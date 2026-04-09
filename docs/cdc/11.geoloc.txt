@@ -1,0 +1,1377 @@
+\documentclass[11pt,a4paper]{article}
+
+% === Encodage & Langue ===
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% === Mise en page ===
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+% === Tableaux ===
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+
+% === Code & couleurs ===
+\usepackage{listings}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{lastpage}
+\usepackage{amssymb}
+
+% === Boites ===
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% === Couleurs AGT ===
+\definecolor{agtblue}{HTML}{1A3A5C}
+\definecolor{agtgray}{HTML}{4A4A4A}
+\definecolor{agtgreen}{HTML}{2E7D32}
+\definecolor{agtred}{HTML}{C62828}
+\definecolor{agtorange}{HTML}{E65100}
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{lightbg}{HTML}{E8EEF4}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=agtblue,
+  urlcolor=agtblue,
+  pdfauthor={AG Technologies},
+  pdftitle={Service Geolocalisation - CDC v1.2},
+}
+
+% === Listings JSON ===
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  string=[s]{"}{"},
+  stringstyle=\color{agtgreen},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{codebg},
+  rulecolor=\color{gray!30},
+  showstringspaces=false,
+  literate=
+    *{:}{{{\color{agtblue}:}}}{1}
+     {,}{{{\color{agtblue},}}}{1}
+     {\{}{{{\color{agtblue}\{}}}{1}
+     {\}}{{{\color{agtblue}\}}}}{1}
+     {[}{{{\color{agtblue}[}}}{1}
+     {]}{{{\color{agtblue}]}}}{1},
+}
+\lstset{language=json}
+
+% === Boites info/warn ===
+\newtcolorbox{infobox}[1][]{
+  colback=lightbg,colframe=agtblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtblue,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=orange!5,colframe=agtorange,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtorange,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+
+% === Header/Footer ===
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{agtgray}{AGT --- Service G\'eolocalisation}}
+\fancyhead[R]{\small\textcolor{agtgray}{v1.2 --- Confidentiel}}
+\fancyfoot[C]{\small\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\textcolor{agtgray}{Avril 2026}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.2pt}
+
+% === Titres ===
+\titleformat{\section}{\Large\bfseries\color{agtblue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{agtblue!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{agtblue!60}}{\thesubsubsection}{1em}{}
+
+% === Commandes ===
+\newcommand{\urgent}{\textcolor{agtred}{\textbf{Urgent}}}
+\newcommand{\normale}{\textcolor{agtorange}{Normale}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+% ============================================================
+%  PAGE DE TITRE
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\Huge\bfseries\textcolor{agtblue}{AG TECHNOLOGIES}\\[0.3cm]}
+{\large\textcolor{agtgray}{Architecture de Services Partag\'es}\\[2cm]}
+\rule{\textwidth}{1.5pt}\\[0.5cm]
+{\LARGE\bfseries Cahier des Charges Technique\\[0.3cm]}
+{\Large Service de G\'eolocalisation Centralis\'e\\[0.3cm]}
+{\large\textit{Geolocation Service --- AGT-Geo}\\[0.5cm]}
+\rule{\textwidth}{1.5pt}\\[2cm]
+\begin{tabular}{ll}
+\textbf{Version}        & 1.2 \\
+\textbf{Date}           & Avril 2026 \\
+\textbf{Statut}         & Implementation-ready \\
+\textbf{Classification} & Confidentiel \\
+\textbf{Auteur}         & \'Equipe Architecture \\
+\textbf{D\'ependances}  & Auth v2.1, Users v1.0, Notification v1.2 \\
+\end{tabular}
+\vfill
+{\small\textcolor{agtgray}{Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies}}
+\end{titlepage}
+
+% ============================================================
+%  HISTORIQUE
+% ============================================================
+\section*{Historique des R\'evisions}
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Ver.} & \textbf{Date} & \textbf{Auteur} & \textbf{Description} \\
+\midrule
+1.0 & 2026-04-05 & \'Equipe Archi. & Cr\'eation initiale. Position temps r\'eel (WebSocket + REST). Redis live + PostGIS historique. Proximit\'e. G\'eofencing event-driven scalable. Historique trajets. Multi-provider ETA/g\'eocodage (adapter pattern). Fr\'equence configurable par plateforme. Batch writes PostGIS. Diagramme PlantUML en annexe. \\
+1.1 & 2026-04-05 & \'Equipe Archi. & Post-audit~: dual Redis formalis\'e (index GEO + payload entit\'e). Autorisation WebSocket verrouill\'ee. RGPD compatible sch\'ema (anonymisation irr\'eversible). Machine \`a \'etats trips. NF-15 corrig\'e. R\^ole Users clarifi\'e. Invalidation cache geofence sur soft delete. Mod\`ele de pr\'esence/offline. \\
+1.2 & 2026-04-05 & \'Equipe Archi. & Version finale~: statut \textit{Implementation-ready}. \\
+\bottomrule
+\end{tabularx}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+Ce document constitue le cahier des charges du \textbf{Service de G\'eolocalisation Centralis\'e} (ci-apr\`es \og~Geolocation Service~\fg{}) destin\'e \`a l'\'ecosyst\`eme AGT. Il sert de r\'ef\'erence unique pour la conception, le d\'eveloppement et les d\'ecisions techniques.
+
+\begin{warnbox}[Principes fondamentaux --- \`A lire en premier]
+\begin{enumerate}[nosep]
+  \item \textbf{Dual storage}~: Redis pour les positions live (volatile, TTL), PostGIS pour l'historique et les requ\^etes spatiales (persistant).
+  \item \textbf{Fr\'equence configurable}~: chaque plateforme d\'efinit l'intervalle de mise \`a jour (1s \`a 60s).
+  \item \textbf{G\'eofencing event-driven}~: v\'erification \`a chaque mise \`a jour de position, pas en polling. Scalable.
+  \item \textbf{Batch writes}~: les positions sont batch\'ees avant insertion PostGIS (10--30s) pour absorber la charge.
+  \item \textbf{Multi-provider}~: ETA et g\'eocodage abstraits derri\`ere des adapters (Google Maps, OSRM, Nominatim).
+  \item \textbf{Stateless}~: chaque instance NestJS est interchangeable. Redis est le point de coordination.
+\end{enumerate}
+\end{warnbox}
+
+\subsection{P\'erim\`etre}
+
+Le service G\'eolocalisation couvre~: r\'eception et diffusion des positions en temps r\'eel, stockage de l'historique des trajets, recherche de proximit\'e, g\'eofencing (zones avec alertes entr\'ee/sortie), calcul de distance/ETA, et g\'eocodage (adresse $\leftrightarrow$ coordonn\'ees).
+
+\begin{infobox}[Principe fondamental]
+Le service g\`ere les \textbf{coordonn\'ees et la logique spatiale}. Il ne conna\^it aucun concept m\'etier~: il ne sait pas ce qu'est un chauffeur, un livreur ou un vendeur. Il g\`ere des \texttt{tracked\_entities} avec des positions, des trajets et des zones. La plateforme consommatrice donne le sens m\'etier.
+\end{infobox}
+
+\subsection{Hors p\'erim\`etre}
+
+\begin{itemize}[nosep]
+  \item Authentification (d\'el\'egu\'ee au Service Auth v2.1)
+  \item Profils utilisateur (Service Users v1.0)
+  \item Logique m\'etier (dispatch, affectation de courses, matching vendeur/livreur)
+  \item Affichage cartographique (le frontend utilise Google Maps / Mapbox directement)
+  \item Paiement, abonnement, wallet
+  \item Notification (d\'el\'egu\'ee au Service Notification v1.2)
+\end{itemize}
+
+\begin{warnbox}[Convention d'identit\'e]
+Dans tout ce document~:
+\begin{itemize}[nosep]
+  \item \texttt{user\_id} d\'esigne \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item \texttt{platform\_id} d\'esigne un UUID du registre Auth (\texttt{platforms.id})
+  \item \texttt{entity\_id} d\'esigne l'identifiant de l'entit\'e track\'ee (= \texttt{user\_id} dans la plupart des cas)
+\end{itemize}
+\end{warnbox}
+
+% ============================================================
+\section{Contexte \& Probl\'ematique}
+% ============================================================
+
+\subsection{Contexte}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Plateforme} & \textbf{Statut} & \textbf{Besoin g\'eolocalisation} \\
+\midrule
+MboaMove   & En d\'eveloppement & Position live chauffeurs, proximit\'e, ETA, suivi de course, historique trajets \\
+AGT-Market & En d\'eveloppement & Position livreurs, suivi livraison, proximit\'e vendeurs \\
+SALMA      & Migration pr\'evue & Localisation centres de formation (statique) \\
+Futures    & Planifi\'e         & Tout besoin de localisation \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Probl\'ematique}
+
+Sans service centralis\'e, chaque plateforme impl\'ementerait sa propre gestion GPS, entra\^inant~: duplication des int\'egrations cartographiques, absence de recherche de proximit\'e performante, pas de g\'eofencing r\'eutilisable, et aucune vision unifi\'ee des donn\'ees de localisation.
+
+% ============================================================
+\section{Vision \& Objectifs}
+% ============================================================
+
+\subsection{Vision}
+
+Un service \textbf{g\'en\'erique et abstrait} qui g\`ere les positions, trajets et zones pour tout l'\'ecosyst\`eme. Il ne conna\^it aucun concept m\'etier~: il g\`ere des entit\'es track\'ees, des coordonn\'ees et des polygones.
+
+\subsection{Objectifs}
+
+\begin{tabularx}{\textwidth}{clL}
+\toprule
+\textbf{\#} & \textbf{Objectif} & \textbf{Indicateur} \\
+\midrule
+O1 & Position temps r\'eel       & Latence < 200ms entre envoi et diffusion \\
+O2 & Proximit\'e performante     & Trouver les N plus proches en < 100ms \\
+O3 & Historique trajets           & Stockage et restitution de tout trajet \\
+O4 & G\'eofencing scalable       & 10~000+ zones actives sans d\'egradation \\
+O5 & Multi-provider               & ETA et g\'eocodage abstraits (adapter pattern) \\
+O6 & Fr\'equence configurable    & 1s \`a 60s selon la plateforme et le contexte \\
+O7 & Scalabilit\'e horizontale   & 100~000+ entit\'es track\'ees simultan\'ement \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Parties Prenantes \& Utilisateurs}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{R\^ole} & \textbf{Type} & \textbf{Responsabilit\'e} \\
+\midrule
+Product Owner       & Interne & Priorisation des fonctionnalit\'es \\
+\'Equipe Backend    & Interne & D\'eveloppement, int\'egration providers \\
+\'Equipe Frontend   & Interne & Int\'egration carte, suivi temps r\'eel \\
+\'Equipe Mobile     & Interne & SDK GPS, envoi positions, battery management \\
+DevOps              & Interne & Infrastructure Redis/PostGIS, monitoring \\
+Admin global AGT    & Interne & Configuration zones, providers \\
+Admin plateforme    & Interne & G\'eofencing, fr\'equence, consultation trajets \\
+Utilisateurs finaux & Externe & Partage de position, suivi \\
+Services internes   & Interne & Plateformes (dispatch, suivi livraison) \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Fonctionnels}
+% ============================================================
+
+\subsection{Position Temps R\'eel}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-POS-01 & Envoi position (WebSocket)  & L'entit\'e envoie sa position via WebSocket. Haute fr\'equence. & \urgent \\
+F-POS-02 & Envoi position (REST)       & Endpoint REST pour les mises \`a jour ponctuelles ou batch & \urgent \\
+F-POS-03 & Stockage live Redis         & Derni\`ere position connue stock\'ee dans Redis avec TTL & \urgent \\
+F-POS-04 & Diffusion live              & Les abonn\'es (plateformes, autres users) re\c{c}oivent les mises \`a jour en temps r\'eel via WebSocket & \urgent \\
+F-POS-05 & TTL auto-expiration         & Si aucune mise \`a jour pendant X secondes (configurable), l'entit\'e est consid\'er\'ee offline & \urgent \\
+F-POS-06 & Fr\'equence configurable    & Chaque plateforme d\'efinit l'intervalle de mise \`a jour (d\'efaut~: 5s) & \urgent \\
+F-POS-07 & Batch write PostGIS         & Les positions sont accumul\'ees en m\'emoire/Redis et flush\'ees vers PostGIS en batch (10--30s) & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Architecture dual-storage (v1.1)]
+Le stockage live Redis repose sur \textbf{deux couches compl\'ementaires}~:
+
+\textbf{Couche A --- Index GEO par plateforme} (proximit\'e)~:
+\begin{itemize}[nosep]
+  \item Cl\'e~: \texttt{geo:index:\{platform\_id\}}
+  \item Contenu~: membres = \texttt{entity\_id}, avec longitude et latitude
+  \item Commandes~: \texttt{GEOADD}, \texttt{GEOSEARCH}, \texttt{GEODIST}
+  \item Usage~: \textbf{exclusivement} pour la recherche de proximit\'e live
+\end{itemize}
+
+\textbf{Couche B --- Payload d\'etaill\'e par entit\'e}~:
+\begin{itemize}[nosep]
+  \item Cl\'e~: \texttt{geo:entity:\{platform\_id\}:\{entity\_id\}}
+  \item Valeur~: \texttt{\{lat, lng, heading, speed, accuracy, tags, entity\_type, recorded\_at, is\_online\}}
+  \item TTL~: configurable par plateforme (d\'efaut 30s). Expiration = entit\'e offline.
+  \item Usage~: lecture de la derni\`ere position d\'etaill\'ee, diffusion WebSocket
+\end{itemize}
+
+\textbf{R\`egle}~: la proximit\'e live n'est \textbf{jamais} calcul\'ee \`a partir des cl\'es individuelles d'entit\'e. Elle s'appuie exclusivement sur l'index GEO par plateforme.
+
+\textbf{Mise \`a jour atomique}~: chaque position update met \`a jour les deux couches dans la m\^eme op\'eration (pipeline Redis).
+
+\textbf{PostGIS} (historique)~:
+\begin{itemize}[nosep]
+  \item Table \texttt{position\_history} avec colonne \texttt{GEOGRAPHY(Point, 4326)}.
+  \item Index GiST pour les requ\^etes spatiales.
+  \item Insertion en batch (buffer de 10--30s) pour absorber la charge.
+  \item Partitionnement par mois sur \texttt{recorded\_at}.
+\end{itemize}
+\end{warnbox}
+
+\subsection{Recherche de Proximit\'e}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-PRX-01 & Recherche par rayon         & Trouver toutes les entit\'es dans un rayon de N km autour d'un point & \urgent \\
+F-PRX-02 & N plus proches              & Trouver les N entit\'es les plus proches d'un point & \urgent \\
+F-PRX-03 & Filtre par plateforme       & La recherche est scop\'ee par \texttt{platform\_id} & \urgent \\
+F-PRX-04 & Filtre par tags             & Filtrer par tags m\'etier (ex~: \texttt{available}, \texttt{busy}, \texttt{vip}) & \urgent \\
+F-PRX-05 & Proximit\'e live vs historique & Proximit\'e live (Redis) pour le temps r\'eel, PostGIS pour l'historique & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Performance proximit\'e]
+\textbf{Live (Redis)}~: \texttt{GEORADIUS} ou \texttt{GEOSEARCH} sur les positions Redis. Complexit\'e O(N+log(M)). R\'eponse < 50ms pour 100~000 entit\'es.
+
+\textbf{Historique (PostGIS)}~: \texttt{ST\_DWithin} avec index GiST. R\'eponse < 200ms sur des millions de points.
+\end{infobox}
+
+\subsection{G\'eofencing}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-GEO-01 & Cr\'eation de zone          & D\'efinir une zone g\'eographique (polygone ou cercle) & \urgent \\
+F-GEO-02 & Zones par plateforme        & Chaque plateforme g\`ere ses propres zones & \urgent \\
+F-GEO-03 & D\'etection entr\'ee/sortie & \`A chaque mise \`a jour de position, v\'erifier si l'entit\'e entre ou sort d'une zone & \urgent \\
+F-GEO-04 & \'Ev\'enement geofence      & \'Emettre un \'ev\'enement RabbitMQ lors d'une entr\'ee ou sortie & \urgent \\
+F-GEO-05 & Zones actives/inactives     & Activer/d\'esactiver une zone sans la supprimer & \normale \\
+F-GEO-06 & M\'etadonn\'ees zone        & Tags et metadata libres sur les zones & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Scalabilit\'e du g\'eofencing --- Architecture event-driven]
+\textbf{Probl\`eme}~: v\'erifier 100~000 positions contre 10~000 zones en polling = 1 milliard de checks par cycle. Non scalable.
+
+\textbf{Solution~: g\'eofencing event-driven en 3 couches}~:
+
+\textbf{Couche 1 --- Cache zones en m\'emoire}~: au d\'emarrage et \`a chaque modification, les zones actives sont charg\'ees dans un cache m\'emoire local (par instance NestJS). Structure~: R-tree ou quadtree pour lookup spatial O(log N).
+
+\textbf{Couche 2 --- V\'erification \`a chaque position update}~: quand une position arrive (WebSocket ou REST), le service v\'erifie \textbf{uniquement cette position} contre les zones pertinentes via le spatial index en m\'emoire. Co\^ut~: O(log Z) o\`u Z = nombre de zones (pas O(Z)).
+
+\textbf{Couche 3 --- \'Etat pr\'ec\'edent en Redis}~: pour chaque entit\'e, Redis stocke la liste des zones dans lesquelles elle se trouve actuellement (\texttt{geo:fences:\{entity\_id\}}). La comparaison ancien \'etat / nouvel \'etat d\'etermine les entr\'ees et sorties.
+
+\textbf{R\'esultat}~: chaque mise \`a jour de position co\^ute O(log Z) au lieu de O(Z). Pour 10~000 zones et 20~000 updates/seconde~: $\sim$280~000 lookups/s (faisable sur une seule instance).
+
+\textbf{Invalidation cache}~: quand une zone est cr\'e\'ee/modifi\'ee/supprim\'ee, un message Redis pub/sub informe toutes les instances de recharger la zone concern\'ee (pas tout le cache).
+\end{warnbox}
+
+\subsection{Trajets}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-TRJ-01 & D\'emarrer un trajet         & Cr\'eer un trajet avec point de d\'epart & \urgent \\
+F-TRJ-02 & Enregistrer les positions    & Les positions envoy\'ees pendant un trajet sont li\'ees au trajet & \urgent \\
+F-TRJ-03 & Terminer un trajet           & Cl\^oturer le trajet avec point d'arriv\'ee et m\'etriques (distance, dur\'ee) & \urgent \\
+F-TRJ-04 & Consulter un trajet          & Restituer le trac\'e complet (polyline) avec m\'etriques & \urgent \\
+F-TRJ-05 & Historique des trajets       & Liste des trajets d'une entit\'e, filtr\'ee par date & \urgent \\
+F-TRJ-06 & Distance calcul\'ee          & Distance totale du trajet calcul\'ee \`a partir des points GPS & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Machine \`a \'etats des trajets (v1.1)]
+\begin{verbatim}
+  [creation via POST /geo/trips] --> active
+  active --> completed    (POST /geo/trips/{id}/end)
+  active --> cancelled    (annulation explicite ou timeout admin)
+\end{verbatim}
+
+\textbf{\'Etats terminaux}~: \texttt{completed}, \texttt{cancelled}. Aucune transition sortante.
+
+\textbf{R\`egles}~:
+\begin{itemize}[nosep]
+  \item Un seul trajet actif par \texttt{(platform\_id, entity\_id)} \`a tout moment.
+  \item Les positions GPS peuvent exister \textbf{hors trajet}. En l'absence de trajet actif, les positions sont stock\'ees dans \texttt{position\_history} avec \texttt{trip\_id = NULL}.
+  \item La cr\'eation d'un trajet est une d\'ecision \textbf{explicite} via \texttt{POST /geo/trips}, pas une d\'etection automatique.
+  \item Si l'entit\'e passe offline pendant un trajet actif, le trajet reste \texttt{active} jusqu'\`a cl\^oture explicite ou timeout configurable par la plateforme.
+\end{itemize}
+\end{warnbox}
+
+\subsection{Distance \& ETA}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ETA-01 & Distance vol d'oiseau       & Calcul interne Haversine (aucun provider externe) & \urgent \\
+F-ETA-02 & Distance routi\`ere          & Via provider externe (Google Maps, OSRM) & \urgent \\
+F-ETA-03 & ETA                          & Temps estim\'e d'arriv\'ee via provider externe & \urgent \\
+F-ETA-04 & Multi-provider               & Adapter pattern~: ajouter un provider = ajouter un adapter & \urgent \\
+F-ETA-05 & Cache ETA                    & R\'esultats cach\'es dans Redis (TTL 60s) pour \'eviter les appels r\'ep\'et\'es & \urgent \\
+F-ETA-06 & Fallback                     & Si le provider principal est down, fallback vers Haversine + estimation & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Architecture multi-provider ETA/g\'eocodage]
+Chaque provider est impl\'ement\'e comme un adapter derri\`ere une interface commune~:
+\begin{itemize}[nosep]
+  \item \texttt{getDistance(origin, destination)} $\to$ \texttt{\{distance\_m, duration\_s, polyline?\}}
+  \item \texttt{getETA(origin, destination)} $\to$ \texttt{\{eta\_seconds, eta\_datetime\}}
+  \item \texttt{geocode(address)} $\to$ \texttt{\{lat, lng, formatted\_address\}}
+  \item \texttt{reverseGeocode(lat, lng)} $\to$ \texttt{\{address, city, country\}}
+\end{itemize}
+
+Providers support\'es au MVP~:
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Provider} & \textbf{Type} & \textbf{Usage} \\
+\midrule
+Interne (Haversine) & Gratuit  & Distance vol d'oiseau, fallback, estimation rapide \\
+OSRM               & Gratuit (self-hosted) & Distance/ETA routi\`ere, open source \\
+Google Maps         & Payant   & Distance/ETA pr\'ecise, g\'eocodage, trafic temps r\'eel \\
+Nominatim           & Gratuit  & G\'eocodage (adresse $\leftrightarrow$ coordonn\'ees), OpenStreetMap \\
+\bottomrule
+\end{tabularx}
+\end{infobox}
+
+\subsection{G\'eocodage}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-GCD-01 & G\'eocodage direct          & Adresse $\to$ coordonn\'ees via provider externe & \urgent \\
+F-GCD-02 & G\'eocodage inverse         & Coordonn\'ees $\to$ adresse via provider externe & \urgent \\
+F-GCD-03 & Cache g\'eocodage           & R\'esultats cach\'es dans Redis (TTL 24h) & \urgent \\
+F-GCD-04 & Multi-provider              & Adapter pattern (Nominatim, Google Maps) & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Administration}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ADM-01 & Stats plateforme            & Entit\'es actives, positions/s, trajets, zones & \normale \\
+F-ADM-02 & Config plateforme           & Fr\'equence, TTL, providers actifs, provider ETA prioritaire & \urgent \\
+F-ADM-03 & Monitoring providers        & Latence, taux d'erreur par provider ETA/g\'eocodage & \normale \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Non-Fonctionnels}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{clLc}
+\toprule
+\textbf{ID} & \textbf{Cat\'egorie} & \textbf{Exigence} & \textbf{Cible} \\
+\midrule
+NF-01 & Performance    & Latence position update $\to$ diffusion             & < 200ms \\
+NF-02 & Performance    & Recherche proximit\'e live                           & < 50ms (P95) \\
+NF-03 & Performance    & Recherche proximit\'e historique                     & < 200ms (P95) \\
+NF-04 & Performance    & Throughput position updates                          & 20~000 msg/s (100K entit\'es \`a 5s) \\
+NF-05 & Disponibilit\'e & Uptime                                              & 99.9\% \\
+NF-06 & S\'ecurit\'e   & Auth obligatoire (WebSocket et REST)                 & JWT ou S2S \\
+NF-07 & S\'ecurit\'e   & Rate limiting                                        & Configurable par plateforme \\
+NF-08 & Scalabilit\'e  & Horizontal                                           & Stateless, multi-instance, Redis coordonne \\
+NF-09 & Scalabilit\'e  & PostGIS partitionnement                              & Par mois sur position\_history \\
+NF-10 & Observabilit\'e & Logs structur\'es                                   & JSON, request ID \\
+NF-11 & Observabilit\'e & Health check                                        & \texttt{GET /geo/health} \\
+NF-12 & Donn\'ees      & Timestamps                                           & TIMESTAMPTZ \\
+NF-13 & Donn\'ees      & Coordonn\'ees                                        & GEOGRAPHY(Point, 4326) / WGS84 \\
+NF-14 & Traitement     & Batch flush PostGIS                                  & Toutes les 10--30s \\
+NF-15 & Traitement     & Maintenance~: offline detection, batch flush PostGIS, cleanup buffers Redis, rotation jobs & Cron NestJS natif \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Architecture Technique}
+% ============================================================
+
+\subsection{Vue d'ensemble}
+
+Le service G\'eolocalisation est un microservice temps r\'eel, d\'eploy\'e en conteneur Docker. Il expose une API REST + WebSocket. Il utilise Redis pour les donn\'ees live et PostgreSQL/PostGIS pour l'historique et les requ\^etes spatiales.
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Composant} & \textbf{Technologie} \\
+\midrule
+Runtime              & Node.js 20 LTS \\
+Framework            & NestJS \\
+WebSocket            & Socket.IO (NestJS Gateway) + Redis Adapter (multi-instance) \\
+API REST             & NestJS Controllers \\
+Base de donn\'ees    & PostgreSQL 15+ avec extension PostGIS 3.x \\
+ORM                  & TypeORM (support natif PostGIS) \\
+Cache \& Live data   & Redis 7+ (GEO commands, pub/sub, cache ETA/g\'eocodage) \\
+Message Broker       & RabbitMQ (\'ev\'enements geofence, position batch) \\
+Spatial index (m\'emoire) & rbush (R-tree JavaScript) pour g\'eofencing \\
+Conteneurisation     & Docker + Docker Compose \\
+CI/CD                & GitHub Actions \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Justification NestJS (vs Django)]
+Le service G\'eolocalisation est I/O-intensif avec des milliers de connexions WebSocket simultan\'ees et des flux GPS \`a haute fr\'equence. Node.js/NestJS est choisi pour les m\^emes raisons que le Service M\'edia (NestJS) et le Service Chat (WebSocket natif)~:
+\begin{itemize}[nosep]
+  \item Event loop non bloquant~: milliers de connexions simultann\'ees sans threads
+  \item Socket.IO natif avec Redis adapter pour le scaling horizontal
+  \item Biblioth\`eques spatiales performantes (rbush, turf.js)
+\end{itemize}
+L'h\'et\'erog\'en\'eit\'e de stack est accept\'ee en microservices quand elle est justifi\'ee par des besoins techniques sp\'ecifiques.
+\end{warnbox}
+
+\subsection{D\'ependances \& R\`egles d'Architecture}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Service} & \textbf{Type} & \textbf{Usage} \\
+\midrule
+Service Auth          & Interne  & Validation JWT (REST et WebSocket handshake). S2S pour appels inter-services. \\
+Service Users         & Interne  & V\'erification statut actif et permissions m\'etier indirectes. \textbf{Non appel\'e sur chaque update GPS.} Lookup uniquement \`a la cr\'eation d'une \texttt{tracked\_entity} ou sur demande explicite. Cache Redis TTL 5 min. \\
+Service Notification  & Interne  & Alertes g\'eofencing (entr\'ee/sortie de zone). \\
+Google Maps API       & Externe  & ETA, distance routi\`ere, g\'eocodage (payant). \\
+OSRM                  & Externe  & ETA, distance routi\`ere (self-hosted, gratuit). \\
+Nominatim             & Externe  & G\'eocodage direct et inverse (gratuit). \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egle stricte de d\'ependance]
+G\'eolocalisation ne d\'epend d'aucun service m\'etier. Il est consomm\'e par les plateformes (MboaMove, Market) pour leurs besoins de localisation. Le couplage est unidirectionnel~: les plateformes interrogent G\'eolocalisation, jamais l'inverse.
+
+\textbf{Exception}~: G\'eolocalisation \'emet des \'ev\'enements RabbitMQ consomm\'es par les plateformes (geofence triggers) et Notification (alertes).
+\end{warnbox}
+
+\subsection{Strat\'egie de scalabilit\'e}
+
+\begin{infobox}[Scaling pour 100~000+ entit\'es simultan\'ees]
+\textbf{WebSocket}~: Socket.IO avec Redis adapter. Chaque instance NestJS g\`ere un sous-ensemble de connexions. Redis pub/sub synchronise les \'ev\'enements entre instances. Load balancer avec sticky sessions (ou transport polling+websocket).
+
+\textbf{Redis GEO}~: les commandes \texttt{GEOADD}/\texttt{GEOSEARCH} supportent des millions de points. Les positions live sont stock\'ees dans des sets Redis par plateforme~: \texttt{geo:live:\{platform\_id\}}.
+
+\textbf{PostGIS batch writes}~: un buffer en m\'emoire accumule les positions pendant 10--30s, puis les ins\`ere en un seul \texttt{INSERT ... VALUES} batch. \`A 20~000 msg/s, un batch de 30s = 600~000 lignes, ins\'er\'e en < 2s avec des insertions batch PostgreSQL.
+
+\textbf{PostGIS partitionnement}~: la table \texttt{position\_history} est partitionn\'ee par mois sur \texttt{recorded\_at}. Les requ\^etes spatiales ne scannent que les partitions pertinentes.
+
+\textbf{G\'eofencing}~: R-tree en m\'emoire (rbush) avec invalidation cibl\'ee via Redis pub/sub. O(log Z) par position update.
+
+\textbf{ETA/g\'eocodage}~: cache Redis (TTL 60s ETA, 24h g\'eocodage). Taux de cache hit > 80\% en r\'egime nominal.
+\end{infobox}
+
+\subsection{Mod\`ele de pr\'esence / offline (v1.1)}
+
+\begin{infobox}[D\'etection de pr\'esence temps r\'eel]
+\textbf{Online}~: une entit\'e est consid\'er\'ee online tant que sa cl\'e payload Redis \texttt{geo:entity:\{platform\_id\}:\{entity\_id\}} n'a pas expir\'e (TTL configurable, d\'efaut 30s).
+
+\textbf{Offline}~: d\`es que le TTL expire (aucune mise \`a jour de position re\c{c}ue pendant X secondes) ou que la connexion WebSocket est ferm\'ee sans reprise~:
+\begin{enumerate}[nosep]
+  \item La cl\'e payload Redis expire automatiquement
+  \item L'entit\'e est retir\'ee de l'index GEO (\texttt{ZREM geo:index:\{platform\_id\} entity\_id})
+  \item L'\'ev\'enement \texttt{geo.entity.offline} est \'emis \textbf{une seule fois} par transition online $\to$ offline
+  \item \texttt{tracked\_entities.last\_seen\_at} est mis \`a jour en base
+\end{enumerate}
+
+\textbf{D\'etection}~: un cron NestJS (toutes les 10s) scanne les entit\'es dont la cl\'e payload a expir\'e mais qui sont encore dans l'index GEO, et effectue le nettoyage. Alternativement, Redis Keyspace Notifications (\texttt{expired} events) peuvent d\'eclencher le processus de mani\`ere event-driven.
+
+\textbf{R\`egle}~: l'\'ev\'enement \texttt{geo.entity.offline} n'est \'emis qu'une seule fois par transition. Pas de r\'e-\'emission tant que l'entit\'e n'est pas repass\'ee online.
+\end{infobox}
+
+\subsection{Diagramme d'architecture}
+
+\begin{verbatim}
+  MboaMove(mobile)  AGT-Market(web)   SALMA   Futures
+      |                  |               |        |
+  [WebSocket]        [REST/WS]       [REST]   [REST/WS]
+      |                  |               |        |
+      +------+-----------+-------+-------+--------+
+             |                   |
+      Geolocation Service (NestJS)
+        |         |          |           |          |
+    Redis GEO   PostGIS    RabbitMQ   Auth(JWT)  Users
+    (live)     (history)   (events)
+        |
+    Socket.IO Redis Adapter (multi-instance sync)
+        |
+    [Providers externes]
+    Google Maps | OSRM | Nominatim
+\end{verbatim}
+
+% ============================================================
+\section{Mod\'elisation}
+% ============================================================
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes complet est fourni en annexe au format PlantUML (voir section~\ref{sec:plantuml}). Il couvre les entit\'es~: \texttt{TrackedEntity}, \texttt{PositionHistory}, \texttt{Trip}, \texttt{TripPoint}, \texttt{Geofence}, \texttt{GeofenceEvent} et \texttt{PlatformGeoConfig}.
+
+\subsection{MLD --- Mod\`ele Logique de Donn\'ees}
+
+\subsubsection{Table \texttt{tracked\_entities}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+platform\_id      & UUID          & NOT NULL       & Plateforme \\
+entity\_type      & VARCHAR(20)   & NOT NULL       & user, vehicle, asset \\
+entity\_id        & UUID          & NOT NULL       & R\'ef\'erence externe (\texttt{users\_auth.id} ou autre) \\
+tags              & JSONB         & DEFAULT '[]'   & Tags m\'etier libres (\texttt{["available","vip"]}) \\
+is\_active        & BOOLEAN       & DEFAULT true   & Tracking actif \\
+last\_seen\_at    & TIMESTAMPTZ   & NULL           & Derni\`ere position connue \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, entity\_type, entity\_id)}.
+
+\subsubsection{Table \texttt{position\_history}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+entity\_id        & UUID          & FK $\to$ tracked\_entities & Entit\'e track\'ee \\
+location          & GEOGRAPHY(Point, 4326) & NOT NULL & Coordonn\'ees WGS84 \\
+altitude          & FLOAT         & NULL           & Altitude en m\`etres \\
+heading           & FLOAT         & NULL           & Direction (0--360\textdegree) \\
+speed             & FLOAT         & NULL           & Vitesse en m/s \\
+accuracy          & FLOAT         & NULL           & Pr\'ecision GPS en m\`etres \\
+trip\_id          & UUID          & FK $\to$ trips, NULL & Trajet associ\'e (NULL si hors trajet) \\
+recorded\_at      & TIMESTAMPTZ   & NOT NULL       & Horodatage de la mesure GPS \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Date d'insertion en base \\
+\bottomrule
+\end{tabularx}
+
+Index~: GiST sur \texttt{location}. B-tree sur \texttt{(entity\_id, recorded\_at)}.
+
+Partitionnement~: par mois sur \texttt{recorded\_at}.
+
+\subsubsection{Table \texttt{trips}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+entity\_id        & UUID          & FK $\to$ tracked\_entities & Entit\'e \\
+platform\_id      & UUID          & NOT NULL       & Plateforme \\
+status            & VARCHAR(20)   & NOT NULL       & active, completed, cancelled \\
+start\_location   & GEOGRAPHY(Point, 4326) & NOT NULL & Point de d\'epart \\
+end\_location     & GEOGRAPHY(Point, 4326) & NULL  & Point d'arriv\'ee \\
+start\_address    & VARCHAR(255)  & NULL           & Adresse de d\'epart (g\'eocod\'ee) \\
+end\_address      & VARCHAR(255)  & NULL           & Adresse d'arriv\'ee \\
+distance\_meters  & FLOAT         & DEFAULT 0      & Distance totale calcul\'ee \\
+duration\_seconds & INT           & DEFAULT 0      & Dur\'ee totale \\
+metadata          & JSONB         & NULL           & Donn\'ees m\'etier opaques \\
+started\_at       & TIMESTAMPTZ   & NOT NULL       & D\'ebut \\
+ended\_at         & TIMESTAMPTZ   & NULL           & Fin \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{geofences}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+platform\_id      & UUID          & NOT NULL       & Plateforme \\
+name              & VARCHAR(100)  & NOT NULL       & Nom de la zone \\
+fence\_type       & VARCHAR(10)   & NOT NULL       & polygon ou circle \\
+geometry          & GEOGRAPHY(Polygon, 4326) & NULL & Polygone (si polygon) \\
+center            & GEOGRAPHY(Point, 4326) & NULL   & Centre (si circle) \\
+radius\_meters    & FLOAT         & NULL           & Rayon (si circle) \\
+tags              & JSONB         & DEFAULT '[]'   & Tags libres \\
+metadata          & JSONB         & NULL           & Donn\'ees compl\'ementaires \\
+is\_active        & BOOLEAN       & DEFAULT true   & Zone active \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, name)}.
+
+Index~: GiST sur \texttt{geometry} et \texttt{center}.
+
+\subsubsection{Table \texttt{geofence\_events}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+geofence\_id      & UUID          & FK $\to$ geofences & Zone concern\'ee \\
+entity\_id        & UUID          & FK $\to$ tracked\_entities & Entit\'e \\
+event\_type       & VARCHAR(10)   & NOT NULL       & enter ou exit \\
+location          & GEOGRAPHY(Point, 4326) & NOT NULL & Position au moment de l'\'ev\'enement \\
+recorded\_at      & TIMESTAMPTZ   & NOT NULL       & Horodatage \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{platform\_geo\_configs}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                        & UUID          & PK             & Identifiant unique \\
+platform\_id              & UUID          & UNIQUE, NOT NULL & Plateforme \\
+update\_interval\_seconds & INT           & DEFAULT 5      & Fr\'equence de mise \`a jour (secondes) \\
+position\_ttl\_seconds    & INT           & DEFAULT 30     & TTL Redis (offline apr\`es X secondes sans update) \\
+batch\_flush\_seconds     & INT           & DEFAULT 15     & Intervalle de flush batch PostGIS \\
+default\_eta\_provider    & VARCHAR(30)   & DEFAULT 'haversine' & Provider ETA par d\'efaut \\
+default\_geocode\_provider & VARCHAR(30)  & DEFAULT 'nominatim' & Provider g\'eocodage par d\'efaut \\
+max\_proximity\_radius\_km & FLOAT        & DEFAULT 50     & Rayon max autoris\'e pour proximit\'e \\
+created\_at               & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at               & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Contrats d'API}
+% ============================================================
+
+Base URL~: \texttt{/api/v1}. Tous les endpoints REST retournent du JSON. Auth~: \texttt{Authorization: Bearer <token>}.
+
+\subsection{Health Check}
+
+\subsubsection{GET /geo/health}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "status": "healthy",
+  "database": "ok",
+  "postgis": "ok",
+  "redis": "ok",
+  "rabbitmq": "ok",
+  "active_connections": 1245,
+  "version": "1.2.0"
+}
+\end{lstlisting}
+
+\subsection{Position (REST)}
+
+\subsubsection{POST /geo/positions}
+
+Envoi d'une position (REST, usage ponctuel). Auth~: Bearer ou S2S.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "entity_type": "user",
+  "entity_id": "user-uuid",
+  "latitude": 3.8480,
+  "longitude": 11.5021,
+  "heading": 45.0,
+  "speed": 12.5,
+  "accuracy": 10.0,
+  "tags": ["available"],
+  "recorded_at": "2026-04-05T10:00:00Z"
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "entity_id": "user-uuid",
+  "status": "updated",
+  "geofence_events": [
+    { "geofence_id": "zone-uuid", "name": "Zone Centre", "event": "enter" }
+  ]
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 401, 429 Rate limited.
+
+\subsubsection{GET /geo/positions/\{entityId\}}
+
+Derni\`ere position connue (depuis Redis). Auth~: Bearer ou S2S.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "entity_id": "user-uuid",
+  "latitude": 3.8480,
+  "longitude": 11.5021,
+  "heading": 45.0,
+  "speed": 12.5,
+  "tags": ["available"],
+  "recorded_at": "2026-04-05T10:00:00Z",
+  "is_online": true
+}
+\end{lstlisting}
+
+Codes~: 200, 404 Entity not found or offline.
+
+\subsection{Position (WebSocket)}
+
+\subsubsection{Connexion WebSocket}
+
+Endpoint~: \texttt{ws://host/geo}. Auth~: token JWT pass\'e en query param ou header lors du handshake.
+
+\textbf{\'Ev\'enements client $\to$ serveur}~:
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Payload} \\
+\midrule
+\texttt{position:update}   & \texttt{\{platform\_id, entity\_type, entity\_id, latitude, longitude, heading, speed, accuracy, tags, recorded\_at\}} \\
+\texttt{position:subscribe} & \texttt{\{platform\_id, entity\_ids: ["uuid1", "uuid2"]\}} --- s'abonner aux positions d'autres entit\'es \\
+\texttt{position:unsubscribe} & \texttt{\{entity\_ids: ["uuid1"]\}} \\
+\bottomrule
+\end{tabularx}
+
+\textbf{\'Ev\'enements serveur $\to$ client}~:
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Payload} \\
+\midrule
+\texttt{position:updated}   & \texttt{\{entity\_id, latitude, longitude, heading, speed, recorded\_at\}} --- position d'une entit\'e suivie \\
+\texttt{position:offline}    & \texttt{\{entity\_id\}} --- entit\'e pass\'ee offline (TTL expir\'e) \\
+\texttt{geofence:trigger}    & \texttt{\{entity\_id, geofence\_id, name, event: "enter"|"exit", location\}} \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egles d'autorisation WebSocket (v1.1)]
+L'abonnement WebSocket aux positions d'autres entit\'es n'est \textbf{jamais libre}.
+
+\textbf{Cas 1 --- Suivi de sa propre position}~: autoris\'e. Un client JWT peut toujours \'ecouter ses propres mises \`a jour.
+
+\textbf{Cas 2 --- Suivi d'autres entit\'es (frontend m\'etier)}~: interdit en acc\`es direct JWT sauf si~:
+\begin{itemize}[nosep]
+  \item permission explicite accord\'ee par le backend produit de la plateforme (ex~: un passager MboaMove suit son chauffeur assign\'e)~;
+  \item ou token S2S \'emis par le backend de la plateforme avec la liste des \texttt{entity\_ids} autoris\'es.
+\end{itemize}
+
+\textbf{Cas 3 --- Abonnement massif (toutes les entit\'es d'une plateforme)}~: r\'eserv\'e aux appels S2S ou aux r\^oles admin plateforme. Jamais accessible en JWT standard.
+
+\textbf{Impl\'ementation}~: lors d'un \texttt{position:subscribe}, le service v\'erifie que chaque \texttt{entity\_id} demand\'e est soit l'appelant lui-m\^eme, soit pr\'esent dans une liste d'autorisations fournie par le backend produit (via un cache Redis \texttt{geo:auth:\{user\_id\}:\{platform\_id\}} avec TTL 5 min).
+\end{warnbox}
+
+\subsection{Proximit\'e}
+
+\subsubsection{GET /geo/proximity}
+
+Recherche de proximit\'e live. Auth~: Bearer ou S2S.
+
+Query params~: \texttt{?platform\_id=uuid\&latitude=3.85\&longitude=11.50\&radius\_km=5\&limit=10\&tags=available}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "results": [
+    {
+      "entity_id": "uuid-1",
+      "latitude": 3.8490,
+      "longitude": 11.5030,
+      "distance_meters": 320,
+      "tags": ["available"],
+      "recorded_at": "2026-04-05T10:00:05Z"
+    },
+    {
+      "entity_id": "uuid-2",
+      "latitude": 3.8510,
+      "longitude": 11.5050,
+      "distance_meters": 580,
+      "tags": ["available", "vip"],
+      "recorded_at": "2026-04-05T10:00:03Z"
+    }
+  ],
+  "total": 2
+}
+\end{lstlisting}
+
+Codes~: 200, 400 Radius exceeds max, 401.
+
+\subsection{Trajets}
+
+\subsubsection{POST /geo/trips}
+
+D\'emarrer un trajet.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "entity_id": "user-uuid",
+  "start_latitude": 3.8480,
+  "start_longitude": 11.5021,
+  "metadata": { "ride_id": "ride-uuid" }
+}
+\end{lstlisting}
+
+Codes~: 201, 400, 409 Active trip already exists.
+
+\subsubsection{POST /geo/trips/\{tripId\}/end}
+
+Terminer un trajet.
+
+Request body~:
+\begin{lstlisting}
+{
+  "end_latitude": 3.8700,
+  "end_longitude": 11.5200
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "trip_id": "trip-uuid",
+  "status": "completed",
+  "distance_meters": 4520,
+  "duration_seconds": 1230,
+  "start_address": "Carrefour Bastos, Yaounde",
+  "end_address": "Marche Central, Yaounde"
+}
+\end{lstlisting}
+
+Codes~: 200, 404, 409 Trip already ended.
+
+\subsubsection{GET /geo/trips/\{tripId\}}
+
+D\'etail d'un trajet avec polyline.
+
+Codes~: 200, 404.
+
+\subsubsection{GET /geo/trips}
+
+Historique des trajets. Query params~: \texttt{?entity\_id\&platform\_id\&from\_date\&to\_date\&page\&limit}.
+
+Codes~: 200, 401.
+
+\subsection{G\'eofences}
+
+\subsubsection{POST /geo/geofences}
+
+Cr\'eation d'une zone. Auth~: admin plateforme.
+
+Request body (polygone)~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "Zone Centre Yaounde",
+  "fence_type": "polygon",
+  "coordinates": [
+    [11.49, 3.84], [11.52, 3.84],
+    [11.52, 3.87], [11.49, 3.87],
+    [11.49, 3.84]
+  ],
+  "tags": ["delivery_zone"]
+}
+\end{lstlisting}
+
+Request body (cercle)~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "Rayon Aeroport Nsimalen",
+  "fence_type": "circle",
+  "center_latitude": 3.7200,
+  "center_longitude": 11.5533,
+  "radius_meters": 5000,
+  "tags": ["airport_zone"]
+}
+\end{lstlisting}
+
+Codes~: 201, 400, 409 Name exists.
+
+\subsubsection{GET /geo/geofences}
+
+Liste des zones. Query params~: \texttt{?platform\_id\&is\_active\&tags}.
+
+Codes~: 200.
+
+\subsubsection{PUT /geo/geofences/\{geofenceId\}}
+
+Modification. D\'eclenche invalidation cache m\'emoire via Redis pub/sub.
+
+Codes~: 200, 400, 404.
+
+\subsubsection{DELETE /geo/geofences/\{geofenceId\}}
+
+Suppression (soft~: \texttt{is\_active = false}). D\'eclenche une invalidation cibl\'ee via Redis pub/sub pour rechargement de l'index m\'emoire sur toutes les instances.
+
+Codes~: 200, 404.
+
+\begin{infobox}[Invalidation cache geofence (v1.1)]
+Toute cr\'eation, modification, d\'esactivation (\texttt{is\_active = false}) ou suppression logique d'une geofence d\'eclenche une invalidation cibl\'ee via Redis pub/sub. Chaque instance NestJS recharge uniquement la zone concern\'ee dans son R-tree local, pas l'ensemble du cache.
+\end{infobox}
+
+\subsection{Distance \& ETA}
+
+\subsubsection{GET /geo/distance}
+
+Query params~: \texttt{?origin\_lat\&origin\_lng\&dest\_lat\&dest\_lng\&provider=google\_maps}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "provider": "google_maps",
+  "distance_meters": 4520,
+  "duration_seconds": 1230,
+  "cached": false
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 503 Provider unavailable.
+
+\subsubsection{GET /geo/eta}
+
+Query params~: \texttt{?origin\_lat\&origin\_lng\&dest\_lat\&dest\_lng\&provider=osrm}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "provider": "osrm",
+  "eta_seconds": 1230,
+  "eta_datetime": "2026-04-05T10:20:30Z",
+  "cached": true
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 503.
+
+\subsection{G\'eocodage}
+
+\subsubsection{GET /geo/geocode}
+
+Query params~: \texttt{?address=Carrefour+Bastos+Yaounde\&provider=nominatim}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "latitude": 3.8845,
+  "longitude": 11.5027,
+  "formatted_address": "Carrefour Bastos, Yaounde, Cameroun",
+  "provider": "nominatim",
+  "cached": true
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 404 Address not found, 503.
+
+\subsubsection{GET /geo/reverse-geocode}
+
+Query params~: \texttt{?latitude=3.8845\&longitude=11.5027\&provider=nominatim}
+
+Codes~: 200, 400, 503.
+
+\subsection{Configuration Plateforme}
+
+\subsubsection{PUT /geo/config/\{platformId\}}
+
+Auth~: admin plateforme ou admin global.
+
+Request body~:
+\begin{lstlisting}
+{
+  "update_interval_seconds": 5,
+  "position_ttl_seconds": 30,
+  "batch_flush_seconds": 15,
+  "default_eta_provider": "osrm",
+  "default_geocode_provider": "nominatim",
+  "max_proximity_radius_km": 50
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 403.
+
+\subsubsection{GET /geo/config/\{platformId\}}
+
+Codes~: 200, 404.
+
+\subsection{Administration}
+
+\subsubsection{GET /geo/admin/stats}
+
+Query params~: \texttt{?platform\_id}. Auth~: admin.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "active_entities": 12450,
+  "active_websockets": 8900,
+  "positions_per_second": 1780,
+  "active_trips": 340,
+  "active_geofences": 125,
+  "geofence_events_24h": 45200
+}
+\end{lstlisting}
+
+Codes~: 200, 403.
+
+\subsubsection{DELETE /geo/by-user/\{userId\}}
+
+\textbf{Purge RGPD.} Auth~: S2S. Supprime les \texttt{tracked\_entities}. Les positions historiques et trajets sont anonymis\'es par remplacement de \texttt{entity\_id} par un identifiant technique d'anonymisation irr\'eversible (UUID g\'en\'er\'e, sans lien vers \texttt{users\_auth.id}). Les lignes historiques sont conserv\'ees pour l'analytics spatiale.
+
+Codes~: 200, 401, 404.
+
+% ============================================================
+\section{Contrats Inter-Services}
+% ============================================================
+
+\subsection{G\'eolocalisation $\to$ Auth (JWT / S2S)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint JWT  & \texttt{GET /auth/verify-token}. Valide au WebSocket handshake + chaque appel REST. Cache Redis TTL 30s. \\
+Endpoint S2S  & \texttt{POST /auth/s2s/introspect} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{G\'eolocalisation $\to$ Notification (alertes)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Notification d\'eclench\'ee} \\
+\midrule
+Geofence enter    & Push~: \og Vous \^etes entr\'e dans la zone X\fg{} (si config plateforme l'exige) \\
+Geofence exit     & Push~: \og Vous avez quitt\'e la zone X\fg{} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{G\'eolocalisation --- \'Ev\'enements RabbitMQ sortants}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement publi\'e} & \textbf{Payload} \\
+\midrule
+\texttt{geo.position.updated}  & \texttt{entity\_id}, \texttt{platform\_id}, \texttt{latitude}, \texttt{longitude}, \texttt{speed}, \texttt{heading}, \texttt{tags}, \texttt{recorded\_at} \\
+\texttt{geo.geofence.enter}    & \texttt{entity\_id}, \texttt{geofence\_id}, \texttt{geofence\_name}, \texttt{platform\_id}, \texttt{location}, \texttt{recorded\_at} \\
+\texttt{geo.geofence.exit}     & Idem \\
+\texttt{geo.trip.started}      & \texttt{trip\_id}, \texttt{entity\_id}, \texttt{platform\_id}, \texttt{start\_location} \\
+\texttt{geo.trip.ended}        & \texttt{trip\_id}, \texttt{entity\_id}, \texttt{platform\_id}, \texttt{distance\_meters}, \texttt{duration\_seconds} \\
+\texttt{geo.entity.offline}    & \texttt{entity\_id}, \texttt{platform\_id}, \texttt{last\_seen\_at} \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Routage des \'ev\'enements]
+Les \'ev\'enements sont publi\'es sur un exchange RabbitMQ de type \texttt{topic}. Les consommateurs s'abonnent selon leur besoin~:
+\begin{itemize}[nosep]
+  \item MboaMove \'ecoute \texttt{geo.position.updated} pour le dispatch
+  \item AGT-Market \'ecoute \texttt{geo.geofence.*} pour la livraison
+  \item Notification \'ecoute \texttt{geo.geofence.*} pour les alertes push
+\end{itemize}
+\end{infobox}
+
+\subsection{Users $\to$ G\'eolocalisation (Purge RGPD)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint          & \texttt{DELETE /api/v1/geo/by-user/\{userId\}} \\
+Auth              & Token S2S \\
+Donn\'ees anonymis\'ees & \texttt{tracked\_entities} supprim\'ees. Dans \texttt{position\_history} et \texttt{trips}, \texttt{entity\_id} est remplac\'e par un UUID technique d'anonymisation irr\'eversible (pas NULL, FK conserv\'ee vers une entit\'e anonyme). Aucune r\'e-identification possible. \\
+S\'equence        & Avant Auth purge \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Matrice d'Autorisation}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{lcccc}
+\toprule
+\textbf{Endpoint} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin Plat.} & \textbf{Admin Global} \\
+\midrule
+POST /geo/positions                       & $\checkmark$ & $\checkmark$ &              &              \\
+GET /geo/positions/\{entityId\}           & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+WebSocket /geo                            & $\checkmark$ &              &              &              \\
+GET /geo/proximity                        & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /geo/trips                           & $\checkmark$ & $\checkmark$ &              &              \\
+POST /geo/trips/\{id\}/end               & $\checkmark$ & $\checkmark$ &              &              \\
+GET /geo/trips/\{id\}                     & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+GET /geo/trips                            & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /geo/geofences                       &              &              & $\checkmark$ & $\checkmark$ \\
+GET /geo/geofences                        & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+PUT /geo/geofences/\{id\}                 &              &              & $\checkmark$ & $\checkmark$ \\
+DELETE /geo/geofences/\{id\}              &              &              & $\checkmark$ & $\checkmark$ \\
+GET /geo/distance                         & $\checkmark$ & $\checkmark$ &              &              \\
+GET /geo/eta                              & $\checkmark$ & $\checkmark$ &              &              \\
+GET /geo/geocode                          & $\checkmark$ & $\checkmark$ &              &              \\
+GET /geo/reverse-geocode                  & $\checkmark$ & $\checkmark$ &              &              \\
+PUT /geo/config/\{platformId\}            &              &              & $\checkmark$ & $\checkmark$ \\
+GET /geo/config/\{platformId\}            &              &              & $\checkmark$ & $\checkmark$ \\
+GET /geo/admin/stats                      &              &              & $\checkmark$ & $\checkmark$ \\
+DELETE /geo/by-user/\{userId\}            &              & $\checkmark$ &              & $\checkmark$ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Recommandations \& \'Evolutions}
+% ============================================================
+
+\begin{itemize}
+  \item \textbf{Heatmap}~: visualisation de densit\'e de positions sur une zone (utile pour analytics MboaMove/Market).
+  \item \textbf{Clustering}~: regroupement d'entit\'es proches pour l'affichage carte \`a faible zoom.
+  \item \textbf{Replay de trajet}~: rejouer un trajet en temps acc\'el\'er\'e (utile pour audit, r\'eclamations).
+  \item \textbf{Alertes vitesse}~: d\'etecter les exc\`es de vitesse dans les zones g\'eofenc\'ees.
+  \item \textbf{Isochrones}~: zones accessibles en N minutes depuis un point.
+  \item \textbf{Offline-first mobile}~: buffer GPS c\^ot\'e mobile avec sync \`a la reconnexion.
+  \item \textbf{Monitoring}~: m\'etriques Prometheus (positions/s, connexions WS, latence proximit\'e, cache hit rate ETA).
+  \item \textbf{Versioning API}~: pr\'efixe \texttt{/api/v1}. Breaking changes $\to$ \texttt{/api/v2}.
+\end{itemize}
+
+% ============================================================
+\section*{Annexes}
+% ============================================================
+
+\subsection*{Glossaire}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Terme} & \textbf{D\'efinition} \\
+\midrule
+PostGIS         & Extension spatiale de PostgreSQL pour les donn\'ees g\'eographiques \\
+WGS84           & Syst\`eme de coordonn\'ees g\'eod\'esiques mondial (SRID 4326) \\
+GiST            & Generalized Search Tree --- index PostgreSQL optimis\'e pour les donn\'ees spatiales \\
+Geofence        & Zone g\'eographique virtuelle d\'eclenchant des alertes \`a l'entr\'ee/sortie \\
+R-tree          & Structure de donn\'ees spatiale pour la recherche par rectangle englobant \\
+Haversine       & Formule de calcul de distance entre deux points sur une sph\`ere \\
+ETA             & Estimated Time of Arrival --- temps estim\'e d'arriv\'ee \\
+OSRM            & Open Source Routing Machine --- moteur de routage open source \\
+Geocoding       & Conversion adresse $\to$ coordonn\'ees (et inverse) \\
+Socket.IO       & Biblioth\`eque WebSocket avec fallback polling et reconnexion automatique \\
+Sticky session  & Affinit\'e de session entre un client et une instance serveur \\
+S2S             & Service-to-Service \\
+DLQ             & Dead Letter Queue \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Code PlantUML --- Diagramme de Classes}
+\label{sec:plantuml}
+
+Le code PlantUML ci-dessous correspond au diagramme de classes complet du service G\'eolocalisation v1.2. Il peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+@startuml Geolocation Service - Class Diagram v1.2
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "tracked_entities" as entities {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * entity_type : VARCHAR(20)
+  * entity_id : UUID
+  tags : JSONB = '[]'
+  is_active : BOOLEAN = true
+  last_seen_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, entity_type, entity_id)
+}
+
+entity "position_history" as positions {
+  * id : UUID <<PK>>
+  --
+  * entity_id : UUID <<FK>>
+  * location : GEOGRAPHY(Point, 4326)
+  altitude : FLOAT
+  heading : FLOAT
+  speed : FLOAT
+  accuracy : FLOAT
+  trip_id : UUID <<FK>>
+  * recorded_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  ..
+  <<INDEX GiST>> location
+  <<PARTITION>> BY RANGE (recorded_at)
+}
+
+entity "trips" as trips {
+  * id : UUID <<PK>>
+  --
+  * entity_id : UUID <<FK>>
+  * platform_id : UUID
+  * status : VARCHAR(20)
+  * start_location : GEOGRAPHY(Point, 4326)
+  end_location : GEOGRAPHY(Point, 4326)
+  start_address : VARCHAR(255)
+  end_address : VARCHAR(255)
+  distance_meters : FLOAT = 0
+  duration_seconds : INT = 0
+  metadata : JSONB
+  * started_at : TIMESTAMPTZ
+  ended_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+}
+
+entity "geofences" as fences {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * name : VARCHAR(100)
+  * fence_type : VARCHAR(10)
+  geometry : GEOGRAPHY(Polygon, 4326)
+  center : GEOGRAPHY(Point, 4326)
+  radius_meters : FLOAT
+  tags : JSONB = '[]'
+  metadata : JSONB
+  is_active : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, name)
+  <<INDEX GiST>> geometry, center
+}
+
+entity "geofence_events" as geoevents {
+  * id : UUID <<PK>>
+  --
+  * geofence_id : UUID <<FK>>
+  * entity_id : UUID <<FK>>
+  * event_type : VARCHAR(10)
+  * location : GEOGRAPHY(Point, 4326)
+  * recorded_at : TIMESTAMPTZ
+}
+
+entity "platform_geo_configs" as geoconfig {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID <<UQ>>
+  update_interval_seconds : INT = 5
+  position_ttl_seconds : INT = 30
+  batch_flush_seconds : INT = 15
+  default_eta_provider : VARCHAR(30) = 'haversine'
+  default_geocode_provider : VARCHAR(30) = 'nominatim'
+  max_proximity_radius_km : FLOAT = 50
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entities ||--o{ positions    : "0..* positions"
+entities ||--o{ trips        : "0..* trips"
+entities ||--o{ geoevents    : "0..* geofence events"
+
+trips ||--o{ positions       : "0..* trip points"
+
+fences ||--o{ geoevents      : "0..* events"
+
+@enduml
+\end{lstlisting}
+
+\vfill
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}\\[0.5em]
+{\small\textcolor{agtgray}{AG Technologies --- Document confidentiel \`a usage interne exclusivement.}}\\
+{\small\textcolor{agtgray}{Geolocation Service CDC v1.2 --- Avril 2026}}
+\end{center}
+
+\end{document}

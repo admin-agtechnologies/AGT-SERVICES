@@ -1,0 +1,2222 @@
+\documentclass[11pt,a4paper]{article}
+
+% ── Encodage & langue ──
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% ── Mise en page ──
+\usepackage[top=2cm,bottom=2cm,left=1.8cm,right=1.8cm]{geometry}
+\usepackage{parskip}
+\usepackage{setspace}
+\setstretch{1.02}
+
+% ── Couleurs – thème Chatbot IA (violet / cyan / sarcelle) ──
+\usepackage[table,dvipsnames]{xcolor}
+\definecolor{aiprimary}{HTML}{7C3AED}      % violet profond
+\definecolor{aisecondary}{HTML}{06B6D4}    % cyan vif
+\definecolor{aiaccent}{HTML}{A78BFA}       % lavande
+\definecolor{aidark}{HTML}{1E1B4B}         % indigo très foncé
+\definecolor{ailight}{HTML}{F3F0FF}        % lavande pâle
+\definecolor{aigray}{HTML}{64748B}         % gris ardoise
+\definecolor{aicode}{HTML}{F8FAFC}         % fond code
+\definecolor{aiwarn}{HTML}{F59E0B}         % ambre
+\definecolor{aigreen}{HTML}{10B981}        % émeraude
+\definecolor{aitable}{HTML}{EDE9FE}        % fond lignes paires tableau
+
+% ── Polices ──
+
+% ── Graphiques & tableaux ──
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{colortbl}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ── Liens & méta ──
+\usepackage[hidelinks,colorlinks=true,linkcolor=aiprimary,urlcolor=aisecondary,citecolor=aiprimary]{hyperref}
+
+% ── Listes ──
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.4em,itemsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=2pt,parsep=0pt}
+
+% ── Code / JSON ──
+\usepackage{listings}
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  string=[s]{"}{"},
+  stringstyle=\color{aiprimary},
+  comment=[l]{//},
+  commentstyle=\color{aigray}\itshape,
+  morestring=[b]',
+  literate=
+    *{:}{{{\color{aidark}:}}}{1}
+    {,}{{{\color{aidark},}}}{1}
+    {\{}{{{\color{aiprimary}\{}}}{1}
+    {\}}{{{\color{aiprimary}\}}}}{1}
+    {[}{{{\color{aiprimary}[}}}{1}
+    {]}{{{\color{aiprimary}]}}}{1}
+    {true}{{{\color{aigreen}true}}}{4}
+    {false}{{{\color{aiwarn}false}}}{5}
+    {null}{{{\color{aigray}null}}}{4},
+}
+\lstset{
+  language=json,
+  backgroundcolor=\color{aicode},
+  frame=single,
+  rulecolor=\color{aiaccent!40},
+  framesep=6pt,
+  xleftmargin=4pt,
+  xrightmargin=4pt,
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=2,
+  aboveskip=4pt,
+  belowskip=4pt,
+}
+
+% ── Sections personnalisées ──
+\usepackage{titlesec}
+\titleformat{\section}
+  {\Large\bfseries\color{aiprimary}}
+  {\thesection}{0.8em}{}[\color{aiaccent}\titlerule]
+\titleformat{\subsection}
+  {\large\bfseries\color{aidark}}
+  {\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{aiprimary}}
+  {\thesubsubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{14pt}{6pt}
+\titlespacing*{\subsection}{0pt}{10pt}{3pt}
+\titlespacing*{\subsubsection}{0pt}{6pt}{2pt}
+
+% ── En-tête / Pied de page ──
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{aiprimary}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0.3pt}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{aiaccent!50}\leaders\hrule height \footrulewidth\hfill}}
+\fancyhead[L]{\small\color{aigray}\textbf{AGT — Service Chatbot IA}}
+\fancyhead[R]{\small\color{aigray}v1.2 — Confidentiel}
+\fancyfoot[C]{\small\color{aigray}\thepage}
+
+% ── Boîtes colorées ──
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+\newtcolorbox{apibox}[1]{
+  enhanced,breakable,
+  colback=ailight,colframe=aiprimary,
+  coltitle=white,fonttitle=\bfseries\ttfamily,
+  title=#1,
+  boxrule=0.6pt,arc=3pt,
+  top=4pt,bottom=4pt,left=6pt,right=6pt
+}
+
+\newtcolorbox{infobox}[1][]{
+  enhanced,breakable,
+  colback=ailight,colframe=aiaccent,
+  boxrule=0.5pt,arc=3pt,
+  top=4pt,bottom=4pt,left=6pt,right=6pt,
+  fontupper=\small,#1
+}
+
+\newtcolorbox{warnbox}[1][]{
+  enhanced,breakable,
+  colback=aiwarn!8,colframe=aiwarn,
+  boxrule=0.5pt,arc=3pt,
+  top=4pt,bottom=4pt,left=6pt,right=6pt,
+  fontupper=\small,#1
+}
+
+% ── Commandes utilitaires ──
+\newcommand{\httpmethod}[1]{\texttt{\bfseries\color{aiprimary}#1}}
+\newcommand{\endpoint}[1]{\texttt{\color{aidark}#1}}
+\newcommand{\code}[1]{\texttt{\color{aiprimary}#1}}
+\newcommand{\field}[1]{\texttt{\small #1}}
+
+% ── TdM ──
+\usepackage{tocloft}
+\renewcommand{\cftsecfont}{\bfseries\color{aiprimary}}
+\renewcommand{\cftsecpagefont}{\bfseries\color{aiprimary}}
+\renewcommand{\cftsubsecfont}{\color{aidark}}
+\renewcommand{\cfttoctitlefont}{\Large\bfseries\color{aiprimary}}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── PAGE DE COUVERTURE ──
+\thispagestyle{empty}
+\begin{center}
+\vspace*{1.5cm}
+
+% Bande décorative supérieure
+\noindent\makebox[\textwidth]{%
+  \colorbox{aiprimary}{\makebox[\textwidth][c]{\rule{0pt}{6pt}}}%
+}
+\vspace{2pt}
+\noindent\makebox[\textwidth]{%
+  \colorbox{aisecondary}{\makebox[\textwidth][c]{\rule{0pt}{3pt}}}%
+}
+
+\vspace{2cm}
+
+{\fontsize{14}{16}\selectfont\color{aigray}\textsc{AGT — Architecture de Services Partagés}}
+
+\vspace{0.8cm}
+
+{\fontsize{28}{34}\selectfont\bfseries\color{aiprimary}Cahier des Charges}
+
+\vspace{0.3cm}
+
+{\fontsize{22}{26}\selectfont\bfseries\color{aidark}Service Chatbot IA Centralisé}
+
+\vspace{0.4cm}
+
+{\fontsize{12}{14}\selectfont\color{aigray}\textit{Le cerveau conversationnel multi-IA de l'écosystème}}
+
+\vspace{0.6cm}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{>{\color{aigray}\bfseries}r @{\hspace{12pt}} l}
+Dépendances validées & Auth v2.1, Users v1.0, Chat v1.2, Notification v1.2, Média v1.4 \\
+Version & 1.2 \\
+Date & Mars 2026 \\
+Statut & Implementation-ready (validé architecture) \\
+Classification & Confidentiel \\
+\end{tabular}
+
+\vspace{2.5cm}
+
+% Bande décorative inférieure
+\noindent\makebox[\textwidth]{%
+  \colorbox{aisecondary}{\makebox[\textwidth][c]{\rule{0pt}{3pt}}}%
+}
+\vspace{2pt}
+\noindent\makebox[\textwidth]{%
+  \colorbox{aiprimary}{\makebox[\textwidth][c]{\rule{0pt}{6pt}}}%
+}
+
+\end{center}
+\newpage
+
+% ── HISTORIQUE ──
+\thispagestyle{fancy}
+
+{\Large\bfseries\color{aiprimary}Historique des Révisions}
+\vspace{6pt}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{c c l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Ver.} & \textbf{\color{white}Date} & \textbf{\color{white}Auteur} & \textbf{\color{white}Description} \\
+\midrule
+1.0 & 2026-03-20 & Équipe Architecture & Création initiale du cahier des charges \\
+1.1 & 2026-03-30 & Équipe Architecture & Refonte multi-provider, abstraction canaux, pipeline ingestion, transfert humain, persistance analytique, branching conditionnel flows \\
+1.2 & 2026-03-30 & Équipe Architecture & Conversation Orchestrator formalisé, Action System standardisé, frontière Search Service documentée, statut Implementation-ready \\
+\bottomrule
+\end{tabularx}
+
+\vspace{1.2cm}
+
+% ── TABLE DES MATIÈRES ──
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+\section{Introduction}
+
+Ce document constitue le cahier des charges du \textbf{Service Chatbot IA Centralisé} (ci-après \og Chatbot Service \fg{}) destiné à l'écosystème de plateformes AGT. Il sert de référence unique pour la conception, le développement et l'intégration avec les autres services.
+
+\subsection*{Périmètre}
+
+Le Chatbot Service est le \textbf{cerveau IA conversationnel multi-provider} de l'écosystème. Il gère l'ensemble du cycle de traitement des messages : détection d'intention, navigation dans des flux conversationnels, génération de réponses par IA, gestion de la mémoire de conversation et déclenchement d'actions métier. Il est conçu comme un service \textbf{générique, configurable et multi-canal}, sans logique métier codée en dur. Chaque plateforme configure ses propres bots.
+
+\begin{infobox}
+\textbf{Modes d'utilisation :} Le service fonctionne (1) via le Hub Engine (AGT-Bot $\rightarrow$ WhatsApp), (2) en standalone (AGT-Market, SALMA, applications web), et (3) via connecteur externe (agent vocal, Messenger, Telegram, SMS, etc.).
+\end{infobox}
+
+\begin{warnbox}
+\textbf{Nouveautés v1.1 $\rightarrow$ v1.2 :} Conversation Orchestrator formalisé comme composant central, Action System standardisé (contrat, retry, timeout, auth), frontière avec Search Service documentée (vector search interne justifié), statut \textit{implementation-ready}.
+\end{warnbox}
+
+% ══════════════════════════════════════════════════════════════
+\section{Contexte \& Problématique}
+
+\subsection{Contexte}
+
+L'organisation développe plusieurs plateformes indépendantes nécessitant des capacités conversationnelles intelligentes :
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Plateforme} & \textbf{\color{white}Statut} & \textbf{\color{white}Besoin IA} \\
+\midrule
+AGT-Bot & En développement & Chatbot WhatsApp multi-tenant via Hub Engine \\
+AGT-Market & En développement & Assistant achat, support vendeur \\
+SALMA & Migration prévue & Assistant conversationnel intégré \\
+Futures & Planifié & Capacités IA à la demande \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Problématique}
+
+Sans service centralisé, chaque plateforme implémenterait sa propre couche IA, entraînant : duplication des intégrations avec les providers IA (coûts \& maintenance), incohérence de l'expérience conversationnelle, impossibilité de mutualiser les bases de connaissances, et multiplication des budgets IA sans contrôle.
+
+% ══════════════════════════════════════════════════════════════
+\section{Vision \& Objectifs}
+
+\subsection{Vision}
+
+Un service IA conversationnel unique, générique et configurable, permettant à toute plateforme de l'écosystème de déployer des chatbots intelligents en quelques minutes, sans développement spécifique.
+
+\subsection{Objectifs}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{c X X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}\#} & \textbf{\color{white}Objectif} & \textbf{\color{white}Indicateur de succès} \\
+\midrule
+O1 & Service IA centralisé & Un seul point d'intégration pour toutes les plateformes \\
+O2 & Architecture multi-couches & 4 couches de traitement (mots-clés, flux, IA générative, fallback) \\
+O3 & Bots génériques & Configuration no-code des bots, intentions, flux \\
+O4 & Multi-provider IA & Plusieurs providers par bot, routing par couche, fallback entre providers \\
+O5 & Multi-canal & Abstraction canal (WhatsApp, web, vocal, SMS, Messenger\ldots) avec adapters \\
+O6 & Performance & $<$ 2s couches 1 \& 2, $<$ 5s couche IA \\
+O7 & Multi-langue & FR + EN minimum, détection automatique \\
+O8 & Transfert humain & Escalade vers Service Chat avec contexte complet \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════
+\section{Parties Prenantes \& Utilisateurs}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Rôle} & \textbf{\color{white}Type} & \textbf{\color{white}Responsabilité} \\
+\midrule
+Product Owner & Interne & Priorisation des fonctionnalités IA \\
+Équipe Backend & Interne & Développement du service Chatbot \\
+Équipe Frontend & Interne & Intégration des widgets de chat \\
+Équipe IA/ML & Interne & Configuration des modèles et prompts \\
+DevOps & Interne & Infrastructure, monitoring, scaling \\
+Administrateurs & Interne & Configuration des bots, intentions, flux \\
+Utilisateurs finaux & Externe & Interaction avec les chatbots \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════
+\section{Besoins Fonctionnels}
+
+\subsection{Gestion des Bots}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-BOT-01 & Création d'un bot avec nom, avatar, personnalité, langues, prompt système & Urgent \\
+F-BOT-02 & Configuration des messages (accueil, fallback, transfert humain) & Urgent \\
+F-BOT-03 & Activation / désactivation d'un bot & Urgent \\
+F-BOT-04 & Duplication d'un bot existant & Normale \\
+F-BOT-05 & Définition du seuil de transfert humain (N échecs) & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Architecture IA Multi-Couches}
+
+\begin{warnbox}
+\textbf{Règle fondamentale :} Chaque message entrant traverse séquentiellement 4 couches de traitement. La première couche renvoyant un résultat avec un score de confiance suffisant produit la réponse.
+\end{warnbox}
+
+\subsubsection{Couche 1 — Mots-clés / Intentions}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-INT-01 & CRUD des intentions avec mots-clés associés & Urgent \\
+F-INT-02 & Mapping mots-clés $\rightarrow$ intention avec score de confiance & Urgent \\
+F-INT-03 & Configuration du seuil de confiance par bot & Urgent \\
+F-INT-04 & Endpoint de test d'une intention & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Couche 2 — Flux Conversationnels}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-FLW-01 & CRUD des flux conversationnels & Urgent \\
+F-FLW-02 & Arbre de décision avec nœuds : question, réponse, condition, action & Urgent \\
+F-FLW-03 & Configuration no-code friendly des flux & Urgent \\
+F-FLW-04 & Simulation / test d'un flux & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Couche 3 — IA Générative}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-GEN-01 & Intégration multi-provider IA (OpenAI, Anthropic, Google Gemini, etc.) & Urgent \\
+F-GEN-02 & Contexte enrichi : base de connaissances + historique + personnalité & Urgent \\
+F-GEN-03 & Routing par couche : provider dédié par usage (RAG, conversation, traduction) & Urgent \\
+F-GEN-04 & Fallback entre providers (si provider A échoue $\rightarrow$ provider B) & Urgent \\
+F-GEN-05 & Configuration prompt système par bot & Urgent \\
+F-GEN-06 & Paramètres modèle (température, max tokens) configurables par provider & Normale \\
+F-GEN-07 & Circuit breaker par provider (désactivation auto si taux d'erreur élevé) & Normale \\
+F-GEN-08 & Health check périodique des providers configurés & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Couche 4 — Fallback}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-FBK-01 & Message de fallback configurable par bot & Urgent \\
+F-FBK-02 & Compteur d'échecs consécutifs par conversation & Urgent \\
+F-FBK-03 & Logging des messages non résolus (persistance PostgreSQL) & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Base de Connaissances}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-KB-01 & CRUD des entrées (FAQ, texte libre, documents PDF) & Urgent \\
+F-KB-02 & Import CSV en masse & Normale \\
+F-KB-03 & Catégorisation des entrées & Normale \\
+F-KB-04 & Recherche par similarité (vector search) & Urgent \\
+F-KB-05 & Données dynamiques via API externe & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Mémoire de Conversation}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-MEM-01 & Historique des N derniers messages par conversation & Urgent \\
+F-MEM-02 & Variables de session (contexte utilisateur) & Urgent \\
+F-MEM-03 & TTL configurable (ex : 30 min d'inactivité) & Urgent \\
+F-MEM-04 & Stockage Redis (pas de persistance long terme) & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Actions \& Intégrations}
+
+Le bot peut déclencher des actions métier via des API internes ou des workflows configurés :
+
+\begin{itemize}
+\item Créer une commande (AGT-Market)
+\item Prendre un rendez-vous (SALMA)
+\item Envoyer un lien de paiement
+\item Transférer vers un agent humain (Service Chat)
+\item Appeler un webhook externe
+\end{itemize}
+
+\subsection{Multi-langue}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-LNG-01 & Support FR + EN minimum & Urgent \\
+F-LNG-02 & Détection automatique de la langue & Urgent \\
+F-LNG-03 & Réponse dans la langue détectée & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Canaux / Connecteurs}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-CHN-01 & Enregistrement d'un canal par bot (WhatsApp, web, vocal, SMS, Messenger, API) & Urgent \\
+F-CHN-02 & Configuration par canal : format réponse, taille max, médias supportés, rate limit & Urgent \\
+F-CHN-03 & Adapter pattern : normalisation entrée/sortie par canal & Urgent \\
+F-CHN-04 & Webhook entrant configurable par canal (pour intégrations push) & Normale \\
+F-CHN-05 & Activation / désactivation d'un canal sans impacter le bot & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Transfert Humain}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-TRF-01 & Déclenchement automatique après N fallbacks consécutifs & Urgent \\
+F-TRF-02 & Appel S2S vers Service Chat \code{POST /api/v1/chat/conversations/transfer} & Urgent \\
+F-TRF-03 & Transmission du contexte (bot\_history, variables session, intent détecté) & Urgent \\
+F-TRF-04 & Suivi du statut transfert (en\_attente, pris\_en\_charge, cloture) & Urgent \\
+F-TRF-05 & Reprise automatique par le bot après clôture opérateur & Normale \\
+F-TRF-06 & Déclenchement manuel via action dans un flow & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Ingestion Documentaire}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-ING-01 & Upload de documents (PDF, TXT, DOCX, CSV) via Média Service & Urgent \\
+F-ING-02 & Worker asynchrone : extraction texte $\rightarrow$ chunking $\rightarrow$ embedding & Urgent \\
+F-ING-03 & Statut de traitement par document (pending, processing, done, error) & Urgent \\
+F-ING-04 & Ré-ingestion manuelle d'un document modifié & Normale \\
+F-ING-05 & Suppression en cascade des embeddings lors de suppression document & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Statistiques}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Fonctionnalité} & \textbf{\color{white}Priorité} \\
+\midrule
+F-STA-01 & Volume de messages par bot & Urgent \\
+F-STA-02 & Taux de résolution (sans fallback) & Urgent \\
+F-STA-03 & Taux de fallback & Urgent \\
+F-STA-04 & Top intentions détectées & Normale \\
+F-STA-05 & Messages non répondus & Normale \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════
+\section{Besoins Non-Fonctionnels}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}Catégorie} & \textbf{\color{white}Exigence} & \textbf{\color{white}Cible} \\
+\midrule
+NF-01 & Performance & Temps de réponse couches 1 \& 2 & $<$ 2s \\
+NF-02 & Performance & Temps de réponse couche IA & $<$ 5s \\
+NF-03 & Performance & Throughput & 200 req/s \\
+NF-04 & Disponibilité & Uptime & 99.9\% \\
+NF-05 & Sécurité & Authentification Bearer via Service Auth & Obligatoire \\
+NF-06 & Sécurité & Auth S2S pour appels inter-services (transfert, etc.) & Obligatoire \\
+NF-07 & Sécurité & Chiffrement des clés API IA (AES-256) & Obligatoire \\
+NF-08 & Sécurité & Rate limiting par bot et par canal & Configurable \\
+NF-09 & Scalabilité & Architecture stateless, multi-instance & Obligatoire \\
+NF-10 & Données & Mémoire conversation : Redis TTL (court terme) & Obligatoire \\
+NF-11 & Données & Logs analytiques : PostgreSQL (long terme) & Obligatoire \\
+NF-12 & Observabilité & Logs structurés JSON, request ID, correlation ID & Obligatoire \\
+NF-13 & Résilience & Fallback obligatoire si toutes couches échouent & Obligatoire \\
+NF-14 & Résilience & Circuit breaker par provider IA & Obligatoire \\
+NF-15 & Extensibilité & Multi-provider IA par bot (Strategy + routing) & Obligatoire \\
+NF-16 & Extensibilité & Multi-canal via adapter pattern & Obligatoire \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════
+\section{Architecture Technique}
+
+\subsection{Vue d'ensemble}
+
+Le Chatbot Service est un microservice REST stateless, déployé en conteneur Docker. Il expose une API JSON consommée par les plateformes clientes (via Hub Engine ou en direct) et interagit avec les providers IA externes.
+
+\subsection{Architecture IA Multi-Couches — Pipeline de traitement}
+
+\begin{infobox}
+\textbf{Pipeline séquentiel :} Message $\rightarrow$ \textbf{Couche 1} (mots-clés) $\rightarrow$ \textbf{Couche 2} (flux) $\rightarrow$ \textbf{Couche 3} (IA générative) $\rightarrow$ \textbf{Couche 4} (fallback). Chaque couche peut court-circuiter le pipeline si le score de confiance dépasse le seuil configuré.
+\end{infobox}
+
+\subsection{Composant Central : Conversation Orchestrator}
+
+Le \textbf{Conversation Orchestrator} est le composant interne qui pilote le cycle de vie complet d'un message entrant. Il n'est pas un microservice séparé : c'est une classe/module Python central dans le codebase du Chatbot Service.
+
+\subsubsection{Responsabilités}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Responsabilité} & \textbf{\color{white}Détail} \\
+\midrule
+Channel Validation & Vérifie que le canal est actif pour le bot, charge la config canal (adapter) \\
+Context Loading & Charge le contexte conversation depuis Redis (historique, variables, compteur fallbacks) \\
+Language Detection & Détecte la langue du message si non fournie \\
+Pipeline Routing & Exécute séquentiellement les couches 1 $\rightarrow$ 2 $\rightarrow$ 3 $\rightarrow$ 4, court-circuite dès confiance suffisante \\
+Provider Selection & Pour la couche 3, sélectionne le provider selon \code{purpose} + \code{priority}, applique le circuit breaker \\
+Action Execution & Si une couche ou un flow déclenche une action, exécute via l'Action Executor \\
+Transfer Decision & Si \code{consecutive\_fallbacks} $\geq$ \code{human\_transfer\_after}, déclenche le transfert S2S vers Chat \\
+Response Adaptation & Adapte la réponse au canal (taille, format, médias) via le Channel Adapter \\
+Context Saving & Sauvegarde le contexte mis à jour dans Redis \\
+Logging & Écrit de manière asynchrone dans \code{conversation\_logs} (fire-and-forget via Celery) \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Flux d'exécution}
+
+\begin{enumerate}[leftmargin=2em]
+\item \code{POST /chatbot/converse} reçu par le contrôleur Django
+\item Le contrôleur instancie l'\code{Orchestrator} avec le payload
+\item L'Orchestrator charge le bot, valide le canal, charge le contexte Redis
+\item L'Orchestrator exécute le pipeline :
+  \begin{enumerate}
+  \item \textbf{Couche 1} — \code{IntentResolver} : matching mots-clés $\rightarrow$ si confiance $\geq$ seuil, retourne
+  \item \textbf{Couche 2} — \code{FlowEngine} : si un flow est actif ou déclenché par intent, exécute les nœuds (avec branching conditionnel)
+  \item \textbf{Couche 3} — \code{AiEngine} : sélectionne le provider (\code{purpose=conversation}), construit le prompt (system\_prompt + KB context + historique), appelle l'API. Si échec, tente le fallback provider (\code{priority=1})
+  \item \textbf{Couche 4} — \code{FallbackHandler} : retourne le \code{fallback\_message}, incrémente le compteur, évalue le transfert humain
+  \end{enumerate}
+\item L'Orchestrator adapte la réponse via le \code{ChannelAdapter}
+\item L'Orchestrator sauvegarde le contexte dans Redis, enqueue le log async
+\item Le contrôleur retourne la réponse JSON
+\end{enumerate}
+
+\begin{warnbox}
+\textbf{Règle :} L'Orchestrator ne contient AUCUNE logique métier. Il orchestre des composants configurables. Toute la ``connaissance'' vient de la base de données (intentions, flows, prompts, actions).
+\end{warnbox}
+
+\subsection{Action System — Contrat Standardisé}
+
+Toute action déclenchée par un flow node ou par le bot (table \code{bot\_actions}, \code{flow\_actions}) suit un contrat standardisé exécuté par l'\textbf{Action Executor}, un sous-composant de l'Orchestrator.
+
+\subsubsection{Contrat d'une Action}
+
+\begin{lstlisting}
+{
+  "type": "api_call",
+  "service": "market",
+  "endpoint": "/api/v1/orders",
+  "method": "POST",
+  "auth": "s2s",
+  "headers": {"X-Bot-Id": "{{bot_id}}"},
+  "payload_template": {
+    "user_id": "{{sender_id}}",
+    "product_id": "{{flow_var.product_id}}"
+  },
+  "timeout_ms": 3000,
+  "retry": {
+    "enabled": true,
+    "max_attempts": 2,
+    "backoff_ms": 500
+  },
+  "on_failure": "continue"
+}
+\end{lstlisting}
+
+\subsubsection{Types d'actions supportés}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Type} & \textbf{\color{white}Auth} & \textbf{\color{white}Description} \\
+\midrule
+\code{api\_call} & S2S / Bearer & Appel REST vers un service interne AGT \\
+\code{webhook} & Custom headers & Appel HTTP vers un endpoint externe \\
+\code{transfer\_human} & S2S & Déclenche un transfert vers le Service Chat \\
+\code{send\_notification} & S2S & Envoie une notification via le Service Notification \\
+\code{set\_variable} & — & Modifie une variable de session (Redis) \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Règles d'exécution}
+
+\begin{itemize}
+\item \textbf{Auth S2S :} utilise le \code{client\_id} / \code{client\_secret} du Chatbot Service enregistré dans Auth v2.1 (endpoint \code{POST /auth/s2s/token}).
+\item \textbf{Template variables :} les \code{\{\{...\}\}} sont résolus au runtime depuis le contexte (sender\_id, bot\_id, flow variables, session variables).
+\item \textbf{Timeout :} défaut 3000ms, configurable par action.
+\item \textbf{Retry :} optionnel, exponential backoff, max 3 tentatives.
+\item \textbf{on\_failure :} \code{continue} (ignore et poursuit le flow) ou \code{abort} (retourne une erreur au user).
+\item \textbf{Logging :} chaque exécution d'action est loggée (succès/échec, durée, HTTP status).
+\end{itemize}
+
+\subsection{Frontière avec le Service Recherche}
+
+\begin{warnbox}
+\textbf{Décision d'architecture :} Le Chatbot Service possède sa \textbf{propre} capacité de vector search (pgvector) pour la knowledge base interne des bots. Il n'utilise PAS le Service Recherche v1.2 pour cela.
+\end{warnbox}
+
+\subsubsection{Justification}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Critère} & \textbf{\color{white}Service Recherche v1.2} & \textbf{\color{white}Chatbot KB (pgvector)} \\
+\midrule
+Périmètre & Données métier plateformes (produits, FAQ, formations) & Knowledge base privée par bot (RAG) \\
+Technologie & Elasticsearch (full-text + futur dense\_vector) & pgvector (similarité cosinus native PostgreSQL) \\
+Latence cible & $<$ 200ms & $<$ 100ms (critique pour pipeline temps réel) \\
+Cycle de vie & Index gérés par les plateformes & Embeddings gérés par le pipeline d'ingestion interne \\
+Sémantique MVP & Full-text + scoring (embeddings = roadmap future) & Vector search = MVP day 1 \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Point d'intégration futur}
+
+Quand le Service Recherche v1.2+ implémentera la recherche sémantique par embeddings (dense\_vector Elasticsearch), le Chatbot Service pourra optionnellement déléguer la recherche KB via un adapter :
+
+\begin{itemize}
+\item \code{search\_backend: "internal"} $\rightarrow$ pgvector (défaut, MVP)
+\item \code{search\_backend: "search\_service"} $\rightarrow$ appel REST vers Search Service
+\end{itemize}
+
+Ce choix sera configurable par bot via \code{bot\_configs} (\code{config\_key: "search\_backend"}).
+
+\subsection{Stack Technique}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Composant} & \textbf{\color{white}Technologie} \\
+\midrule
+Langage \& Framework & Python 3.11+ / Django REST Framework \\
+Base de données & PostgreSQL 15+ \\
+Cache / Contexte & Redis 7+ (mémoire conversation, sessions, rate limiting) \\
+Recherche vectorielle & pgvector ou Elasticsearch \\
+Providers IA & OpenAI API, Anthropic API (interchangeables) \\
+Message Broker & RabbitMQ ou Redis Streams \\
+Conteneurisation & Docker + Docker Compose \\
+CI/CD & GitHub Actions \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Dépendances Externes \& Services}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Service} & \textbf{\color{white}Type} & \textbf{\color{white}Usage} \\
+\midrule
+Auth Service & Interne & Validation des tokens Bearer + auth S2S (obligatoire) \\
+Chat Service & Interne & Transfert vers agent humain (S2S : \code{POST /api/v1/chat/conversations/transfer}) \\
+User Service & Interne & Données utilisateur pour contexte, rôles admin \\
+Notification Service & Interne & Notifications push liées aux conversations \\
+Média Service & Interne & Gestion des fichiers / images / documents uploadés \\
+OpenAI / Anthropic / Google & Externe & Providers IA générative (couche 3) — multi-provider par bot \\
+Elasticsearch / pgvector & Interne & Recherche par similarité (knowledge base) \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}
+\textbf{Règle d'architecture :} Le Chatbot Service ne contient aucune logique métier en dur. Toute la configuration (intentions, flux, prompts, actions) est stockée en base et pilotée par API.
+\end{warnbox}
+
+\subsection{Workers Asynchrones (Celery)}
+
+Le service utilise des workers Celery pour les tâches lourdes ou périodiques :
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Worker} & \textbf{\color{white}Déclencheur} & \textbf{\color{white}Rôle} \\
+\midrule
+\code{ingest\_document} & Event (upload doc) & Extraction texte $\rightarrow$ chunking $\rightarrow$ embedding $\rightarrow$ insertion KB \\
+\code{aggregate\_stats} & Cron (toutes les heures) & Agrège \code{conversation\_logs} $\rightarrow$ insère/met à jour \code{bot\_stats} \\
+\code{health\_check\_providers} & Cron (toutes les 5 min) & Ping les providers IA, met à jour circuit breaker \\
+\code{cleanup\_redis\_sessions} & Cron (quotidien) & Purge les sessions expirées dans Redis \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Stratégie de Persistance}
+
+\begin{infobox}
+\textbf{Séparation mémoire / analytique :}
+\begin{itemize}
+\item \textbf{Redis} (TTL configurable, défaut 30 min) : contexte conversation en cours, variables de session, compteur fallbacks consécutifs. Pas de persistance long terme.
+\item \textbf{PostgreSQL} \code{conversation\_logs} : chaque échange est loggé de manière asynchrone (fire-and-forget) pour les analytics, le dashboard stats, et le dataset de fine-tuning.
+\item \textbf{PostgreSQL} \code{bot\_stats} : agrégation horaire par le worker \code{aggregate\_stats} à partir des \code{conversation\_logs}.
+\end{itemize}
+\end{infobox}
+
+% ══════════════════════════════════════════════════════════════
+\section{Modélisation}
+
+\subsection{Diagramme de Classes}
+
+La figure~\ref{fig:class-diagram} présente le diagramme de classes complet du Service Chatbot IA. Il illustre les 13 entités principales et leurs relations.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{images/diagramme_classes_chatbot.png}
+  \caption{Diagramme de classes — Service Chatbot IA Centralisé}
+  \label{fig:class-diagram}
+\end{figure}
+
+\subsection{MLD — Modèle Logique de Données}
+
+\subsubsection{Table \code{bots}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+platform\_id & UUID & NOT NULL & Plateforme propriétaire \\
+name & VARCHAR(100) & NOT NULL & Nom du bot \\
+slug & VARCHAR(100) & UNIQUE & Slug URL-friendly \\
+avatar\_url & VARCHAR(500) & NULL & URL de l'avatar \\
+personality & TEXT & NULL & Description de la personnalité \\
+system\_prompt & TEXT & NULL & Prompt système pour l'IA \\
+welcome\_message & TEXT & NULL & Message d'accueil \\
+fallback\_message & TEXT & NULL & Message de fallback \\
+languages & JSONB & DEFAULT '["fr"]' & Langues supportées \\
+confidence\_threshold & DECIMAL(3,2) & DEFAULT 0.7 & Seuil de confiance \\
+human\_transfer\_after & INT & DEFAULT 3 & Transfert après N échecs \\
+is\_active & BOOLEAN & DEFAULT true & Bot actif \\
+version & INT & DEFAULT 1 & Version du bot (incrémentée à chaque publication) \\
+status & VARCHAR(20) & DEFAULT 'draft' & draft, published, archived \\
+created\_at & TIMESTAMPTZ & NOT NULL & Date de création \\
+updated\_at & TIMESTAMPTZ & NOT NULL & Dernière modification \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{bot\_configs}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+config\_key & VARCHAR(100) & NOT NULL & Clé de configuration \\
+config\_value & JSONB & NOT NULL & Valeur \\
+created\_at & TIMESTAMPTZ & NOT NULL & Création \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}
+{\small Contrainte unique : (\field{bot\_id}, \field{config\_key}).}
+
+\subsubsection{Table \code{bot\_channels}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+channel\_type & VARCHAR(30) & NOT NULL & whatsapp, web, vocal, sms, messenger, api \\
+display\_name & VARCHAR(100) & NULL & Nom affiché \\
+config & JSONB & NOT NULL & Config spécifique canal (max\_length, media\_types, format) \\
+rate\_limit & INT & DEFAULT 60 & Requêtes max par minute par canal \\
+is\_active & BOOLEAN & DEFAULT true & Canal actif \\
+created\_at & TIMESTAMPTZ & NOT NULL & Création \\
+updated\_at & TIMESTAMPTZ & NOT NULL & Modification \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}
+{\small Contrainte unique : (\field{bot\_id}, \field{channel\_type}).}
+
+\subsubsection{Table \code{knowledge\_base\_entries}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+category\_id & UUID & FK $\rightarrow$ knowledge\_categories, NULL & Catégorie \\
+type & VARCHAR(20) & NOT NULL & faq, document, text, api \\
+question & TEXT & NULL & Question (si FAQ) \\
+answer & TEXT & NOT NULL & Contenu / réponse \\
+embedding & VECTOR(1536) & NULL & Vecteur pour recherche similarité \\
+metadata & JSONB & NULL & Métadonnées additionnelles \\
+is\_active & BOOLEAN & DEFAULT true & Entrée active \\
+created\_at & TIMESTAMPTZ & NOT NULL & Création \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{knowledge\_categories}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+name & VARCHAR(100) & NOT NULL & Nom de la catégorie \\
+created\_at & TIMESTAMPTZ & NOT NULL & Création \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{knowledge\_documents}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+filename & VARCHAR(255) & NOT NULL & Nom du fichier \\
+file\_type & VARCHAR(20) & NOT NULL & pdf, txt, csv \\
+file\_url & VARCHAR(500) & NOT NULL & URL stockage (via Média Service) \\
+status & VARCHAR(20) & DEFAULT 'pending' & pending, processing, done, error \\
+chunk\_count & INT & DEFAULT 0 & Nombre de chunks extraits \\
+created\_at & TIMESTAMPTZ & NOT NULL & Création \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{intents}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+name & VARCHAR(100) & NOT NULL & Nom de l'intention \\
+response & TEXT & NOT NULL & Réponse associée \\
+is\_active & BOOLEAN & DEFAULT true & Intention active \\
+created\_at & TIMESTAMPTZ & NOT NULL & Création \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{intent\_keywords}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+intent\_id & UUID & FK $\rightarrow$ intents & Intention associée \\
+keyword & VARCHAR(100) & NOT NULL & Mot-clé \\
+weight & DECIMAL(3,2) & DEFAULT 1.0 & Poids du mot-clé \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{conversation\_flows}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+name & VARCHAR(100) & NOT NULL & Nom du flux \\
+trigger\_intent & VARCHAR(100) & NULL & Intention déclencheuse \\
+is\_active & BOOLEAN & DEFAULT true & Flux actif \\
+created\_at & TIMESTAMPTZ & NOT NULL & Création \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{flow\_nodes}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+flow\_id & UUID & FK $\rightarrow$ conversation\_flows & Flux parent \\
+type & VARCHAR(20) & NOT NULL & question, response, condition, action \\
+content & JSONB & NOT NULL & Contenu du nœud \\
+next\_node\_id & UUID & FK $\rightarrow$ flow\_nodes, NULL & Nœud suivant par défaut \\
+branches & JSONB & NULL & Branching conditionnel : \code{[{"condition":"...", "next\_node\_id":"uuid"}]} \\
+position & INT & NOT NULL & Ordre dans le flux \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{flow\_actions}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+node\_id & UUID & FK $\rightarrow$ flow\_nodes & Nœud associé \\
+action\_type & VARCHAR(50) & NOT NULL & api\_call, webhook, transfer\_human, send\_notification, set\_variable \\
+config & JSONB & NOT NULL & Contrat Action standardisé (voir section Architecture $\rightarrow$ Action System) \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{bot\_actions}}
+
+Actions globales du bot (non liées à un flow spécifique). Utilisent le même contrat standardisé que les \code{flow\_actions}.
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+name & VARCHAR(100) & NOT NULL & Nom de l'action \\
+action\_type & VARCHAR(50) & NOT NULL & api\_call, webhook, transfer\_human, send\_notification, set\_variable \\
+config & JSONB & NOT NULL & Contrat Action standardisé (voir section Architecture $\rightarrow$ Action System) \\
+is\_active & BOOLEAN & DEFAULT true & Action active \\
+created\_at & TIMESTAMPTZ & NOT NULL & Création \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{ai\_provider\_configs}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+provider & VARCHAR(30) & NOT NULL & openai, anthropic, google, mistral, custom \\
+model & VARCHAR(50) & NOT NULL & gpt-4o, claude-sonnet-4-20250514, gemini-pro, etc. \\
+api\_key\_encrypted & TEXT & NOT NULL & Clé API chiffrée (AES-256) \\
+base\_url & VARCHAR(500) & NULL & URL custom (pour providers self-hosted) \\
+temperature & DECIMAL(3,2) & DEFAULT 0.7 & Température du modèle \\
+max\_tokens & INT & DEFAULT 1000 & Tokens max par réponse \\
+purpose & VARCHAR(30) & NOT NULL & conversation, rag, translation, fallback \\
+priority & INT & DEFAULT 0 & Priorité (0 = principal, 1+ = fallback) \\
+is\_active & BOOLEAN & DEFAULT true & Provider actif \\
+circuit\_breaker\_threshold & INT & DEFAULT 5 & Échecs consécutifs avant désactivation auto \\
+created\_at & TIMESTAMPTZ & NOT NULL & Création \\
+updated\_at & TIMESTAMPTZ & NOT NULL & Modification \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}
+{\small Contrainte unique : (\field{bot\_id}, \field{provider}, \field{purpose}). Un bot peut avoir OpenAI pour conversation et Gemini pour RAG.}
+
+\subsubsection{Table \code{bot\_stats}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+date & DATE & NOT NULL & Jour \\
+total\_messages & INT & DEFAULT 0 & Nombre total de messages \\
+resolved\_count & INT & DEFAULT 0 & Résolus sans fallback \\
+fallback\_count & INT & DEFAULT 0 & Passés en fallback \\
+human\_transfer\_count & INT & DEFAULT 0 & Transférés vers humain \\
+layer1\_count & INT & DEFAULT 0 & Résolus couche 1 \\
+layer2\_count & INT & DEFAULT 0 & Résolus couche 2 \\
+layer3\_count & INT & DEFAULT 0 & Résolus couche 3 \\
+top\_intents & JSONB & NULL & Top intentions du jour \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}
+{\small Contrainte unique : (\field{bot\_id}, \field{date}).}
+
+\subsubsection{Table \code{conversation\_logs}}
+
+Persistance analytique des messages (séparée de la mémoire Redis).
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+conversation\_id & UUID & NOT NULL & ID session (même que Redis) \\
+sender\_id & UUID & NOT NULL & Utilisateur \\
+channel & VARCHAR(30) & NOT NULL & Canal d'origine \\
+user\_message & TEXT & NOT NULL & Message utilisateur \\
+bot\_response & TEXT & NOT NULL & Réponse du bot \\
+layer\_used & VARCHAR(30) & NOT NULL & layer\_1\_keywords, layer\_2\_flow, layer\_3\_ai, layer\_4\_fallback \\
+intent\_detected & VARCHAR(100) & NULL & Intention détectée \\
+confidence & DECIMAL(3,2) & NULL & Score de confiance \\
+provider\_used & VARCHAR(30) & NULL & Provider IA utilisé (si couche 3) \\
+tokens\_used & INT & NULL & Tokens consommés \\
+processing\_time\_ms & INT & NOT NULL & Temps de traitement \\
+is\_resolved & BOOLEAN & NOT NULL & Résolu sans fallback \\
+created\_at & TIMESTAMPTZ & NOT NULL & Horodatage \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}
+{\small Index : (\field{bot\_id}, \field{created\_at} DESC), (\field{bot\_id}, \field{is\_resolved}).}
+
+\subsubsection{Table \code{transfer\_logs}}
+
+Suivi des transferts bot $\rightarrow$ humain côté Chatbot.
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associé \\
+conversation\_id & UUID & NOT NULL & Session chatbot \\
+chat\_transfer\_id & UUID & NULL & ID transfert côté Service Chat \\
+user\_id & UUID & NOT NULL & Utilisateur transféré \\
+reason & VARCHAR(50) & NOT NULL & max\_fallbacks, manual, flow\_action \\
+bot\_history & JSONB & NOT NULL & Historique transmis au Chat \\
+context & JSONB & NULL & Variables de session transmises \\
+status & VARCHAR(20) & NOT NULL & pending, sent, accepted, closed, error \\
+created\_at & TIMESTAMPTZ & NOT NULL & Création \\
+updated\_at & TIMESTAMPTZ & NOT NULL & Dernière MAJ statut \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{ingestion\_jobs}}
+
+Pipeline d'ingestion documentaire asynchrone.
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+document\_id & UUID & FK $\rightarrow$ knowledge\_documents & Document source \\
+status & VARCHAR(20) & NOT NULL & pending, processing, done, error \\
+chunks\_created & INT & DEFAULT 0 & Nombre de chunks générés \\
+error\_message & TEXT & NULL & Détail erreur si applicable \\
+started\_at & TIMESTAMPTZ & NULL & Début traitement \\
+completed\_at & TIMESTAMPTZ & NULL & Fin traitement \\
+created\_at & TIMESTAMPTZ & NOT NULL & Création \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════
+\section{Contrats d'API}
+
+Base URL : \code{/api/v1}. Tous les endpoints retournent du JSON. Tous les endpoints requièrent un header \code{Authorization: Bearer <token>} validé via le Service Auth.
+
+% ── BOTS ──
+\subsection{Bots}
+
+\begin{apibox}{POST /bots}
+\textbf{Description :} Création d'un nouveau bot.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "Assistant Market",
+  "personality": "Friendly and helpful",
+  "system_prompt": "Tu es un assistant...",
+  "languages": ["fr", "en"],
+  "welcome_message": "Bonjour ! Comment puis-je vous aider ?",
+  "fallback_message": "Désolé, je n'ai pas compris.",
+  "human_transfer_after": 3,
+  "confidence_threshold": 0.7
+}
+\end{lstlisting}
+\textbf{Response 201 :}
+\begin{lstlisting}
+{
+  "id": "uuid",
+  "name": "Assistant Market",
+  "slug": "assistant-market",
+  "is_active": true,
+  "created_at": "2026-03-20T10:00:00Z"
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error, 401 Unauthorized.
+\end{apibox}
+
+\begin{apibox}{GET /bots}
+\textbf{Description :} Liste des bots de la plateforme.\\
+\textbf{Query params :} \code{?platform\_id=uuid\&page=1\&limit=20}\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "id": "uuid",
+      "name": "Assistant Market",
+      "is_active": true,
+      "languages": ["fr", "en"],
+      "created_at": "2026-03-20T10:00:00Z"
+    }
+  ],
+  "total": 1,
+  "page": 1
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}}
+\textbf{Description :} Détail complet d'un bot.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}}
+\textbf{Description :} Mise à jour d'un bot (mêmes champs que POST).\\
+\textbf{Codes :} 200 OK, 400 Validation error, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}}
+\textbf{Description :} Suppression d'un bot et de toutes ses données associées.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/duplicate}
+\textbf{Description :} Duplication complète d'un bot (config, intentions, flux, knowledge base).\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "new_name": "Assistant Market v2"
+}
+\end{lstlisting}
+\textbf{Response 201 :} Retourne le nouveau bot créé.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/status}
+\textbf{Description :} Activation / désactivation d'un bot.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "is_active": false
+}
+\end{lstlisting}
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+% ── KNOWLEDGE ──
+\subsection{Knowledge Base}
+
+\begin{apibox}{POST /bots/\{id\}/knowledge}
+\textbf{Description :} Ajout d'une entrée dans la base de connaissances.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "type": "faq",
+  "question": "Quels sont vos horaires ?",
+  "answer": "Nous sommes ouverts de 8h a 18h.",
+  "category_id": "uuid"
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/knowledge}
+\textbf{Description :} Liste des entrées. Query params : \code{?type=faq\&category\_id=uuid\&page=1\&limit=20}\\
+\textbf{Codes :} 200 OK.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/knowledge/\{entryId\}}
+\textbf{Description :} Mise à jour d'une entrée.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}/knowledge/\{entryId\}}
+\textbf{Description :} Suppression d'une entrée.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/knowledge/import}
+\textbf{Description :} Import en masse depuis un fichier CSV.\\
+\textbf{Content-Type :} \code{multipart/form-data}\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "imported": 42,
+  "errors": 2,
+  "error_details": [
+    {"line": 15, "reason": "Missing answer field"}
+  ]
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/knowledge/search}
+\textbf{Description :} Recherche par similarité dans la base de connaissances.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "query": "Comment passer une commande ?",
+  "limit": 5
+}
+\end{lstlisting}
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "results": [
+    {
+      "id": "uuid",
+      "question": "Comment commander ?",
+      "answer": "Rendez-vous sur...",
+      "score": 0.92
+    }
+  ]
+}
+\end{lstlisting}
+\end{apibox}
+
+% ── INTENTIONS ──
+\subsection{Intentions}
+
+\begin{apibox}{POST /bots/\{id\}/intents}
+\textbf{Description :} Création d'une intention avec ses mots-clés.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "name": "greeting",
+  "response": "Bonjour ! Comment puis-je vous aider ?",
+  "keywords": [
+    {"keyword": "bonjour", "weight": 1.0},
+    {"keyword": "salut", "weight": 0.9},
+    {"keyword": "hello", "weight": 0.8}
+  ]
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/intents}
+\textbf{Description :} Liste des intentions du bot.\\
+\textbf{Codes :} 200 OK.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/intents/\{intentId\}}
+\textbf{Description :} Mise à jour d'une intention et de ses mots-clés.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}/intents/\{intentId\}}
+\textbf{Description :} Suppression d'une intention.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/intents/test}
+\textbf{Description :} Test de détection d'intention sur un message.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "message": "bonjour, je cherche de l'aide"
+}
+\end{lstlisting}
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "detected_intent": "greeting",
+  "confidence": 0.85,
+  "all_matches": [
+    {"intent": "greeting", "confidence": 0.85},
+    {"intent": "help", "confidence": 0.60}
+  ]
+}
+\end{lstlisting}
+\end{apibox}
+
+% ── FLUX ──
+\subsection{Flux Conversationnels}
+
+\begin{apibox}{POST /bots/\{id\}/flows}
+\textbf{Description :} Création d'un flux conversationnel avec ses nœuds.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "name": "Flux commande",
+  "trigger_intent": "order",
+  "nodes": [
+    {
+      "type": "question",
+      "content": {"text": "Quel produit souhaitez-vous ?"},
+      "position": 1
+    },
+    {
+      "type": "action",
+      "content": {"action_type": "api_call", "endpoint": "/orders"},
+      "position": 2
+    }
+  ]
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/flows}
+\textbf{Description :} Liste des flux du bot.\\
+\textbf{Codes :} 200 OK.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/flows/\{flowId\}}
+\textbf{Description :} Détail d'un flux avec tous ses nœuds et actions.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/flows/\{flowId\}}
+\textbf{Description :} Mise à jour d'un flux.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}/flows/\{flowId\}}
+\textbf{Description :} Suppression d'un flux.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/flows/\{flowId\}/test}
+\textbf{Description :} Simulation d'un flux avec un message de test.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "message": "je veux commander",
+  "session_vars": {"user_name": "Alice"}
+}
+\end{lstlisting}
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "flow_name": "Flux commande",
+  "current_node": {"type": "question", "position": 1},
+  "response": "Quel produit souhaitez-vous ?",
+  "completed": false
+}
+\end{lstlisting}
+\end{apibox}
+
+% ── CONVERSATION ──
+\subsection{Conversation — Endpoint Principal}
+
+\begin{apibox}{POST /chatbot/converse}
+\textbf{Description :} Endpoint principal. Envoie un message et reçoit la réponse du bot après traitement par le pipeline multi-couches. Le champ \code{channel} est obligatoire et détermine l'adapter de sortie.\\[4pt]
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "bot_id": "uuid",
+  "conversation_id": "uuid-or-null",
+  "sender_id": "uuid",
+  "channel": "whatsapp",
+  "message": "Bonjour, je cherche un produit",
+  "language": "fr",
+  "metadata": {
+    "platform": "agt-bot",
+    "source_message_id": "wa-msg-123"
+  }
+}
+\end{lstlisting}
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "response": "Bonjour ! Quel type de produit recherchez-vous ?",
+  "conversation_id": "uuid",
+  "intent_detected": "greeting",
+  "layer_used": "layer_1_keywords",
+  "confidence": 0.88,
+  "provider_used": null,
+  "action": null,
+  "language": "fr",
+  "transfer": null,
+  "metadata": {
+    "processing_time_ms": 145,
+    "fallback": false,
+    "consecutive_fallbacks": 0
+  }
+}
+\end{lstlisting}
+\textbf{Valeurs possibles de \code{layer\_used} :}
+\begin{itemize}
+\item \code{layer\_1\_keywords} — Résolu par mots-clés / intentions
+\item \code{layer\_2\_flow} — Résolu par flux conversationnel
+\item \code{layer\_3\_ai} — Résolu par IA générative
+\item \code{layer\_4\_fallback} — Fallback (aucune couche n'a résolu)
+\end{itemize}
+\textbf{Si transfert humain déclenché}, le champ \code{transfer} contient :
+\begin{lstlisting}
+{
+  "transfer": {
+    "id": "uuid",
+    "status": "sent",
+    "reason": "max_fallbacks",
+    "chat_transfer_id": "uuid"
+  }
+}
+\end{lstlisting}
+\textbf{Codes :} 200 OK, 400 Validation error, 401 Unauthorized, 404 Bot not found, 429 Rate limited.
+\end{apibox}
+
+\begin{apibox}{DELETE /chatbot/conversations/\{conversationId\}}
+\textbf{Description :} Suppression du contexte d'une conversation (mémoire Redis).\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+% ── IA CONFIG ──
+\subsection{Configuration IA (Multi-Provider)}
+
+\begin{apibox}{POST /bots/\{id\}/ai-providers}
+\textbf{Description :} Ajout d'un provider IA pour un bot. Un bot peut avoir plusieurs providers avec des rôles différents (conversation, RAG, traduction, fallback).\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "provider": "anthropic",
+  "model": "claude-sonnet-4-20250514",
+  "api_key": "sk-ant-...",
+  "purpose": "conversation",
+  "priority": 0,
+  "temperature": 0.5,
+  "max_tokens": 1500
+}
+\end{lstlisting}
+\textbf{Response 201 :}
+\begin{lstlisting}
+{
+  "id": "uuid",
+  "provider": "anthropic",
+  "model": "claude-sonnet-4-20250514",
+  "purpose": "conversation",
+  "priority": 0,
+  "is_active": true,
+  "has_api_key": true
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error, 409 Conflit (provider+purpose déjà configuré).
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/ai-providers}
+\textbf{Description :} Liste de tous les providers IA configurés pour un bot.\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "id": "uuid",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-20250514",
+      "purpose": "conversation",
+      "priority": 0,
+      "is_active": true,
+      "has_api_key": true
+    },
+    {
+      "id": "uuid",
+      "provider": "google",
+      "model": "gemini-pro",
+      "purpose": "rag",
+      "priority": 0,
+      "is_active": true,
+      "has_api_key": true
+    }
+  ]
+}
+\end{lstlisting}
+\textbf{Note :} Les clés API ne sont jamais retournées en clair.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/ai-providers/\{providerId\}}
+\textbf{Description :} Mise à jour d'un provider IA (modèle, température, priorité, etc.).\\
+\textbf{Codes :} 200 OK, 400 Validation error, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}/ai-providers/\{providerId\}}
+\textbf{Description :} Suppression d'un provider IA.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/ai-providers/\{providerId\}/test}
+\textbf{Description :} Test d'un provider spécifique avec un message.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "message": "Quelle est votre politique de retour ?"
+}
+\end{lstlisting}
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "response": "Notre politique de retour permet...",
+  "provider": "anthropic",
+  "model": "claude-sonnet-4-20250514",
+  "tokens_used": 234,
+  "processing_time_ms": 1820
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/ai-providers/health}
+\textbf{Description :} Health check de tous les providers IA configurés pour un bot.\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "providers": [
+    {
+      "id": "uuid",
+      "provider": "anthropic",
+      "purpose": "conversation",
+      "status": "healthy",
+      "last_check": "2026-03-30T10:00:00Z",
+      "consecutive_errors": 0
+    },
+    {
+      "id": "uuid",
+      "provider": "google",
+      "purpose": "rag",
+      "status": "degraded",
+      "last_check": "2026-03-30T10:00:00Z",
+      "consecutive_errors": 3
+    }
+  ]
+}
+\end{lstlisting}
+\end{apibox}
+
+% ── STATS ──
+\subsection{Statistiques}
+
+\begin{apibox}{GET /bots/\{id\}/stats}
+\textbf{Description :} Statistiques agrégées d'un bot.\\
+\textbf{Query params :} \code{?from=2026-03-01\&to=2026-03-20}\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "bot_id": "uuid",
+  "period": {"from": "2026-03-01", "to": "2026-03-20"},
+  "total_messages": 12450,
+  "resolution_rate": 0.87,
+  "fallback_rate": 0.08,
+  "human_transfer_rate": 0.05,
+  "by_layer": {
+    "layer_1": 5200,
+    "layer_2": 3800,
+    "layer_3": 2400,
+    "layer_4": 1050
+  },
+  "top_intents": [
+    {"intent": "greeting", "count": 3200},
+    {"intent": "order_status", "count": 1800}
+  ]
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/stats/unanswered}
+\textbf{Description :} Messages non résolus (passés en fallback).\\
+\textbf{Query params :} \code{?page=1\&limit=20}\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "message": "Je veux annuler ma commande 12345",
+      "count": 15,
+      "last_seen": "2026-03-20T14:30:00Z"
+    }
+  ],
+  "total": 42
+}
+\end{lstlisting}
+\end{apibox}
+
+% ── CANAUX ──
+\subsection{Canaux / Connecteurs}
+
+\begin{apibox}{POST /bots/\{id\}/channels}
+\textbf{Description :} Enregistrement d'un canal pour un bot.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "channel_type": "whatsapp",
+  "display_name": "WhatsApp AGT-Bot",
+  "config": {
+    "max_response_length": 4096,
+    "supported_media": ["image", "document"],
+    "response_format": "text"
+  },
+  "rate_limit": 120
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error, 409 Canal déjà configuré pour ce bot.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/channels}
+\textbf{Description :} Liste des canaux configurés pour un bot.\\
+\textbf{Codes :} 200 OK.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/channels/\{channelId\}}
+\textbf{Description :} Mise à jour de la configuration d'un canal.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}/channels/\{channelId\}}
+\textbf{Description :} Suppression d'un canal.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/channels/\{channelId\}/status}
+\textbf{Description :} Activation / désactivation d'un canal.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "is_active": false
+}
+\end{lstlisting}
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+% ── TRANSFERTS ──
+\subsection{Transferts Humains}
+
+\begin{apibox}{GET /bots/\{id\}/transfers}
+\textbf{Description :} Liste des transferts bot $\rightarrow$ humain pour un bot.\\
+\textbf{Query params :} \code{?status=pending\&page=1\&limit=20}\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "id": "uuid",
+      "conversation_id": "uuid",
+      "user_id": "uuid",
+      "reason": "max_fallbacks",
+      "status": "sent",
+      "chat_transfer_id": "uuid",
+      "created_at": "2026-03-30T10:00:00Z"
+    }
+  ],
+  "total": 5,
+  "page": 1
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{POST /chatbot/transfers/\{transferId\}/callback}
+\textbf{Description :} Callback S2S appelé par le Service Chat lorsque le statut d'un transfert change (pris\_en\_charge, cloture). Permet au chatbot de reprendre la conversation après clôture.\\
+\textbf{Auth :} S2S uniquement.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "status": "cloture",
+  "operator_id": "uuid",
+  "closed_at": "2026-03-30T11:00:00Z"
+}
+\end{lstlisting}
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+% ── INGESTION ──
+\subsection{Ingestion Documentaire}
+
+\begin{apibox}{POST /bots/\{id\}/knowledge/documents}
+\textbf{Description :} Upload d'un document pour ingestion dans la knowledge base. Le fichier est stocké via le Média Service, puis un job asynchrone extrait, découpe et génère les embeddings.\\
+\textbf{Content-Type :} \code{multipart/form-data}\\
+\textbf{Response 202 Accepted :}
+\begin{lstlisting}
+{
+  "document_id": "uuid",
+  "filename": "politique-retour.pdf",
+  "status": "pending",
+  "job_id": "uuid"
+}
+\end{lstlisting}
+\textbf{Codes :} 202 Accepted, 400 Invalid file type, 413 File too large.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/knowledge/documents/\{docId\}/status}
+\textbf{Description :} Statut d'ingestion d'un document.\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "document_id": "uuid",
+  "status": "done",
+  "chunks_created": 24,
+  "started_at": "2026-03-30T10:01:00Z",
+  "completed_at": "2026-03-30T10:01:45Z"
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/knowledge/documents/\{docId\}/reprocess}
+\textbf{Description :} Relance l'ingestion d'un document (supprime les anciens chunks et ré-extrait).\\
+\textbf{Codes :} 202 Accepted, 404 Not found.
+\end{apibox}
+
+% ══════════════════════════════════════════════════════════════
+\section{Infrastructure}
+
+\subsection{Composants d'infrastructure}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Service} & \textbf{\color{white}Technologie} & \textbf{\color{white}Rôle} \\
+\midrule
+Backend & Python / Django REST & API REST du service Chatbot \\
+Worker Celery & Python / Celery & Ingestion docs, agrégation stats, health check providers \\
+Base de données & PostgreSQL 15+ & Stockage bots, intentions, flux, KB, stats, logs analytiques \\
+Cache / Mémoire & Redis 7+ & Contexte conversation, sessions, rate limiting, circuit breakers \\
+Recherche vectorielle & pgvector / Elasticsearch & Recherche par similarité (knowledge base) \\
+Providers IA & OpenAI, Anthropic, Google Gemini & IA générative (couche 3) — multi-provider par bot \\
+Message Broker & RabbitMQ / Redis Streams & Jobs asynchrones (ingestion, stats) + events inter-services \\
+Conteneur & Docker + Docker Compose & Déploiement isolé et reproductible \\
+Reverse Proxy & Nginx / Traefik & TLS, load balancing \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Services externes à prévoir}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Catégorie} & \textbf{\color{white}Fournisseurs} & \textbf{\color{white}Facturation} \\
+\midrule
+Providers IA & OpenAI, Anthropic, Google Gemini, Mistral & Pay-per-token (coût principal du service) \\
+Recherche vectorielle & Elasticsearch Cloud / pgvector & Hébergement ou intégré à PostgreSQL \\
+Hébergement & AWS, GCP, DigitalOcean & Conteneurs, PostgreSQL, Redis managés \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════
+\section*{Annexes — Cas d'Usage}
+
+\subsection*{Cas 1 : WhatsApp via Hub Engine}
+
+\begin{enumerate}
+\item L'utilisateur envoie un message WhatsApp.
+\item AGT-Bot (Hub Engine) reçoit le message et appelle \code{POST /chatbot/converse} avec \code{channel: "whatsapp"}.
+\item Le pipeline vérifie que le canal \code{whatsapp} est actif pour ce bot, applique l'adapter de sortie (limite taille, format texte).
+\item Le pipeline multi-couches traite le message.
+\item La réponse est retournée au Hub Engine qui l'envoie via WhatsApp.
+\end{enumerate}
+
+\subsection*{Cas 2 : Flux de commande (AGT-Market)}
+
+\begin{enumerate}
+\item L'utilisateur dit \og je veux commander \fg{} via le widget web (\code{channel: "web"}).
+\item Couche 1 détecte l'intention \code{order}.
+\item Couche 2 active le flux \og Flux commande \fg{}.
+\item Le bot guide l'utilisateur à travers les nœuds (produit, quantité, confirmation).
+\item Un nœud \code{condition} vérifie la disponibilité via \code{branches} (si oui $\rightarrow$ confirmation, si non $\rightarrow$ suggestion).
+\item Un nœud \code{action} appelle l'API de création de commande.
+\end{enumerate}
+
+\subsection*{Cas 3 : Fallback puis transfert humain}
+
+\begin{enumerate}
+\item Le bot ne comprend pas le message (couches 1, 2, 3 échouent).
+\item Couche 4 envoie le message de fallback. Le compteur \code{consecutive\_fallbacks} s'incrémente.
+\item Le message est loggé dans \code{conversation\_logs} (persistance PostgreSQL).
+\item Après 3 échecs consécutifs (\code{human\_transfer\_after}), le bot appelle le Service Chat en S2S : \code{POST /api/v1/chat/conversations/transfer} avec \code{bot\_history} et \code{context}.
+\item Un \code{transfer\_log} est créé côté chatbot avec le statut \code{sent}.
+\item Quand l'opérateur clôture, le Service Chat appelle \code{POST /chatbot/transfers/\{id\}/callback} avec \code{status: "cloture"}.
+\item Le bot reprend la conversation.
+\end{enumerate}
+
+\subsection*{Cas 4 : Multi-langue}
+
+\begin{enumerate}
+\item L'utilisateur envoie un message en anglais.
+\item Le service détecte la langue (EN).
+\item Le pipeline utilise les intentions et prompts adaptés à la langue.
+\item La réponse est générée en anglais (le provider de \code{purpose: "conversation"} est utilisé).
+\end{enumerate}
+
+\subsection*{Cas 5 : Agent vocal externe}
+
+\begin{enumerate}
+\item Un service d'agent vocal externe appelle \code{POST /chatbot/converse} avec \code{channel: "vocal"} et un Bearer token valide.
+\item L'adapter vocal formate la réponse (texte court, sans markdown, compatible TTS).
+\item La réponse est retournée au service vocal qui la synthétise en audio.
+\end{enumerate}
+
+\subsection*{Cas 6 : Ingestion d'un document PDF}
+
+\begin{enumerate}
+\item L'admin uploade un PDF via \code{POST /bots/\{id\}/knowledge/documents}.
+\item Le fichier est stocké via le Média Service.
+\item Un job Celery est créé (\code{ingestion\_jobs}, statut \code{pending}).
+\item Le worker extrait le texte, découpe en chunks, génère les embeddings via le provider de \code{purpose: "rag"}.
+\item Les chunks sont insérés dans \code{knowledge\_base\_entries} avec leurs embeddings.
+\item Le statut du job passe à \code{done}.
+\end{enumerate}
+
+\subsection*{Cas 7 : Failover multi-provider}
+
+\begin{enumerate}
+\item Un message arrive en couche 3 (IA générative).
+\item Le provider principal (\code{priority: 0}, \code{purpose: "conversation"}) est appelé.
+\item L'appel échoue (timeout, erreur 500). Le circuit breaker incrémente le compteur.
+\item Le service bascule automatiquement sur le provider de \code{priority: 1} (fallback).
+\item Si le provider principal atteint \code{circuit\_breaker\_threshold} erreurs consécutives, il est temporairement désactivé.
+\end{enumerate}
+
+\subsection*{Code Source PlantUML — Diagramme de Classes}
+
+Le code ci-dessous permet de régénérer le diagramme de classes (figure~\ref{fig:class-diagram}) via tout outil compatible PlantUML. \textbf{v1.1} : ajout de \code{BotChannel}, \code{ConversationLog}, \code{TransferLog}, \code{IngestionJob}, refonte \code{AiProviderConfig} (multi-provider), ajout \code{branches} à \code{FlowNode}, ajout \code{version/status} à \code{Bot}.
+
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,rulecolor=\color{aiaccent!40},backgroundcolor=\color{aicode},xleftmargin=4pt,xrightmargin=4pt]
+@startuml
+skinparam classAttributeIconSize 0
+skinparam classFontSize 11
+skinparam classFontColor #000000
+skinparam classHeaderBackgroundColor #7C3AED
+skinparam classHeaderFontColor white
+skinparam classBorderColor #5B21B6
+skinparam classBackgroundColor #F3F0FF
+skinparam arrowColor #6D28D9
+title Diagramme de Classes -- Service Chatbot IA Centralise v1.2
+
+class Bot {
+  id : UUID [PK]
+  platform_id : UUID
+  name : VARCHAR(100)
+  slug : VARCHAR(100) [UQ]
+  avatar_url : VARCHAR(500)
+  personality : TEXT
+  system_prompt : TEXT
+  welcome_message : TEXT
+  fallback_message : TEXT
+  languages : JSONB
+  confidence_threshold : DECIMAL(3,2)
+  human_transfer_after : INT
+  is_active : BOOLEAN
+  version : INT
+  status : VARCHAR(20)
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+class BotConfig {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  config_key : VARCHAR(100)
+  config_value : JSONB
+  created_at : TIMESTAMPTZ
+}
+
+class BotChannel {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  channel_type : VARCHAR(30)
+  display_name : VARCHAR(100)
+  config : JSONB
+  rate_limit : INT
+  is_active : BOOLEAN
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+class KnowledgeCategory {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  name : VARCHAR(100)
+  created_at : TIMESTAMPTZ
+}
+
+class KnowledgeBaseEntry {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  category_id : UUID [FK]
+  type : VARCHAR(20)
+  question : TEXT
+  answer : TEXT
+  embedding : VECTOR(1536)
+  metadata : JSONB
+  is_active : BOOLEAN
+  created_at : TIMESTAMPTZ
+}
+
+class KnowledgeDocument {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  filename : VARCHAR(255)
+  file_type : VARCHAR(20)
+  file_url : VARCHAR(500)
+  status : VARCHAR(20)
+  chunk_count : INT
+  created_at : TIMESTAMPTZ
+}
+
+class IngestionJob {
+  id : UUID [PK]
+  document_id : UUID [FK]
+  status : VARCHAR(20)
+  chunks_created : INT
+  error_message : TEXT
+  started_at : TIMESTAMPTZ
+  completed_at : TIMESTAMPTZ
+  created_at : TIMESTAMPTZ
+}
+
+class Intent {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  name : VARCHAR(100)
+  response : TEXT
+  is_active : BOOLEAN
+  created_at : TIMESTAMPTZ
+}
+
+class IntentKeyword {
+  id : UUID [PK]
+  intent_id : UUID [FK]
+  keyword : VARCHAR(100)
+  weight : DECIMAL(3,2)
+}
+
+class ConversationFlow {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  name : VARCHAR(100)
+  trigger_intent : VARCHAR(100)
+  is_active : BOOLEAN
+  created_at : TIMESTAMPTZ
+}
+
+class FlowNode {
+  id : UUID [PK]
+  flow_id : UUID [FK]
+  type : VARCHAR(20)
+  content : JSONB
+  next_node_id : UUID [FK]
+  branches : JSONB
+  position : INT
+}
+
+class FlowAction {
+  id : UUID [PK]
+  node_id : UUID [FK]
+  action_type : VARCHAR(50)
+  config : JSONB
+}
+
+class BotAction {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  name : VARCHAR(100)
+  action_type : VARCHAR(50)
+  config : JSONB
+  is_active : BOOLEAN
+  created_at : TIMESTAMPTZ
+}
+
+class AiProviderConfig {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  provider : VARCHAR(30)
+  model : VARCHAR(50)
+  api_key_encrypted : TEXT
+  base_url : VARCHAR(500)
+  temperature : DECIMAL(3,2)
+  max_tokens : INT
+  purpose : VARCHAR(30)
+  priority : INT
+  is_active : BOOLEAN
+  circuit_breaker_threshold : INT
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+class BotStats {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  date : DATE
+  total_messages : INT
+  resolved_count : INT
+  fallback_count : INT
+  human_transfer_count : INT
+  layer1_count : INT
+  layer2_count : INT
+  layer3_count : INT
+  top_intents : JSONB
+}
+
+class ConversationLog {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  conversation_id : UUID
+  sender_id : UUID
+  channel : VARCHAR(30)
+  user_message : TEXT
+  bot_response : TEXT
+  layer_used : VARCHAR(30)
+  intent_detected : VARCHAR(100)
+  confidence : DECIMAL(3,2)
+  provider_used : VARCHAR(30)
+  tokens_used : INT
+  processing_time_ms : INT
+  is_resolved : BOOLEAN
+  created_at : TIMESTAMPTZ
+}
+
+class TransferLog {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  conversation_id : UUID
+  chat_transfer_id : UUID
+  user_id : UUID
+  reason : VARCHAR(50)
+  bot_history : JSONB
+  context : JSONB
+  status : VARCHAR(20)
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+' === Relations ===
+Bot "1" -- "0..*" BotConfig
+Bot "1" -- "0..*" BotChannel
+Bot "1" -- "0..*" KnowledgeCategory
+Bot "1" -- "0..*" KnowledgeBaseEntry
+Bot "1" -- "0..*" KnowledgeDocument
+Bot "1" -- "0..*" Intent
+Bot "1" -- "0..*" ConversationFlow
+Bot "1" -- "0..*" BotAction
+Bot "1" -- "0..*" AiProviderConfig
+Bot "1" -- "0..*" BotStats
+Bot "1" -- "0..*" ConversationLog
+Bot "1" -- "0..*" TransferLog
+KnowledgeCategory "0..1" -- "0..*" KnowledgeBaseEntry
+KnowledgeDocument "1" -- "0..*" IngestionJob
+Intent "1" -- "0..*" IntentKeyword
+ConversationFlow "1" -- "0..*" FlowNode
+FlowNode "1" -- "0..*" FlowAction
+FlowNode "0..1" -- "0..*" FlowNode : next
+@enduml
+\end{lstlisting}
+
+\section*{Conclusion Générale}
+
+Le Service Chatbot IA Centralisé v1.2 est le pilier conversationnel stratégique de l'écosystème AGT. Son architecture repose sur un \textbf{Conversation Orchestrator} explicite qui pilote un pipeline 4 couches, orchestre des providers IA multiples avec failover, adapte les réponses par canal, et exécute des actions standardisées vers les services internes.
+
+Les décisions structurantes de cette version :
+
+\begin{itemize}
+\item \textbf{Multi-provider} avec routing par \code{purpose} et circuit breaker — aucune dépendance à un fournisseur unique.
+\item \textbf{Multi-canal} via adapter pattern — WhatsApp, web, vocal, SMS, API extensible sans toucher au pipeline.
+\item \textbf{Action System standardisé} — contrat unique (auth, retry, timeout, template variables) pour toutes les interactions inter-services.
+\item \textbf{Persistance duale} — Redis pour la mémoire temps réel, PostgreSQL pour les analytics et le fine-tuning.
+\item \textbf{Frontière Search Service} documentée — pgvector interne pour le RAG MVP, adapter configurable vers Search Service quand celui-ci supportera les embeddings.
+\item \textbf{Transfert humain bidirectionnel} — intégration S2S complète avec le Service Chat v1.2.
+\end{itemize}
+
+Prochaines étapes : validation équipe, initialisation des développements par priorité, déploiement progressif Hub Engine (AGT-Bot) puis extension aux autres canaux.
+
+\vspace{0.5cm}
+\begin{center}
+\textit{\color{aigray}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section*{Annexes — Bonus / Stratégies Avancées}
+
+\subsection*{Suggestion automatique des questions non répondues}
+
+Le service collecte les messages passés en fallback et les agrège par similarité. L'endpoint \code{GET /bots/\{id\}/stats/unanswered} permet aux administrateurs de transformer ces messages en nouvelles intentions ou entrées de knowledge base.
+
+\subsection*{Gestion du budget IA par bot}
+
+Chaque bot peut avoir un budget mensuel configurable (en tokens ou en montant). Le service tracked la consommation et peut désactiver la couche 3 si le budget est épuisé, basculant directement vers le fallback.
+
+\subsection*{A/B Testing des réponses}
+
+Possibilité de configurer plusieurs réponses pour une même intention avec distribution pondérée, permettant de mesurer laquelle génère le meilleur engagement.
+
+\subsection*{Stratégie de fine-tuning}
+
+Les conversations réussies (haute confiance, pas de fallback) peuvent être exportées pour constituer un dataset de fine-tuning, améliorant progressivement les performances de la couche IA.
+
+% ══════════════════════════════════════════════════════════════
+\section*{Glossaire}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Terme} & \textbf{\color{white}Définition} \\
+\midrule
+Intent (Intention) & Action ou sujet détecté dans le message de l'utilisateur via des mots-clés. \\
+Flow (Flux) & Arbre de décision guidant une conversation multi-étapes. \\
+Knowledge Base & Base de connaissances du bot (FAQ, documents, textes). \\
+Provider IA & Service externe fournissant les capacités d'IA générative (OpenAI, Anthropic, Google). \\
+Strategy Pattern & Patron de conception permettant de changer d'algorithme (provider IA) à l'exécution. \\
+Circuit Breaker & Pattern de résilience désactivant temporairement un provider défaillant. \\
+Channel Adapter & Composant normalisant les entrées/sorties selon le canal (WhatsApp, web, vocal). \\
+Embedding & Représentation vectorielle d'un texte pour la recherche par similarité. \\
+Chunking & Découpage d'un document en segments pour l'indexation vectorielle. \\
+Ingestion & Pipeline asynchrone : extraction $\rightarrow$ chunking $\rightarrow$ embedding d'un document. \\
+Fallback & Réponse par défaut quand aucune couche ne parvient à résoudre le message. \\
+TTL & Time To Live — durée de vie d'une donnée en cache (Redis). \\
+Hub Engine & Composant AGT-Bot gérant la connexion WhatsApp et routant les messages. \\
+Vector Search & Recherche basée sur la distance entre vecteurs (similarité sémantique). \\
+S2S (Service-to-Service) & Authentification inter-services via client\_id/client\_secret (Auth v2.1). \\
+Celery & Framework Python pour l'exécution de tâches asynchrones (workers). \\
+Conversation Orchestrator & Composant central qui pilote le cycle de vie d'un message (routing pipeline, contexte, actions, adaptation canal). \\
+Action Executor & Sous-composant de l'Orchestrator exécutant les actions standardisées (API calls, webhooks, transferts). \\
+Channel Adapter & Composant normalisant les entrées/sorties selon les contraintes du canal (taille, format, médias). \\
+Circuit Breaker & Pattern de résilience désactivant temporairement un provider IA défaillant après N erreurs consécutives. \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════
+\vspace{1cm}
+
+\begin{center}
+\noindent\makebox[\textwidth]{%
+  \colorbox{aisecondary}{\makebox[\textwidth][c]{\rule{0pt}{2pt}}}%
+}
+\vspace{4pt}
+
+{\large\bfseries\color{aiprimary}Fin du document — AGT Engineering — v1.2}
+
+\vspace{4pt}
+\noindent\makebox[\textwidth]{%
+  \colorbox{aiprimary}{\makebox[\textwidth][c]{\rule{0pt}{2pt}}}%
+}
+\end{center}
+
+\end{document}

@@ -1,0 +1,1556 @@
+\documentclass[11pt,a4paper]{article}
+
+% === Encodage & Langue ===
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% === Mise en page ===
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+% === Tableaux ===
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+
+% === Code & couleurs ===
+\usepackage{listings}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{lastpage}
+
+% === Boites ===
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% === Couleurs AGT ===
+\definecolor{agtblue}{HTML}{1A3A5C}
+\definecolor{agtgray}{HTML}{4A4A4A}
+\definecolor{agtgreen}{HTML}{2E7D32}
+\definecolor{agtred}{HTML}{C62828}
+\definecolor{agtorange}{HTML}{E65100}
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{lightbg}{HTML}{E8EEF4}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=agtblue,
+  urlcolor=agtblue,
+  pdfauthor={AG Technologies},
+  pdftitle={Service Abonnement - CDC v1.2},
+}
+
+% === Listings JSON ===
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  string=[s]{"}{"},
+  stringstyle=\color{agtgreen},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{codebg},
+  rulecolor=\color{gray!30},
+  showstringspaces=false,
+  literate=
+    *{:}{{{\color{agtblue}:}}}{1}
+     {,}{{{\color{agtblue},}}}{1}
+     {\{}{{{\color{agtblue}\{}}}{1}
+     {\}}{{{\color{agtblue}\}}}}{1}
+     {[}{{{\color{agtblue}[}}}{1}
+     {]}{{{\color{agtblue}]}}}{1},
+}
+\lstset{language=json}
+
+% === Boites info/warn ===
+\newtcolorbox{infobox}[1][]{
+  colback=lightbg,colframe=agtblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtblue,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=orange!5,colframe=agtorange,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtorange,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+
+% === Header/Footer ===
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{agtgray}{AGT --- Service Abonnement}}
+\fancyhead[R]{\small\textcolor{agtgray}{v1.2 --- Confidentiel}}
+\fancyfoot[C]{\small\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\textcolor{agtgray}{Avril 2026}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.2pt}
+
+% === Titres ===
+\titleformat{\section}{\Large\bfseries\color{agtblue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{agtblue!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{agtblue!60}}{\thesubsubsection}{1em}{}
+
+% === Commandes ===
+\newcommand{\urgent}{\textcolor{agtred}{\textbf{Urgent}}}
+\newcommand{\normale}{\textcolor{agtorange}{Normale}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+% ============================================================
+%  PAGE DE TITRE
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\Huge\bfseries\textcolor{agtblue}{AG TECHNOLOGIES}\\[0.3cm]}
+{\large\textcolor{agtgray}{Architecture de Services Partag\'es}\\[2cm]}
+\rule{\textwidth}{1.5pt}\\[0.5cm]
+{\LARGE\bfseries Cahier des Charges Technique\\[0.3cm]}
+{\Large Service d'Abonnement Centralis\'e\\[0.3cm]}
+{\large\textit{Subscription Service --- AGT-Subscription}\\[0.5cm]}
+\rule{\textwidth}{1.5pt}\\[2cm]
+\begin{tabular}{ll}
+\textbf{Version}        & 1.2 \\
+\textbf{Date}           & Avril 2026 \\
+\textbf{Statut}         & Implementation-ready \\
+\textbf{Classification} & Confidentiel \\
+\textbf{Auteur}         & \'Equipe Architecture \\
+\textbf{D\'ependances}  & Auth v2.1, Users v1.0, Notification v1.2 \\
+\end{tabular}
+\vfill
+{\small\textcolor{agtgray}{Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies}}
+\end{titlepage}
+
+% ============================================================
+%  HISTORIQUE
+% ============================================================
+\section*{Historique des R\'evisions}
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Ver.} & \textbf{Date} & \textbf{Auteur} & \textbf{Description} \\
+\midrule
+1.0 & 2026-04-03 & \'Equipe Archi. & Cr\'eation initiale. Mod\`ele hybride B2C+B2B via subscriber abstrait. Plans, quotas, cycles, trial, prorata, overage, organisations. Contrats inter-services formalis\'es. Diagramme PlantUML en annexe. \\
+1.1 & 2026-04-03 & \'Equipe Archi. & Post-audit~: quota atomique (reserve/confirm/release). Idempotence \'ev\'enements RabbitMQ (\texttt{event\_id}, \texttt{idempotency\_key}). Strat\'egie fallback/mode d\'egrad\'e (4 niveaux). Retry crons avec backoff exponentiel + dead letter queue. Immutabilit\'e des plans actifs (versioning). Snapshot quota au billing overage. Table \texttt{quota\_reservations}. \\
+1.2 & 2026-04-03 & \'Equipe Archi. & Version finale~: statut \textit{Implementation-ready}. Contrats inter-services align\'es sur reserve/confirm/release pour chemins critiques. R\'esidus documentaires corrig\'es. \\
+\bottomrule
+\end{tabularx}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+Ce document constitue le cahier des charges du \textbf{Service d'Abonnement Centralis\'e} (ci-apr\`es \og~Subscription Service~\fg{}) destin\'e \`a l'\'ecosyst\`eme AGT. Il sert de r\'ef\'erence unique pour la conception, le d\'eveloppement et les d\'ecisions techniques.
+
+\subsection{P\'erim\`etre}
+
+Le service Abonnement couvre la gestion compl\`ete du cycle de vie des abonnements~: d\'efinition de plans avec quotas, souscription, renouvellement, upgrade/downgrade avec prorata, trial, d\'epassement (overage), gr\^ace apr\`es expiration, et v\'erification de quotas en temps r\'eel pour les services consommateurs.
+
+\subsection{Hors p\'erim\`etre}
+
+\begin{itemize}[nosep]
+  \item Authentification (d\'el\'egu\'ee au Service Auth v2.1)
+  \item Profils utilisateur, r\^oles et permissions (d\'el\'egu\'es au Service Users v1.0)
+  \item Ex\'ecution des paiements (d\'el\'egu\'ee au futur Service Paiement)
+  \item Stockage de fichiers (d\'el\'egu\'e au Service M\'edia v1.4)
+  \item Envoi de notifications (d\'el\'egu\'e au Service Notification v1.2)
+  \item Logique m\'etier propre aux plateformes consommatrices
+\end{itemize}
+
+\begin{warnbox}[Convention d'identit\'e]
+Dans tout ce document~:
+\begin{itemize}[nosep]
+  \item \texttt{user\_id} d\'esigne \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item \texttt{platform\_id} d\'esigne un UUID du registre Auth (\texttt{platforms.id})
+  \item Abonnement ne stocke aucune table locale de plateformes ni d'utilisateurs. Il consomme Auth et Users.
+\end{itemize}
+\end{warnbox}
+
+% ============================================================
+\section{Contexte \& Probl\'ematique}
+% ============================================================
+
+\subsection{Contexte}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Plateforme} & \textbf{Statut} & \textbf{Besoin abonnement} \\
+\midrule
+AGT-Bot    & En d\'eveloppement & Plans par nombre de bots, messages IA/mois \\
+AGT-Market & En d\'eveloppement & Plans vendeur par nombre de produits, boosts \\
+MboaMove   & En d\'eveloppement & Plans chauffeur, dispatch prioritaire \\
+SALMA      & Migration pr\'evue & Plans \'etudiant, acc\`es formations \\
+Futures    & Planifi\'e         & Toute plateforme n\'ecessitant une mon\'etisation \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Probl\'ematique}
+
+Sans service centralis\'e, chaque plateforme impl\'ementerait sa propre gestion d'abonnements, entra\^inant~: duplication de la logique de quotas, incoh\'erence dans la gestion des cycles de vie, impossibilit\'e de mutualiser les r\`egles de facturation, et absence de vision unifi\'ee sur les revenus r\'ecurrents.
+
+% ============================================================
+\section{Vision \& Objectifs}
+% ============================================================
+
+\subsection{Vision}
+
+Un service \textbf{g\'en\'erique et abstrait} qui g\`ere les abonnements pour toute plateforme de l'\'ecosyst\`eme. Il ne conna\^it aucun concept m\'etier~: il g\`ere des plans, des quotas, des cycles et des souscriptions.
+
+\begin{infobox}[Principe fondamental]
+Le service Abonnement \textbf{d\'efinit les r\`egles} (qui a droit \`a quoi, en quelle quantit\'e, pendant combien de temps). Il ne facture rien~: c'est le futur Service Paiement qui ex\'ecute les transactions. Abonnement \textbf{d\'ecide}, Paiement \textbf{ex\'ecute}.
+\end{infobox}
+
+\subsection{Concept du subscriber abstrait}
+
+L'abonn\'e n'est pas forc\'ement un individu. Le service mod\'elise un \textbf{subscriber} abstrait~:
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{subscriber\_type} & \textbf{subscriber\_id pointe vers} & \textbf{Exemple} \\
+\midrule
+\texttt{user}         & \texttt{users\_auth.id} & Yannick s'abonne seul au plan Pro AGT-Bot \\
+\texttt{organization} & \texttt{organizations.id} (table locale) & TechCorp s'abonne au plan Enterprise, 15 membres partagent les quotas \\
+\bottomrule
+\end{tabularx}
+
+Chaque plateforme peut utiliser uniquement le mode \texttt{user} au d\'ebut, et activer le mode \texttt{organization} quand elle en a besoin. Aucune obligation.
+
+\subsection{Objectifs}
+
+\begin{tabularx}{\textwidth}{clL}
+\toprule
+\textbf{\#} & \textbf{Objectif} & \textbf{Indicateur} \\
+\midrule
+O1 & Gestion multi-plateforme   & Tout plan est scop\'e \`a une plateforme \\
+O2 & Mod\`ele hybride           & Forfait + d\'epassement configurable par quota \\
+O3 & Subscriber abstrait        & Support B2C (user) et B2B (organization) \\
+O4 & Cycle de vie complet       & Trial, actif, gr\^ace, suspendu, annul\'e, expir\'e \\
+O5 & Prorata                    & Upgrade/downgrade calcul\'e au jour \\
+O6 & V\'erification temps r\'eel & Endpoint quota check < 50ms \\
+O7 & Flexibilit\'e maximale     & Trial, gr\^ace, post-trial, plan gratuit~: tout configurable par plateforme \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Parties Prenantes \& Utilisateurs}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{R\^ole} & \textbf{Type} & \textbf{Responsabilit\'e} \\
+\midrule
+Product Owner       & Interne & Priorisation des fonctionnalit\'es \\
+\'Equipe Backend    & Interne & D\'eveloppement et maintenance \\
+\'Equipe Frontend   & Interne & Int\'egration UI plans, upgrade, quotas \\
+DevOps              & Interne & Infrastructure, monitoring, crons \\
+Admin global AGT    & Interne & Gestion transverse des plans, limites syst\`eme \\
+Admin plateforme    & Interne & Gestion des plans de sa plateforme \\
+Utilisateurs finaux & Externe & Souscription, upgrade, consultation quotas \\
+Services internes   & Interne & Chatbot, M\'edia, Search~: v\'erification quotas \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Fonctionnels}
+% ============================================================
+
+\subsection{Gestion des Plans}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-PLN-01 & Cr\'eation de plan       & Cr\'eer un plan avec nom, prix, cycle, quotas, pour une plateforme & \urgent \\
+F-PLN-02 & Liste des plans          & Lister les plans d'une plateforme (publics et/ou internes) & \urgent \\
+F-PLN-03 & D\'etail d'un plan       & Consulter un plan avec ses quotas et features & \urgent \\
+F-PLN-04 & Modification de plan     & Modifier prix, quotas, features (n'affecte pas les abonnements actifs) & \urgent \\
+F-PLN-05 & Archivage de plan        & D\'esactiver un plan (plus de nouvelles souscriptions, existants maintenus) & \urgent \\
+F-PLN-06 & Plan gratuit par d\'efaut & Configurable par plateforme~: un plan peut \^etre marqu\'e \texttt{is\_default} & \normale \\
+F-PLN-07 & Hi\'erarchie admin       & Admin global peut tout faire~; admin plateforme limit\'e \`a sa plateforme & \urgent \\
+F-PLN-08 & Immutabilit\'e plans actifs & Un plan avec abonnements actifs est immutable sur prix/quotas. Cr\'eer un nouveau plan et archiver l'ancien. & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Versioning des plans (v1.1)]
+\textbf{R\`egle}~: un plan ayant au moins un abonnement actif (statut $\neq$ expired, cancelled) est \textbf{immutable} sur ses champs \texttt{plan\_prices} et \texttt{plan\_quotas}. Seuls \texttt{name}, \texttt{description} et \texttt{metadata} restent modifiables.
+
+Pour changer les prix ou quotas~: cr\'eer un nouveau plan (avec \texttt{tier\_order} identique ou sup\'erieur), archiver l'ancien. Les abonn\'es existants restent sur leur plan jusqu'au renouvellement ou upgrade volontaire. Aucune migration automatique.
+\end{warnbox}
+
+\subsection{Gestion des Quotas}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-QTA-01 & D\'efinition quotas par plan  & Chaque plan d\'efinit N quotas avec cl\'e, limite, et politique (hard/overage) & \urgent \\
+F-QTA-02 & V\'erification quota          & Endpoint S2S~: un service demande \og~cet abonn\'e a-t-il encore du quota X~?\fg{} & \urgent \\
+F-QTA-03 & Incr\'ementation usage        & Endpoint S2S~: un service reporte une consommation sur un quota & \urgent \\
+F-QTA-04 & Consultation usage            & L'abonn\'e consulte sa consommation courante vs limites & \urgent \\
+F-QTA-05 & Reset p\'eriodique            & Les compteurs de quotas cycliques sont remis \`a z\'ero au renouvellement & \urgent \\
+F-QTA-06 & Politique hard limit          & Quota atteint = acc\`es bloqu\'e. Le service appelant re\c{c}oit un refus & \urgent \\
+F-QTA-07 & Politique overage             & Quota atteint = d\'epassement autoris\'e, comptabilis\'e pour facturation & \normale \\
+F-QTA-08 & Quotas libres par plateforme  & Les cl\'es de quotas sont d\'efinies librement (pas de liste cod\'ee en dur) & \urgent \\
+F-QTA-09 & Snapshot fin de cycle         & \`A chaque fin de cycle, snapshot de l'usage et overage persist\'e avant reset. Base de la facturation overage. & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Exemples de cl\'es de quotas]
+\begin{itemize}[nosep]
+  \item AGT-Bot~: \texttt{max\_bots}, \texttt{messages\_per\_month}, \texttt{storage\_mb}
+  \item AGT-Market~: \texttt{max\_products}, \texttt{boosts\_per\_month}
+  \item MboaMove~: \texttt{priority\_dispatch} (bool\'een via quota 0/1)
+  \item SALMA~: \texttt{max\_active\_courses}, \texttt{certifications\_included}
+\end{itemize}
+Les cl\'es sont des \texttt{VARCHAR} libres, scop\'ees par plateforme. Abonnement ne conna\^it pas leur signification m\'etier.
+\end{infobox}
+
+\subsection{Souscription \& Cycle de Vie}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-SUB-01 & Souscription             & Cr\'eer un abonnement (subscriber + plan + cycle) & \urgent \\
+F-SUB-02 & Activation post-paiement & Passer de \texttt{pending\_payment} \`a \texttt{active} sur confirmation Paiement & \urgent \\
+F-SUB-03 & Renouvellement auto      & Cron~: tenter le renouvellement avant expiration via Paiement & \urgent \\
+F-SUB-04 & Expiration               & Cron~: passer en \texttt{grace} puis \texttt{expired} selon config plateforme & \urgent \\
+F-SUB-05 & Annulation               & L'abonn\'e annule~; reste actif jusqu'\`a fin du cycle pay\'e & \urgent \\
+F-SUB-06 & Suspension               & Admin ou syst\`eme suspend un abonnement (impay\'e, abus) & \normale \\
+F-SUB-07 & R\'eactivation           & Reprendre un abonnement suspendu ou expir\'e & \normale \\
+F-SUB-08 & Historique               & Consulter l'historique complet des changements d'\'etat & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Cycle de vie d'un abonnement]
+\begin{verbatim}
+  pending_payment --> active --> [renouvellement OK] --> active
+                       |
+                       +--> cancelled (par l'abonne, actif jusqu'a fin cycle)
+                       |
+                       +--> [expiration] --> grace --> expired --> suspended
+                       |
+                       +--> suspended (par admin/systeme)
+
+  trial --> active (si paiement)
+        --> [selon config plateforme] : downgrade_to_free | suspended | expired
+\end{verbatim}
+\end{warnbox}
+
+\subsection{Trial}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-TRI-01 & Activation trial             & Souscription avec p\'eriode d'essai (dur\'ee configurable par plateforme) & \urgent \\
+F-TRI-02 & Fin de trial                 & Comportement post-trial configurable~: downgrade, suspend, ou expire & \urgent \\
+F-TRI-03 & Conversion trial $\to$ payant & Si paiement re\c{c}u pendant le trial, passage en \texttt{active} & \urgent \\
+F-TRI-04 & Un seul trial par plan       & Un subscriber ne peut pas b\'en\'eficier deux fois du trial sur le m\^eme plan & \normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Upgrade \& Downgrade}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-CHG-01 & Upgrade              & Passage \`a un plan sup\'erieur en cours de cycle avec prorata au jour & \urgent \\
+F-CHG-02 & Downgrade            & Passage \`a un plan inf\'erieur en cours de cycle avec prorata au jour & \urgent \\
+F-CHG-03 & Calcul prorata       & Cr\'edit restant sur l'ancien plan $-$ co\^ut restant sur le nouveau plan & \urgent \\
+F-CHG-04 & Historique changements & Chaque changement de plan est logg\'e avec montants prorata & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Calcul du prorata]
+\textbf{Upgrade}~: jours restants sur l'ancien plan $\times$ prix/jour ancien = cr\'edit. Jours restants $\times$ prix/jour nouveau = d\'ebit. Diff\'erence = montant \`a facturer via Paiement.\\
+\textbf{Downgrade}~: m\^eme logique invers\'ee. Le cr\'edit r\'esiduel est stock\'e et d\'eduit du prochain cycle.
+\end{infobox}
+
+\subsection{Organisations (B2B)}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ORG-01 & Cr\'eation organisation & Cr\'eer une organisation avec nom, owner, plateforme & \urgent \\
+F-ORG-02 & Ajout de membres       & Ajouter un user\_id comme membre d'une organisation & \urgent \\
+F-ORG-03 & Retrait de membres     & Retirer un membre (l'owner ne peut pas \^etre retir\'e) & \urgent \\
+F-ORG-04 & R\^oles organisation   & Owner (admin) et member (consommateur de quotas) & \normale \\
+F-ORG-05 & Quotas partag\'es      & Les quotas de l'abonnement org sont mutualis\'es entre membres & \urgent \\
+F-ORG-06 & Liste membres          & Consulter les membres d'une organisation & \normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Configuration Plateforme}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-CFG-01 & Config trial            & Dur\'ee trial par d\'efaut, comportement post-trial & \urgent \\
+F-CFG-02 & Config gr\^ace          & Dur\'ee du d\'elai de gr\^ace apr\`es expiration & \urgent \\
+F-CFG-03 & Config plan par d\'efaut & Quel plan est assign\'e par d\'efaut (ou aucun) & \normale \\
+F-CFG-04 & Config devise           & Devise des prix pour cette plateforme & \urgent \\
+F-CFG-05 & Config cycles autoris\'es & Quels cycles de facturation sont propos\'es & \normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Administration}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ADM-01 & Stats par plateforme    & Nombre d'abonn\'es actifs, MRR, churn, par plan & \normale \\
+F-ADM-02 & Liste abonnements       & Filtrage par plateforme, plan, statut, subscriber & \urgent \\
+F-ADM-03 & Forcer un changement    & Admin peut forcer upgrade, downgrade, suspension, annulation & \urgent \\
+F-ADM-04 & Limites syst\`eme       & Admin global d\'efinit des plafonds & \normale \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Non-Fonctionnels}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{clLc}
+\toprule
+\textbf{ID} & \textbf{Cat\'egorie} & \textbf{Exigence} & \textbf{Cible} \\
+\midrule
+NF-01 & Performance    & V\'erification quota (endpoint check)            & < 50ms (P95) \\
+NF-02 & Performance    & Temps de r\'eponse API                           & < 200ms (P95) \\
+NF-03 & Performance    & Throughput v\'erification quotas                  & 1000 req/s min \\
+NF-04 & Disponibilit\'e & Uptime                                          & 99.9\% \\
+NF-05 & S\'ecurit\'e   & Auth obligatoire                                & JWT ou S2S \\
+NF-06 & S\'ecurit\'e   & Rate limiting                                   & Configurable \\
+NF-07 & Scalabilit\'e  & Horizontal                                      & Stateless, multi-instance \\
+NF-08 & Observabilit\'e & Logs structur\'es                               & JSON, request ID \\
+NF-09 & Observabilit\'e & Health check                                    & \texttt{GET /subscriptions/health} \\
+NF-10 & Donn\'ees      & Cache quotas                                    & Redis TTL 30s \\
+NF-11 & Donn\'ees      & Timestamps                                      & TIMESTAMPTZ \\
+NF-12 & Traitement     & Crons renouvellement/expiration                 & Celery Beat, retry 3x backoff (1min, 5min, 15min), dead letter queue \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Architecture Technique}
+% ============================================================
+
+\subsection{Vue d'ensemble}
+
+Le service Abonnement est un microservice REST stateless, d\'eploy\'e en conteneur Docker. Il expose une API JSON consomm\'ee par les plateformes clientes et les services internes (v\'erification de quotas).
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Composant} & \textbf{Technologie} \\
+\midrule
+Langage \& Framework & Python 3.11+ / Django 5.x \\
+API                  & Django REST Framework (DRF) \\
+Base de donn\'ees    & PostgreSQL 15+ \\
+ORM                  & Django ORM \\
+Migrations           & Django Migrations \\
+Cache                & Redis 7+ (quotas, v\'erifications fr\'equentes) \\
+Scheduler            & Celery + Celery Beat \\
+Message Broker       & RabbitMQ \\
+Validation           & DRF Serializers \\
+Conteneurisation     & Docker + Docker Compose \\
+CI/CD                & GitHub Actions \\
+\bottomrule
+\end{tabularx}
+
+\subsection{D\'ependances \& R\`egles d'Architecture}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Service} & \textbf{Type} & \textbf{Usage} \\
+\midrule
+Service Auth         & Interne & Validation JWT via \texttt{GET /auth/verify-token}. Validation S2S via \texttt{POST /auth/s2s/introspect}. Registre plateformes. \\
+Service Users        & Interne & R\'esolution \texttt{user\_id}, v\'erification statut actif. Cache Redis TTL 60s. \\
+Service Notification & Interne & Alertes~: expiration, renouvellement, fin trial, quota atteint. \\
+Service Paiement     & Interne (futur) & Ex\'ecution paiements. Confirmation via \'ev\'enement RabbitMQ. \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egle stricte de d\'ependance]
+Abonnement ne d\'epend d'aucun service m\'etier. Il est consomm\'e par les plateformes et les services internes (Chatbot, M\'edia, Search) pour la v\'erification de quotas. Le couplage est unidirectionnel~: les services interrogent Abonnement, jamais l'inverse.
+
+\textbf{Exception}~: Abonnement \'emet des \'ev\'enements RabbitMQ consomm\'es par Paiement (demande de facturation) et Notification (alertes cycle de vie).
+\end{warnbox}
+
+\subsection{Strat\'egie de r\'esilience (v1.1)}
+
+Le service Abonnement est sur le \textbf{chemin critique} de tout l'\'ecosyst\`eme (chaque message IA, chaque upload, chaque boost passe par la v\'erification de quotas). Une indisponibilit\'e d'Abonnement bloquerait Chatbot, M\'edia et Search simultan\'ement.
+
+\begin{infobox}[Mode d\'egrad\'e --- Fallback Strategy]
+\textbf{Niveau 1 --- Cache Redis (nominal)}~: les quotas et usages sont cach\'es dans Redis (TTL 30s). 95\% des appels sont servis depuis le cache sans toucher PostgreSQL.
+
+\textbf{Niveau 2 --- Cache local appelant (d\'egrad\'e)}~: chaque service consommateur (Chatbot, M\'edia) \textbf{doit} maintenir un cache local (in-memory, TTL 5 min) du dernier r\'esultat de \texttt{quota/check}. Si Abonnement est injoignable, le service utilise ce cache local.
+
+\textbf{Niveau 3 --- Grace allowance (failover)}~: si le cache local est \'egalement vide (premier appel, red\'emarrage), le service consommateur applique une \textbf{grace allowance} configurable~: il autorise N requ\^etes (d\'efaut~: 10) avant de bloquer. Ces consommations sont report\'ees en batch d\`es qu'Abonnement redevient disponible.
+
+\textbf{Niveau 4 --- Soft enforcement (dernier recours)}~: en cas d'indisponibilit\'e prolong\'ee ($>$ 5 min), les services passent en mode \texttt{soft enforcement}~: les quotas sont logg\'es mais non bloqu\'es. Une alerte critique est envoy\'ee \`a l'\'equipe ops via Notification.
+\end{infobox}
+
+\begin{warnbox}[Contrat de r\'esilience pour les services consommateurs]
+Tout service appelant \texttt{quotas/check} ou \texttt{quotas/reserve} \textbf{doit} impl\'ementer les niveaux 2 et 3. Ce n'est pas optionnel. Le non-respect de cette r\`egle cr\'ee un SPOF sur l'\'ecosyst\`eme.
+\end{warnbox}
+
+\subsection{Diagramme d'architecture}
+
+\begin{verbatim}
+  AGT-Bot   AGT-Market   MboaMove   SALMA   Futures
+     |          |            |         |        |
+     +-----+----+-------+----+----+----+--------+
+           |            |         |
+    Subscription Service (API REST)
+      |         |          |           |
+  Auth(JWT)  Users(status)  Redis    PostgreSQL
+      |
+  RabbitMQ -----> Paiement (futur)
+      |-----> Notification (alertes)
+\end{verbatim}
+
+% ============================================================
+\section{Mod\'elisation}
+% ============================================================
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes complet est fourni en annexe au format PlantUML (voir section~\ref{sec:plantuml}). Il couvre les entit\'es~: \texttt{Plan}, \texttt{PlanPrice}, \texttt{PlanQuota}, \texttt{Organization}, \texttt{OrganizationMember}, \texttt{Subscription}, \texttt{SubscriptionQuotasUsage}, \texttt{QuotaReservation}, \texttt{SubscriptionEvent} et \texttt{PlatformSubscriptionConfig}.
+
+\subsection{MLD --- Mod\`ele Logique de Donn\'ees}
+
+\subsubsection{Table \texttt{plans}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+platform\_id      & UUID          & NOT NULL       & Plateforme (UUID Auth) \\
+name              & VARCHAR(100)  & NOT NULL       & Nom du plan \\
+slug              & VARCHAR(100)  & NOT NULL       & Slug URL-friendly \\
+description       & TEXT          & NULL           & Description \\
+is\_active        & BOOLEAN       & DEFAULT true   & Plan actif \\
+is\_default       & BOOLEAN       & DEFAULT false  & Plan par d\'efaut \\
+is\_free          & BOOLEAN       & DEFAULT false  & Plan gratuit \\
+tier\_order       & INT           & DEFAULT 0      & Ordre hi\'erarchique \\
+metadata          & JSONB         & NULL           & Donn\'ees compl\'ementaires \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere mise \`a jour \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, slug)}.
+
+\subsubsection{Table \texttt{plan\_prices}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+plan\_id          & UUID          & FK $\to$ plans & Plan associ\'e \\
+billing\_cycle    & VARCHAR(20)   & NOT NULL       & monthly, yearly, custom \\
+cycle\_days       & INT           & NULL           & Jours si custom \\
+price             & DECIMAL(12,2) & NOT NULL       & Prix du cycle \\
+currency          & VARCHAR(3)    & NOT NULL       & Devise (XAF, EUR, USD) \\
+is\_active        & BOOLEAN       & DEFAULT true   & Prix actif \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(plan\_id, billing\_cycle, currency)}.
+
+\subsubsection{Table \texttt{plan\_quotas}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                   & UUID          & PK             & Identifiant unique \\
+plan\_id             & UUID          & FK $\to$ plans & Plan associ\'e \\
+quota\_key           & VARCHAR(50)   & NOT NULL       & Cl\'e libre (\texttt{max\_bots}, \texttt{messages\_per\_month}) \\
+limit\_value         & INT           & NOT NULL       & Limite ($-1$ = illimit\'e) \\
+is\_cyclical         & BOOLEAN       & DEFAULT true   & RAZ \`a chaque cycle \\
+overage\_policy      & VARCHAR(10)   & DEFAULT 'hard' & \texttt{hard} ou \texttt{overage} \\
+overage\_unit\_price & DECIMAL(10,2) & DEFAULT 0      & Prix unitaire du d\'epassement \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(plan\_id, quota\_key)}.
+
+\subsubsection{Table \texttt{organizations}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+platform\_id      & UUID          & NOT NULL       & Plateforme \\
+name              & VARCHAR(150)  & NOT NULL       & Nom de l'organisation \\
+owner\_user\_id   & UUID          & NOT NULL       & Propri\'etaire (\texttt{users\_auth.id}) \\
+is\_active        & BOOLEAN       & DEFAULT true   & Active \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, name)}.
+
+\subsubsection{Table \texttt{organization\_members}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+organization\_id  & UUID          & FK $\to$ organizations & Organisation \\
+user\_id          & UUID          & NOT NULL       & Membre (\texttt{users\_auth.id}) \\
+role              & VARCHAR(20)   & DEFAULT 'member' & \texttt{owner} ou \texttt{member} \\
+joined\_at        & TIMESTAMPTZ   & NOT NULL       & Date d'ajout \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(organization\_id, user\_id)}.
+
+\subsubsection{Table \texttt{subscriptions}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                     & UUID          & PK             & Identifiant unique \\
+platform\_id           & UUID          & NOT NULL       & Plateforme \\
+subscriber\_type       & VARCHAR(20)   & NOT NULL       & \texttt{user} ou \texttt{organization} \\
+subscriber\_id         & UUID          & NOT NULL       & user\_id ou organization\_id \\
+plan\_id               & UUID          & FK $\to$ plans & Plan souscrit \\
+plan\_price\_id        & UUID          & FK $\to$ plan\_prices & Prix/cycle choisi \\
+status                 & VARCHAR(20)   & NOT NULL       & pending\_payment, trial, active, grace, expired, suspended, cancelled \\
+current\_period\_start & TIMESTAMPTZ   & NOT NULL       & D\'ebut du cycle courant \\
+current\_period\_end   & TIMESTAMPTZ   & NOT NULL       & Fin du cycle courant \\
+trial\_end             & TIMESTAMPTZ   & NULL           & Fin de la p\'eriode d'essai \\
+grace\_end             & TIMESTAMPTZ   & NULL           & Fin du d\'elai de gr\^ace \\
+cancelled\_at          & TIMESTAMPTZ   & NULL           & Date d'annulation \\
+cancel\_at\_period\_end & BOOLEAN      & DEFAULT false  & Annulation en fin de cycle \\
+created\_at            & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at            & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique partielle~: \texttt{(platform\_id, subscriber\_type, subscriber\_id)} \texttt{WHERE status NOT IN ('expired','cancelled')}.
+
+\begin{infobox}[R\`egle d'unicit\'e]
+Un subscriber ne peut avoir qu'\textbf{un seul abonnement actif} par plateforme. Les abonnements termin\'es (expired, cancelled) restent en base pour l'historique.
+\end{infobox}
+
+\subsubsection{Table \texttt{subscription\_quotas\_usage}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+subscription\_id  & UUID          & FK $\to$ subscriptions & Abonnement \\
+quota\_key        & VARCHAR(50)   & NOT NULL       & Cl\'e du quota \\
+used              & INT           & DEFAULT 0      & Consommation courante \\
+overage           & INT           & DEFAULT 0      & D\'epassement \\
+period\_start     & TIMESTAMPTZ   & NOT NULL       & D\'ebut p\'eriode \\
+period\_end       & TIMESTAMPTZ   & NOT NULL       & Fin p\'eriode \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(subscription\_id, quota\_key, period\_start)}.
+
+\begin{infobox}[Snapshot de fin de cycle (v1.1)]
+Avant le reset des quotas cycliques, le cron de renouvellement cr\'ee un \texttt{subscription\_event} de type \texttt{cycle\_closed} avec dans \texttt{metadata} un snapshot complet~: \texttt{\{quota\_key, limit, used, overage\}} pour chaque quota. Ce snapshot est la source de v\'erit\'e pour la facturation overage. Le reset n'intervient qu'\textbf{apr\`es} la cr\'eation du snapshot.
+\end{infobox}
+
+\subsubsection{Table \texttt{quota\_reservations} (v1.1)}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique (= reservation\_id) \\
+subscription\_id  & UUID          & FK $\to$ subscriptions & Abonnement \\
+quota\_key        & VARCHAR(50)   & NOT NULL       & Cl\'e du quota \\
+amount            & INT           & NOT NULL       & Quantit\'e r\'eserv\'ee \\
+status            & VARCHAR(20)   & DEFAULT 'pending' & pending, confirmed, released, expired \\
+expires\_at       & TIMESTAMPTZ   & NOT NULL       & Expiration de la r\'eservation \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+resolved\_at      & TIMESTAMPTZ   & NULL           & Date de confirm/release/expiration \\
+\bottomrule
+\end{tabularx}
+
+Index~: \texttt{(subscription\_id, quota\_key, status)} pour lookup rapide des r\'eservations pending.
+
+\subsubsection{Table \texttt{subscription\_events}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+subscription\_id  & UUID          & FK $\to$ subscriptions & Abonnement \\
+event\_type       & VARCHAR(30)   & NOT NULL       & created, activated, renewed, upgraded, downgraded, cancelled, expired, suspended, reactivated, cycle\_closed \\
+from\_plan\_id    & UUID          & NULL           & Plan pr\'ec\'edent \\
+to\_plan\_id      & UUID          & NULL           & Nouveau plan \\
+prorate\_credit   & DECIMAL(12,2) & NULL           & Cr\'edit prorata \\
+prorate\_debit    & DECIMAL(12,2) & NULL           & D\'ebit prorata \\
+metadata          & JSONB         & NULL           & Donn\'ees compl\'ementaires \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Date de l'\'ev\'enement \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{platform\_subscription\_config}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                      & UUID          & PK             & Identifiant unique \\
+platform\_id            & UUID          & UNIQUE, NOT NULL & Plateforme \\
+default\_trial\_days    & INT           & DEFAULT 0      & Dur\'ee trial (0 = pas de trial) \\
+grace\_period\_days     & INT           & DEFAULT 0      & D\'elai de gr\^ace (0 = coupure imm\'ediate) \\
+post\_trial\_behavior   & VARCHAR(20)   & DEFAULT 'suspend' & \texttt{downgrade\_to\_free}, \texttt{suspend}, \texttt{expire} \\
+default\_currency       & VARCHAR(3)    & DEFAULT 'XAF'  & Devise par d\'efaut \\
+allowed\_cycles         & JSONB         & NOT NULL       & Cycles autoris\'es \\
+require\_default\_plan  & BOOLEAN       & DEFAULT false  & Exiger un plan par d\'efaut \\
+created\_at             & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at             & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Contrats d'API}
+% ============================================================
+
+Base URL~: \texttt{/api/v1}. Tous les endpoints retournent du JSON. Les endpoints prot\'eg\'es requi\`erent \texttt{Authorization: Bearer <token>}.
+
+\subsection{Health Check}
+
+\subsubsection{GET /subscriptions/health}
+
+V\'erifie l'\'etat du service. Aucune authentification requise.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "status": "healthy",
+  "database": "ok",
+  "redis": "ok",
+  "version": "1.2.0"
+}
+\end{lstlisting}
+
+\subsection{Plans}
+
+\subsubsection{POST /subscriptions/plans}
+
+Cr\'eation d'un plan. Auth~: Bearer token (admin plateforme ou admin global).
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "Pro",
+  "slug": "pro",
+  "description": "Plan professionnel",
+  "is_free": false,
+  "tier_order": 2,
+  "prices": [
+    { "billing_cycle": "monthly", "price": 15000, "currency": "XAF" },
+    { "billing_cycle": "yearly", "price": 150000, "currency": "XAF" }
+  ],
+  "quotas": [
+    {
+      "quota_key": "max_bots",
+      "limit_value": 5,
+      "is_cyclical": false,
+      "overage_policy": "hard"
+    },
+    {
+      "quota_key": "messages_per_month",
+      "limit_value": 10000,
+      "is_cyclical": true,
+      "overage_policy": "overage",
+      "overage_unit_price": 2
+    }
+  ]
+}
+\end{lstlisting}
+
+Response 201~:
+\begin{lstlisting}
+{
+  "id": "plan-uuid",
+  "platform_id": "uuid",
+  "name": "Pro",
+  "slug": "pro",
+  "message": "Plan created"
+}
+\end{lstlisting}
+
+Codes~: 201 Created, 400 Validation error, 401 Unauthorized, 403 Forbidden, 409 Slug exists.
+
+\subsubsection{GET /subscriptions/plans}
+
+Liste des plans. Query params~: \texttt{?platform\_id=uuid\&is\_active=true\&page=1\&limit=20}.
+
+Codes~: 200 OK, 401 Unauthorized.
+
+\subsubsection{GET /subscriptions/plans/\{planId\}}
+
+D\'etail d'un plan avec prix et quotas. Codes~: 200 OK, 404 Not found.
+
+\subsubsection{PUT /subscriptions/plans/\{planId\}}
+
+Modification. N'affecte pas les abonnements actifs. Codes~: 200 OK, 400, 403, 404.
+
+\subsubsection{POST /subscriptions/plans/\{planId\}/archive}
+
+Archivage (\texttt{is\_active = false}). Codes~: 200 OK, 403, 404.
+
+\subsection{Souscriptions}
+
+\subsubsection{POST /subscriptions}
+
+Cr\'eation d'un abonnement.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "subscriber_type": "user",
+  "subscriber_id": "user-uuid",
+  "plan_id": "plan-uuid",
+  "billing_cycle": "monthly",
+  "with_trial": true
+}
+\end{lstlisting}
+
+Response 201~:
+\begin{lstlisting}
+{
+  "id": "sub-uuid",
+  "status": "trial",
+  "plan": { "id": "plan-uuid", "name": "Pro" },
+  "current_period_start": "2026-04-03T00:00:00Z",
+  "current_period_end": "2026-05-03T00:00:00Z",
+  "trial_end": "2026-04-17T00:00:00Z",
+  "message": "Subscription created"
+}
+\end{lstlisting}
+
+Codes~: 201 Created, 400 Validation, 404 Plan not found, 409 Active sub exists.
+
+\subsubsection{GET /subscriptions/\{subId\}}
+
+D\'etail avec plan, quotas, usage courant. Codes~: 200, 404.
+
+\subsubsection{GET /subscriptions}
+
+Liste. Query params~: \texttt{?platform\_id\&subscriber\_id\&status\&page\&limit}. Codes~: 200, 401.
+
+\subsubsection{POST /subscriptions/\{subId\}/cancel}
+
+Annulation. Actif jusqu'\`a fin du cycle.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "id": "sub-uuid",
+  "status": "active",
+  "cancel_at_period_end": true,
+  "message": "Subscription will be cancelled at period end"
+}
+\end{lstlisting}
+
+Codes~: 200, 404, 409 Already cancelled.
+
+\subsubsection{POST /subscriptions/\{subId\}/reactivate}
+
+R\'eactivation. Codes~: 200, 404, 409 Cannot reactivate.
+
+\subsection{Changement de Plan}
+
+\subsubsection{POST /subscriptions/\{subId\}/change-plan}
+
+Upgrade ou downgrade avec prorata.
+
+Request body~:
+\begin{lstlisting}
+{
+  "new_plan_id": "plan-uuid",
+  "billing_cycle": "monthly"
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "id": "sub-uuid",
+  "old_plan": { "id": "old-uuid", "name": "Free" },
+  "new_plan": { "id": "new-uuid", "name": "Pro" },
+  "prorate_credit": 0,
+  "prorate_debit": 10000,
+  "amount_due": 10000,
+  "message": "Plan changed, payment required"
+}
+\end{lstlisting}
+
+Codes~: 200, 400 Same plan, 404 Plan not found, 409 No active sub.
+
+\subsection{Quotas}
+
+\subsubsection{POST /subscriptions/quotas/check}
+
+\textbf{Endpoint critique S2S.} V\'erifie si un subscriber a du quota disponible. Auth~: S2S token.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "subscriber_type": "user",
+  "subscriber_id": "user-uuid",
+  "quota_key": "messages_per_month",
+  "requested": 1
+}
+\end{lstlisting}
+
+Response 200 (disponible)~:
+\begin{lstlisting}
+{
+  "allowed": true,
+  "quota_key": "messages_per_month",
+  "limit": 10000,
+  "used": 4523,
+  "remaining": 5477,
+  "overage_policy": "overage"
+}
+\end{lstlisting}
+
+Response 200 (\'epuis\'e, hard limit)~:
+\begin{lstlisting}
+{
+  "allowed": false,
+  "quota_key": "max_bots",
+  "limit": 5,
+  "used": 5,
+  "remaining": 0,
+  "overage_policy": "hard",
+  "message": "Quota exceeded"
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 401, 404 No active sub.
+
+\begin{warnbox}[Performance quota check]
+Cet endpoint est sur le chemin critique de tous les services. Il \textbf{doit} r\'epondre en < 50ms. Strat\'egie~: cache Redis avec les quotas/usage du subscriber, TTL 30s, invalid\'e \`a chaque incr\'ementation.
+\end{warnbox}
+
+\subsubsection{POST /subscriptions/quotas/increment}
+
+\textbf{Endpoint S2S.} Reporte une consommation.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "subscriber_type": "user",
+  "subscriber_id": "user-uuid",
+  "quota_key": "messages_per_month",
+  "amount": 1
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "quota_key": "messages_per_month",
+  "used": 4524,
+  "limit": 10000,
+  "overage": 0
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 403 Hard limit exceeded, 404 No active sub.
+
+\begin{warnbox}[Atomicit\'e des quotas (v1.1)]
+Le pattern \texttt{check $\to$ increment} en deux appels s\'epar\'es est vuln\'erable aux race conditions (requ\^etes concurrentes). Le service impl\'emente un mod\`ele \textbf{reserve / confirm / release}~:
+
+\begin{enumerate}[nosep]
+  \item \textbf{Reserve}~: r\'eserve atomiquement N unit\'es (\texttt{UPDATE ... WHERE used + requested <= limit} ou autorise l'overage). Retourne un \texttt{reservation\_id} avec TTL (d\'efaut~: 60s).
+  \item \textbf{Confirm}~: le service appelant confirme la consommation. La r\'eservation devient d\'efinitive.
+  \item \textbf{Release}~: si le traitement \'echoue, lib\'eration de la r\'eservation. Un cron purge les r\'eservations expir\'ees.
+\end{enumerate}
+
+\textbf{Impl\'ementation}~: op\'eration SQL atomique (\texttt{SELECT ... FOR UPDATE} ou \texttt{UPDATE ... RETURNING}). Cache Redis invalid\'e apr\`es chaque reserve/confirm/release.
+
+\textbf{R\'etrocompatibilit\'e}~: \texttt{check} et \texttt{increment} restent disponibles pour les cas simples. Pour les chemins critiques \`a haute concurrence (messages IA, uploads), les services \textbf{doivent} utiliser reserve/confirm/release.
+\end{warnbox}
+
+\subsubsection{POST /subscriptions/quotas/reserve (v1.1)}
+
+\textbf{Endpoint S2S.} R\'eserve atomiquement du quota. Auth~: S2S token.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "subscriber_type": "user",
+  "subscriber_id": "user-uuid",
+  "quota_key": "messages_per_month",
+  "amount": 1,
+  "ttl_seconds": 60
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "reservation_id": "res-uuid",
+  "allowed": true,
+  "quota_key": "messages_per_month",
+  "limit": 10000,
+  "used": 4524,
+  "reserved": 1,
+  "expires_at": "2026-04-03T12:01:00Z"
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 403 Hard limit exceeded, 404 No active sub.
+
+\subsubsection{POST /subscriptions/quotas/confirm (v1.1)}
+
+Confirme une r\'eservation. Auth~: S2S token.
+
+Request body~:
+\begin{lstlisting}
+{
+  "reservation_id": "res-uuid"
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "confirmed": true,
+  "quota_key": "messages_per_month",
+  "used": 4524
+}
+\end{lstlisting}
+
+Codes~: 200, 404 Reservation not found, 410 Reservation expired.
+
+\subsubsection{POST /subscriptions/quotas/release (v1.1)}
+
+Lib\`ere une r\'eservation non utilis\'ee. Auth~: S2S token.
+
+Request body~:
+\begin{lstlisting}
+{
+  "reservation_id": "res-uuid"
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "released": true,
+  "quota_key": "messages_per_month",
+  "used": 4523
+}
+\end{lstlisting}
+
+Codes~: 200, 404, 410 Already confirmed or expired.
+
+\subsubsection{GET /subscriptions/\{subId\}/usage}
+
+Usage courant de tous les quotas. Codes~: 200, 404.
+
+\subsection{Organisations}
+
+\subsubsection{POST /subscriptions/organizations}
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "TechCorp",
+  "owner_user_id": "user-uuid"
+}
+\end{lstlisting}
+
+Codes~: 201, 400, 409 Name exists.
+
+\subsubsection{POST /subscriptions/organizations/\{orgId\}/members}
+
+Request body~: \texttt{\{"user\_id": "uuid", "role": "member"\}}
+
+Codes~: 201, 404, 409 Already member.
+
+\subsubsection{DELETE /subscriptions/organizations/\{orgId\}/members/\{userId\}}
+
+Codes~: 200, 403 Cannot remove owner, 404.
+
+\subsubsection{GET /subscriptions/organizations/\{orgId\}/members}
+
+Codes~: 200, 404.
+
+\subsection{Configuration Plateforme}
+
+\subsubsection{PUT /subscriptions/config/\{platformId\}}
+
+Auth~: admin global ou admin plateforme.
+
+Request body~:
+\begin{lstlisting}
+{
+  "default_trial_days": 14,
+  "grace_period_days": 7,
+  "post_trial_behavior": "downgrade_to_free",
+  "default_currency": "XAF",
+  "allowed_cycles": ["monthly", "yearly"],
+  "require_default_plan": true
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 403.
+
+\subsubsection{GET /subscriptions/config/\{platformId\}}
+
+Codes~: 200, 404.
+
+\subsection{Administration}
+
+\subsubsection{GET /subscriptions/admin/stats}
+
+Query params~: \texttt{?platform\_id=uuid}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "total_active": 1542,
+  "total_trial": 89,
+  "total_cancelled": 234,
+  "mrr": 12500000,
+  "plans_breakdown": [
+    { "plan": "Free", "count": 980 },
+    { "plan": "Pro", "count": 450 },
+    { "plan": "Enterprise", "count": 112 }
+  ]
+}
+\end{lstlisting}
+
+Codes~: 200, 401, 403.
+
+\subsubsection{POST /subscriptions/admin/\{subId\}/suspend}
+
+Suspension forc\'ee. Codes~: 200, 403, 404.
+
+\subsubsection{POST /subscriptions/admin/\{subId\}/force-change}
+
+Changement de plan forc\'e (sans paiement). Codes~: 200, 403, 404.
+
+\subsubsection{DELETE /subscriptions/by-user/\{userId\}}
+
+\textbf{Purge RGPD.} Auth~: S2S token. Supprime abonnements, usage, events du subscriber.
+
+Codes~: 200, 401, 404.
+
+% ============================================================
+\section{Contrats Inter-Services}
+% ============================================================
+
+\subsection{Abonnement $\to$ Auth (JWT utilisateur)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint           & \texttt{GET /auth/verify-token} \\
+Auth               & \texttt{Authorization: Bearer <access\_token>} \\
+Donn\'ees extraites & \texttt{user\_id} (\texttt{sub}), \texttt{platform\_id} \\
+Cache              & Redis TTL 30s \\
+Comportement \'echec & Retourner 401 Unauthorized \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Abonnement $\to$ Auth (token S2S)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint & \texttt{POST /auth/s2s/introspect} \\
+Donn\'ees & \texttt{client\_id} (= \texttt{platform\_id}), \texttt{service\_name} \\
+Usage    & Appels S2S entrants (quota check depuis Chatbot, M\'edia, etc.) \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Abonnement $\to$ Users (r\'esolution subscriber)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint           & \texttt{GET /api/v1/users/\{userId\}/status} \\
+Usage              & V\'erifier que le user est actif avant souscription \\
+Cache              & Redis TTL 60s \\
+Comportement \'echec & Retourner 400 \og User not found or inactive\fg{} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Abonnement $\to$ Notification (alertes)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Notification d\'eclench\'ee} \\
+\midrule
+Trial expire dans 3 jours        & Email/push~: \og Votre essai expire bient\^ot\fg{} \\
+Renouvellement r\'eussi          & Email~: \og Votre abonnement a \'et\'e renouvel\'e\fg{} \\
+Renouvellement \'echou\'e        & Email/push~: \og \'Echec de paiement, action requise\fg{} \\
+Entr\'ee en gr\^ace              & Email/push~: \og Abonnement expir\'e, d\'elai de gr\^ace de X jours\fg{} \\
+Suspension                        & Email~: \og Votre abonnement a \'et\'e suspendu\fg{} \\
+Quota \`a 80\%                    & Push/in-app~: \og 80\% de votre quota X consomm\'e\fg{} \\
+Quota atteint (hard limit)        & Push/in-app~: \og Quota X atteint, upgradez votre plan\fg{} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Services consommateurs $\to$ Abonnement (v\'erification quotas) (v1.2)}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Service} & \textbf{Endpoint appel\'e} & \textbf{Moment} \\
+\midrule
+Chatbot  & \texttt{POST /quotas/reserve} & Avant chaque r\'eponse IA (chemin critique haute concurrence) \\
+Chatbot  & \texttt{POST /quotas/confirm} & Apr\`es r\'eponse IA r\'eussie \\
+Chatbot  & \texttt{POST /quotas/release} & Si \'echec g\'en\'eration IA \\
+M\'edia  & \texttt{POST /quotas/reserve} & Avant chaque upload (chemin critique haute concurrence) \\
+M\'edia  & \texttt{POST /quotas/confirm} & Apr\`es upload r\'eussi \\
+M\'edia  & \texttt{POST /quotas/release} & Si \'echec upload \\
+Search   & \texttt{POST /quotas/check}   & Avant activation boost (faible concurrence, check suffisant) \\
+AGT-Bot  & \texttt{POST /quotas/check}   & Avant cr\'eation de bot (faible concurrence, check suffisant) \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[R\`egle d'usage (v1.2)]
+\textbf{Chemins critiques} (haute fr\'equence, concurrence \'elev\'ee)~: Chatbot, M\'edia $\to$ \textbf{reserve/confirm/release obligatoire}.\\
+\textbf{Chemins non critiques} (faible fr\'equence, op\'erations ponctuelles)~: Search, AGT-Bot $\to$ \texttt{check} seul suffit.
+\end{infobox}
+
+\subsection{Abonnement $\to$ Paiement (\'ev\'enements RabbitMQ) (v1.1)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement publi\'e} & \textbf{Payload} \\
+\midrule
+\texttt{subscription.payment\_required} & \texttt{event\_id} (UUID unique), \texttt{idempotency\_key} (UUID), \texttt{subscription\_id}, \texttt{amount}, \texttt{currency}, \texttt{subscriber\_type}, \texttt{subscriber\_id}, \texttt{reason} (new, renewal, upgrade), \texttt{timestamp} \\
+\texttt{subscription.overage\_billing}  & \texttt{event\_id}, \texttt{idempotency\_key}, \texttt{subscription\_id}, \texttt{quota\_key}, \texttt{overage\_amount}, \texttt{unit\_price}, \texttt{total}, \texttt{quota\_snapshot} (v1.1), \texttt{timestamp} \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Idempotence (v1.1)]
+\textbf{R\`egle stricte}~: chaque \'ev\'enement porte un \texttt{event\_id} (UUID v4) et un \texttt{idempotency\_key}. Le consommateur (Paiement) \textbf{doit} d\'edupliquer sur \texttt{idempotency\_key} avant traitement.
+
+\textbf{Sc\'enarios couverts}~:
+\begin{itemize}[nosep]
+  \item Retry RabbitMQ apr\`es timeout~: m\^eme \texttt{idempotency\_key} $\to$ ignor\'e par Paiement
+  \item Double \'emission (bug ou crash recovery)~: d\'etect\'e et ignor\'e
+  \item Webhook Paiement doublonn\'e~: Abonnement d\'eduplique sur \texttt{payment\_reference\_id}
+\end{itemize}
+
+\textbf{Stockage}~: table \texttt{processed\_events} c\^ot\'e consommateur avec TTL 72h (index sur \texttt{idempotency\_key}).
+\end{warnbox}
+
+\begin{infobox}[\'Ev\'enements re\c{c}us de Paiement (v1.1)]
+Abonnement \'ecoute les queues \texttt{payment.confirmed} et \texttt{payment.failed}~:
+\begin{itemize}[nosep]
+  \item \texttt{payment.confirmed}~: contient \texttt{payment\_reference\_id}, \texttt{subscription\_id}, \texttt{idempotency\_key}. Abonnement v\'erifie que le \texttt{payment\_reference\_id} n'a pas d\'ej\`a \'et\'e trait\'e (table \texttt{subscription\_events.metadata}). Si nouveau $\to$ activation ou renouvellement.
+  \item \texttt{payment.failed}~: m\^eme structure. D\'eclenche la logique de gr\^ace ou suspension.
+\end{itemize}
+\textbf{D\'eduplication}~: Abonnement stocke chaque \texttt{payment\_reference\_id} trait\'e. Tout doublon est ignor\'e silencieusement (log warning, pas d'erreur).
+\end{infobox}
+
+\subsection{Users $\to$ Abonnement (Purge RGPD)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint          & \texttt{DELETE /api/v1/subscriptions/by-user/\{userId\}} \\
+Auth              & Token S2S \\
+Usage             & Appel\'e par Users dans le workflow de purge RGPD \\
+Donn\'ees supprim\'ees & Abonnements, usage, events du subscriber. Organisations si owner. \\
+S\'equence        & Avant Auth purge et M\'edia purge \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Matrice d'Autorisation}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{lcccc}
+\toprule
+\textbf{Endpoint} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin Plat.} & \textbf{Admin Global} \\
+\midrule
+GET /plans                        & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /plans                       &              &              & $\checkmark$ & $\checkmark$ \\
+PUT /plans/\{id\}                 &              &              & $\checkmark$ & $\checkmark$ \\
+POST /plans/.../archive           &              &              & $\checkmark$ & $\checkmark$ \\
+POST /subscriptions               & $\checkmark$ & $\checkmark$ &              &              \\
+GET /subscriptions/\{id\}         & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /.../cancel                  & $\checkmark$ &              &              & $\checkmark$ \\
+POST /.../change-plan             & $\checkmark$ &              &              & $\checkmark$ \\
+POST /quotas/check                &              & $\checkmark$ &              & $\checkmark$ \\
+POST /quotas/increment            &              & $\checkmark$ &              & $\checkmark$ \\
+POST /quotas/reserve             &              & $\checkmark$ &              & $\checkmark$ \\
+POST /quotas/confirm             &              & $\checkmark$ &              & $\checkmark$ \\
+POST /quotas/release             &              & $\checkmark$ &              & $\checkmark$ \\
+GET /.../usage                    & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /organizations               & $\checkmark$ &              &              & $\checkmark$ \\
+PUT /config/\{platformId\}        &              &              & $\checkmark$ & $\checkmark$ \\
+GET /admin/stats                  &              &              & $\checkmark$ & $\checkmark$ \\
+POST /admin/.../suspend           &              &              & $\checkmark$ & $\checkmark$ \\
+DELETE /by-user/\{userId\}        &              & $\checkmark$ &              & $\checkmark$ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Recommandations \& \'Evolutions}
+% ============================================================
+
+\begin{itemize}
+  \item \textbf{Coupons \& r\'eductions}~: module pour codes promo, remises fid\'elit\'e.
+  \item \textbf{Usage analytics}~: dashboard de consommation par quota, tendances, pr\'edictions.
+  \item \textbf{Webhooks sortants}~: \'ev\'enements cycle de vie vers les plateformes.
+  \item \textbf{Quotas imbriqu\'es}~: quotas par membre d'organisation (en plus des quotas partag\'es).
+  \item \textbf{Multi-abonnement}~: add-ons en compl\'ement du plan principal.
+  \item \textbf{Versioning API}~: pr\'efixe \texttt{/api/v1}. Breaking changes $\to$ \texttt{/api/v2}.
+  \item \textbf{Monitoring}~: m\'etriques Prometheus (souscriptions, quota checks/s, latence P95, taux renouvellement).
+\end{itemize}
+
+% ============================================================
+\section*{Annexes}
+% ============================================================
+
+\subsection*{Glossaire}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Terme} & \textbf{D\'efinition} \\
+\midrule
+Subscriber    & Entit\'e abstraite qui d\'etient un abonnement (user ou organization) \\
+Plan          & Offre nomm\'ee avec prix, quotas et features, scop\'ee \`a une plateforme \\
+Quota         & Limite mesurable associ\'ee \`a un plan \\
+Overage       & D\'epassement d'un quota autoris\'e, factur\'e \`a l'unit\'e \\
+Hard limit    & Quota dont le d\'epassement est interdit \\
+Prorata       & Calcul au jour du cr\'edit/d\'ebit lors d'un changement de plan \\
+Trial         & P\'eriode d'essai gratuite avant activation payante \\
+Grace period  & D\'elai apr\`es expiration o\`u l'acc\`es est maintenu \\
+MRR           & Monthly Recurring Revenue \\
+Billing cycle & P\'eriode de facturation \\
+S2S           & Service-to-Service \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Code PlantUML --- Diagramme de Classes}
+\label{sec:plantuml}
+
+Le code PlantUML ci-dessous correspond au diagramme de classes complet du service Abonnement v1.2. Il peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+@startuml Subscription Service - Class Diagram v1.2
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "plans" as plans {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * name : VARCHAR(100)
+  * slug : VARCHAR(100)
+  description : TEXT
+  is_active : BOOLEAN = true
+  is_default : BOOLEAN = false
+  is_free : BOOLEAN = false
+  * tier_order : INT = 0
+  metadata : JSONB
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, slug)
+}
+
+entity "plan_prices" as prices {
+  * id : UUID <<PK>>
+  --
+  * plan_id : UUID <<FK>>
+  * billing_cycle : VARCHAR(20)
+  cycle_days : INT
+  * price : DECIMAL(12,2)
+  * currency : VARCHAR(3)
+  is_active : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (plan_id, billing_cycle, currency)
+}
+
+entity "plan_quotas" as quotas {
+  * id : UUID <<PK>>
+  --
+  * plan_id : UUID <<FK>>
+  * quota_key : VARCHAR(50)
+  * limit_value : INT
+  is_cyclical : BOOLEAN = true
+  overage_policy : VARCHAR(10) = 'hard'
+  overage_unit_price : DECIMAL(10,2) = 0
+  ..
+  <<UQ>> (plan_id, quota_key)
+}
+
+entity "organizations" as orgs {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * name : VARCHAR(150)
+  * owner_user_id : UUID
+  is_active : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, name)
+}
+
+entity "organization_members" as members {
+  * id : UUID <<PK>>
+  --
+  * organization_id : UUID <<FK>>
+  * user_id : UUID
+  role : VARCHAR(20) = 'member'
+  * joined_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (organization_id, user_id)
+}
+
+entity "subscriptions" as subs {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * subscriber_type : VARCHAR(20)
+  * subscriber_id : UUID
+  * plan_id : UUID <<FK>>
+  * plan_price_id : UUID <<FK>>
+  * status : VARCHAR(20)
+  * current_period_start : TIMESTAMPTZ
+  * current_period_end : TIMESTAMPTZ
+  trial_end : TIMESTAMPTZ
+  grace_end : TIMESTAMPTZ
+  cancelled_at : TIMESTAMPTZ
+  cancel_at_period_end : BOOLEAN = false
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<PARTIAL UQ>> (platform_id, subscriber_type, subscriber_id)
+  WHERE status NOT IN ('expired','cancelled')
+}
+
+entity "subscription_quotas_usage" as usage {
+  * id : UUID <<PK>>
+  --
+  * subscription_id : UUID <<FK>>
+  * quota_key : VARCHAR(50)
+  used : INT = 0
+  overage : INT = 0
+  * period_start : TIMESTAMPTZ
+  * period_end : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (subscription_id, quota_key, period_start)
+}
+
+entity "quota_reservations" as reservations {
+  * id : UUID <<PK>>
+  --
+  * subscription_id : UUID <<FK>>
+  * quota_key : VARCHAR(50)
+  * amount : INT
+  status : VARCHAR(20) = 'pending'
+  * expires_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  resolved_at : TIMESTAMPTZ
+}
+
+entity "subscription_events" as events {
+  * id : UUID <<PK>>
+  --
+  * subscription_id : UUID <<FK>>
+  * event_type : VARCHAR(30)
+  from_plan_id : UUID
+  to_plan_id : UUID
+  prorate_credit : DECIMAL(12,2)
+  prorate_debit : DECIMAL(12,2)
+  metadata : JSONB
+  * created_at : TIMESTAMPTZ
+}
+
+entity "platform_subscription_config" as config {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID <<UQ>>
+  default_trial_days : INT = 0
+  grace_period_days : INT = 0
+  post_trial_behavior : VARCHAR(20) = 'suspend'
+  default_currency : VARCHAR(3) = 'XAF'
+  * allowed_cycles : JSONB
+  require_default_plan : BOOLEAN = false
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+plans ||--o{ prices   : "1..* prices"
+plans ||--o{ quotas   : "1..* quotas"
+plans ||--o{ subs     : "1..* subscriptions"
+
+prices ||--o{ subs    : "1..* subscriptions"
+
+orgs ||--o{ members   : "1..* members"
+
+subs ||--o{ usage     : "1..* usage"
+subs ||--o{ events    : "1..* events"
+subs ||--o{ reservations : "0..* reservations"
+
+@enduml
+\end{lstlisting}
+
+\vfill
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}\\[0.5em]
+{\small\textcolor{agtgray}{AG Technologies --- Document confidentiel \`a usage interne exclusivement.}}\\
+{\small\textcolor{agtgray}{Subscription Service CDC v1.2 --- Avril 2026}}
+\end{center}
+
+\end{document}

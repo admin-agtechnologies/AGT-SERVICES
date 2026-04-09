@@ -1,0 +1,109 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# === Node.js ===
+node_modules/
+dist/
+.next/
+coverage/
+
+# === Environment ===
+.env
+.env.local
+.env.production
+
+# === Keys (NEVER commit) ===
+keys/
+*.pem
+*.key
+
+# === Database ===
+db.sqlite3
+*.db
+
+# === IDE ===
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# === Docker ===
+docker-compose.override.yml
+
+# === Logs ===
+*.log
+logs/
+
+# === Test ===
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# === Uploads ===
+uploads/
+media_storage/# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# === Node.js ===
+node_modules/
+dist/
+.next/
+coverage/
+
+# === Environment ===
+.env
+.env.local
+.env.production
+
+# === Keys (NEVER commit) ===
+keys/
+*.pem
+*.key
+
+# === Database ===
+db.sqlite3
+*.db
+
+# === IDE ===
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# === Docker ===
+docker-compose.override.yml
+
+# === Logs ===
+*.log
+logs/
+
+# === Test ===
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# === Uploads ===
+uploads/
+media_storage/

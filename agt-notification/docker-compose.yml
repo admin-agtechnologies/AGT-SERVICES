@@ -1,0 +1,165 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: agt_notif_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: agt_notification_db
+      POSTGRES_USER: notif_user
+      POSTGRES_PASSWORD: notif_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notif_user -d agt_notification_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: agt_notif_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6381:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: agt_notif_rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  notification:
+    build:
+      context: .
+      target: production
+    container_name: agt_notif_service
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
+      REDIS_URL: redis://redis:6379/2
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
+      CELERY_RESULT_BACKEND: redis://redis:6379/3
+      AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
+    volumes:
+      - ./keys:/app/keys:ro
+    ports:
+      - "7002:7002"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:7002/api/v1/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  celery-worker:
+    build:
+      context: .
+      target: production
+    container_name: agt_notif_worker
+    restart: unless-stopped
+    command: celery -A config.celery worker -l info -c 4
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
+      REDIS_URL: redis://redis:6379/2
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
+      CELERY_RESULT_BACKEND: redis://redis:6379/3
+      AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
+    volumes:
+      - ./keys:/app/keys:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  celery-beat:
+    build:
+      context: .
+      target: production
+    container_name: agt_notif_beat
+    restart: unless-stopped
+    command: celery -A config.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
+      REDIS_URL: redis://redis:6379/2
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  notification-dev:
+    build:
+      context: .
+      target: builder
+    container_name: agt_notif_dev
+    restart: unless-stopped
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py runserver 0.0.0.0:7002"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
+      REDIS_URL: redis://redis:6379/2
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
+      DEBUG: "True"
+      DJANGO_SETTINGS_MODULE: config.settings
+      AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
+    volumes:
+      - .:/app
+      - ./keys:/app/keys:ro
+    ports:
+      - "7002:7002"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    profiles:
+      - dev
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:

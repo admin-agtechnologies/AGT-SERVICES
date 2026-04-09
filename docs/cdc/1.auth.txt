@@ -1,0 +1,1891 @@
+    \documentclass[11pt,a4paper]{article}
+    
+    % === Encodage & Langue ===
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    \usepackage{babel}
+    
+    % === Mise en page ===
+    \usepackage[margin=2.5cm]{geometry}
+    \usepackage{fancyhdr}
+    \usepackage{titlesec}
+    \usepackage{parskip}
+    
+    % === Tableaux ===
+    \usepackage{longtable}
+    \usepackage{tabularx}
+    \usepackage{booktabs}
+    \usepackage{multirow}
+    \usepackage{array}
+    \usepackage{float}
+    
+    % === Code & couleurs ===
+    \usepackage{listings}
+    \usepackage[table,dvipsnames]{xcolor}
+    \usepackage{enumitem}
+    \usepackage{hyperref}
+    \usepackage{lastpage}
+    
+    % === Couleurs AGT ===
+    \definecolor{agtblue}{HTML}{1A3A5C}
+    \definecolor{agtgray}{HTML}{4A4A4A}
+    \definecolor{agtgreen}{HTML}{2E7D32}
+    \definecolor{agtred}{HTML}{C62828}
+    \definecolor{agtorange}{HTML}{E65100}
+    \definecolor{codebg}{HTML}{F5F5F5}
+    
+    \hypersetup{
+      colorlinks=true,
+      linkcolor=agtblue,
+      urlcolor=agtblue,
+      pdfauthor={AG Technologies},
+      pdftitle={Service Auth - CDC v2.1},
+    }
+    
+    % === Listings JSON ===
+    \lstdefinelanguage{json}{
+      basicstyle=\ttfamily\small,
+      string=[s]{"}{"},
+      stringstyle=\color{agtgreen},
+      numbers=left,
+      numberstyle=\tiny\color{gray},
+      numbersep=8pt,
+      breaklines=true,
+      frame=single,
+      backgroundcolor=\color{codebg},
+      rulecolor=\color{gray!30},
+      showstringspaces=false,
+      literate=
+        *{:}{{{\color{agtblue}:}}}{1}
+         {,}{{{\color{agtblue},}}}{1}
+         {\{}{{{\color{agtblue}\{}}}{1}
+         {\}}{{{\color{agtblue}\}}}}{1}
+         {[}{{{\color{agtblue}[}}}{1}
+         {]}{{{\color{agtblue}]}}}{1},
+    }
+    \lstset{language=json}
+    
+    % === Header/Footer ===
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyhead[L]{\small\textcolor{agtgray}{AGT --- Service Auth}}
+    \fancyhead[R]{\small\textcolor{agtgray}{v2.1 --- Confidentiel}}
+    \fancyfoot[C]{\small\thepage\ / \pageref{LastPage}}
+    \fancyfoot[R]{\small\textcolor{agtgray}{Mars 2026}}
+    \renewcommand{\headrulewidth}{0.4pt}
+    \renewcommand{\footrulewidth}{0.2pt}
+    
+    % === Titres ===
+    \titleformat{\section}{\Large\bfseries\color{agtblue}}{\thesection}{1em}{}
+    \titleformat{\subsection}{\large\bfseries\color{agtblue!80}}{\thesubsection}{1em}{}
+    \titleformat{\subsubsection}{\normalsize\bfseries\color{agtblue!60}}{\thesubsubsection}{1em}{}
+    
+    % === Commandes ===
+    \newcommand{\urgent}{\textcolor{agtred}{\textbf{Urgent}}}
+    \newcommand{\normale}{\textcolor{agtorange}{Normale}}
+    \newcolumntype{L}{>{\raggedright\arraybackslash}X}
+    
+    \begin{document}
+    
+    % ============================================================
+    %  PAGE DE TITRE
+    % ============================================================
+    \begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge\bfseries\textcolor{agtblue}{AG TECHNOLOGIES}\\[0.3cm]}
+    {\large\textcolor{agtgray}{Architecture de Services Partag\'es}\\[2cm]}
+    \rule{\textwidth}{1.5pt}\\[0.5cm]
+    {\LARGE\bfseries Cahier des Charges Technique\\[0.3cm]}
+    {\Large Service d'Authentification Centralis\'e\\[0.3cm]}
+    {\large\textit{Auth Service --- AGT-Auth}\\[0.5cm]}
+    \rule{\textwidth}{1.5pt}\\[2cm]
+    \begin{tabular}{ll}
+    \textbf{Version}        & 2.1 (final --- aligned with Users v2.1) \\
+    \textbf{Date}           & Mars 2026 \\
+    \textbf{Statut}         & Implementation-ready \\
+    \textbf{Classification} & Confidentiel \\
+    \textbf{Auteur}         & \'Equipe Architecture \\
+    \end{tabular}
+    \vfill
+    {\small\textcolor{agtgray}{Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies}}
+    \end{titlepage}
+    
+    % ============================================================
+    %  HISTORIQUE
+    % ============================================================
+    \section*{Historique des R\'evisions}
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Ver.} & \textbf{Date} & \textbf{Auteur} & \textbf{Description} \\
+    \midrule
+    1.0 & 2026-03-19 & \'Equipe Archi. & Cr\'eation initiale \\
+    1.1 & 2026-03-20 & \'Equipe Archi. & Post-audit~: stack unifi\'ee Django+DRF+Django ORM~; r\^oles supprim\'es (d\'el\'egu\'es au Service Users)~; endpoints ajout\'es (plateformes CRUD, verify-otp, magic-link callback, admin block/unblock, health)~; MLD compl\'et\'e (verification\_tokens, registration\_platform\_id, is\_deactivated)~; clarification verify-token vs introspect~; JWT document\'e \\
+    1.2 & 2026-03-20 & \'Equipe Archi. & Bloquants r\'esolus~: mod\`ele admin (API key statique)~; r\`egles register (phone sans mdp, un identifiant \`a la fois, OAuth flux s\'epar\'e)~; verify-token v\'erification compl\`ete (blocked, deactivated, platform, session)~; r\`egles de r\'evocation sessions formalis\'ees~; callbacks OAuth/magic-link s\'ecuris\'es (cookie HttpOnly)~; max 5 refresh tokens par user \\
+    1.3 & 2026-03-20 & \'Equipe Archi. & Production-ready~: client\_secret hash\'e (bcrypt)~; contrainte unique (provider, provider\_user\_id) sur oauth\_providers~; session\_id ajout\'e au JWT payload~; refresh token via cookie HttpOnly uniquement~; SameSite=Lax~; corrections coh\'erence documentaire \\
+    1.3.1 & 2026-03-20 & \'Equipe Archi. & Alignement final~: refresh\_token retir\'e de toutes les r\'eponses JSON (cookie-only)~; effet du logout sur l'access token pr\'ecis\'e~; mini-contrat Auth $\to$ Notification ajout\'e \\
+    1.3.2 & 2026-03-20 & \'Equipe Archi. & Endpoint POST /auth/token/exchange ajout\'e (cookie $\to$ bearer apr\`es OAuth/magic link)~; strat\'egie CSRF document\'ee~; coquilles de version corrig\'ees \\
+    2.0 & 2026-03-20 & \'Equipe Archi. & Alignement Users v2.1~: endpoints admin/deactivate et admin/purge ajout\'es~; contrat Auth $\to$ Users (status-sync) formalis\'e~; besoins F-USR-03/F-USR-04 ajout\'es~; r\`egles r\'evocation compl\'et\'ees~; mapping statuts Auth $\leftrightarrow$ Users~; clarification identit\'e userId~; terminologie block/deactivate/purge harmonis\'ee \\
+    2.1 & 2026-03-20 & \'Equipe Archi. & Version finale~: contrat sync email/phone ajout\'e~; propagation status-sync sur account/deactivate~; comportement transactionnel admin/purge~; r\'eactivation clarifi\'ee (aucun flux en v2.1)~; statut document pass\'e \`a Implementation-ready \\
+    \bottomrule
+    \end{tabularx}
+    
+    \newpage
+    \tableofcontents
+    \newpage
+    
+    % ============================================================
+    \section{Introduction}
+    % ============================================================
+    
+    Ce document constitue le cahier des charges du \textbf{Service d'Authentification Centralis\'e} (ci-apr\`es «~Auth Service ~») destin\'e \`a l'\'ecosyst\`eme AGT. Il sert de r\'ef\'erence unique pour la conception, le d\'eveloppement et les d\'ecisions techniques.
+    
+    \subsection{P\'erim\`etre}
+    
+    Le service Auth couvre le cycle de vie de l'\textbf{identit\'e pure}~: inscription, connexion, gestion de sessions, s\'ecurit\'e (2FA, rate limiting), administration des plateformes clientes et tra\c{c}abilit\'e.
+    
+    \subsection{Hors p\'erim\`etre}
+    
+    \begin{itemize}[nosep]
+      \item Gestion du profil \'etendu (d\'el\'egu\'ee au Service Users)
+      \item Gestion des r\^oles et permissions (d\'el\'egu\'ee au Service Users)
+      \item Logique m\'etier propre aux plateformes consommatrices
+      \item Envoi effectif d'emails/SMS (d\'el\'egu\'e au Service Notification)
+      \item Le cycle de vie du profil utilisateur, les \'etats \texttt{deleted} et \texttt{deletion\_in\_progress}, ainsi que la logique de sortie d'une plateforme, sont g\'er\'es par le Service Users
+    \end{itemize}
+    
+    % ============================================================
+    \section{Contexte \& Probl\'ematique}
+    % ============================================================
+    
+    \subsection{Contexte}
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{Plateforme} & \textbf{Statut} & \textbf{Description} \\
+    \midrule
+    AGT-Bot    & En d\'eveloppement & Plateforme de bots automatis\'es \\
+    AGT-Market & En d\'eveloppement & Marketplace de services \\
+    SALMA      & Migration pr\'evue & Plateforme existante \`a int\'egrer \\
+    Futures    & Planifi\'e         & Nouvelles plateformes \`a venir \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Probl\'ematique}
+    
+    Sans service centralis\'e, chaque plateforme impl\'emente sa propre authentification, entra\^inant~: duplication du code de s\'ecurit\'e, exp\'erience utilisateur fragment\'ee, maintenance co\^uteuse et risques de failles incoh\'erentes.
+    
+    % ============================================================
+    \section{Vision \& Objectifs}
+    % ============================================================
+    
+    \subsection{Vision}
+    
+    Un utilisateur s'authentifie une seule fois et acc\`ede \`a toutes les plateformes de l'\'ecosyst\`eme. Les r\^oles et permissions sont g\'er\'es par le Service Users.
+    
+    \subsection{Objectifs}
+    
+    \begin{tabularx}{\textwidth}{clL}
+    \toprule
+    \textbf{\#} & \textbf{Objectif} & \textbf{Indicateur} \\
+    \midrule
+    O1 & Authentification unique & Un seul compte par utilisateur, multi-plateforme \\
+    O2 & S\'ecurit\'e renforc\'ee & 2FA, rate limiting, audit log complet \\
+    O3 & Multi-m\'ethodes        & Email, phone, OAuth, magic link \\
+    O4 & Tra\c{c}abilit\'e       & Chaque action d'auth enregistr\'ee \\
+    O5 & Scalabilit\'e           & +10M utilisateurs, < 200ms latence \\
+    O6 & R\'eutilisabilit\'e     & Int\'egration nouvelle plateforme < 1 jour \\
+    \bottomrule
+    \end{tabularx}
+    
+    % ============================================================
+    \section{Parties Prenantes \& Utilisateurs}
+    % ============================================================
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{R\^ole} & \textbf{Type} & \textbf{Responsabilit\'e} \\
+    \midrule
+    Product Owner       & Interne & Priorisation des fonctionnalit\'es \\
+    \'Equipe Backend    & Interne & D\'eveloppement et maintenance \\
+    \'Equipe Frontend   & Interne & Int\'egration des flux d'authentification \\
+    DevOps              & Interne & Infrastructure, CI/CD, monitoring \\
+    Utilisateurs finaux & Externe & Inscription, connexion, gestion de compte \\
+    Administrateurs     & Interne & Gestion des plateformes, audit, supervision \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textbf{Scalabilit\'e attendue~:} +10 millions d'utilisateurs inscrits \`a travers l'\'ecosyst\`eme.
+    
+    % ============================================================
+    \section{Besoins Fonctionnels}
+    % ============================================================
+    
+    \subsection{Inscription (Register)}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-REG-01 & Inscription email     & Cr\'eation de compte avec email + mot de passe & \urgent \\
+    F-REG-02 & Inscription t\'el\'ephone & Cr\'eation de compte avec num\'ero + OTP SMS & \normale \\
+    F-REG-03 & Inscription OAuth     & Cr\'eation via Google ou Facebook & \urgent \\
+    F-REG-04 & V\'erification email  & Envoi d'un lien de v\'erification post-inscription & \urgent \\
+    F-REG-05 & V\'erification t\'el\'ephone & Envoi OTP pour validation du num\'ero & \normale \\
+    F-REG-06 & Liaison plateforme    & Association automatique \`a la plateforme source & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Connexion (Login)}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-LOG-01 & Login email/password & Authentification classique & \urgent \\
+    F-LOG-02 & Login phone/OTP      & Connexion via OTP SMS & \normale \\
+    F-LOG-03 & Login OAuth           & Connexion via Google / Facebook & \urgent \\
+    F-LOG-04 & Magic link            & Envoi d'un lien de connexion par email & \urgent \\
+    F-LOG-05 & 2FA challenge         & V\'erification du second facteur si activ\'e & \normale \\
+    F-LOG-06 & \'Emission tokens     & JWT access token + refresh token & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Gestion de session \& tokens}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-SES-01 & Refresh token      & Renouvellement du JWT via refresh token & \urgent \\
+    F-SES-02 & Rotation refresh   & Invalidation de l'ancien refresh token \`a chaque usage & \urgent \\
+    F-SES-03 & Liste sessions     & Visualisation des sessions actives & \normale \\
+    F-SES-04 & R\'evocation session & Suppression d'une session sp\'ecifique & \normale \\
+    F-SES-05 & Logout             & Invalidation du refresh token et de la session & \urgent \\
+    F-SES-06 & Verify token       & Endpoint interne~: validation d'un JWT utilisateur & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{S\'ecurit\'e \& 2FA}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-SEC-01 & Activation 2FA     & G\'en\'eration secret TOTP + QR code & \normale \\
+    F-SEC-02 & D\'esactivation 2FA & Avec v\'erification du code actuel & \normale \\
+    F-SEC-03 & V\'erification 2FA  & Validation code TOTP lors du login & \normale \\
+    F-SEC-04 & Forgot password     & Envoi d'un lien de r\'einitialisation & \urgent \\
+    F-SEC-05 & Reset password      & R\'einitialisation via token temporaire & \urgent \\
+    F-SEC-06 & Change password     & Modification avec ancien mot de passe requis & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Tra\c{c}abilit\'e \& Audit}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-AUD-01 & Login history      & Historique complet des connexions & \urgent \\
+    F-AUD-02 & M\'ethode tracking & Enregistrement de la m\'ethode utilis\'ee & \urgent \\
+    F-AUD-03 & Stats utilisateur  & Fr\'equence par m\'ethode et plateforme & \normale \\
+    F-AUD-04 & Profil identit\'e  & Endpoint /auth/me (identit\'e pure, sans r\^oles) & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Gestion des Plateformes (Admin)}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-PLAT-01 & Cr\'eation plateforme  & Enregistrer une nouvelle plateforme cliente & \urgent \\
+    F-PLAT-02 & Lister plateformes    & Liste de toutes les plateformes et leur statut & \urgent \\
+    F-PLAT-03 & Modifier plateforme   & Mise \`a jour nom, m\'ethodes d'auth autoris\'ees & \urgent \\
+    F-PLAT-04 & Supprimer plateforme  & D\'esactivation d'une plateforme & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Gestion du Compte Utilisateur}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-USR-01 & D\'esactivation de compte & Soft delete c\^ot\'e Auth (is\_deactivated) & \normale \\
+    F-USR-02 & Blocage admin           & Blocage / d\'eblocage d'un utilisateur & \urgent \\
+    F-USR-03 & Purge RGPD              & Suppression physique compl\`ete d'un compte Auth (appel inter-service) & \urgent \\
+    F-USR-04 & D\'esactivation propag\'ee & D\'esactivation S2S d\'eclench\'ee par le Service Users (sans mot de passe) & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textit{Note~: la suppression d\'efinitive (hard delete / RGPD) est orchestr\'ee par le Service Users, qui d\'eclenche la purge dans Auth apr\`es avoir nettoy\'e le profil.}
+    
+    \textbf{Terminologie (v2.0)~:}
+    \begin{itemize}[nosep]
+      \item \textbf{Block}~: mesure d'administration/s\'ecurit\'e. Temporaire ou r\'eversible. Ne modifie pas le statut Users.
+      \item \textbf{Deactivate}~: fermeture logique du compte d'authentification. Propag\'ee \`a Users comme \texttt{inactive}.
+      \item \textbf{Purge}~: suppression physique RGPD. Irr\'eversible. Orchestr\'ee par Users.
+    \end{itemize}
+    
+    \textbf{Identit\'e (v2.0)~:}
+    
+    \textit{Dans tous les endpoints \texttt{/auth/.../\{userId\}}, \texttt{userId} d\'esigne \texttt{users\_auth.id}, qui correspond \`a \texttt{auth\_user\_id} dans le Service Users.}
+    
+    % ============================================================
+    \section{Besoins Non-Fonctionnels}
+    % ============================================================
+    
+    \begin{tabularx}{\textwidth}{clLc}
+    \toprule
+    \textbf{ID} & \textbf{Cat\'egorie} & \textbf{Exigence} & \textbf{Cible} \\
+    \midrule
+    NF-01 & Performance   & Temps de r\'eponse           & < 200ms (P95) \\
+    NF-02 & Performance   & Throughput                    & 500 req/s min \\
+    NF-03 & Disponibilit\'e & Uptime                      & 99.9\% \\
+    NF-04 & S\'ecurit\'e  & Hashing                       & bcrypt, cost $\geq$ 12 \\
+    NF-05 & S\'ecurit\'e  & JWT signature                 & RS256 \\
+    NF-06 & S\'ecurit\'e  & Rate limiting login            & 10 req/min \\
+    NF-07 & S\'ecurit\'e  & Brute force                   & Blocage apr\`es 5 tentatives (15 min) \\
+    NF-08 & S\'ecurit\'e  & Tokens                        & Access: 15 min, Refresh: 7 jours \\
+    NF-09 & Scalabilit\'e & Horizontal                    & Stateless, multi-instance \\
+    NF-10 & Observabilit\'e & Logs structur\'es            & JSON, corr\'elation par request ID \\
+    NF-11 & Observabilit\'e & Health check                & \texttt{GET /auth/health} \\
+    \bottomrule
+    \end{tabularx}
+    
+    % ============================================================
+    \section{Architecture Technique}
+    % ============================================================
+    
+    \subsection{Vue d'ensemble}
+    
+    Le service Auth est un microservice REST stateless, d\'eploy\'e en conteneur Docker. Il expose une API JSON consomm\'ee par les plateformes clientes et les services internes.
+    
+    \subsection{Stack Technique}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Composant} & \textbf{Technologie} \\
+    \midrule
+    Langage \& Framework & Python 3.11+ / Django 5.x \\
+    API                  & Django REST Framework (DRF) \\
+    Base de donn\'ees    & PostgreSQL 15+ \\
+    ORM                  & Django ORM \\
+    Migrations           & Django Migrations \\
+    Cache / Sessions     & Redis 7+ \\
+    JWT                  & PyJWT (Signature RS256) \\
+    Hashing              & bcrypt (cost factor $\geq$ 12) \\
+    2FA / TOTP           & pyotp \\
+    Validation           & DRF Serializers \\
+    Conteneurisation     & Docker + Docker Compose \\
+    CI/CD                & GitHub Actions \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{D\'ependances Externes \& R\`egles d'Architecture}
+    
+    \begin{center}
+    \fbox{\parbox{0.9\textwidth}{
+    \textbf{R\`egle stricte de d\'ependance}\\[0.3em]
+    Auth ne d\'epend d'\textbf{aucun service m\'etier interne}, sauf le Notification Service (envoi emails/SMS).\\
+    Le User Service d\'epend de Auth (et non l'inverse). Auth g\`ere l'identit\'e pure et les credentials~; Users g\`ere le profil, les r\^oles et les permissions.
+    }}
+    \end{center}
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{Service} & \textbf{Type} & \textbf{Usage} \\
+    \midrule
+    Notification Service & Interne & Envoi emails (v\'erification, reset, magic link) et SMS (OTP) \\
+    Google OAuth         & Externe & Authentification via compte Google \\
+    Facebook OAuth       & Externe & Authentification via compte Facebook \\
+    SMS Provider         & Externe & Twilio / Vonage / Infobip pour OTP \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Format du JWT Payload}
+    
+    \begin{lstlisting}
+    {
+      "sub": "user-uuid",
+      "iss": "agt-auth",
+      "aud": "agt-ecosystem",
+      "iat": 1710840000,
+      "exp": 1710840900,
+      "jti": "unique-token-id",
+      "session_id": "session-uuid",
+      "platform_id": "agt-bot",
+      "email": "user@example.com",
+      "email_verified": true,
+      "two_fa_verified": false
+    }
+    \end{lstlisting}
+    
+    \textit{Note v1.3~: \texttt{session\_id} a \'et\'e ajout\'e au payload pour permettre \`a \texttt{verify-token} de v\'erifier que la session est active. \texttt{jti} reste un identifiant unique du token lui-m\^eme (ind\'ependant de la session).}
+    
+    \textit{Note~: le JWT ne contient pas de r\^oles. Les services consommateurs doivent interroger le Service Users pour obtenir les r\^oles et permissions d'un utilisateur.}
+    
+    % ============================================================
+    \section{Mod\'elisation}
+    % ============================================================
+    
+    \subsection{Diagramme de Classes}
+    
+    Le diagramme de classes complet est fourni en annexe au format PlantUML (voir section~\ref{sec:plantuml}). Il couvre les entit\'es~: \texttt{Platform}, \texttt{UserAuth}, \texttt{Session}, \texttt{RefreshToken}, \texttt{OAuthProvider}, \texttt{LoginHistory} et \texttt{VerificationToken}.
+    
+    \subsection{MLD --- Mod\`ele Logique de Donn\'ees}
+    
+    \subsubsection{Table \texttt{platforms}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id                     & UUID          & PK             & Identifiant unique \\
+    name                   & VARCHAR(50)   & UNIQUE, NOT NULL & Nom (agt-bot, agt-market, salma) \\
+    slug                   & VARCHAR(50)   & UNIQUE, NOT NULL & Slug URL-friendly \\
+    allowed\_auth\_methods & JSONB         & NOT NULL       & M\'ethodes activ\'ees \\
+    allowed\_redirect\_urls & JSONB        & NOT NULL       & Whitelist des URLs de redirection autoris\'ees (OAuth, magic link) \\
+    client\_secret\_hash   & VARCHAR(255)  & NOT NULL       & Hash bcrypt du secret S2S (le secret brut n'est affich\'e qu'\`a la cr\'eation) \\
+    is\_active             & BOOLEAN       & DEFAULT true   & Plateforme active \\
+    created\_at            & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+    updated\_at            & TIMESTAMPTZ   & NOT NULL       & Derni\`ere mise \`a jour \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsubsection{Table \texttt{users\_auth}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id                          & UUID          & PK             & Identifiant unique \\
+    email                       & VARCHAR(255)  & UNIQUE, NULL   & Adresse email \\
+    phone                       & VARCHAR(20)   & UNIQUE, NULL   & Num\'ero de t\'el\'ephone \\
+    password\_hash              & VARCHAR(255)  & NULL           & Hash bcrypt (cost 12+) \\
+    email\_verified             & BOOLEAN       & DEFAULT false  & Email v\'erifi\'e \\
+    phone\_verified             & BOOLEAN       & DEFAULT false  & T\'el\'ephone v\'erifi\'e \\
+    two\_fa\_enabled            & BOOLEAN       & DEFAULT false  & 2FA activ\'e \\
+    two\_fa\_secret             & VARCHAR(255)  & NULL           & Secret TOTP (chiffr\'e AES) \\
+    registration\_method        & VARCHAR(20)   & NOT NULL       & email, phone, google, facebook \\
+    registration\_platform\_id  & UUID          & FK $\to$ platforms & Plateforme d'inscription initiale \\
+    failed\_login\_attempts     & INT           & DEFAULT 0      & Compteur tentatives \'echou\'ees \\
+    locked\_until               & TIMESTAMPTZ   & NULL           & Fin de blocage auto (brute force) \\
+    is\_blocked                 & BOOLEAN       & DEFAULT false  & Blocage admin \\
+    is\_deactivated             & BOOLEAN       & DEFAULT false  & Soft delete (d\'esactivation) \\
+    created\_at                 & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+    updated\_at                 & TIMESTAMPTZ   & NOT NULL       & Derni\`ere mise \`a jour \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textit{Ajouts v1.1~: \texttt{registration\_platform\_id} (F-REG-06), \texttt{is\_blocked} (F-USR-02), \texttt{is\_deactivated} (F-USR-01).}
+    
+    \subsubsection{Table \texttt{sessions}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id            & UUID          & PK                   & Identifiant session \\
+    user\_id      & UUID          & FK $\to$ users\_auth & Utilisateur \\
+    platform\_id  & UUID          & FK $\to$ platforms   & Plateforme de connexion \\
+    ip\_address   & VARCHAR(45)   & NOT NULL             & IP du client \\
+    user\_agent   & TEXT          & NULL                 & User-Agent \\
+    is\_active    & BOOLEAN       & DEFAULT true         & Session active \\
+    created\_at   & TIMESTAMPTZ   & NOT NULL             & D\'ebut de session \\
+    expires\_at   & TIMESTAMPTZ   & NOT NULL             & Expiration \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsubsection{Table \texttt{refresh\_tokens}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id            & UUID          & PK                   & Identifiant \\
+    user\_id      & UUID          & FK $\to$ users\_auth & Utilisateur \\
+    session\_id   & UUID          & FK $\to$ sessions    & Session li\'ee \\
+    token\_hash   & VARCHAR(255)  & UNIQUE, NOT NULL     & Hash du refresh token \\
+    is\_revoked   & BOOLEAN       & DEFAULT false        & Token r\'evoqu\'e \\
+    created\_at   & TIMESTAMPTZ   & NOT NULL             & Cr\'eation \\
+    expires\_at   & TIMESTAMPTZ   & NOT NULL             & Expiration (7 jours) \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsubsection{Table \texttt{oauth\_providers}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id                 & UUID          & PK                   & Identifiant \\
+    user\_id           & UUID          & FK $\to$ users\_auth & Utilisateur li\'e \\
+    provider           & VARCHAR(20)   & NOT NULL             & google, facebook \\
+    provider\_user\_id & VARCHAR(255)  & NOT NULL             & ID chez le provider \\
+    email              & VARCHAR(255)  & NULL                 & Email du provider \\
+    created\_at        & TIMESTAMPTZ   & NOT NULL             & Cr\'eation \\
+    \bottomrule
+    \end{tabularx}
+    
+    Contraintes uniques~: \texttt{(user\_id, provider)} et \texttt{(provider, provider\_user\_id)}.
+    
+    \textit{La seconde contrainte emp\^eche qu'un m\^eme compte provider (ex~: un Google ID) soit li\'e \`a plusieurs utilisateurs Auth.}
+    
+    \subsubsection{Table \texttt{login\_history}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id              & UUID          & PK                   & Identifiant \\
+    user\_id        & UUID          & FK $\to$ users\_auth & Utilisateur \\
+    platform\_id    & UUID          & FK $\to$ platforms   & Plateforme \\
+    method          & VARCHAR(20)   & NOT NULL             & email, phone, google, facebook, magic\_link \\
+    ip\_address     & VARCHAR(45)   & NOT NULL             & IP \\
+    user\_agent     & TEXT          & NULL                 & User-Agent \\
+    success         & BOOLEAN       & NOT NULL             & Succ\`es ou \'echec \\
+    failure\_reason & VARCHAR(100)  & NULL                 & Raison de l'\'echec \\
+    created\_at     & TIMESTAMPTZ   & NOT NULL             & Date/heure \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsubsection{Table \texttt{verification\_tokens}}
+    
+    \textit{Ajout v1.1~: table pour stocker les tokens temporaires (v\'erification email, reset password, magic link, OTP). Les tokens sont \'egalement cach\'es dans Redis pour un lookup rapide.}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id            & UUID          & PK                   & Identifiant \\
+    user\_id      & UUID          & FK $\to$ users\_auth & Utilisateur concern\'e \\
+    token\_hash   & VARCHAR(255)  & UNIQUE, NOT NULL     & Hash SHA-256 du token \\
+    type          & VARCHAR(30)   & NOT NULL             & email\_verification, password\_reset, magic\_link, phone\_otp \\
+    payload       & JSONB         & NULL                 & Donn\'ees compl\'ementaires (redirect\_url, platform\_id\ldots) \\
+    expires\_at   & TIMESTAMPTZ   & NOT NULL             & Expiration \\
+    used\_at      & TIMESTAMPTZ   & NULL                 & Date d'utilisation (NULL = non utilis\'e) \\
+    created\_at   & TIMESTAMPTZ   & NOT NULL             & Cr\'eation \\
+    \bottomrule
+    \end{tabularx}
+    
+    R\`egles~:
+    \begin{itemize}[nosep]
+      \item Un token ne peut \^etre utilis\'e qu'une seule fois (\texttt{used\_at} passe de NULL \`a la date).
+      \item Les tokens expir\'es sont purg\'es par un cron job quotidien.
+      \item Le token brut n'est jamais stock\'e~; seul le hash SHA-256 est persist\'e.
+      \item Chaque token est \'egalement stock\'e dans Redis avec un TTL correspondant \`a son expiration pour un lookup O(1).
+    \end{itemize}
+    
+    % ============================================================
+    \section{Contrats d'API}
+    % ============================================================
+    
+    Base URL~: \texttt{/api/v1}. Tous les endpoints retournent du JSON. Les endpoints prot\'eg\'es requi\`erent un header \texttt{Authorization: Bearer <token>}.
+    
+    % ── 9.1 Health ──
+    \subsection{Health Check}
+    
+    \subsubsection{GET /auth/health}
+    
+    V\'erifie l'\'etat du service (base de donn\'ees, Redis). Aucune authentification requise.
+    
+    R\'eponse 200~:
+    \begin{lstlisting}
+    {
+      "status": "healthy",
+      "database": "ok",
+      "redis": "ok",
+      "version": "2.1.0"
+    }
+    \end{lstlisting}
+    
+    % ── 9.2 Inscription ──
+    \subsection{Inscription \& V\'erification}
+    
+    \subsubsection{POST /auth/register}
+    
+    Cr\'eation d'un nouveau compte (email ou t\'el\'ephone). \textbf{Le flux OAuth ne passe pas par cet endpoint} (voir section OAuth).\\
+    Headers~: \texttt{X-Platform-Id: <platform\_uuid>}\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "email": "user@example.com",
+      "password": "SecureP@ss123",
+      "method": "email"
+    }
+    \end{lstlisting}
+    
+    \textbf{R\`egles de validation par m\'ethode~:}
+    
+    \begin{tabularx}{\textwidth}{llll}
+    \toprule
+    \textbf{method} & \textbf{email} & \textbf{phone} & \textbf{password} \\
+    \midrule
+    \texttt{email} & Obligatoire & Ignor\'e & Obligatoire \\
+    \texttt{phone} & Ignor\'e & Obligatoire & Ignor\'e (auth par OTP uniquement) \\
+    \bottomrule
+    \end{tabularx}
+    
+    \begin{itemize}[nosep]
+      \item Un seul identifiant par inscription~: email \textbf{ou} phone, jamais les deux.
+      \item L'autre identifiant peut \^etre ajout\'e ult\'erieurement (\'evolution future).
+      \item Si \texttt{method=email}, le champ \texttt{phone} est ignor\'e (et inversement).
+      \item Inscription OAuth~: flux s\'epar\'e via \texttt{GET /auth/oauth/\{provider\}}, cr\'eation auto au callback.
+      \item Inscription phone~: pas de mot de passe en MVP, authentification exclusivement par OTP.
+    \end{itemize}
+    
+    Response 201~:
+    \begin{lstlisting}
+    {
+      "id": "uuid",
+      "email": "user@example.com",
+      "email_verified": false,
+      "registration_method": "email",
+      "registration_platform_id": "platform-uuid",
+      "message": "Verification email sent"
+    }
+    \end{lstlisting}
+    
+    Codes~: 201 Created, 400 Validation error, 409 Email/phone already exists.
+    
+    \subsubsection{POST /auth/verify-email}
+    
+    Request body~:
+    \begin{lstlisting}
+    {
+      "token": "verification-token-from-email"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Email verified",
+      "email_verified": true
+    }
+    \end{lstlisting}
+    
+    \subsubsection{POST /auth/verify-otp}
+    
+    \textit{Ajout v1.1~: endpoint g\'en\'erique pour v\'erifier un OTP, utilis\'e pour l'inscription t\'el\'ephone ET le login phone.}
+    
+    Request body~:
+    \begin{lstlisting}
+    {
+      "phone": "+237600000000",
+      "otp_code": "482910",
+      "context": "login",
+      "platform_id": "uuid"
+    }
+    \end{lstlisting}
+    
+    Le champ \texttt{context} peut valoir \texttt{"registration"} ou \texttt{"login"}.
+    
+    Response 200 (context = login)~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 900
+    }
+    \end{lstlisting}
+    
+    \textit{Le refresh token est pos\'e dans un cookie HttpOnly (voir section Strat\'egie de Gestion des Tokens).}
+    
+    Response 200 (context = registration)~:
+    \begin{lstlisting}
+    {
+      "message": "Phone verified",
+      "phone_verified": true
+    }
+    \end{lstlisting}
+    
+    Codes~: 200 OK, 400 Invalid/expired OTP, 429 Rate limited.
+    
+    % ── 9.3 Login ──
+    \subsection{Authentification (Login)}
+    
+    \subsubsection{POST /auth/login}
+    
+    Connexion email + mot de passe.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "email": "user@example.com",
+      "password": "SecureP@ss123",
+      "platform_id": "uuid"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 900,
+      "requires_2fa": false
+    }
+    \end{lstlisting}
+    
+    \textit{Le refresh token est pos\'e dans un cookie HttpOnly.}
+    
+    Si \texttt{requires\_2fa} est \texttt{true}, la r\'eponse contient un \texttt{temp\_token} au lieu de l'access token. Le client doit appeler \texttt{POST /auth/2fa/verify} pour finaliser.
+    
+    Codes~: 200 OK, 401 Invalid credentials, 403 Account locked/blocked/deactivated, 429 Rate limited.
+    
+    \subsubsection{POST /auth/login/phone}
+    
+    Demande d'OTP pour connexion par t\'el\'ephone.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "phone": "+237600000000",
+      "platform_id": "uuid"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "OTP sent",
+      "expires_in": 300
+    }
+    \end{lstlisting}
+    
+    \textit{Le client soumet ensuite l'OTP re\c{c}u via \texttt{POST /auth/verify-otp} avec \texttt{context: "login"}.}
+    
+    \subsubsection{POST /auth/login/magic-link}
+    
+    Envoi d'un lien de connexion par email.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "email": "user@example.com",
+      "platform_id": "uuid",
+      "redirect_url": "https://agt-bot.com/auth/callback"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Magic link sent",
+      "expires_in": 600
+    }
+    \end{lstlisting}
+    
+    \subsubsection{GET /auth/magic-link/callback}
+    
+    \textit{Ajout v1.1, s\'ecuris\'e v1.2~: endpoint de callback pour traiter le clic sur le magic link.}
+    
+    Query params~: \texttt{?token=xxx}
+    
+    \textbf{Comportement (v1.2)~:} le callback ne retourne \textbf{pas} les tokens dans le body JSON ni dans l'URL. Il pose les tokens dans des \textbf{cookies HttpOnly s\'ecuris\'es} (m\^eme m\'ecanisme que les callbacks OAuth) puis redirige vers la \texttt{redirect\_url} stock\'ee dans le \texttt{payload} du \texttt{verification\_token}.
+    
+    Response~: 302 Redirect vers \texttt{redirect\_url} avec cookies pos\'es~:
+    \begin{itemize}[nosep]
+      \item \texttt{Set-Cookie: access\_token=eyJ...; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=900}
+      \item \texttt{Set-Cookie: refresh\_token=dGh...; HttpOnly; Secure; SameSite=Lax; Path=/auth/refresh; Max-Age=604800}
+    \end{itemize}
+    
+    \textbf{R\`egles de s\'ecurit\'e~:}
+    \begin{itemize}[nosep]
+      \item Token \`a usage unique~: \texttt{used\_at} est renseign\'e d\`es le premier clic.
+      \item Token expir\'e ou d\'ej\`a utilis\'e~: 400 Bad Request.
+      \item Utilisateur bloqu\'e ou d\'esactiv\'e~: 403 Forbidden.
+      \item Whitelist des \texttt{redirect\_url} par plateforme.
+    \end{itemize}
+    
+    Codes~: 302 Redirect (succ\`es), 400 Token invalide/expir\'e/utilis\'e, 403 Utilisateur bloqu\'e/d\'esactiv\'e.
+    
+    % ── 9.4 OAuth ──
+    \subsection{Authentification Sociale (OAuth)}
+    
+    \subsubsection{GET /auth/oauth/google}
+    
+    Initie le flux OAuth Google. Redirige vers l'\'ecran de consentement.\\
+    Query params~: \texttt{?platform\_id=uuid\&redirect\_uri=https://...}\\
+    Response~: 302 Redirect vers Google.
+    
+    \subsubsection{GET /auth/oauth/google/callback}
+    
+    Callback OAuth Google. Cr\'ee ou lie le compte, \'emet les tokens.
+    
+    \textbf{S\'ecurit\'e des callbacks (v1.2)~:} les tokens ne sont \textbf{jamais} transmis dans l'URL (risque de fuite via logs, referrer, historique navigateur). Le callback pose les tokens dans des \textbf{cookies HttpOnly s\'ecuris\'es}~:
+    
+    \begin{itemize}[nosep]
+      \item \texttt{Set-Cookie: access\_token=eyJ...; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=900}
+      \item \texttt{Set-Cookie: refresh\_token=dGh...; HttpOnly; Secure; SameSite=Lax; Path=/auth/refresh; Max-Age=604800}
+    \end{itemize}
+    
+    Response~: 302 Redirect vers \texttt{redirect\_uri} (sans tokens dans l'URL).\\
+    Les cookies sont envoy\'es automatiquement par le navigateur sur les requ\^etes API suivantes. Le frontend n'y acc\`ede pas en JavaScript (HttpOnly).
+    
+    \textbf{R\`egles de s\'ecurit\'e callback~:}
+    \begin{itemize}[nosep]
+      \item Whitelist stricte des \texttt{redirect\_uri} autoris\'ees par plateforme (stock\'ees dans \texttt{platforms}).
+      \item Param\`etre \texttt{state} anti-CSRF g\'en\'er\'e avant la redirection OAuth, valid\'e au retour.
+      \item Si l'email du provider existe d\'ej\`a dans \texttt{users\_auth}~: liaison automatique au compte existant.
+      \item Si le provider renvoie un email non v\'erifi\'e~: le compte est cr\'e\'e mais \texttt{email\_verified = false}.
+    \end{itemize}
+    
+    \subsubsection{GET /auth/oauth/facebook}
+    
+    Identique au flux Google, avec Facebook comme provider.
+    
+    \subsubsection{GET /auth/oauth/facebook/callback}
+    
+    Callback Facebook. M\^eme logique et m\^eme s\'ecurit\'e que Google callback (cookies HttpOnly).
+    
+    % ── 9.5 Securite ──
+    \subsection{S\'ecurit\'e \& Mots de passe}
+    
+    \subsubsection{POST /auth/forgot-password}
+    
+    Request body~:
+    \begin{lstlisting}
+    {
+      "email": "user@example.com"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Reset link sent if account exists"
+    }
+    \end{lstlisting}
+    
+    \subsubsection{POST /auth/reset-password}
+    
+    Request body~:
+    \begin{lstlisting}
+    {
+      "token": "reset-token-uuid",
+      "new_password": "NewSecureP@ss456"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Password reset successfully"
+    }
+    \end{lstlisting}
+    
+    \subsubsection{PUT /auth/change-password}
+    
+    Auth~: Bearer token requis.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "current_password": "OldP@ss123",
+      "new_password": "NewP@ss456"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Password changed successfully"
+    }
+    \end{lstlisting}
+    
+    % ── 9.6 2FA ──
+    \subsection{Authentification \`a Double Facteur (2FA)}
+    
+    \subsubsection{POST /auth/2fa/enable}
+    
+    Auth~: Bearer token requis.\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "secret": "JBSWY3DPEHPK3PXP",
+      "qr_code_url": "otpauth://totp/AGT:user@example.com?...",
+      "message": "Scan QR code, then verify with POST /auth/2fa/confirm"
+    }
+    \end{lstlisting}
+    
+    \subsubsection{POST /auth/2fa/confirm}
+    
+    \textit{Clarification v1.1~: cet endpoint confirme l'activation du 2FA apr\`es scan du QR code. Distinct de \texttt{/auth/2fa/verify} qui sert au challenge login.}
+    
+    Auth~: Bearer token requis.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "code": "482910"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "2FA activated",
+      "two_fa_enabled": true
+    }
+    \end{lstlisting}
+    
+    \subsubsection{POST /auth/2fa/verify}
+    
+    V\'erification du code 2FA lors du login. Appel\'e uniquement quand \texttt{requires\_2fa = true}.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "code": "482910",
+      "temp_token": "eyJ2ZmE..."
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 900
+    }
+    \end{lstlisting}
+    
+    \textit{Le refresh token est pos\'e dans un cookie HttpOnly.}
+    
+    \subsubsection{POST /auth/2fa/disable}
+    
+    Auth~: Bearer token requis.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "code": "482910"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "2FA disabled",
+      "two_fa_enabled": false
+    }
+    \end{lstlisting}
+    
+    % ── 9.7 Sessions & Tokens ──
+    \subsection{Gestion des Sessions \& Tokens}
+    
+    \subsubsection{POST /auth/refresh}
+    
+    Renouvellement du JWT. Le refresh token est consomm\'e et un nouveau est \'emis (rotation).
+    
+    \textbf{Strat\'egie refresh token (v1.3)~:} le refresh token est transmis \textbf{exclusivement via cookie HttpOnly}. Aucun body n'est requis~; le serveur lit le cookie \texttt{refresh\_token} automatiquement.
+    
+    Request~: aucun body. Le cookie \texttt{refresh\_token} est envoy\'e automatiquement par le navigateur.
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 900
+    }
+    \end{lstlisting}
+    
+    Le nouveau refresh token est pos\'e dans un cookie mis \`a jour~:
+    \begin{itemize}[nosep]
+      \item \texttt{Set-Cookie: refresh\_token=bmV3...; HttpOnly; Secure; SameSite=Lax; Path=/auth/refresh; Max-Age=604800}
+    \end{itemize}
+    
+    \subsubsection{POST /auth/logout}
+    
+    Auth~: Bearer token requis. Le cookie \texttt{refresh\_token} est lu automatiquement.\\
+    Aucun body requis.
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Logged out successfully"
+    }
+    \end{lstlisting}
+    
+    \textbf{Effet sur les tokens (v1.3.1)~:}
+    \begin{itemize}[nosep]
+      \item La session est marqu\'ee \texttt{is\_active = false}.
+      \item Le refresh token associ\'e est r\'evoqu\'e.
+      \item Le cookie \texttt{refresh\_token} est supprim\'e (\texttt{Max-Age=0}).
+      \item L'access token JWT reste techniquement valide jusqu'\`a son expiration (15 min), mais tout appel \`a \texttt{verify-token} retournera \texttt{session\_revoked} car la session est inactive.
+      \item \textbf{Recommandation aux services consommateurs~:} les services qui v\'erifient les tokens uniquement par signature locale (sans appeler \texttt{verify-token}) doivent accepter un d\'elai de latence \'egal au TTL de l'access token. Les services sensibles doivent toujours appeler \texttt{verify-token} ou utiliser un cache Redis \`a TTL court (30s).
+    \end{itemize}
+    
+    \subsubsection{GET /auth/sessions}
+    
+    Auth~: Bearer token requis.\\
+    Query params~: \texttt{?page=1\&limit=20}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "data": [
+        {
+          "id": "uuid",
+          "platform": "agt-bot",
+          "ip_address": "192.168.1.1",
+          "user_agent": "Mozilla/5.0...",
+          "created_at": "2026-03-19T10:00:00Z",
+          "is_current": true
+        }
+      ],
+      "page": 1,
+      "limit": 20,
+      "total": 3
+    }
+    \end{lstlisting}
+    
+    \subsubsection{DELETE /auth/sessions/\{sessionId\}}
+    
+    Auth~: Bearer token requis.\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Session revoked"
+    }
+    \end{lstlisting}
+    
+    \subsubsection{GET /auth/verify-token}
+    
+    \textit{Usage~: endpoint interne pour les autres services. Valide un JWT \textbf{utilisateur}.}\\
+    Headers~: \texttt{Authorization: Bearer <access\_token>}\\
+    
+    \textbf{V\'erifications effectu\'ees (v1.2)~:}
+    \begin{enumerate}[nosep]
+      \item Signature JWT valide (RS256)
+      \item Token non expir\'e
+      \item Utilisateur \texttt{is\_blocked = false}
+      \item Utilisateur \texttt{is\_deactivated = false}
+      \item Plateforme \texttt{is\_active = true}
+      \item Session associ\'ee \texttt{is\_active = true}
+    \end{enumerate}
+    
+    \textit{Note~: les v\'erifications 3 \`a 6 impliquent un appel DB. Le r\'esultat peut \^etre cach\'e dans Redis (TTL court~: 30s) pour limiter la charge.}
+    
+    Response 200 (token valide)~:
+    \begin{lstlisting}
+    {
+      "valid": true,
+      "user_id": "uuid",
+      "platform_id": "agt-bot",
+      "expires_at": "2026-03-19T10:15:00Z"
+    }
+    \end{lstlisting}
+    
+    Response 401 (token invalide)~:
+    \begin{lstlisting}
+    {
+      "valid": false,
+      "reason": "user_blocked"
+    }
+    \end{lstlisting}
+    
+    Raisons possibles~: \texttt{invalid\_signature}, \texttt{token\_expired}, \texttt{user\_blocked}, \texttt{user\_deactivated}, \texttt{platform\_inactive}, \texttt{session\_revoked}.
+    
+    \textit{Note~: cet endpoint ne retourne pas de r\^oles. Les services consommateurs doivent interroger le Service Users pour les r\^oles et permissions.}
+    
+    \subsection{R\`egles de R\'evocation des Sessions}
+    \label{sec:revocation-rules}
+    
+    \textit{Ajout v1.2~: r\`egles formalis\'ees de r\'evocation des sessions et refresh tokens.}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{\'Ev\'enement} & \textbf{Effet sur les sessions / refresh tokens} \\
+    \midrule
+    \texttt{change-password} & Toutes les sessions r\'evoqu\'ees \textbf{sauf la session courante}. Tous les refresh tokens associ\'es invalid\'es. \\
+    \texttt{reset-password}  & \textbf{Toutes} les sessions r\'evoqu\'ees (l'utilisateur n'est pas connect\'e). Tous les refresh tokens invalid\'es. \\
+    \texttt{block} (admin)   & \textbf{Toutes} les sessions r\'evoqu\'ees. Tous les refresh tokens invalid\'es. \\
+    \texttt{unblock} (admin) & Les sessions pr\'ec\'edentes restent r\'evoqu\'ees. L'utilisateur doit se reconnecter. \\
+    \texttt{deactivate}      & \textbf{Toutes} les sessions r\'evoqu\'ees. Tous les refresh tokens invalid\'es. \\
+    \texttt{logout}          & Seule la session courante est r\'evoqu\'ee. Le refresh token associ\'e est invalid\'e. \\
+    \texttt{admin\_deactivate} (S2S) & \textbf{Toutes} les sessions r\'evoqu\'ees. Tous les refresh tokens invalid\'es. Statut propag\'e \`a Users. \\
+    \texttt{purge} (RGPD)    & Suppression physique totale du compte et de tous les artefacts Auth. \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textbf{Limite de refresh tokens~:} un utilisateur peut avoir au maximum \textbf{5 refresh tokens actifs} simultan\'ement. Lorsqu'un 6\`eme est \'emis, le plus ancien est automatiquement r\'evoqu\'e (FIFO).
+    
+    \textbf{Relation session / refresh token~:} un refresh token appartient toujours \`a une seule session (FK \texttt{session\_id}). La r\'evocation d'une session entra\^ine la r\'evocation de son refresh token associ\'e.
+    
+    % ── 9.7bis Token Exchange ──
+    \subsection{\'Echange de Token (Cookie $\to$ Bearer)}
+    
+    \textit{Ajout v1.3.2~: cet endpoint r\'esout l'incoh\'erence entre les callbacks (qui posent des cookies HttpOnly) et les endpoints prot\'eg\'es (qui attendent un header \texttt{Authorization: Bearer}).}
+    
+    \begin{center}
+    \fbox{\parbox{0.9\textwidth}{
+    \textbf{Probl\`eme~:} apr\`es un callback OAuth ou magic link, l'access token est dans un cookie HttpOnly. Le frontend JavaScript ne peut pas le lire pour le mettre dans le header \texttt{Authorization: Bearer}. \\[0.3em]
+    \textbf{Solution~:} un endpoint d\'edi\'e qui lit le cookie et retourne l'access token dans le body JSON. Le frontend l'appelle une seule fois apr\`es la redirection.
+    }}
+    \end{center}
+    
+    \subsubsection{POST /auth/token/exchange}
+    
+    Aucun body requis. Le cookie \texttt{access\_token} est lu automatiquement par le serveur.
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 900
+    }
+    \end{lstlisting}
+    
+    Effet~: le cookie \texttt{access\_token} est supprim\'e (\texttt{Max-Age=0}) apr\`es l'\'echange. \`A partir de ce moment, le frontend utilise le header \texttt{Authorization: Bearer} pour toutes les requ\^etes.
+    
+    Le cookie \texttt{refresh\_token} reste en place (il ne passe jamais par le frontend).
+    
+    Codes~: 200 OK, 401 Cookie absent ou token invalide.
+    
+    \textbf{Flux complet OAuth / magic link (v1.3.2)~:}
+    \begin{enumerate}[nosep]
+      \item Frontend redirige vers \texttt{GET /auth/oauth/google} ou l'utilisateur clique le magic link.
+      \item Callback Auth pose \texttt{access\_token} et \texttt{refresh\_token} en cookies HttpOnly, puis redirige vers le frontend.
+      \item Frontend appelle \texttt{POST /auth/token/exchange} (les cookies partent automatiquement).
+      \item Auth retourne l'access token en JSON et supprime le cookie access\_token.
+      \item Frontend stocke l'access token en m\'emoire (variable JS, pas localStorage) et l'utilise en header Bearer.
+      \item Pour le refresh, le navigateur envoie automatiquement le cookie refresh\_token \`a \texttt{POST /auth/refresh}.
+    \end{enumerate}
+    
+    % ── 9.8 Profil & Audit ──
+    \subsection{Profil \& Audit}
+    
+    \subsubsection{GET /auth/me}
+    
+    Auth~: Bearer token requis.\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "id": "uuid",
+      "email": "user@example.com",
+      "phone": "+237600000000",
+      "email_verified": true,
+      "phone_verified": true,
+      "two_fa_enabled": true,
+      "registration_method": "email",
+      "registration_platform_id": "platform-uuid",
+      "is_blocked": false,
+      "is_deactivated": false,
+      "created_at": "2026-01-15T10:30:00Z"
+    }
+    \end{lstlisting}
+    
+    \textit{Note~: aucun r\^ole n'est retourn\'e. Le profil \'etendu et les r\^oles sont g\'er\'es par le Service Users.}
+    
+    \subsubsection{GET /auth/login-history}
+    
+    Auth~: Bearer token requis.\\
+    Query params~: \texttt{?page=1\&limit=20\&platform=agt-bot}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "data": [
+        {
+          "id": "uuid",
+          "method": "email",
+          "platform": "agt-bot",
+          "ip_address": "192.168.1.1",
+          "success": true,
+          "created_at": "2026-03-19T09:45:00Z"
+        }
+      ],
+      "page": 1,
+      "limit": 20,
+      "total": 142
+    }
+    \end{lstlisting}
+    
+    \subsubsection{GET /auth/stats/\{userId\}}
+    
+    Auth~: Bearer token requis (admin ou m\^eme utilisateur).\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "user_id": "uuid",
+      "total_logins": 142,
+      "last_login": "2026-03-19T09:45:00Z",
+      "active_sessions": 3
+    }
+    \end{lstlisting}
+    
+    % ── 9.9 Plateformes CRUD ──
+    \subsection{Gestion des Plateformes (Admin)}
+    
+    \textit{Ajout v1.1~: endpoints CRUD pour les plateformes, correspondant aux besoins F-PLAT-01 \`a F-PLAT-04. Prot\'eg\'es par \texttt{X-Admin-API-Key} (voir section Administration).}
+    
+    \subsubsection{POST /auth/platforms}
+    
+    Cr\'eation d'une nouvelle plateforme.\\
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "name": "AGT-Bot",
+      "slug": "agt-bot",
+      "allowed_auth_methods": ["email", "google", "facebook"]
+    }
+    \end{lstlisting}
+    
+    Response 201~:
+    \begin{lstlisting}
+    {
+      "id": "uuid",
+      "name": "AGT-Bot",
+      "slug": "agt-bot",
+      "allowed_auth_methods": ["email", "google", "facebook"],
+      "is_active": true,
+      "created_at": "2026-03-20T10:00:00Z"
+    }
+    \end{lstlisting}
+    
+    Codes~: 201 Created, 400 Validation error, 409 Slug already exists.
+    
+    \subsubsection{GET /auth/platforms}
+    
+    Liste toutes les plateformes.\\
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "data": [
+        {
+          "id": "uuid",
+          "name": "AGT-Bot",
+          "slug": "agt-bot",
+          "allowed_auth_methods": ["email", "google"],
+          "is_active": true,
+          "created_at": "2026-03-20T10:00:00Z"
+        }
+      ]
+    }
+    \end{lstlisting}
+    
+    \subsubsection{PUT /auth/platforms/\{platformId\}}
+    
+    Mise \`a jour d'une plateforme.\\
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "name": "AGT-Bot v2",
+      "allowed_auth_methods": ["email", "google", "facebook", "phone"]
+    }
+    \end{lstlisting}
+    
+    Response 200~: objet plateforme mis \`a jour.\\
+    Codes~: 200 OK, 404 Not found.
+    
+    \subsubsection{DELETE /auth/platforms/\{platformId\}}
+    
+    D\'esactivation d'une plateforme (\texttt{is\_active = false}). Ne supprime pas physiquement.\\
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Platform deactivated",
+      "is_active": false
+    }
+    \end{lstlisting}
+    
+    % ── 9.10 Admin ──
+    \subsection{Administration}
+    
+    \begin{center}
+    \fbox{\parbox{0.9\textwidth}{
+    \textbf{Mod\`ele de s\'ecurit\'e admin (v1.2)}\\[0.3em]
+    Les endpoints \texttt{/auth/admin/*} et \texttt{/auth/platforms/*} sont prot\'eg\'es par une \textbf{API key statique} transmise via le header \texttt{X-Admin-API-Key}. Cette cl\'e est configur\'ee en variable d'environnement (\texttt{ADMIN\_API\_KEY}).\\[0.3em]
+    Aucun JWT utilisateur n'est requis. Aucune d\'ependance vers le Service Users.\\[0.3em]
+    Ce m\'ecanisme est destin\'e aux back-offices internes et scripts d'administration.
+    }}
+    \end{center}
+    
+    \subsubsection{POST /auth/admin/block/\{userId\}}
+    
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "User blocked",
+      "user_id": "uuid",
+      "is_blocked": true
+    }
+    \end{lstlisting}
+    
+    Effet~: l'utilisateur ne peut plus se connecter. \textbf{Toutes ses sessions actives sont r\'evoqu\'ees} et tous ses refresh tokens sont invalid\'es.
+    
+    \subsubsection{POST /auth/admin/unblock/\{userId\}}
+    
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "User unblocked",
+      "user_id": "uuid",
+      "is_blocked": false
+    }
+    \end{lstlisting}
+    
+    Effet~: l'utilisateur peut \`a nouveau se connecter. Les sessions pr\'ec\'edentes restent r\'evoqu\'ees~; il doit se reconnecter.
+    
+    \textit{Note v2.0~: \texttt{unblock} n'implique \textbf{pas} de r\'eactivation. Si \texttt{is\_deactivated = true}, l'utilisateur reste inactif. Aucun \texttt{status-sync} n'est envoy\'e \`a Users sur un unblock.}
+    
+    \subsubsection{POST /auth/account/deactivate}
+    
+    Soft delete c\^ot\'e Auth. L'utilisateur d\'esactive son propre compte.\\
+    Auth~: Bearer token requis.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "password": "CurrentP@ss123"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Account deactivated",
+      "is_deactivated": true
+    }
+    \end{lstlisting}
+    
+    Effet~: le compte est marqu\'e \texttt{is\_deactivated = true}, \textbf{toutes les sessions sont r\'evoqu\'ees}, les connexions sont refus\'ees. Apr\`es d\'esactivation r\'eussie, Auth propage \texttt{status: "inactive"} au Service Users via \texttt{POST /api/v1/users/status-sync}. La suppression d\'efinitive (hard delete) est orchestr\'ee par le Service Users.
+    
+    \subsubsection{POST /auth/admin/deactivate/\{authUserId\}}
+    
+    \textit{Ajout v2.0~: d\'esactivation inter-service. Utilis\'e par le Service Users pour le soft delete global sans mot de passe utilisateur. Distinct de \texttt{POST /auth/account/deactivate} qui est un endpoint utilisateur.}
+    
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "User deactivated",
+      "user_id": "uuid",
+      "is_deactivated": true
+    }
+    \end{lstlisting}
+    
+    Effet~: identique \`a \texttt{/auth/account/deactivate}~: \texttt{is\_deactivated = true}, toutes les sessions r\'evoqu\'ees, tous les refresh tokens invalid\'es. Auth pousse ensuite \texttt{POST /api/v1/users/status-sync} avec \texttt{status: "inactive"} (voir section Contrat Auth $\to$ Users).
+    
+    Codes~: 200 OK, 401 API key invalide, 404 Utilisateur non trouv\'e.
+    
+    \subsubsection{DELETE /auth/admin/purge/\{authUserId\}}
+    
+    \textit{Ajout v2.0~: suppression physique RGPD. Appel\'e par le Service Users apr\`es avoir nettoy\'e le profil. Irr\'eversible.}
+    
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "User purged",
+      "user_id": "uuid",
+      "purged": true
+    }
+    \end{lstlisting}
+    
+    Effet~: suppression physique de toutes les donn\'ees de l'utilisateur~:
+    \begin{itemize}[nosep]
+      \item \texttt{users\_auth}
+      \item \texttt{sessions}
+      \item \texttt{refresh\_tokens}
+      \item \texttt{oauth\_providers}
+      \item \texttt{login\_history}
+      \item \texttt{verification\_tokens}
+    \end{itemize}
+    
+    \textbf{Important~:} \texttt{authUserId} d\'esigne \texttt{users\_auth.id} (pas \texttt{users\_profiles.id}).
+    
+    \textbf{Comportement transactionnel~:} l'op\'eration de purge doit \^etre transactionnelle. En cas d'\'echec partiel (ex~: suppression de \texttt{sessions} r\'eussie mais \texttt{oauth\_providers} \'echou\'ee), l'endpoint retourne une erreur 500 et aucune confirmation de purge ne doit \^etre consid\'er\'ee comme acquise par le Service Users.
+    
+    Codes~: 200 OK, 401 API key invalide, 404 Utilisateur non trouv\'e, 500 \'Echec partiel de purge.
+    
+    % ── 9.11 S2S ──
+    \subsection{Tokens Inter-Services (Machine-to-Machine)}
+    
+    \begin{center}
+    \fbox{\parbox{0.9\textwidth}{
+    \textbf{Communication entre Microservices}\\[0.3em]
+    Pour qu'une plateforme (ex: AGT-Bot) puisse consommer un service interne (ex: M\'edia), elle s'authentifie en tant que «~Service ~» via un token S2S. Le service de destination utilise l'endpoint d'introspection pour valider ce token aupr\`es de Auth.
+    }}
+    \end{center}
+    
+    \subsubsection{POST /auth/s2s/token}
+    
+    G\'en\`ere un token d'acc\`es pour une plateforme (similaire au flux Client Credentials OAuth2).\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "client_id": "uuid-platform-123",
+      "client_secret": "super-secret-key"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "service_name": "AGT-Bot"
+    }
+    \end{lstlisting}
+    
+    \subsubsection{POST /auth/s2s/introspect}
+    
+    \textit{Permet \`a un service (ex: M\'edia) de v\'erifier la validit\'e d'un token \textbf{S2S plateforme}. Distinct de \texttt{GET /auth/verify-token} qui valide un JWT utilisateur.}\\
+    Auth~: Bearer token requis (le service qui interroge doit lui-m\^eme \^etre authentifi\'e).\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "token": "eyJhbG..."
+    }
+    \end{lstlisting}
+    
+    Response 200 (token valide)~:
+    \begin{lstlisting}
+    {
+      "active": true,
+      "client_id": "uuid-platform-123",
+      "service_name": "AGT-Bot",
+      "exp": 1710846000
+    }
+    \end{lstlisting}
+    
+    Response 200 (token invalide)~:
+    \begin{lstlisting}
+    {
+      "active": false
+    }
+    \end{lstlisting}
+    
+    % ============================================================
+    \section{Infrastructure}
+    % ============================================================
+    
+    \subsection{Composants d'infrastructure}
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{Service} & \textbf{Technologie} & \textbf{R\^ole} \\
+    \midrule
+    Base de donn\'ees & PostgreSQL 15+ & Stockage utilisateurs, sessions, historiques, tokens \\
+    Cache             & Redis 7+       & Sessions actives, OTP temporaires, rate limiting, cache verification\_tokens \\
+    SMS Provider      & Twilio / Vonage & Envoi des OTP SMS \\
+    Email             & Notification Service & Envoi des emails transactionnels \\
+    Conteneur         & Docker         & D\'eploiement isol\'e et reproductible \\
+    Reverse Proxy     & Nginx / Traefik & TLS termination, load balancing \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Services externes \`a payer}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Cat\'egorie} & \textbf{Fournisseurs / Nature} \\
+    \midrule
+    Envoi SMS (OTP)       & Twilio, Vonage, Infobip --- facturation par SMS \\
+    Envoi Emails          & SendGrid, AWS SES, Mailgun --- facturation au volume \\
+    H\'ebergement \& BDD  & AWS, GCP, DigitalOcean --- conteneurs, PostgreSQL, Redis \\
+    S\'ecurit\'e / Anti-Bot & Cloudflare, reCAPTCHA --- protection brute force \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Variables d'Environnement}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Variable} & \textbf{Description} \\
+    \midrule
+    \texttt{DATABASE\_URL}           & URL de connexion PostgreSQL \\
+    \texttt{REDIS\_URL}              & URL de connexion Redis \\
+    \texttt{JWT\_PRIVATE\_KEY}       & Cl\'e priv\'ee RS256 pour signature JWT \\
+    \texttt{JWT\_PUBLIC\_KEY}        & Cl\'e publique RS256 pour v\'erification JWT \\
+    \texttt{JWT\_ACCESS\_TTL}        & Dur\'ee de vie access token (d\'efaut~: 900s) \\
+    \texttt{JWT\_REFRESH\_TTL}       & Dur\'ee de vie refresh token (d\'efaut~: 604800s) \\
+    \texttt{BCRYPT\_ROUNDS}          & Cost factor bcrypt (d\'efaut~: 12) \\
+    \texttt{NOTIFICATION\_SERVICE\_URL} & URL du Service Notification \\
+    \texttt{GOOGLE\_CLIENT\_ID}      & Client ID OAuth Google \\
+    \texttt{GOOGLE\_CLIENT\_SECRET}  & Client Secret OAuth Google \\
+    \texttt{FACEBOOK\_APP\_ID}       & App ID OAuth Facebook \\
+    \texttt{FACEBOOK\_APP\_SECRET}   & App Secret OAuth Facebook \\
+    \texttt{OTP\_TTL}                & Dur\'ee de vie OTP en secondes (d\'efaut~: 300) \\
+    \texttt{MAGIC\_LINK\_TTL}        & Dur\'ee de vie magic link (d\'efaut~: 600s) \\
+    \texttt{RATE\_LIMIT\_LOGIN}      & Limite login par minute (d\'efaut~: 10) \\
+    \texttt{BRUTE\_FORCE\_MAX}       & Tentatives avant blocage (d\'efaut~: 5) \\
+    \texttt{BRUTE\_FORCE\_LOCKOUT}   & Dur\'ee blocage en secondes (d\'efaut~: 900) \\
+    \texttt{ADMIN\_API\_KEY}         & Cl\'e API statique pour les endpoints admin (v1.2) \\
+    \texttt{MAX\_REFRESH\_TOKENS}    & Nombre max de refresh tokens actifs par user (d\'efaut~: 5) \\
+    \bottomrule
+    \end{tabularx}
+    
+    % ============================================================
+    \section{Strat\'egie de Gestion des Tokens (v1.3)}
+    % ============================================================
+    
+    \begin{center}
+    \fbox{\parbox{0.9\textwidth}{
+    \textbf{D\'ecision architecturale~:} tous les refresh tokens et les tokens d'authentification issus des callbacks (OAuth, magic link) sont transmis \textbf{exclusivement via cookies HttpOnly}. Aucun token sensible ne transite dans une URL, un body JSON ou le localStorage.
+    }}
+    \end{center}
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{Token} & \textbf{Transport} & \textbf{D\'etails} \\
+    \midrule
+    Access token (JWT)   & Header \texttt{Authorization: Bearer} & Retourn\'e dans le body JSON au login email/phone, au refresh et via \texttt{POST /auth/token/exchange}. Pos\'e temporairement en cookie HttpOnly lors des callbacks OAuth/magic link, puis \'echang\'e contre un bearer via \texttt{/auth/token/exchange}. \\
+    Refresh token        & Cookie HttpOnly uniquement & \texttt{Path=/auth/refresh; Secure; SameSite=Lax; Max-Age=604800} \\
+    Temp token (2FA)     & Body JSON                   & Retourn\'e dans la r\'eponse login quand \texttt{requires\_2fa=true}. Courte dur\'ee (5 min). \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textbf{Propri\'et\'es des cookies~:}
+    \begin{itemize}[nosep]
+      \item \texttt{HttpOnly}~: inaccessible en JavaScript (protection XSS).
+      \item \texttt{Secure}~: transmis uniquement sur HTTPS.
+      \item \texttt{SameSite=Lax}~: compatible avec les redirections cross-domain (OAuth, magic link) tout en prot\'egeant contre les requ\^etes CSRF de type POST.
+      \item \texttt{Path=/auth/refresh}~: le cookie refresh\_token n'est envoy\'e que sur l'endpoint de refresh.
+    \end{itemize}
+    
+    \textbf{Protection CSRF (v1.3.2)~:}
+    
+    Les endpoints qui consomment des cookies (\texttt{/auth/refresh}, \texttt{/auth/logout}, \texttt{/auth/token/exchange}) sont expos\'es aux attaques CSRF. La strat\'egie de protection repose sur trois niveaux~:
+    
+    \begin{enumerate}[nosep]
+      \item \textbf{SameSite=Lax}~: bloque les requ\^etes POST cross-origin (premi\`ere ligne de d\'efense).
+      \item \textbf{V\'erification du header \texttt{Origin} / \texttt{Referer}}~: le serveur rejette les requ\^etes POST dont l'origine ne correspond pas aux domaines autoris\'es de l'\'ecosyst\`eme AGT.
+      \item \textbf{Header custom obligatoire}~: les endpoints cookie-based exigent un header \texttt{X-Requested-With: XMLHttpRequest}. Ce header ne peut pas \^etre pos\'e par un formulaire HTML classique (protection contre les CSRF simples).
+    \end{enumerate}
+    
+    \textit{Note~: un token CSRF classique (double submit cookie) n'est pas n\'ecessaire gr\^ace \`a la combinaison SameSite=Lax + v\'erification Origin + header custom. Si l'architecture \'evolue vers du cross-domain complet, cette strat\'egie devra \^etre r\'e\'evalu\'ee.}
+    
+    % ============================================================
+    \section{Rate Limiting}
+    % ============================================================
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Endpoint} & \textbf{Fen\^etre} & \textbf{Limite} & \textbf{Strat\'egie} \\
+    \midrule
+    /auth/login            & 1 min  & 10 req & Par IP + email \\
+    /auth/login/phone      & 1 min  & 3 req  & Par IP + phone \\
+    /auth/verify-otp       & 1 min  & 5 req  & Par IP + phone \\
+    /auth/forgot-password   & 15 min & 3 req  & Par IP \\
+    /auth/register          & 1 heure & 5 req & Par IP \\
+    /auth/2fa/verify        & 1 min  & 5 req  & Par user \\
+    Global                  & 1 min  & 100 req & Par IP (tous endpoints) \\
+    \bottomrule
+    \end{tabularx}
+    
+    Impl\'ementation via Redis avec algorithme sliding window.
+    
+    % ============================================================
+    \section{Contrat d'Int\'egration Auth $\to$ Notification}
+    % ============================================================
+    
+    \textit{Ajout v1.3.1~: mini-contrat technique pour formaliser la communication entre Auth et le Service Notification.}
+    
+    \subsection{Mode de communication}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Param\`etre} & \textbf{Valeur} \\
+    \midrule
+    Transport     & HTTP POST (synchrone pour le MVP, migration vers message queue recommand\'ee en production) \\
+    Format        & JSON \\
+    Auth          & Token S2S (Auth s'authentifie aupr\`es de Notification via \texttt{POST /auth/s2s/token}) \\
+    Timeout       & 5 secondes max \\
+    Retry         & 3 tentatives avec backoff exponentiel (1s, 2s, 4s) \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Payload standard}
+    
+    \begin{lstlisting}
+    {
+      "type": "email_verification",
+      "recipient": {
+        "email": "user@example.com",
+        "phone": null
+      },
+      "template": "auth_verify_email",
+      "data": {
+        "verification_url": "https://auth.agt.com/...",
+        "expires_in_minutes": 60,
+        "platform_name": "AGT-Bot"
+      },
+      "priority": "high",
+      "idempotency_key": "uuid-unique"
+    }
+    \end{lstlisting}
+    
+    \subsection{Types de notifications \'emis par Auth}
+    
+    \begin{tabularx}{\textwidth}{llll}
+    \toprule
+    \textbf{Type} & \textbf{Canal} & \textbf{D\'eclencheur} & \textbf{Template} \\
+    \midrule
+    \texttt{email\_verification} & Email & POST /auth/register (method=email) & auth\_verify\_email \\
+    \texttt{phone\_otp}          & SMS   & POST /auth/register (method=phone), POST /auth/login/phone & auth\_otp \\
+    \texttt{password\_reset}     & Email & POST /auth/forgot-password & auth\_reset\_password \\
+    \texttt{magic\_link}         & Email & POST /auth/login/magic-link & auth\_magic\_link \\
+    \texttt{login\_alert}        & Email & Login depuis nouvelle IP/device (\'evolution future) & auth\_login\_alert \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Comportement en cas d'\'echec}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Sc\'enario} & \textbf{Comportement Auth} \\
+    \midrule
+    Notification indisponible (timeout/5xx) & Auth cr\'ee l'utilisateur/le token quand m\^eme, mais retourne un warning~: \texttt{"notification\_sent": false}. L'utilisateur peut redemander l'envoi. \\
+    Notification rejette (4xx) & Auth logge l'erreur. L'op\'eration Auth (register, reset) reste valid\'ee. \\
+    Retry \'epuis\'es & Auth logge un \'ev\'enement critique. Un cron job peut retenter les notifications en \'echec. \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textit{R\`egle fondamentale~: l'\'echec de Notification ne doit \textbf{jamais} bloquer une op\'eration Auth. L'utilisateur doit toujours pouvoir redemander l'envoi.}
+    
+    % ============================================================
+    \section{Contrat d'Int\'egration Auth $\to$ Users}
+    % ============================================================
+    
+    \textit{Ajout v2.0~: contrat technique pour formaliser la communication entre Auth et le Service Users.}
+    
+    \subsection{Provisioning}
+    
+    Apr\`es une inscription r\'eussie (\texttt{POST /auth/register} ou callback OAuth), Auth appelle le Service Users pour cr\'eer le profil associ\'e~:
+    
+    \begin{lstlisting}
+    POST /api/v1/users
+    {
+      "auth_user_id": "users_auth.id",
+      "first_name": "",
+      "last_name": "",
+      "email": "user@example.com",
+      "phone": "+237600000000"
+    }
+    \end{lstlisting}
+    
+    \subsection{Synchronisation de statut}
+    
+    Lorsque \texttt{is\_deactivated} change dans Auth, Auth pousse la mise \`a jour vers Users~:
+    
+    \begin{lstlisting}
+    POST /api/v1/users/status-sync
+    {
+      "auth_user_id": "uuid",
+      "status": "inactive"
+    }
+    \end{lstlisting}
+    
+    \textbf{R\`egles~:}
+    \begin{itemize}[nosep]
+      \item Auth pousse \texttt{inactive} quand \texttt{is\_deactivated = true}.
+      \item Auth ne pousse \textbf{jamais} \texttt{deleted} ni \texttt{deletion\_in\_progress} (\'etats internes \`a Users).
+      \item \texttt{is\_blocked} n'est \textbf{pas} propag\'e \`a Users~: c'est une mesure de s\'ecurit\'e Auth, pas un changement de statut profil.
+      \item Auth ne pousse actuellement que \texttt{inactive}. \textbf{Aucun flux de r\'eactivation n'est d\'efini en v2.1.} Si ce besoin \'emerge, un endpoint \texttt{POST /auth/admin/reactivate/\{authUserId\}} devra \^etre ajout\'e.
+    \end{itemize}
+    
+    \subsection{Synchronisation email / t\'el\'ephone}
+    
+    Lorsque l'email ou le t\'el\'ephone change dans Auth (ex~: ajout d'un t\'el\'ephone apr\`es inscription email), Auth pousse la mise \`a jour vers Users~:
+    
+    \begin{lstlisting}
+    POST /api/v1/users/sync
+    {
+      "auth_user_id": "uuid",
+      "email": "new@example.com",
+      "phone": "+237600000000"
+    }
+    \end{lstlisting}
+    
+    \textbf{R\`egles~:}
+    \begin{itemize}[nosep]
+      \item D\'eclench\'e quand \texttt{email} ou \texttt{phone} change dans \texttt{users\_auth}.
+      \item Users ne modifie \textbf{jamais} seul ces champs~: Auth est la source de v\'erit\'e pour les identifiants d'authentification.
+      \item Seuls les champs modifi\'es sont envoy\'es.
+    \end{itemize}
+    
+    \subsection{Mapping de statuts Auth $\leftrightarrow$ Users}
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{\'Etat Auth} & \textbf{Projection Users} & \textbf{Commentaire} \\
+    \midrule
+    \texttt{is\_deactivated = false} & Aucune projection automatique & \'Etat par d\'efaut. Aucun push vers Users (pas de flux de r\'eactivation en v2.1) \\
+    \texttt{is\_deactivated = true}  & \texttt{inactive}          & Push via \texttt{status-sync} \\
+    \texttt{is\_blocked = true}      & Aucune projection          & Mesure de s\'ecurit\'e Auth uniquement \\
+    Purge RGPD                        & \texttt{deleted}           & Orchestr\'e par Users, pas par Auth \\
+    \bottomrule
+    \end{tabularx}
+    
+    % ============================================================
+    \section{Recommandations \& \'Evolutions}
+    % ============================================================
+    
+    \begin{itemize}
+      \item \textbf{Gestion des comptes li\'es~:} un utilisateur inscrit par email peut lier son compte Google/Facebook via la table \texttt{oauth\_providers}. Lors d'un login OAuth, le service v\'erifie d'abord si l'email existe dans \texttt{users\_auth}. Si oui, il lie automatiquement le provider au compte existant (apr\`es confirmation utilisateur).
+      \item \textbf{Nettoyage des sessions~:} un cron job quotidien doit purger les sessions expir\'ees, les refresh tokens r\'evoqu\'es et les verification\_tokens utilis\'es ou expir\'es.
+      \item \textbf{Monitoring~:} exposer des m\'etriques Prometheus (nombre de logins, erreurs 401/403, latence P95, sessions actives).
+      \item \textbf{Versioning API~:} pr\'efixe \texttt{/api/v1}. En cas de breaking changes, publier une \texttt{/api/v2} avec p\'eriode de cohabitation.
+      \item \textbf{Migration future~:} si le besoin de SSO \'emerge, envisager une couche OpenID Connect par-dessus le syst\`eme JWT existant.
+    \end{itemize}
+    
+    % ============================================================
+    \section*{Annexes}
+    % ============================================================
+    
+    \subsection*{Glossaire}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Terme} & \textbf{D\'efinition} \\
+    \midrule
+    JWT         & JSON Web Token --- standard pour transmettre des informations sign\'ees \\
+    Access Token & Jeton \`a dur\'ee courte (15 min) prouvant l'authentification \\
+    Refresh Token & Jeton \`a dur\'ee longue (7 jours) pour renouveler l'access token \\
+    OAuth       & Protocole d'autorisation via compte tiers (Google, Facebook) \\
+    2FA / TOTP  & Authentification \`a double facteur via code temporaire \\
+    OTP         & Mot de passe \`a usage unique, envoy\'e par SMS ou email \\
+    Magic Link  & Lien d'authentification unique envoy\'e par email \\
+    Rate Limiting & Limitation du nombre de requ\^etes par fen\^etre de temps \\
+    Stateless   & Architecture o\`u le serveur ne conserve pas d'\'etat en m\'emoire locale \\
+    S2S         & Service-to-Service --- communication entre microservices \\
+    Introspect  & V\'erification de validit\'e d'un token S2S par un service tiers \\
+    Soft Delete & D\'esactivation logique sans suppression physique \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection*{Code PlantUML --- Diagramme de Classes}
+    \label{sec:plantuml}
+    
+    Le code PlantUML ci-dessous correspond au diagramme de classes complet du service Auth v2.1. Il peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+    
+    \begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+    @startuml Auth Service - Class Diagram v2.1
+    
+    skinparam classAttributeIconSize 0
+    skinparam linetype ortho
+    
+    entity "platforms" as platforms {
+      * id : UUID <<PK>>
+      --
+      * name : VARCHAR(50) <<UQ>>
+      * slug : VARCHAR(50) <<UQ>>
+      * allowed_auth_methods : JSONB
+      * allowed_redirect_urls : JSONB
+      * client_secret_hash : VARCHAR(255)
+      is_active : BOOLEAN = true
+      * created_at : TIMESTAMPTZ
+      * updated_at : TIMESTAMPTZ
+    }
+    
+    entity "users_auth" as users {
+      * id : UUID <<PK>>
+      --
+      email : VARCHAR(255) <<UQ>>
+      phone : VARCHAR(20) <<UQ>>
+      password_hash : VARCHAR(255)
+      email_verified : BOOLEAN = false
+      phone_verified : BOOLEAN = false
+      two_fa_enabled : BOOLEAN = false
+      two_fa_secret : VARCHAR(255)
+      * registration_method : VARCHAR(20)
+      * registration_platform_id : UUID <<FK>>
+      failed_login_attempts : INT = 0
+      locked_until : TIMESTAMPTZ
+      is_blocked : BOOLEAN = false
+      is_deactivated : BOOLEAN = false
+      * created_at : TIMESTAMPTZ
+      * updated_at : TIMESTAMPTZ
+    }
+    
+    entity "sessions" as sessions {
+      * id : UUID <<PK>>
+      --
+      * user_id : UUID <<FK>>
+      * platform_id : UUID <<FK>>
+      * ip_address : VARCHAR(45)
+      user_agent : TEXT
+      is_active : BOOLEAN = true
+      * created_at : TIMESTAMPTZ
+      * expires_at : TIMESTAMPTZ
+    }
+    
+    entity "refresh_tokens" as rtokens {
+      * id : UUID <<PK>>
+      --
+      * user_id : UUID <<FK>>
+      * session_id : UUID <<FK>>
+      * token_hash : VARCHAR(255) <<UQ>>
+      is_revoked : BOOLEAN = false
+      * created_at : TIMESTAMPTZ
+      * expires_at : TIMESTAMPTZ
+    }
+    
+    entity "oauth_providers" as oauth {
+      * id : UUID <<PK>>
+      --
+      * user_id : UUID <<FK>>
+      * provider : VARCHAR(20)
+      * provider_user_id : VARCHAR(255)
+      email : VARCHAR(255)
+      * created_at : TIMESTAMPTZ
+      ..
+      <<UQ>> (user_id, provider)
+      <<UQ>> (provider, provider_user_id)
+    }
+    
+    entity "login_history" as loghist {
+      * id : UUID <<PK>>
+      --
+      * user_id : UUID <<FK>>
+      * platform_id : UUID <<FK>>
+      * method : VARCHAR(20)
+      * ip_address : VARCHAR(45)
+      user_agent : TEXT
+      * success : BOOLEAN
+      failure_reason : VARCHAR(100)
+      * created_at : TIMESTAMPTZ
+    }
+    
+    entity "verification_tokens" as vtokens {
+      * id : UUID <<PK>>
+      --
+      * user_id : UUID <<FK>>
+      * token_hash : VARCHAR(255) <<UQ>>
+      * type : VARCHAR(30)
+      payload : JSONB
+      * expires_at : TIMESTAMPTZ
+      used_at : TIMESTAMPTZ
+      * created_at : TIMESTAMPTZ
+    }
+    
+    platforms ||--o{ sessions       : "1..* sessions"
+    platforms ||--o{ loghist        : "1..* login_history"
+    platforms ||--o{ users          : "1..* registered on"
+    
+    users ||--o{ sessions          : "1..* sessions"
+    users ||--o{ rtokens           : "1..* refresh_tokens"
+    users ||--o{ oauth             : "1..* oauth_providers"
+    users ||--o{ loghist           : "1..* login_history"
+    users ||--o{ vtokens           : "1..* verification_tokens"
+    
+    sessions ||--o| rtokens        : "1..0..1 refresh_token"
+    
+    @enduml
+    \end{lstlisting}
+    
+    \vfill
+    \begin{center}
+    \rule{0.5\textwidth}{0.4pt}\\[0.5em]
+    {\small\textcolor{agtgray}{AG Technologies --- Document confidentiel \`a usage interne exclusivement.}}\\
+    {\small\textcolor{agtgray}{Auth Service CDC v2.1 --- Mars 2026}}
+    \end{center}
+    
+    \end{document}

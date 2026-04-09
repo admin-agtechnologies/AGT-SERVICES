@@ -1,0 +1,87 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: agt_sub_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: agt_subscription_db
+      POSTGRES_USER: sub_user
+      POSTGRES_PASSWORD: sub_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sub_user -d agt_subscription_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  redis:
+    image: redis:7-alpine
+    container_name: agt_sub_redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6382:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  subscription:
+    build:
+      context: .
+      target: production
+    container_name: agt_sub_service
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://sub_user:sub_password@db:5432/agt_subscription_db
+      REDIS_URL: redis://redis:6379/4
+      AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
+    volumes:
+      - ./keys:/app/keys:ro
+    ports:
+      - "7004:7004"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:7004/api/v1/subscriptions/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  subscription-dev:
+    build:
+      context: .
+      target: builder
+    container_name: agt_sub_dev
+    restart: unless-stopped
+    command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:7004"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://sub_user:sub_password@db:5432/agt_subscription_db
+      REDIS_URL: redis://redis:6379/4
+      DEBUG: "True"
+      AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
+    volumes:
+      - .:/app
+      - ./keys:/app/keys:ro
+    ports:
+      - "7004:7004"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - dev
+volumes:
+  postgres_data:
+  redis_data:

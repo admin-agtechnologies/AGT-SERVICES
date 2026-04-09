@@ -1,0 +1,75 @@
+# ============================================================
+# AG TECHNOLOGIES — Infrastructure partagée
+# Usage : docker compose -f docker-compose.infra.yml up -d
+# Monte les services d'infrastructure communs à tout l'écosystème.
+# Chaque microservice a son propre docker-compose.yml pour sa DB et son Redis.
+# ============================================================
+
+services:
+
+  # ── API Gateway (Nginx reverse proxy) ────────────────────────────────────
+  gateway:
+    image: nginx:alpine
+    container_name: agt_gateway
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - rabbitmq
+    networks:
+      - agt_network
+
+  # ── RabbitMQ (Message Broker partagé) ────────────────────────────────────
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: agt_rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: agt_rabbit
+      RABBITMQ_DEFAULT_PASS: agt_rabbit_password
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    networks:
+      - agt_network
+
+  # ── Elasticsearch (Search Service) ───────────────────────────────────────
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    container_name: agt_elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    networks:
+      - agt_network
+
+volumes:
+  rabbitmq_data:
+    driver: local
+  es_data:
+    driver: local
+
+networks:
+  agt_network:
+    name: agt_network
+    driver: bridge

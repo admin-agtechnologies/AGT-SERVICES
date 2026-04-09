@@ -1,0 +1,1046 @@
+% ============================================================
+%  CAHIER DES CHARGES TECHNIQUE --- SERVICE CHAT v1.2
+%  AG Technologies --- Architecture de Services Partages
+%  Compilable sur Overleaf (pdfLaTeX)
+% ============================================================
+\documentclass[a4paper,12pt]{article}
+
+% --- Encodage & Langue ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% --- Mise en page ---
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{float}
+\usepackage{graphicx}
+
+% --- Couleurs & Graphismes ---
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+\usepackage{mdframed}
+\usepackage{letterspace}
+
+% --- Tableaux ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{colortbl}
+
+% --- Listes ---
+\usepackage{enumitem}
+
+% --- Code & Monospace ---
+\usepackage{listings}
+\usepackage{inconsolata}
+
+% --- Liens ---
+\usepackage[colorlinks=true, linkcolor=AGBlue, urlcolor=AGBlue, citecolor=AGBlue]{hyperref}
+
+% --- Icones ---
+\usepackage{fontawesome5}
+
+% --- Numerotation & Espacement ---
+\usepackage{setspace}
+\usepackage{lastpage}
+
+% ============================================================
+%  PALETTE DE COULEURS AG TECHNOLOGIES
+% ============================================================
+\definecolor{AGBlue}{RGB}{30, 90, 168}
+\definecolor{AGLightBlue}{RGB}{220, 235, 255}
+\definecolor{AGDark}{RGB}{20, 30, 50}
+\definecolor{AGGray}{RGB}{100, 110, 125}
+\definecolor{AGLightGray}{RGB}{245, 247, 250}
+\definecolor{AGGreen}{RGB}{30, 160, 100}
+\definecolor{AGOrange}{RGB}{230, 115, 20}
+\definecolor{AGRed}{RGB}{200, 50, 50}
+\definecolor{AGPurple}{RGB}{100, 60, 180}
+\definecolor{AGTeal}{RGB}{15, 130, 145}
+\definecolor{TableHeader}{RGB}{30, 90, 168}
+\definecolor{TableAlt}{RGB}{240, 245, 255}
+\definecolor{CodeBg}{RGB}{248, 249, 252}
+
+\titleformat{\section}
+  {\color{AGBlue}\Large\bfseries}{\thesection}{1em}{}[\color{AGBlue}\titlerule]
+\titleformat{\subsection}{\color{AGDark}\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\color{AGGray}\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+\titlespacing*{\subsubsection}{0pt}{8pt}{2pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.3pt}
+\fancyhead[L]{\small\color{AGGray}\textbf{AG Technologies} --- Service Chat}
+\fancyhead[R]{\small\color{AGGray}Cahier des Charges Technique}
+\fancyfoot[L]{\small\color{AGGray}Confidentiel --- Usage Interne}
+\fancyfoot[C]{\small\color{AGGray}\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\color{AGGray}v1.2 --- \today}
+
+\lstset{
+  backgroundcolor=\color{CodeBg},
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true, frame=single, framesep=4pt,
+  rulecolor=\color{AGBlue!30},
+  commentstyle=\color{AGGreen},
+  keywordstyle=\color{AGBlue}\bfseries,
+  stringstyle=\color{AGOrange},
+  numbers=left, numberstyle=\tiny\color{AGGray},
+  numbersep=8pt, xleftmargin=16pt, tabsize=2,
+  showstringspaces=false,
+}
+
+\newmdenv[linecolor=AGBlue, linewidth=2pt, leftline=true, rightline=false, topline=false, bottomline=false, backgroundcolor=AGLightBlue, innerleftmargin=12pt, innerrightmargin=8pt, innertopmargin=6pt, innerbottommargin=6pt, skipabove=8pt, skipbelow=8pt]{infobox}
+\newmdenv[linecolor=AGOrange, linewidth=2pt, leftline=true, rightline=false, topline=false, bottomline=false, backgroundcolor=AGOrange!8, innerleftmargin=12pt, innerrightmargin=8pt, innertopmargin=6pt, innerbottommargin=6pt, skipabove=8pt, skipbelow=8pt]{warningbox}
+\newmdenv[linecolor=AGGreen, linewidth=2pt, leftline=true, rightline=false, topline=false, bottomline=false, backgroundcolor=AGGreen!8, innerleftmargin=12pt, innerrightmargin=8pt, innertopmargin=6pt, innerbottommargin=6pt, skipabove=8pt, skipbelow=8pt]{successbox}
+
+\newcommand{\badge}[2]{\tikz[baseline=-2pt]{\node[fill=#1, text=white, rounded corners=3pt, inner sep=3pt, font=\footnotesize\bfseries]{#2};}}
+\newcommand{\httpmethod}[1]{\colorbox{AGBlue!15}{\textcolor{AGBlue}{\ttfamily\footnotesize\bfseries #1}}}
+\newcommand{\wsevent}[1]{\colorbox{AGPurple!15}{\textcolor{AGPurple}{\ttfamily\footnotesize\bfseries #1}}}
+
+\setcounter{tocdepth}{3}
+\renewcommand{\contentsname}{Table des Mati\`eres}
+
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{AGDark}\color{white}
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[AGBlue!50, opacity=0.45](current page.north west) rectangle ([yshift=-3.8cm]current page.north east);
+  \fill[AGBlue!80, opacity=0.20](current page.north west) rectangle ([yshift=-1.0cm]current page.north east);
+  \fill[white, opacity=0.025]([xshift=-1.5cm, yshift=-4.5cm]current page.north east) circle (6.0cm);
+  \fill[AGBlue!70, opacity=0.10]([xshift=2.0cm, yshift=-9.0cm]current page.north east) circle (4.5cm);
+  \fill[AGBlue!40, opacity=0.08]([xshift=3.5cm, yshift=-16cm]current page.north west) circle (3.2cm);
+  \fill[white, opacity=0.015]([xshift=-3cm, yshift=6cm]current page.south west) circle (5.0cm);
+  \fill[AGBlue, opacity=0.55](current page.south west) rectangle ([yshift=0.65cm]current page.south east);
+  \fill[AGBlue!40, opacity=0.30]([yshift=0.65cm]current page.south west) rectangle ([yshift=2.0cm]current page.south east);
+  \node[text=white!40, font=\fontsize{7}{9}\selectfont, anchor=south] at ([yshift=0.18cm]current page.south) {Document confidentiel $\cdot$ R\'eserv\'e \`a l'usage interne d'AG Technologies $\cdot$ v1.2};
+\end{tikzpicture}
+\vspace*{1.2cm}
+\begin{center}
+  {\fontsize{10}{12}\selectfont\textbf{AG\,TECHNOLOGIES} \quad\textcolor{white!60}{$|$}\quad Architecture de Services Partag\'es}\\[0.25cm]
+  {\color{white!80}\rule{10cm}{0.6pt}}
+\end{center}
+\vspace{1.0cm}
+\begin{center}
+\begin{tikzpicture}
+  \fill[AGBlue!20, opacity=0.20] (0,0) circle (3.0cm);
+  \fill[AGBlue!40, opacity=0.22] (0,0) circle (2.3cm);
+  \fill[AGBlue!70, opacity=0.50] (0,0) circle (1.6cm);
+  \fill[AGBlue, opacity=0.80] (0,0) circle (1.15cm);
+  \node[text=white, font=\fontsize{30}{30}\selectfont] at (0, 0) {\faComments};
+\end{tikzpicture}
+\end{center}
+\vspace{0.7cm}
+\begin{center}
+  {\fontsize{9}{11}\selectfont\textls[250]{C A H I E R \ D E S \ C H A R G E S \ T E C H N I Q U E}}\\[0.45cm]
+  \begin{tikzpicture}
+    \fill[AGBlue, opacity=0.70, rounded corners=7pt](-6.5,-0.62) rectangle (6.5,0.62);
+    \node[text=white, font=\LARGE\bfseries] at (0,0) {\faComments\enspace Service Chat};
+  \end{tikzpicture}\\[0.4cm]
+  {\fontsize{10}{12}\selectfont\color{white} Messagerie Temps R\'eel Unifi\'ee --- Chat Service}
+\end{center}
+\vspace{0.8cm}
+\begin{center}{\large\color{AGGreen}\textbf{Statut~: Implementation-ready}}\end{center}
+\vspace{0.4cm}
+\begin{center}
+\begin{tabular}{ll}
+  \toprule \textbf{Attribut} & \textbf{Valeur} \\ \midrule
+  Document & CDC Technique et Fonctionnel \\ Service & Chat Service \\ Version & 1.2 \\
+  Statut & \textbf{Implementation-ready} \\ Classification & Confidentiel --- Usage interne \\
+  Stack & Node.js / Express / Socket.io / PostgreSQL / Redis \\
+  D\'ependances valid\'ees & Auth v2.1, Users v1.0, Notification v1.2, M\'edia v1.4 \\ \bottomrule
+\end{tabular}
+\end{center}
+\nopagecolor
+\end{titlepage}
+
+% === HISTORIQUE ===
+\newpage
+\section*{Historique des R\'evisions}
+\addcontentsline{toc}{section}{Historique des R\'evisions}
+\begin{tabularx}{\textwidth}{|p{1.2cm}|p{2.4cm}|X|p{2.8cm}|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Ver.} & \color{white}\textbf{Date} & \color{white}\textbf{Description} & \color{white}\textbf{Auteur} \\ \hline
+  1.0 & 30 mars 2026 & Cr\'eation initiale du document & \'Equipe Ing\'enierie \\ \hline
+  \rowcolor{TableAlt} 1.1 & 30 mars 2026 & Post-audit~: alignement \texttt{platform\_id} UUID Auth. Pr\'efixe \texttt{/api/v1}. Convention identit\'e. PK corrig\'ees. Table \texttt{platform\_capabilities}. \texttt{TIMESTAMPTZ}. Contrats inter-services. Matrice autorisation. Fronti\`ere Chat/Search. Garde-fous scalabilit\'e. PlantUML annexe. & \'Equipe Architecture \\ \hline
+  1.2 & \today & Version finale~: statut \textit{Implementation-ready}. Matrice autorisation en forme canonique. Gouvernance capabilities~: r\^ole admin pr\'ecis\'e via Users. Mapping identit\'e Chat$\rightarrow$Notification. R\`egles op\'erateur transfert verrouill\'ees. & \'Equipe Architecture \\ \hline
+\end{tabularx}
+
+\newpage\tableofcontents\newpage
+
+% === SECTION 1 ===
+\section{Introduction}
+
+\subsection{Objet du Document}
+Ce document constitue le \textbf{Cahier des Charges Technique et Fonctionnel} du \textbf{Service Chat} d'AG Technologies, version~1.2 (\textit{Implementation-ready}). Il d\'efinit les objectifs, fonctionnalit\'es, architecture technique, contrats d'API et contrats inter-services.
+
+\subsection{Destinataires}
+\begin{tabularx}{\textwidth}{|p{3.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Destinataire} & \color{white}\textbf{R\^ole} \\ \hline
+  \'Equipe Backend & D\'eveloppement et maintenance \\ \hline
+  \rowcolor{TableAlt}\'Equipe Frontend & Int\'egration WebSocket, UI chat \\ \hline
+  \'Equipes consommatrices & AGT-Market, AGT-Bot, SALMA, Service Chatbot \\ \hline
+  \rowcolor{TableAlt}Lead Technique & Validation des choix techniques \\ \hline
+  Chef de Projet & Suivi et validation fonctionnelle \\ \hline
+\end{tabularx}
+
+\subsection{P\'erim\`etre du Service}
+\begin{infobox}
+\faInfoCircle\quad \textbf{P\'erim\`etre inclus~:} conversations directes, canaux et transferts bot$\rightarrow$humain~; messagerie temps r\'eel via WebSocket~; r\'eactions emoji~; accus\'es de lecture~; indicateur de saisie~; pr\'esence en ligne~; recherche full-text intra-conversation~; historique pagin\'e~; configuration de capacit\'es par plateforme~; API REST et \'ev\'enements WebSocket complets.
+\end{infobox}
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{Hors p\'erim\`etre~:} authentification (Service Auth v2.1), stockage fichiers (Service M\'edia v1.4), recherche transverse donn\'ees m\'etier (Service Recherche v1.2), logique m\'etier plateformes, facturation, mod\'eration de contenu (futur).
+\end{warningbox}
+
+\subsection{Conventions \'ecosyst\`eme AG Technologies}
+\label{sec:conventions}
+\begin{warningbox}
+\faExclamationTriangle\quad Conventions \textbf{non n\'egociables} (valid\'ees Auth~v2.1, Users~v1.0, Notification~v1.2, M\'edia~v1.4, Recherche~v1.2)~:
+\begin{itemize}[nosep]
+  \item \texttt{platform\_id} = UUID du registre Auth (\texttt{platforms.id})
+  \item Identit\'e utilisateur = \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item JWT valid\'e via \texttt{GET /auth/verify-token}~; token S2S via \texttt{POST /auth/s2s/introspect}
+  \item Pr\'efixe API~: \texttt{/api/v1}
+  \item R\^oles et permissions g\'er\'es par Users, pas par Auth
+  \item RGPD orchestr\'e par Users
+  \item Stack~: Django/DRF pour Auth, Users, Notif, Recherche~; Node.js/NestJS pour M\'edia~; \textbf{Node.js/Express/Socket.io pour Chat} (justification~: section~\ref{sec:stack-justif})
+  \item Timestamps~: \texttt{TIMESTAMPTZ}
+\end{itemize}
+\end{warningbox}
+
+\subsection{Fronti\`ere Chat / Recherche}
+\label{sec:boundary-search}
+\begin{infobox}
+\faInfoCircle\quad \textbf{R\`egle non n\'egociable~:} La recherche full-text intra-conversation reste locale au Service Chat (index GIN PostgreSQL). Le Service Recherche (v1.2) n'indexe jamais de messages de chat.
+\end{infobox}
+
+% === SECTION 2 ===
+\section{Contexte \& Probl\'ematique}
+
+\subsection{Pourquoi Ce Service Existe}
+Dans un \'ecosyst\`eme multi-plateformes, la communication entre utilisateurs est un besoin transverse critique. Sans service centralis\'e~: duplication temps r\'eel, incoh\'erence fonctionnalit\'es, impossibilit\'e transfert bot$\rightarrow$humain, probl\`emes scalabilit\'e WebSocket, absence historique unifi\'e.
+
+\subsection{Probl\`emes R\'esolus}
+\begin{tabularx}{\textwidth}{|p{4.2cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Probl\`eme} & \color{white}\textbf{Solution} \\ \hline
+  WebSocket par plateforme & Gateway centralis\'e avec Redis Adapter \\ \hline
+  \rowcolor{TableAlt}Pas de transfert bot$\rightarrow$humain & Type conversation d\'edi\'e + file d'attente \\ \hline
+  Scalabilit\'e WebSocket & Redis Pub/Sub + Socket.io Adapter multi-instances \\ \hline
+  \rowcolor{TableAlt}Messages perdus hors ligne & Persistance PostgreSQL + livraison \`a la reconnexion \\ \hline
+  Concepts m\'etier cod\'es en dur & Service g\'en\'erique + capacit\'es configurables par plateforme \\ \hline
+\end{tabularx}
+
+\subsection{Positionnement Architecture Globale}
+Le Service Chat d\'epend du Service Auth (v2.1), Users (v1.0), Notification (v1.2) et, \`a terme, M\'edia (v1.4).
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\small},
+  consumer/.style={draw=AGGray,fill=AGLightGray,rounded corners=4pt,minimum width=2.8cm,minimum height=0.7cm,align=center},
+  depnode/.style={draw=AGOrange!80,fill=AGOrange!10,rounded corners=4pt,minimum width=2.8cm,minimum height=0.7cm,align=center},
+  authnode/.style={draw=AGGreen!80,fill=AGGreen!10,rounded corners=4pt,minimum width=2.8cm,minimum height=0.7cm,align=center},
+  chatnode/.style={draw=AGBlue,fill=AGLightBlue,rounded corners=6pt,minimum width=4.2cm,minimum height=1.0cm,align=center,line width=1.5pt}]
+  \node[consumer](market) at (-4.5,0){AGT-Market};
+  \node[consumer](bot) at (-1.5,0){AGT-Bot};
+  \node[consumer](salma) at (1.5,0){SALMA};
+  \node[consumer](chatbot) at (4.5,0){Chatbot};
+  \node[chatnode](chat) at (0,-2){\textbf{\faComments\ Chat Service}};
+  \node[authnode](auth) at (-4.5,-4){Service Auth};
+  \node[depnode](users) at (-1.5,-4){Service Users};
+  \node[depnode](notif) at (1.5,-4){Service Notif.};
+  \node[depnode](media) at (4.5,-4){Service M\'edia};
+  \draw[->,thick,color=AGGray](market)--(chat);
+  \draw[->,thick,color=AGGray](bot)--(chat);
+  \draw[->,thick,color=AGGray](salma)--(chat);
+  \draw[->,thick,color=AGGray](chatbot)--(chat);
+  \draw[->,thick,color=AGGreen](chat)--(auth);
+  \draw[->,thick,color=AGOrange](chat)--(users);
+  \draw[->,thick,color=AGOrange](chat)--(notif);
+  \draw[->,thick,color=AGOrange,dashed](chat)--(media);
+\end{tikzpicture}
+\end{center}
+
+% === SECTION 3 ===
+\section{Vision \& Objectifs}
+
+\subsection{Concept du Service}
+Le Service Chat est le syst\`eme de messagerie temps r\'eel unifi\'e pour toutes les plateformes. Il est g\'en\'erique~: trois types abstraits (directe, canal, transfert), m\'etadonn\'ees libres, capacit\'es activables par plateforme.
+
+\subsection{Objectifs MVP \& Long Terme}
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Phase} & \color{white}\textbf{Objectifs} \\ \hline
+  \textbf{MVP} & Conversations directes/canaux~; reply, edit, soft delete~; accus\'es lecture~; typing~; pr\'esence~; r\'eactions~; transfert bot$\rightarrow$humain~; notifications hors ligne~; capabilities par plateforme~; API REST + WS \\ \hline
+  \rowcolor{TableAlt}\textbf{Long terme} & Pi\`eces jointes M\'edia~; E2E~; archivage~; mod\'eration~; messages vocaux \\ \hline
+\end{tabularx}
+
+\subsection{KPIs}
+\begin{tabularx}{\textwidth}{|X|p{2.2cm}|p{2.8cm}|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{KPI} & \color{white}\textbf{MVP} & \color{white}\textbf{Long Terme} \\ \hline
+  Latence WS & $<$ 200ms & $<$ 100ms \\ \hline
+  \rowcolor{TableAlt}Connexions WS & 1\,000+ & 10\,000+ \\ \hline
+  Disponibilit\'e & $\geq$ 99\% & $\geq$ 99,9\% \\ \hline
+  \rowcolor{TableAlt}Perte messages & 0\% & 0\% \\ \hline
+  Prise en charge transfert & $<$ 5 min & $<$ 2 min \\ \hline
+  \rowcolor{TableAlt}Taux erreur API & $<$ 1\% & $<$ 0,5\% \\ \hline
+\end{tabularx}
+
+% === SECTION 4 ===
+\section{Parties Prenantes}
+\subsection{\'Equipe Technique}
+\begin{tabularx}{\textwidth}{|p{3.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{R\^ole} & \color{white}\textbf{Responsabilit\'es} \\ \hline
+  Ing\'enieur Backend & API REST, conversations, messaging \\ \hline
+  \rowcolor{TableAlt}Ing\'enieur Temps R\'eel & Gateway WS, Socket.io, Redis Pub/Sub \\ \hline
+  Lead Technique & Architecture, scaling, d\'ecisions techniques \\ \hline
+  \rowcolor{TableAlt}Ing\'enieur DevOps & Redis, PostgreSQL, Docker, LB \\ \hline
+  Ing\'enieur Frontend & Int\'egration Socket.io, UI \\ \hline
+\end{tabularx}
+
+\subsection{Services Consommateurs}
+\begin{tabularx}{\textwidth}{|p{3.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Service} & \color{white}\textbf{Usage} \\ \hline
+  AGT-Market & Chat acheteur$\leftrightarrow$vendeur, canaux boutique \\ \hline
+  \rowcolor{TableAlt}AGT-Bot & Conversations user$\leftrightarrow$op\'erateur, transfert bot$\rightarrow$humain \\ \hline
+  SALMA & Chat \'etudiant$\leftrightarrow$formateur, canaux cours \\ \hline
+  \rowcolor{TableAlt}Service Chatbot & Cr\'eation transferts (auth S2S) \\ \hline
+  Service Notification & Alertes push/email hors ligne \\ \hline
+\end{tabularx}
+
+% === SECTION 5 ===
+\section{Besoins Fonctionnels}
+
+\subsection{Module Conversations}
+\subsubsection{Types de Conversations}
+\begin{tabularx}{\textwidth}{|p{2.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Type} & \color{white}\textbf{Caract\'eristiques} \\ \hline
+  \texttt{direct} & 2 participants~; anti-doublon (m\^emes participants + plateforme = m\^eme conversation) \\ \hline
+  \rowcolor{TableAlt}\texttt{canal} & Illimit\'e~; public/priv\'e~; nom, description, propri\'etaire \\ \hline
+  \texttt{transfert} & Via Chatbot (S2S)~; statuts~: \texttt{en\_attente}, \texttt{pris\_en\_charge}, \texttt{cloture} \\ \hline
+\end{tabularx}
+
+\subsubsection{Gestion des Conversations}
+\begin{itemize}[leftmargin=1.5cm]
+  \item Cr\'eation (type, participants, plateforme, m\'etadonn\'ees)
+  \item Listage pagin\'e (filtr\'e type, plateforme)
+  \item D\'etail avec dernier message + non-lus
+  \item Modification canal (nom, description, visibilit\'e)
+  \item Soft delete~; tri par derni\`ere activit\'e
+\end{itemize}
+
+\subsubsection{Gestion des Participants}
+Ajouter/retirer, quitter canal, lister avec pr\'esence.
+
+\subsection{Module Messagerie}
+\subsubsection{Messages}
+\begin{itemize}[leftmargin=1.5cm]
+  \item Envoi texte (chemin principal~: WS~; fallback~: REST)
+  \item Reply, Edit (auteur, d\'elai configurable), Soft delete
+  \item Pagination historique~; recherche full-text (GIN)
+  \item Taille max~: 4\,096 caract\`eres (configurable par plateforme)
+\end{itemize}
+
+\subsubsection{R\'eactions Emoji}
+Ajouter/retirer, UNIQUE \texttt{(message\_id, user\_id, emoji)} en base, compteurs par emoji.
+
+\subsubsection{Accus\'es de Lecture}
+Curseur ``lu jusqu'au message X'', avancement auto, visibilit\'e pour les participants. \textbf{Capacit\'e configurable} (section~\ref{sec:capabilities}).
+
+\subsection{Module Temps R\'eel (WebSocket)}
+\subsubsection{Typing}
+Timeout 3s, Redis-only, capacit\'e configurable.
+\subsubsection{Pr\'esence}
+En ligne / hors ligne / derni\`ere connexion, Redis-only, capacit\'e configurable.
+\subsubsection{Reconnexion}
+Auto-reconnexion, r\'ecup\'eration messages manqu\'es via REST, z\'ero perte (PostgreSQL avant WS).
+
+\subsection{Module Transfert Bot $\rightarrow$ Humain}
+\label{sec:transfer-rules}
+\begin{itemize}[leftmargin=1.5cm]
+  \item Chatbot appelle \texttt{POST /api/v1/chat/conversations/transfer} (S2S)
+  \item Conversation cr\'e\'ee \texttt{en\_attente}~; op\'erateurs re\c{c}oivent \texttt{transfer:new}
+  \item Op\'erateur prend en charge $\rightarrow$ \texttt{pris\_en\_charge}
+  \item Op\'erateur cl\^oture $\rightarrow$ \texttt{cloture}~; bot reprend
+  \item File d'attente~: message automatique si aucun op\'erateur
+  \item Capacit\'e configurable par plateforme
+\end{itemize}
+
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{R\`egles de prise en charge op\'erateur (v1.2)~:}
+\begin{itemize}[nosep]
+  \item \textbf{Qui peut prendre en charge~?} Utilisateurs ayant la permission \texttt{chat:transfer:take} (v\'erifi\'e via \texttt{GET /users/\{id\}/permissions/check}).
+  \item \textbf{Concurrence~:} verrou optimiste (\texttt{UPDATE ... WHERE status = 'en\_attente'}). Deuxi\`eme op\'erateur re\c{c}oit \texttt{409 Conflict}.
+  \item \textbf{Reprise~:} un transfert \texttt{pris\_en\_charge} ne peut pas \^etre repris. Si l'op\'erateur se d\'econnecte sans cl\^oturer, job p\'eriodique remet en \texttt{en\_attente} apr\`es d\'elai configurable (d\'efaut~: 10 min).
+  \item \textbf{Cl\^oture~:} uniquement par l'op\'erateur ayant pris en charge (\texttt{operator\_id = user\_id} du JWT).
+  \item \textbf{Post-cl\^oture~:} conversation lisible en historique, plus de nouveaux messages.
+\end{itemize}
+\end{warningbox}
+
+\subsection{Module Capacit\'es par Plateforme}
+\label{sec:capabilities}
+\begin{infobox}
+\faInfoCircle\quad Le moteur Chat sait tout faire~; chaque plateforme active ce qu'elle veut. Config stock\'ee en PostgreSQL, modifiable via API.
+\end{infobox}
+
+\subsubsection{Capacit\'es optionnelles}
+\begin{tabularx}{\textwidth}{|p{4.5cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Capacit\'e} & \color{white}\textbf{Description} \\ \hline
+  \texttt{direct\_enabled} & Conversations directes 1-to-1 \\ \hline
+  \rowcolor{TableAlt}\texttt{channels\_enabled} & Canaux (groupes) \\ \hline
+  \texttt{read\_receipts\_enabled} & Accus\'es lecture d\'etaill\'es \\ \hline
+  \rowcolor{TableAlt}\texttt{typing\_enabled} & Indicateur saisie \\ \hline
+  \texttt{presence\_enabled} & Pr\'esence en ligne \\ \hline
+  \rowcolor{TableAlt}\texttt{reactions\_enabled} & R\'eactions emoji \\ \hline
+  \texttt{transfer\_enabled} & Transfert bot$\rightarrow$humain \\ \hline
+  \rowcolor{TableAlt}\texttt{message\_edit\_enabled} & \'Edition messages \\ \hline
+  \texttt{message\_delete\_enabled} & Suppression logique \\ \hline
+  \rowcolor{TableAlt}\texttt{message\_search\_enabled} & Recherche full-text \\ \hline
+  \texttt{attachments\_enabled} & Pi\`eces jointes (futur) \\ \hline
+\end{tabularx}
+
+\subsubsection{Capacit\'es structurelles (toujours actives)}
+Auth obligatoire, isolation plateforme, persistance, s\'ecurit\'e, rate limiting, logs, contr\^ole d'acc\`es.
+
+\subsubsection{Comportement d\'esactiv\'e}
+Endpoints $\rightarrow$ \texttt{403 Feature disabled}~; \'ev\'enements WS non \'emis~; co\^ut technique \'evit\'e.
+
+\subsubsection{Gouvernance des capacit\'es (v1.2)}
+\label{sec:capabilities-gov}
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{Qui peut modifier \texttt{platform\_capabilities}~?}
+\begin{itemize}[nosep]
+  \item \textbf{Lecture}~: tout token JWT ou S2S valide de la plateforme.
+  \item \textbf{\'Ecriture}~: r\'eserv\'ee aux \textbf{administrateurs}~:
+    \begin{enumerate}[nosep]
+      \item JWT valid\'e via \texttt{GET /auth/verify-token}.
+      \item Permission v\'erifi\'ee via \texttt{GET /users/\{user\_id\}/permissions/check?platform=\{p\}\&permission=chat:admin}.
+    \end{enumerate}
+  \item La permission \texttt{chat:admin} doit \^etre cr\'e\'ee par chaque plateforme dans le Service Users.
+  \item Alternative~: token S2S avec \texttt{service\_name = "admin"} (gestion automatis\'ee).
+\end{itemize}
+\end{warningbox}
+
+% === SECTION 6 ===
+\section{Besoins Non-Fonctionnels}
+
+\subsection{Performance}
+\begin{tabularx}{\textwidth}{|X|p{3.2cm}|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Exigence} & \color{white}\textbf{Cible} \\ \hline
+  Latence WS & $<$ 200ms \\ \hline
+  \rowcolor{TableAlt}Connexions WS MVP & 1\,000+ \\ \hline
+  Timeout typing & 3s \\ \hline
+  \rowcolor{TableAlt}Chargement historique & $<$ 300ms \\ \hline
+  Cache pr\'esence TTL & Configurable \\ \hline
+  \rowcolor{TableAlt}Taille max message & 4\,096 car. \\ \hline
+\end{tabularx}
+
+\subsection{S\'ecurit\'e}
+\begin{itemize}[leftmargin=1.5cm]
+  \item Auth obligatoire via \texttt{GET /auth/verify-token}
+  \item Isolation conversations par participant + \texttt{platform\_id} du JWT
+  \item Edit/Delete auteur uniquement~; soft delete obligatoire
+  \item Rate limiting via Redis (section~\ref{sec:guardrails})
+\end{itemize}
+
+\subsection{Scalabilit\'e}
+Redis Adapter multi-instances, LB sticky-session, index PostgreSQL, Redis d\'echarge.
+
+\subsection{Garde-fous}
+\label{sec:guardrails}
+\begin{tabularx}{\textwidth}{|p{4.5cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{R\`egle} & \color{white}\textbf{Valeur} \\ \hline
+  Taille max message & 4\,096 car. \\ \hline
+  \rowcolor{TableAlt}Rate limit / utilisateur & 30 msg/min \\ \hline
+  Rate limit / conversation & 100 msg/min \\ \hline
+  \rowcolor{TableAlt}Anti-flood WS & 10 evt/s/client \\ \hline
+  Max membres canal & 500 \\ \hline
+  \rowcolor{TableAlt}Archivage inactif & 12 mois \\ \hline
+  Backpressure WS & Livraison diff\'er\'ee si file surcharg\'ee \\ \hline
+  \rowcolor{TableAlt}Timeout reprise transfert & 10 min \\ \hline
+\end{tabularx}
+
+\subsection{Disponibilit\'e}
+$\geq$ 99,9\%~; persistance PG avant WS~; health check \texttt{GET /api/v1/chat/health}~; rolling updates avec drain WS.
+
+% === SECTION 7 ===
+\section{Architecture Technique}
+
+\subsection{Stack Technique}
+\label{sec:stack-justif}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Composant} & \color{white}\textbf{Technologie} & \color{white}\textbf{R\^ole} \\ \hline
+  Runtime & Node.js & Boucle \'ev\'enementielle temps r\'eel \\ \hline
+  \rowcolor{TableAlt}Framework API & Express.js & Endpoints REST \\ \hline
+  WebSocket & Socket.io & Temps r\'eel, rooms \\ \hline
+  \rowcolor{TableAlt}WS Adapter & Redis Adapter & Sync multi-instances \\ \hline
+  Base de donn\'ees & PostgreSQL & Donn\'ees durables \\ \hline
+  \rowcolor{TableAlt}Cache & Redis & Pr\'esence, typing, sessions, non-lus \\ \hline
+  Broker & RabbitMQ & Async inter-services \\ \hline
+  \rowcolor{TableAlt}Conteneurisation & Docker & D\'eploiement \\ \hline
+\end{tabularx}
+
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{Justification Node.js~:} Exception document\'ee (comme M\'edia/NestJS). Socket.io = r\'ef\'erence temps r\'eel~; boucle \'ev\'enementielle optimis\'ee pour milliers de connexions~; Redis Adapter natif.
+\end{warningbox}
+
+\subsection{Int\'egrations Externes}
+\begin{tabularx}{\textwidth}{|p{4.0cm}|X|p{1.5cm}|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Service} & \color{white}\textbf{R\^ole} & \color{white}\textbf{Phase} \\ \hline
+  Auth v2.1 & JWT + S2S & MVP \\ \hline
+  \rowcolor{TableAlt}Users v1.0 & Profils, permissions op\'erateur & MVP \\ \hline
+  Notification v1.2 & Alertes hors ligne & MVP \\ \hline
+  \rowcolor{TableAlt}Chatbot & Cr\'eation transferts (S2S) & MVP \\ \hline
+  M\'edia v1.4 & Pi\`eces jointes & Futur \\ \hline
+\end{tabularx}
+
+% === SECTION 8 ===
+\section{Mod\'elisation}
+
+\begin{infobox}
+\faInfoCircle\quad \textbf{Convention d'identit\'e~:} \texttt{user\_id}, \texttt{sender\_id}, \texttt{created\_by}, \texttt{operator\_id} = \texttt{users\_auth.id} (= \texttt{sub} JWT). \texttt{platform\_id} = UUID Auth. Pr\'esence et typing = Redis-only.
+\end{infobox}
+
+\subsection{Table \texttt{conversations}}
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  id & UUID & PK & Identifiant \\ \hline
+  \rowcolor{TableAlt}type & VARCHAR(20) & NOT NULL & direct/canal/transfert \\ \hline
+  platform\_id & UUID & NOT NULL & FK logique $\rightarrow$ Auth \\ \hline
+  \rowcolor{TableAlt}name & VARCHAR(255) & NULL & Nom (canaux) \\ \hline
+  description & TEXT & NULL & Description (canaux) \\ \hline
+  \rowcolor{TableAlt}is\_public & BOOLEAN & NULL & Visibilit\'e (canaux) \\ \hline
+  created\_by & UUID & NOT NULL & \texttt{users\_auth.id} \\ \hline
+  \rowcolor{TableAlt}metadata & JSONB & NULL & M\'etadonn\'ees libres \\ \hline
+  deleted\_at & TIMESTAMPTZ & NULL & Soft delete \\ \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\ \hline
+  updated\_at & TIMESTAMPTZ & NOT NULL & Derni\`ere activit\'e \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{conversation\_participants}}
+PK composite \texttt{(conversation\_id, user\_id)}.
+
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  conversation\_id & UUID & PK, FK & Conversation \\ \hline
+  \rowcolor{TableAlt}user\_id & UUID & PK & Participant \\ \hline
+  role & VARCHAR(20) & NOT NULL & member/admin/owner \\ \hline
+  \rowcolor{TableAlt}joined\_at & TIMESTAMPTZ & NOT NULL & Entr\'ee \\ \hline
+  left\_at & TIMESTAMPTZ & NULL & Sortie \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{messages}}
+Index~: \texttt{(conversation\_id, created\_at DESC)}, GIN sur \texttt{content}.
+
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  id & UUID & PK & Identifiant \\ \hline
+  \rowcolor{TableAlt}conversation\_id & UUID & FK, NN & Conversation \\ \hline
+  sender\_id & UUID & NOT NULL & Auteur \\ \hline
+  \rowcolor{TableAlt}content & TEXT & NULL & Contenu \\ \hline
+  parent\_id & UUID & FK self & Reply \\ \hline
+  \rowcolor{TableAlt}is\_deleted & BOOLEAN & NOT NULL & Soft delete \\ \hline
+  edited\_at & TIMESTAMPTZ & NULL & Modification \\ \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Envoi \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{message\_reactions}}
+PK composite \texttt{(message\_id, user\_id, emoji)}.
+
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  message\_id & UUID & PK, FK & Message \\ \hline
+  \rowcolor{TableAlt}user\_id & UUID & PK & Utilisateur \\ \hline
+  emoji & VARCHAR(10) & PK & Code emoji \\ \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Date \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{read\_cursors}}
+PK composite \texttt{(conversation\_id, user\_id)}.
+
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  conversation\_id & UUID & PK, FK & Conversation \\ \hline
+  \rowcolor{TableAlt}user\_id & UUID & PK & Participant \\ \hline
+  last\_read\_message\_id & UUID & FK & Dernier lu \\ \hline
+  \rowcolor{TableAlt}updated\_at & TIMESTAMPTZ & NOT NULL & MAJ \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{transfers}}
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  id & UUID & PK & Identifiant \\ \hline
+  \rowcolor{TableAlt}conversation\_id & UUID & FK, UQ & Conversation transfert \\ \hline
+  user\_id & UUID & NOT NULL & Utilisateur transf\'er\'e \\ \hline
+  \rowcolor{TableAlt}operator\_id & UUID & NULL & Op\'erateur \\ \hline
+  status & VARCHAR(20) & NOT NULL & en\_attente/pris\_en\_charge/cloture \\ \hline
+  \rowcolor{TableAlt}bot\_history & JSONB & NOT NULL & Historique bot \\ \hline
+  context & JSONB & NULL & Contexte bot \\ \hline
+  \rowcolor{TableAlt}taken\_at & TIMESTAMPTZ & NULL & Prise en charge \\ \hline
+  closed\_at & TIMESTAMPTZ & NULL & Cl\^oture \\ \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{platform\_capabilities}}
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{4.2cm}|p{2.0cm}|p{2.2cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  platform\_id & UUID & PK & FK logique Auth \\ \hline
+  \rowcolor{TableAlt}direct\_enabled & BOOLEAN & DEF true & Conv. directes \\ \hline
+  channels\_enabled & BOOLEAN & DEF true & Canaux \\ \hline
+  \rowcolor{TableAlt}read\_receipts\_enabled & BOOLEAN & DEF true & Accus\'es lecture \\ \hline
+  typing\_enabled & BOOLEAN & DEF true & Typing \\ \hline
+  \rowcolor{TableAlt}presence\_enabled & BOOLEAN & DEF true & Pr\'esence \\ \hline
+  reactions\_enabled & BOOLEAN & DEF true & R\'eactions \\ \hline
+  \rowcolor{TableAlt}transfer\_enabled & BOOLEAN & DEF false & Transfert \\ \hline
+  message\_edit\_enabled & BOOLEAN & DEF true & \'Edition \\ \hline
+  \rowcolor{TableAlt}message\_delete\_enabled & BOOLEAN & DEF true & Suppression \\ \hline
+  message\_search\_enabled & BOOLEAN & DEF true & Recherche \\ \hline
+  \rowcolor{TableAlt}attachments\_enabled & BOOLEAN & DEF false & Pi\`eces jointes \\ \hline
+  max\_message\_length & INTEGER & DEF 4096 & Taille max msg \\ \hline
+  \rowcolor{TableAlt}rate\_limit\_per\_user & INTEGER & DEF 30 & Msg/min/user \\ \hline
+  rate\_limit\_per\_conv & INTEGER & DEF 100 & Msg/min/conv \\ \hline
+  \rowcolor{TableAlt}max\_channel\_members & INTEGER & DEF 500 & Max membres \\ \hline
+  updated\_at & TIMESTAMPTZ & NOT NULL & MAJ \\ \hline
+\end{tabularx}
+
+% === SECTION 9 ===
+\section{Contrats d'API}
+
+\begin{infobox}
+\faLock\quad \textbf{Base URL~:} \texttt{/api/v1/chat}. Token valid\'e via Auth v2.1. \texttt{platform\_id} et \texttt{user\_id} extraits du JWT.
+\end{infobox}
+
+\subsection{Matrice d'Autorisation (v1.2)}
+\label{sec:auth-matrix}
+
+\begin{infobox}
+\faInfoCircle\quad \textbf{Pub.}~= public. \textbf{JWT}~= Bearer utilisateur. \textbf{S2S}~= Service-to-Service. \textbf{Adm.}~= JWT + permission \texttt{chat:admin} via Users, ou S2S \texttt{service\_name="admin"}.
+\end{infobox}
+
+\begin{small}
+\begin{longtable}{|p{6.2cm}|p{0.8cm}|c|c|c|c|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Endpoint} & \color{white}\textbf{M.} & \color{white}\textbf{Pub} & \color{white}\textbf{JWT} & \color{white}\textbf{S2S} & \color{white}\textbf{Adm} \\ \hline \endfirsthead
+  \hline \rowcolor{TableHeader}\color{white}\textbf{Endpoint} & \color{white}\textbf{M.} & \color{white}\textbf{Pub} & \color{white}\textbf{JWT} & \color{white}\textbf{S2S} & \color{white}\textbf{Adm} \\ \hline \endhead
+  \texttt{/api/v1/chat/health} & GET & $\checkmark$ &&& \\ \hline
+  \rowcolor{TableAlt}\texttt{/api/v1/chat/conversations} & POST && $\checkmark$ && \\ \hline
+  \texttt{/api/v1/chat/conversations} & GET && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{/api/v1/chat/conversations/\{id\}} & GET && $\checkmark$ && \\ \hline
+  \texttt{/api/v1/chat/conversations/\{id\}} & PUT && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{/api/v1/chat/conversations/\{id\}} & DEL && $\checkmark$ && $\checkmark$ \\ \hline
+  \texttt{.../\{id\}/participants} & POST && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{id\}/participants/\{uid\}} & DEL && $\checkmark$ && \\ \hline
+  \texttt{.../\{id\}/participants} & GET && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{id\}/leave} & POST && $\checkmark$ && \\ \hline
+  \texttt{.../\{id\}/messages} & POST && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{id\}/messages} & GET && $\checkmark$ && \\ \hline
+  \texttt{.../\{id\}/messages/\{msgId\}} & PUT && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{id\}/messages/\{msgId\}} & DEL && $\checkmark$ && \\ \hline
+  \texttt{.../\{id\}/messages/search} & GET && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{msgId\}/reactions} & POST && $\checkmark$ && \\ \hline
+  \texttt{.../\{msgId\}/reactions/\{emoji\}} & DEL && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{msgId\}/reactions} & GET && $\checkmark$ && \\ \hline
+  \texttt{.../\{id\}/read} & POST && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{id\}/read-status} & GET && $\checkmark$ && \\ \hline
+  \texttt{/api/v1/chat/conversations/transfer} & POST &&& $\checkmark$ & \\ \hline
+  \rowcolor{TableAlt}\texttt{.../transfers/pending} & GET && $\checkmark$ && \\ \hline
+  \texttt{.../transfers/\{id\}/take} & POST && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../transfers/\{id\}/close} & POST && $\checkmark$ && \\ \hline
+  \texttt{.../platforms/\{p\}/channels} & GET && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{/api/v1/chat/channels/\{id\}/join} & POST && $\checkmark$ && \\ \hline
+  \texttt{.../users/\{uid\}/presence} & GET && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../conversations/stats} & GET &&& $\checkmark$ & $\checkmark$ \\ \hline
+  \texttt{.../transfers/stats} & GET &&& $\checkmark$ & $\checkmark$ \\ \hline
+  \rowcolor{TableAlt}\texttt{.../capabilities/\{p\}} & GET && $\checkmark$ & $\checkmark$ & \\ \hline
+  \texttt{.../capabilities/\{p\}} & PUT &&&& $\checkmark$ \\ \hline
+\end{longtable}
+\end{small}
+
+\textit{Note~: les chemins abr\'eg\'es \texttt{.../} sont relatifs \`a \texttt{/api/v1/chat/conversations} sauf indication contraire.}
+
+\subsection{Endpoints REST}
+Les endpoints sont identiques \`a la v1.1 avec les corrections de chemin canonique. Tous utilisent le pr\'efixe \texttt{/api/v1/chat}. Les endpoints li\'es aux capacit\'es d\'esactiv\'ees retournent \texttt{403 Feature disabled}. Le transfert \texttt{POST .../transfer} est S2S uniquement. Les endpoints \texttt{.../transfers/\{id\}/take} v\'erifient la permission \texttt{chat:transfer:take} via Users et utilisent un verrou optimiste (409 Conflict). D\'etails complets des body/response~: voir v1.1 section~9.
+
+\subsection{\'Ev\'enements WebSocket}
+
+\begin{infobox}
+\faWifi\quad Connexion~: token Bearer $\rightarrow$ validation Auth $\rightarrow$ extraction \texttt{user\_id}/\texttt{platform\_id} $\rightarrow$ chargement capabilities $\rightarrow$ inscription rooms. \'Ev\'enements des capacit\'es d\'esactiv\'ees non \'emis. WS = chemin principal envoi~; REST = fallback. Persistance PG avant \'emission.
+\end{infobox}
+
+\subsubsection{Serveur $\rightarrow$ Client}
+\begin{tabularx}{\textwidth}{|p{3.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{\'Ev\'enement} & \color{white}\textbf{Payload \& Condition} \\ \hline
+  \wsevent{message:new} & \texttt{\{message\_id, conversation\_id, sender\_id, content, parent\_id, created\_at\}} \\ \hline
+  \rowcolor{TableAlt}\wsevent{message:updated} & \texttt{\{message\_id, content, edited\_at\}} \\ \hline
+  \wsevent{message:deleted} & \texttt{\{message\_id\}} \\ \hline
+  \rowcolor{TableAlt}\wsevent{typing:start} & si \texttt{typing\_enabled} \\ \hline
+  \wsevent{typing:stop} & si \texttt{typing\_enabled} \\ \hline
+  \rowcolor{TableAlt}\wsevent{read:update} & si \texttt{read\_receipts\_enabled} \\ \hline
+  \wsevent{reaction:new} & si \texttt{reactions\_enabled} \\ \hline
+  \rowcolor{TableAlt}\wsevent{reaction:removed} & si \texttt{reactions\_enabled} \\ \hline
+  \wsevent{participant:online} & si \texttt{presence\_enabled} \\ \hline
+  \rowcolor{TableAlt}\wsevent{participant:offline} & si \texttt{presence\_enabled} \\ \hline
+  \wsevent{transfer:new} & si \texttt{transfer\_enabled} \\ \hline
+  \rowcolor{TableAlt}\wsevent{conversation:updated} & toujours \\ \hline
+\end{tabularx}
+
+\subsubsection{Client $\rightarrow$ Serveur}
+\texttt{message:send}, \texttt{typing:start}, \texttt{typing:stop}, \texttt{message:read}, \texttt{reaction:add}, \texttt{reaction:remove}. Payloads identiques v1.1.
+
+% === SECTION 10 ===
+\section{Contrats Inter-Services}
+
+\subsection{Chat $\rightarrow$ Auth (JWT)}
+Endpoint \texttt{GET /auth/verify-token}. Cache Redis TTL 30s. \'Echec $\rightarrow$ 401.
+
+\subsection{Chat $\rightarrow$ Auth (S2S)}
+Endpoint \texttt{POST /auth/s2s/introspect}. Usage~: Chatbot transfert, admin capabilities.
+
+\subsection{Chat $\rightarrow$ Users}
+\begin{tabularx}{\textwidth}{|p{3.5cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\ \hline
+  Endpoint profil & \texttt{GET /users/\{users\_auth.id\}} \\ \hline
+  \rowcolor{TableAlt}Usage profil & Nom, photo, \texttt{users\_profiles.id} \\ \hline
+  Endpoint permissions & \texttt{GET /users/\{id\}/permissions/check} \\ \hline
+  \rowcolor{TableAlt}Usage permissions & \texttt{chat:transfer:take}, \texttt{chat:admin} \\ \hline
+  Cache & TTL 5 min (profil), 30s (permissions) \\ \hline
+  \rowcolor{TableAlt}Si Users down & Profil~: ``Utilisateur inconnu''. Permissions~: refus (fail-closed). \\ \hline
+\end{tabularx}
+
+\subsection{Chat $\rightarrow$ Notification}
+\begin{tabularx}{\textwidth}{|p{3.5cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\ \hline
+  Endpoint & \texttt{POST /api/v1/notifications/send} \\ \hline
+  \rowcolor{TableAlt}Auth & Token S2S \\ \hline
+  Cat\'egorie & \texttt{transactional}, priorit\'e \texttt{normal} \\ \hline
+  \rowcolor{TableAlt}\'Echec & Log~; ne bloque jamais l'envoi du message \\ \hline
+\end{tabularx}
+
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{Mapping identit\'e Chat $\rightarrow$ Notification (v1.2)~:}
+
+Chat travaille avec \texttt{users\_auth.id}. Notification attend \texttt{users\_profiles.id}.
+
+\textbf{S\'equence~:}
+\begin{enumerate}[nosep]
+  \item Chat d\'etecte destinataire hors ligne.
+  \item Chat appelle \texttt{GET /users/\{users\_auth.id\}} $\rightarrow$ r\'esout \texttt{users\_profiles.id} (d\'ej\`a en cache Redis TTL 5 min).
+  \item Chat appelle Notification avec \texttt{user\_id = users\_profiles.id}.
+\end{enumerate}
+Chat n'envoie \textbf{jamais} un \texttt{users\_auth.id} brut \`a Notification.
+\end{warningbox}
+
+\subsubsection{Templates Notification pr\'e-requis}
+\begin{tabularx}{\textwidth}{|p{4.2cm}|p{1.2cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Template} & \color{white}\textbf{Canal} & \color{white}\textbf{D\'eclencheur} \\ \hline
+  \texttt{chat\_message\_offline} & push & Message hors ligne \\ \hline
+  \rowcolor{TableAlt}\texttt{chat\_transfer\_new} & push & Nouveau transfert \\ \hline
+  \texttt{chat\_transfer\_assigned} & push & Transfert pris en charge \\ \hline
+  \rowcolor{TableAlt}\texttt{chat\_transfer\_closed} & push & Transfert cl\^otur\'e \\ \hline
+\end{tabularx}
+
+\subsection{Chatbot $\rightarrow$ Chat}
+\texttt{POST /api/v1/chat/conversations/transfer}. Auth S2S. Donn\'ees~: \texttt{user\_id} (\texttt{users\_auth.id}), \texttt{platform\_id}, \texttt{bot\_history}, \texttt{context}.
+
+\subsection{Chat $\rightarrow$ M\'edia (futur)}
+\texttt{GET /api/v1/media/\{id\}}. Quand \texttt{attachments\_enabled = true}. Messages avec \texttt{media\_ids : UUID[]}.
+
+% === SECTION 11 ===
+\section{Infrastructure}
+
+\subsection{Composants}
+PostgreSQL, Redis, Socket.io + Redis Adapter, RabbitMQ, Docker, LB sticky-session, index GIN. Tous MVP.
+
+\subsection{Variables d'Environnement}
+\begin{tabularx}{\textwidth}{|p{5.0cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Variable} & \color{white}\textbf{Description} \\ \hline
+  \texttt{DATABASE\_URL} & PostgreSQL \\ \hline
+  \rowcolor{TableAlt}\texttt{REDIS\_URL} & Redis \\ \hline
+  \texttt{AUTH\_SERVICE\_URL} & Auth v2.1 \\ \hline
+  \rowcolor{TableAlt}\texttt{USERS\_SERVICE\_URL} & Users v1.0 \\ \hline
+  \texttt{NOTIFICATION\_SERVICE\_URL} & Notification v1.2 \\ \hline
+  \rowcolor{TableAlt}\texttt{BROKER\_URL} & RabbitMQ \\ \hline
+  \texttt{SOCKET\_IO\_CORS\_ORIGIN} & Origines WS \\ \hline
+  \rowcolor{TableAlt}\texttt{TYPING\_TIMEOUT\_MS} & D\'efaut 3000 \\ \hline
+  \texttt{MESSAGE\_EDIT\_DELAY\_MIN} & D\'elai edit (min) \\ \hline
+  \rowcolor{TableAlt}\texttt{TRANSFER\_TIMEOUT\_MIN} & D\'efaut 10 \\ \hline
+  \texttt{SECRET\_KEY} & Cl\'e Node.js \\ \hline
+  \rowcolor{TableAlt}\texttt{USERS\_CACHE\_TTL\_SEC} & D\'efaut 300 \\ \hline
+  \texttt{AUTH\_CACHE\_TTL\_SEC} & D\'efaut 30 \\ \hline
+\end{tabularx}
+
+\subsection{Docker Compose}
+\begin{lstlisting}[language=bash, caption=docker-compose.yml]
+services:
+  chat-service:
+    build: ./chat-service
+    ports: ["3005:3005"]
+    environment:
+      - DATABASE_URL=postgresql://...
+      - REDIS_URL=redis://redis:6379
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - USERS_SERVICE_URL=http://user-service:3002
+      - NOTIFICATION_SERVICE_URL=http://notif-service:3004
+      - BROKER_URL=amqp://rabbitmq:5672
+    depends_on: [postgres, redis, rabbitmq]
+  postgres:
+    image: postgres:16-alpine
+    volumes: [chat_pg_data:/var/lib/postgresql/data]
+  redis:
+    image: redis:7-alpine
+  rabbitmq:
+    image: rabbitmq:3-management
+volumes:
+  chat_pg_data:
+\end{lstlisting}
+
+% === SECTION 12 ===
+\section{Recommandations \& \'Evolutions}
+\subsection{Scaling WebSocket}
+Multi-instances Socket.io + LB sticky-session + Redis Adapter.
+\subsection{Pi\`eces Jointes}
+Champ \texttt{media\_ids} via Service M\'edia. Chat ne stocke jamais les fichiers.
+\subsection{E2E}
+Signal Protocol pour conversations directes sensibles.
+\subsection{Archivage}
+Conversations inactives 12 mois+ vers \texttt{messages\_archive}. Job p\'eriodique. Lecture seule.
+\subsection{Suppression}
+Soft delete message (auteur), soft delete conversation (admin), archivage (inactif).
+
+% === ANNEXES ===
+\newpage\appendix
+
+\section{Annexe A --- Diagramme de Classes (PlantUML)}
+\begin{lstlisting}[caption={PlantUML --- Classes Chat Service v1.2},basicstyle=\ttfamily\scriptsize]
+@startuml Chat Service - Class Diagram v1.2
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "conversations" as conv {
+  * id : UUID <<PK>>
+  --
+  * type : VARCHAR(20)
+  * platform_id : UUID <<FK logique -> Auth>>
+  name : VARCHAR(255)
+  description : TEXT
+  is_public : BOOLEAN
+  * created_by : UUID
+  metadata : JSONB
+  deleted_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "conversation_participants" as part {
+  * conversation_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  --
+  * role : VARCHAR(20)
+  * joined_at : TIMESTAMPTZ
+  left_at : TIMESTAMPTZ
+}
+
+entity "messages" as msg {
+  * id : UUID <<PK>>
+  --
+  * conversation_id : UUID <<FK>>
+  * sender_id : UUID
+  content : TEXT
+  parent_id : UUID <<FK self>>
+  * is_deleted : BOOLEAN
+  edited_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+}
+
+entity "message_reactions" as react {
+  * message_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  * emoji : VARCHAR(10) <<PK>>
+  --
+  * created_at : TIMESTAMPTZ
+}
+
+entity "read_cursors" as cursor {
+  * conversation_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  --
+  last_read_message_id : UUID <<FK>>
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "transfers" as xfer {
+  * id : UUID <<PK>>
+  --
+  * conversation_id : UUID <<FK, UNIQUE>>
+  * user_id : UUID
+  operator_id : UUID
+  * status : VARCHAR(20)
+  * bot_history : JSONB
+  context : JSONB
+  taken_at : TIMESTAMPTZ
+  closed_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+}
+
+entity "platform_capabilities" as cap {
+  * platform_id : UUID <<PK>>
+  --
+  direct_enabled : BOOLEAN = true
+  channels_enabled : BOOLEAN = true
+  read_receipts_enabled : BOOLEAN = true
+  typing_enabled : BOOLEAN = true
+  presence_enabled : BOOLEAN = true
+  reactions_enabled : BOOLEAN = true
+  transfer_enabled : BOOLEAN = false
+  message_edit_enabled : BOOLEAN = true
+  message_delete_enabled : BOOLEAN = true
+  message_search_enabled : BOOLEAN = true
+  attachments_enabled : BOOLEAN = false
+  max_message_length : INT = 4096
+  rate_limit_per_user : INT = 30
+  rate_limit_per_conv : INT = 100
+  max_channel_members : INT = 500
+  * updated_at : TIMESTAMPTZ
+}
+
+note as N1
+  <b>Redis-only</b>
+  Presence : user_id, status, last_seen_at
+  Typing : conversation_id, user_id
+end note
+
+conv "1" -- "*" part
+conv "1" -- "*" msg
+conv "1" -- "0..1" xfer
+conv "1" -- "*" cursor
+msg "1" -- "*" react
+msg "0..1" -- "*" msg : parent_id
+@enduml
+\end{lstlisting}
+
+\section{Annexe B --- MLD (PlantUML)}
+\begin{lstlisting}[caption={PlantUML --- MLD Chat Service v1.2},basicstyle=\ttfamily\scriptsize]
+@startuml Chat Service - MLD v1.2
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "conversations" as conv {
+  * id : UUID <<PK>>
+  --
+  * type : VARCHAR(20)
+  * platform_id : UUID
+  name : VARCHAR(255)
+  description : TEXT
+  is_public : BOOLEAN
+  * created_by : UUID
+  metadata : JSONB
+  deleted_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+entity "conversation_participants" as part {
+  * conversation_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  --
+  * role : VARCHAR(20)
+  * joined_at : TIMESTAMPTZ
+  left_at : TIMESTAMPTZ
+}
+entity "messages" as msg {
+  * id : UUID <<PK>>
+  --
+  * conversation_id : UUID <<FK>>
+  * sender_id : UUID
+  content : TEXT
+  parent_id : UUID <<FK self>>
+  * is_deleted : BOOLEAN = false
+  edited_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  ..
+  <<INDEX>> (conversation_id, created_at DESC)
+  <<GIN>> content
+}
+entity "message_reactions" as react {
+  * message_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  * emoji : VARCHAR(10) <<PK>>
+  --
+  * created_at : TIMESTAMPTZ
+}
+entity "read_cursors" as cursor {
+  * conversation_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  --
+  last_read_message_id : UUID <<FK>>
+  * updated_at : TIMESTAMPTZ
+}
+entity "transfers" as xfer {
+  * id : UUID <<PK>>
+  --
+  * conversation_id : UUID <<FK, UNIQUE>>
+  * user_id : UUID
+  operator_id : UUID
+  * status : VARCHAR(20)
+  * bot_history : JSONB
+  context : JSONB
+  taken_at : TIMESTAMPTZ
+  closed_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+}
+entity "platform_capabilities" as cap {
+  * platform_id : UUID <<PK>>
+  --
+  (all feature flags + limits)
+  * updated_at : TIMESTAMPTZ
+}
+conv ||--o{ part
+conv ||--o{ msg
+conv ||--o| xfer
+conv ||--o{ cursor
+msg ||--o{ react
+msg |o--o{ msg : parent_id
+@enduml
+\end{lstlisting}
+
+% === GLOSSAIRE ===
+\newpage
+\section*{Annexe C --- Glossaire}
+\addcontentsline{toc}{section}{Annexe C --- Glossaire}
+
+\begin{tabularx}{\textwidth}{|p{3.5cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Terme} & \color{white}\textbf{D\'efinition} \\ \hline
+  WebSocket & Communication bidirectionnelle persistante sur TCP \\ \hline
+  \rowcolor{TableAlt}Socket.io & Librairie WebSocket avec fallback et rooms \\ \hline
+  Room & Canal virtuel Socket.io par conversation \\ \hline
+  \rowcolor{TableAlt}Redis Adapter & Sync \'ev\'enements entre instances Socket.io \\ \hline
+  Pub/Sub & Diffusion \'ev\'enements Redis inter-processus \\ \hline
+  \rowcolor{TableAlt}Sticky Session & Affinit\'e LB client$\rightarrow$instance \\ \hline
+  S2S & Service-to-Service auth \\ \hline
+  \rowcolor{TableAlt}Feature Flag & Capacit\'e activable/d\'esactivable par plateforme \\ \hline
+  Typing & ``X est en train d'\'ecrire'' \\ \hline
+  \rowcolor{TableAlt}Curseur de lecture & Dernier message lu par participant \\ \hline
+  Transfert & Conversation bot$\rightarrow$humain \\ \hline
+  \rowcolor{TableAlt}Soft delete & Suppression logique \\ \hline
+  E2E & Chiffrement bout en bout \\ \hline
+  \rowcolor{TableAlt}TTL & Dur\'ee de vie cache Redis \\ \hline
+  Backpressure & Contr\^ole flux si surcharge \\ \hline
+  \rowcolor{TableAlt}\texttt{users\_auth.id} & ID technique Auth (= \texttt{sub} JWT) \\ \hline
+  \texttt{users\_profiles.id} & ID profil Users (utilis\'e par Notification) \\ \hline
+  \rowcolor{TableAlt}Verrou optimiste & UPDATE conditionnel (pas de lock) \\ \hline
+\end{tabularx}
+
+\vspace{2cm}
+\begin{center}
+  \color{AGGray}\small
+  \textbf{AG Technologies} --- Document confidentiel \`a usage interne exclusivement.\\
+  \textit{Chat Service CDC v1.2 --- \today}
+\end{center}
+
+\end{document}

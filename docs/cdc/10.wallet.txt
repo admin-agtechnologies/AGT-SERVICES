@@ -1,0 +1,1304 @@
+\documentclass[11pt,a4paper]{article}
+
+% === Encodage & Langue ===
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% === Mise en page ===
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+% === Tableaux ===
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+
+% === Code & couleurs ===
+\usepackage{listings}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{lastpage}
+\usepackage{amssymb}
+
+% === Boites ===
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% === Couleurs AGT ===
+\definecolor{agtblue}{HTML}{1A3A5C}
+\definecolor{agtgray}{HTML}{4A4A4A}
+\definecolor{agtgreen}{HTML}{2E7D32}
+\definecolor{agtred}{HTML}{C62828}
+\definecolor{agtorange}{HTML}{E65100}
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{lightbg}{HTML}{E8EEF4}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=agtblue,
+  urlcolor=agtblue,
+  pdfauthor={AG Technologies},
+  pdftitle={Service Wallet - CDC v1.1},
+}
+
+% === Listings JSON ===
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  string=[s]{"}{"},
+  stringstyle=\color{agtgreen},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{codebg},
+  rulecolor=\color{gray!30},
+  showstringspaces=false,
+  literate=
+    *{:}{{{\color{agtblue}:}}}{1}
+     {,}{{{\color{agtblue},}}}{1}
+     {\{}{{{\color{agtblue}\{}}}{1}
+     {\}}{{{\color{agtblue}\}}}}{1}
+     {[}{{{\color{agtblue}[}}}{1}
+     {]}{{{\color{agtblue}]}}}{1},
+}
+\lstset{language=json}
+
+% === Boites info/warn ===
+\newtcolorbox{infobox}[1][]{
+  colback=lightbg,colframe=agtblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtblue,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=orange!5,colframe=agtorange,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtorange,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+
+% === Header/Footer ===
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{agtgray}{AGT --- Service Wallet}}
+\fancyhead[R]{\small\textcolor{agtgray}{v1.1 --- Confidentiel}}
+\fancyfoot[C]{\small\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\textcolor{agtgray}{Avril 2026}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.2pt}
+
+% === Titres ===
+\titleformat{\section}{\Large\bfseries\color{agtblue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{agtblue!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{agtblue!60}}{\thesubsubsection}{1em}{}
+
+% === Commandes ===
+\newcommand{\urgent}{\textcolor{agtred}{\textbf{Urgent}}}
+\newcommand{\normale}{\textcolor{agtorange}{Normale}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+% ============================================================
+%  PAGE DE TITRE
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\Huge\bfseries\textcolor{agtblue}{AG TECHNOLOGIES}\\[0.3cm]}
+{\large\textcolor{agtgray}{Architecture de Services Partag\'es}\\[2cm]}
+\rule{\textwidth}{1.5pt}\\[0.5cm]
+{\LARGE\bfseries Cahier des Charges Technique\\[0.3cm]}
+{\Large Service Wallet Centralis\'e\\[0.3cm]}
+{\large\textit{Wallet Service --- AGT-Wallet}\\[0.5cm]}
+\rule{\textwidth}{1.5pt}\\[2cm]
+\begin{tabular}{ll}
+\textbf{Version}        & 1.1 \\
+\textbf{Date}           & Avril 2026 \\
+\textbf{Statut}         & Implementation-ready \\
+\textbf{Classification} & Confidentiel \\
+\textbf{Auteur}         & \'Equipe Architecture \\
+\textbf{D\'ependances}  & Auth v2.1, Users v1.0, Paiement v1.2, Notification v1.2 \\
+\end{tabular}
+\vfill
+{\small\textcolor{agtgray}{Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies}}
+\end{titlepage}
+
+% ============================================================
+%  HISTORIQUE
+% ============================================================
+\section*{Historique des R\'evisions}
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Ver.} & \textbf{Date} & \textbf{Auteur} & \textbf{Description} \\
+\midrule
+1.0 & 2026-04-04 & \'Equipe Archi. & Cr\'eation initiale. Wallet unique cross-plateforme. Ledger double-entry obligatoire. Comptes syst\`eme (user, organization, platform, escrow, external). Cash-in via Paiement, cash-out vers Mobile Money/banque. Virements user-to-user. Holds/r\'eservations. Partages automatis\'es (commissions). Idempotence. Events RabbitMQ. Diagramme PlantUML en annexe. \\
+1.1 & 2026-04-04 & \'Equipe Archi. & Version finale~: statut \textit{Implementation-ready}. Encart principes fondamentaux ajout\'e (lisibilit\'e). Sch\'ema visuel des flux financiers. \texttt{ledger\_reference\_id} ajout\'e sur \texttt{ledger\_transactions}. Health check version align\'ee. \\
+\bottomrule
+\end{tabularx}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+Ce document constitue le cahier des charges du \textbf{Service Wallet Centralis\'e} (ci-apr\`es \og~Wallet Service~\fg{}) destin\'e \`a l'\'ecosyst\`eme AGT. Il sert de r\'ef\'erence unique pour la conception, le d\'eveloppement et les d\'ecisions techniques.
+
+\begin{warnbox}[Principes fondamentaux --- \`A lire en premier]
+\begin{enumerate}[nosep]
+  \item \textbf{Double-entry ledger}~: chaque mouvement = 1 d\'ebit + 1 cr\'edit \'equilibr\'es. Pas d'exception.
+  \item \textbf{Append-only}~: aucun UPDATE, aucun DELETE sur les \'ecritures. Corrections par \'ecriture inverse (reversal).
+  \item \textbf{Ledger = source de v\'erit\'e}~: le champ \texttt{balance} est un cache. Le solde r\'eel = $\sum$ cr\'edits $-$ $\sum$ d\'ebits.
+  \item \textbf{Transactions atomiques}~: toute op\'eration d'\'ecriture est encapsul\'ee dans une transaction PostgreSQL (SERIALIZABLE).
+  \item \textbf{Idempotence}~: chaque mouvement porte un \texttt{idempotency\_key} unique. Doublon = retour du r\'esultat existant.
+  \item \textbf{Holds obligatoires}~: tout cash-out ou paiement en cours passe par une r\'eservation de fonds avant ex\'ecution.
+\end{enumerate}
+\end{warnbox}
+
+\subsection{P\'erim\`etre}
+
+Le service Wallet g\`ere la \textbf{comptabilit\'e interne} de l'\'ecosyst\`eme AGT~: comptes virtuels, mouvements financiers (cr\'edits, d\'ebits, virements, commissions), r\'eservations de fonds (holds), cash-out vers providers externes, et tra\c{c}abilit\'e compl\`ete via un ledger double-entry.
+
+\begin{infobox}[Principe fondamental]
+Le Wallet est un \textbf{ledger comptable interne}. Chaque mouvement d'argent est enregistr\'e comme une \'ecriture double (d\'ebit + cr\'edit). Le solde n'est \textbf{jamais} un simple champ incr\'ement\'e~: il est \textbf{d\'eriv\'e} de la somme des \'ecritures du ledger ou maintenu de mani\`ere coh\'erente via des transactions atomiques.
+\end{infobox}
+
+\subsection{Hors p\'erim\`etre}
+
+\begin{itemize}[nosep]
+  \item Authentification (d\'el\'egu\'ee au Service Auth v2.1)
+  \item Profils utilisateur (Service Users v1.0)
+  \item Ex\'ecution des paiements externes (Service Paiement v1.2)
+  \item Gestion des abonnements (Service Abonnement v1.2)
+  \item Logique m\'etier propre aux plateformes (commissions, r\`egles de partage)
+  \item Envoi de notifications (Service Notification v1.2)
+  \item Comptabilit\'e g\'en\'erale / ERP (hors p\'erim\`etre \'ecosyst\`eme)
+\end{itemize}
+
+\begin{warnbox}[Convention d'identit\'e]
+Dans tout ce document~:
+\begin{itemize}[nosep]
+  \item \texttt{user\_id} d\'esigne \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item \texttt{platform\_id} d\'esigne un UUID du registre Auth (\texttt{platforms.id})
+  \item Le wallet est \textbf{unique par user} pour tout l'\'ecosyst\`eme, mais chaque \'ecriture porte un \texttt{platform\_id} pour tra\c{c}abilit\'e
+\end{itemize}
+\end{warnbox}
+
+% ============================================================
+\section{Contexte \& Probl\'ematique}
+% ============================================================
+
+\subsection{Contexte}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Plateforme} & \textbf{Statut} & \textbf{Besoin wallet} \\
+\midrule
+AGT-Bot    & En d\'eveloppement & Cr\'edits bonus, remboursements futurs \\
+AGT-Market & En d\'eveloppement & Encaissement vendeurs, commissions, paiement fournisseurs/livreurs \\
+MboaMove   & En d\'eveloppement & Gains chauffeurs, commissions AGT, cash-out vers Mobile Money \\
+SALMA      & Migration pr\'evue & Cr\'edits formation, remboursements \\
+Futures    & Planifi\'e         & Tout flux financier interne \`a l'\'ecosyst\`eme \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Probl\'ematique}
+
+Sans ledger centralis\'e, chaque plateforme g\'ererait ses propres soldes avec un simple champ \texttt{balance}, entra\^inant~: incoh\'erences comptables, impossibilit\'e d'auditer les mouvements, race conditions sur les soldes, absence de r\'eservation de fonds, et aucune vision consolid\'ee des flux financiers de l'\'ecosyst\`eme.
+
+% ============================================================
+\section{Vision \& Objectifs}
+% ============================================================
+
+\subsection{Vision}
+
+Un \textbf{ledger double-entry centralis\'e} qui enregistre chaque mouvement financier de l'\'ecosyst\`eme. Le wallet d'un utilisateur est unique et cross-plateforme~: ses gains AGT-Market et MboaMove arrivent dans le m\^eme solde.
+
+\begin{warnbox}[S\'eparation des responsabilit\'es financi\`eres (rappel)]
+\begin{itemize}[nosep]
+  \item \textbf{Abonnement} d\'ecide quoi facturer
+  \item \textbf{Paiement} ex\'ecute la transaction externe
+  \item \textbf{Wallet} comptabilise le mouvement interne et r\'epartit les fonds
+\end{itemize}
+Le Wallet ne parle \textbf{jamais} directement aux providers de paiement. Il passe toujours par le Service Paiement pour les cash-in et cash-out.
+\end{warnbox}
+
+\subsection{Architecture des comptes}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Type de compte} & \textbf{Code} & \textbf{R\^ole} \\
+\midrule
+Wallet utilisateur   & \texttt{user}             & Solde de l'utilisateur (cross-plateforme) \\
+Wallet organisation  & \texttt{organization}     & Solde d'une organisation (B2B) \\
+Compte plateforme    & \texttt{platform\_system}  & Commissions et frais pr\'elev\'es par AGT \\
+Compte de transit    & \texttt{escrow}            & Fonds en attente de confirmation (hold) \\
+Compte externe       & \texttt{external}          & Repr\'esente l'entr\'ee/sortie vers providers (Orange Money, Stripe, etc.) \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Exemple~: achat sur AGT-Market (10~000 XAF)]
+\textbf{\'Etape 1 --- Cash-in (paiement confirm\'e)}~:
+\begin{itemize}[nosep]
+  \item DEBIT \texttt{external(orange\_money)} 10~000 XAF
+  \item CREDIT \texttt{escrow(market)} 10~000 XAF
+\end{itemize}
+\textbf{\'Etape 2 --- Livraison confirm\'ee (lib\'eration escrow)}~:
+\begin{itemize}[nosep]
+  \item DEBIT \texttt{escrow(market)} 10~000 XAF
+  \item CREDIT \texttt{wallet\_vendeur} 8~500 XAF (85\%)
+  \item CREDIT \texttt{platform\_system(agt)} 1~500 XAF (15\% commission)
+\end{itemize}
+\textbf{R\`egle comptable}~: la somme des d\'ebits = la somme des cr\'edits, toujours.
+\end{infobox}
+
+\subsection{Objectifs}
+
+\begin{tabularx}{\textwidth}{clL}
+\toprule
+\textbf{\#} & \textbf{Objectif} & \textbf{Indicateur} \\
+\midrule
+O1 & Ledger double-entry      & Chaque mouvement = 1 d\'ebit + 1 cr\'edit (ou N d\'ebits + N cr\'edits \'equilibr\'es) \\
+O2 & Wallet unique            & Un seul wallet par user, cross-plateforme \\
+O3 & Tra\c{c}abilit\'e totale & Chaque \'ecriture porte source, plateforme, r\'ef\'erence, timestamp \\
+O4 & Holds / escrow           & R\'eservation de fonds atomique avec TTL \\
+O5 & Cash-out MVP             & Retrait vers Mobile Money / banque via Paiement \\
+O6 & Virements                & User$\to$user, plateforme$\to$user, partages automatis\'es \\
+O7 & Idempotence              & Chaque mouvement porte un \texttt{idempotency\_key} unique \\
+O8 & Solde coh\'erent         & Solde = somme des \'ecritures, v\'erifiable \`a tout moment \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Parties Prenantes \& Utilisateurs}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{R\^ole} & \textbf{Type} & \textbf{Responsabilit\'e} \\
+\midrule
+Product Owner       & Interne & Priorisation des fonctionnalit\'es \\
+\'Equipe Backend    & Interne & D\'eveloppement et maintenance \\
+\'Equipe Frontend   & Interne & UI solde, historique, cash-out \\
+DevOps              & Interne & Infrastructure, monitoring, backups \\
+Admin global AGT    & Interne & R\'econciliation, audit, comptes syst\`eme \\
+Admin plateforme    & Interne & Consultation mouvements de sa plateforme \\
+Services internes   & Interne & Paiement (cash-in/out), plateformes (partages) \\
+Utilisateurs finaux & Externe & Consultation solde, historique, retrait \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Fonctionnels}
+% ============================================================
+
+\subsection{Gestion des Comptes}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ACC-01 & Cr\'eation wallet user      & Cr\'eer automatiquement un wallet \`a la premi\`ere interaction financi\`ere & \urgent \\
+F-ACC-02 & Cr\'eation wallet org       & Cr\'eer un wallet pour une organisation (li\'e au subscriber B2B Abonnement) & \urgent \\
+F-ACC-03 & Comptes syst\`eme          & Provisionner les comptes platform\_system, escrow, external au d\'eploiement & \urgent \\
+F-ACC-04 & Consultation solde          & Retourner le solde disponible (= solde total $-$ holds en cours) & \urgent \\
+F-ACC-05 & Gel de compte               & Admin peut geler un wallet (aucun mouvement autoris\'e) & \normale \\
+F-ACC-06 & Statut wallet               & active, frozen, closed & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Ledger \& \'Ecritures}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-LED-01 & \'Ecriture double-entry     & Chaque mouvement g\'en\`ere au minimum 1 ligne d\'ebit + 1 ligne cr\'edit \'equilibr\'ees & \urgent \\
+F-LED-02 & \'Ecriture multi-leg        & Support des \'ecritures \`a N lignes (ex~: 1 d\'ebit, 2 cr\'edits pour partage commission) & \urgent \\
+F-LED-03 & Immutabilit\'e              & Aucune \'ecriture ne peut \^etre modifi\'ee ou supprim\'ee. Correction = \'ecriture inverse & \urgent \\
+F-LED-04 & Idempotence                 & Chaque op\'eration porte un \texttt{idempotency\_key}. Doublon = retour du r\'esultat existant & \urgent \\
+F-LED-05 & R\'ef\'erence crois\'ee     & Chaque \'ecriture porte la r\'ef\'erence du d\'eclencheur (payment\_id, order\_id, etc.) & \urgent \\
+F-LED-06 & Historique                  & Consultation des \'ecritures avec filtres (date, type, plateforme, montant) & \urgent \\
+F-LED-07 & V\'erification d'int\'egrit\'e & Endpoint admin~: v\'erifier que $\sum$ d\'ebits = $\sum$ cr\'edits sur tout le ledger & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egle comptable fondamentale]
+\textbf{Invariant}~: pour chaque transaction dans le ledger, la somme des montants d\'ebit\'es doit \^etre \textbf{strictement \'egale} \`a la somme des montants cr\'edit\'es. Toute tentative de cr\'eer une \'ecriture d\'es\'equilibr\'ee est rejet\'ee avec une erreur 400.
+
+\textbf{Solde d'un compte}~: $\text{solde} = \sum \text{cr\'edits} - \sum \text{d\'ebits}$ sur toutes les lignes du ledger pour ce compte.
+
+\textbf{Solde disponible}~: $\text{disponible} = \text{solde} - \sum \text{holds pending}$.
+
+\textbf{Contr\^ole de solde}~: aucun d\'ebit n'est autoris\'e si le solde disponible est insuffisant (sauf pour les comptes syst\`eme \texttt{external} qui peuvent avoir un solde n\'egatif par nature).
+\end{warnbox}
+
+\subsection{Cash-in (Entr\'ee de fonds)}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-CIN-01 & Cr\'edit sur payment.confirmed & \`A la r\'eception de l'\'ev\'enement Paiement, cr\'editer le wallet concern\'e & \urgent \\
+F-CIN-02 & Cr\'edit en escrow             & Si le paiement est li\'e \`a une commande, cr\'editer l'escrow (pas le wallet final) & \urgent \\
+F-CIN-03 & Cr\'edit direct                & Cr\'edit admin (remboursement, ajustement, bonus) & \normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Cash-out (Sortie de fonds)}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-COUT-01 & Demande de retrait          & L'utilisateur demande un cash-out vers Mobile Money ou compte bancaire & \urgent \\
+F-COUT-02 & V\'erification solde         & V\'erifier solde disponible $\geq$ montant demand\'e & \urgent \\
+F-COUT-03 & Hold pr\'ealable             & R\'eserver le montant (hold) avant d'envoyer l'ordre \`a Paiement & \urgent \\
+F-COUT-04 & Envoi vers Paiement         & \'Emettre un ordre de paiement sortant via Paiement (event ou API) & \urgent \\
+F-COUT-05 & Confirmation cash-out       & Sur \texttt{payment.confirmed}, lib\'erer le hold et d\'ebiter d\'efinitivement & \urgent \\
+F-COUT-06 & \'Echec cash-out             & Sur \texttt{payment.failed}, lib\'erer le hold (fonds restituables) & \urgent \\
+F-COUT-07 & Seuils de retrait           & Montant minimum, plafond journalier, configurable par plateforme & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Flux cash-out complet]
+\begin{enumerate}[nosep]
+  \item User demande retrait de 5~000 XAF vers Orange Money
+  \item Wallet v\'erifie solde disponible $\geq$ 5~000
+  \item Wallet cr\'ee un hold de 5~000 XAF (DEBIT \texttt{wallet\_user} $\to$ CREDIT \texttt{escrow(cashout)})
+  \item Wallet \'emet \texttt{wallet.cashout.requested} vers Paiement
+  \item Paiement ex\'ecute le transfert Orange Money
+  \item Paiement \'emet \texttt{payment.confirmed}
+  \item Wallet lib\`ere l'escrow (DEBIT \texttt{escrow(cashout)} $\to$ CREDIT \texttt{external(orange\_money)})
+  \item Wallet \'emet \texttt{wallet.cashout.completed}
+\end{enumerate}
+Si \'echec \`a l'\'etape 6~: Wallet annule le hold (DEBIT \texttt{escrow(cashout)} $\to$ CREDIT \texttt{wallet\_user}).
+\end{infobox}
+
+\subsection{Holds / R\'eservation de fonds}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-HLD-01 & Cr\'eation hold             & R\'eserver un montant sur un wallet (solde disponible diminu\'e) & \urgent \\
+F-HLD-02 & Capture hold                & Confirmer le hold (d\'ebit d\'efinitif) & \urgent \\
+F-HLD-03 & Release hold                & Annuler le hold (fonds lib\'er\'es) & \urgent \\
+F-HLD-04 & Expiration hold             & Cron~: lib\'erer automatiquement les holds expir\'es (TTL configurable) & \urgent \\
+F-HLD-05 & Hold partiel                & Capturer partiellement un hold (ex~: commande modifi\'ee) & \normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Virements \& Partages}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-VIR-01 & Virement user$\to$user      & Transfert entre deux wallets utilisateurs & \urgent \\
+F-VIR-02 & Virement plateforme$\to$user & Cr\'edit d'un wallet par un compte syst\`eme & \urgent \\
+F-VIR-03 & Partage automatis\'e         & R\'epartition d'un montant selon des r\`egles de split (commissions) & \urgent \\
+F-VIR-04 & R\`egles de split            & La plateforme d\'efinit les r\`egles (ex~: 85\% vendeur, 15\% AGT) via l'API & \urgent \\
+F-VIR-05 & Partage multi-b\'en\'eficiaires & Split vers N wallets en une seule transaction (vendeur + livreur + AGT) & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Exemple~: partage MboaMove]
+Course \`a 3~000 XAF. R\`egle de split~: 80\% chauffeur, 20\% AGT.
+
+\'Ecriture atomique (1 transaction, 3 lignes)~:
+\begin{itemize}[nosep]
+  \item DEBIT \texttt{escrow(mboamove)} 3~000 XAF
+  \item CREDIT \texttt{wallet\_chauffeur} 2~400 XAF
+  \item CREDIT \texttt{platform\_system(agt)} 600 XAF
+\end{itemize}
+\end{infobox}
+
+\subsection{Administration}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ADM-01 & Stats globales              & Solde total \'ecosyst\`eme, volume mouvements, par plateforme & \normale \\
+F-ADM-02 & Audit ledger                & V\'erifier l'\'equilibre global $\sum$ d\'ebits = $\sum$ cr\'edits & \urgent \\
+F-ADM-03 & Ajustement admin            & Cr\'edit ou d\'ebit correctif avec justification obligatoire & \urgent \\
+F-ADM-04 & Gel / d\'egel wallet         & Geler un wallet suspect, d\'egeler apr\`es v\'erification & \urgent \\
+F-ADM-05 & Export \'ecritures           & Export CSV/JSON des \'ecritures par p\'eriode et par compte & \normale \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Non-Fonctionnels}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{clLc}
+\toprule
+\textbf{ID} & \textbf{Cat\'egorie} & \textbf{Exigence} & \textbf{Cible} \\
+\midrule
+NF-01 & Performance    & \'Ecriture ledger                       & < 100ms (P95) \\
+NF-02 & Performance    & Consultation solde                      & < 50ms (P95) \\
+NF-03 & Performance    & Throughput \'ecritures                  & 500 tx/s min \\
+NF-04 & Disponibilit\'e & Uptime                                 & 99.9\% \\
+NF-05 & S\'ecurit\'e   & Auth obligatoire                       & JWT ou S2S \\
+NF-06 & S\'ecurit\'e   & Rate limiting                          & Configurable \\
+NF-07 & S\'ecurit\'e   & Aucune suppression physique             & Append-only ledger \\
+NF-08 & Int\'egrit\'e  & Transactions atomiques                  & PostgreSQL SERIALIZABLE ou SELECT FOR UPDATE \\
+NF-09 & Int\'egrit\'e  & V\'erification d'\'equilibre p\'eriodique & Cron quotidien \\
+NF-10 & Scalabilit\'e  & Horizontal                              & Stateless, multi-instance \\
+NF-11 & Observabilit\'e & Logs structur\'es                      & JSON, request ID, masquage montants sensibles \\
+NF-12 & Observabilit\'e & Health check                           & \texttt{GET /wallet/health} \\
+NF-13 & Donn\'ees      & Timestamps                              & TIMESTAMPTZ \\
+NF-14 & Traitement     & Crons holds expir\'es                   & Celery Beat, retry 3x backoff, DLQ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Architecture Technique}
+% ============================================================
+
+\subsection{Vue d'ensemble}
+
+Le service Wallet est un microservice REST stateless, d\'eploy\'e en conteneur Docker. Il expose une API JSON et consomme/produit des \'ev\'enements RabbitMQ. C'est le service le plus critique en termes d'int\'egrit\'e de donn\'ees de tout l'\'ecosyst\`eme.
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Composant} & \textbf{Technologie} \\
+\midrule
+Langage \& Framework & Python 3.11+ / Django 5.x \\
+API                  & Django REST Framework (DRF) \\
+Base de donn\'ees    & PostgreSQL 15+ (niveau d'isolation SERIALIZABLE pour les \'ecritures ledger) \\
+ORM                  & Django ORM \\
+Migrations           & Django Migrations \\
+Cache                & Redis 7+ (soldes cach\'es, idempotence) \\
+Scheduler            & Celery + Celery Beat (holds expir\'es, audit quotidien) \\
+Message Broker       & RabbitMQ (\'ev\'enements entrants/sortants) \\
+Validation           & DRF Serializers \\
+Conteneurisation     & Docker + Docker Compose \\
+CI/CD                & GitHub Actions \\
+\bottomrule
+\end{tabularx}
+
+\subsection{D\'ependances \& R\`egles d'Architecture}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Service} & \textbf{Type} & \textbf{Usage} \\
+\midrule
+Service Auth          & Interne  & Validation JWT / S2S \\
+Service Users         & Interne  & R\'esolution \texttt{user\_id}, v\'erification statut actif \\
+Service Paiement      & Interne  & Cash-in (\texttt{payment.confirmed} $\to$ cr\'edit wallet). Cash-out (Wallet \'emet ordre $\to$ Paiement ex\'ecute). \\
+Service Notification  & Interne  & Alertes~: cr\'edit re\c{c}u, cash-out confirm\'e, solde faible \\
+Plateformes           & Interne  & D\'efinition des r\`egles de split, d\'eclenchement des partages \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egle stricte~: Wallet ne touche jamais les providers externes]
+Le Wallet ne communique \textbf{jamais} directement avec Orange Money, Stripe ou tout autre provider. Pour toute entr\'ee ou sortie d'argent r\'eel, il passe par le Service Paiement. Le Wallet ne g\`ere que la \textbf{comptabilit\'e interne}.
+\end{warnbox}
+
+\subsection{Strat\'egie d'int\'egrit\'e}
+
+\begin{warnbox}[Int\'egrit\'e des donn\'ees financi\`eres]
+\textbf{Transactions atomiques}~: chaque op\'eration d'\'ecriture (cr\'edit, d\'ebit, virement, split) est encapsul\'ee dans une transaction PostgreSQL. Si une seule ligne \'echoue, tout est annul\'e (rollback).
+
+\textbf{Niveau d'isolation}~: les \'ecritures ledger utilisent \texttt{SERIALIZABLE} ou \texttt{SELECT ... FOR UPDATE} pour \'eliminer les race conditions sur les soldes.
+
+\textbf{Solde cach\'e}~: le solde est maintenu dans un champ \texttt{balance} sur la table \texttt{accounts} pour la performance (lecture < 50ms). Ce champ est mis \`a jour \textbf{atomiquement dans la m\^eme transaction} que l'\'ecriture ledger. Un cron quotidien v\'erifie que \texttt{balance} = $\sum$ cr\'edits $-$ $\sum$ d\'ebits pour chaque compte.
+
+\textbf{Append-only}~: le ledger est en insertion seule. Aucun UPDATE, aucun DELETE sur les \'ecritures. Les corrections passent par des \'ecritures inverses (reversal).
+\end{warnbox}
+
+\subsection{Diagramme d'architecture}
+
+\begin{verbatim}
+  AGT-Market   MboaMove   SALMA   AGT-Bot   Futures
+      |           |          |        |         |
+      +-----+-----+-----+----+--------+---------+
+            |           |
+     Wallet Service (API REST + Workers)
+       |         |          |           |
+   Auth(JWT)  Users      Redis      PostgreSQL
+       |                               (ledger)
+   RabbitMQ
+     |       |
+  Paiement  Notification
+     |
+  [providers externes]
+\end{verbatim}
+
+\subsection{Flux financiers (v1.1)}
+
+\begin{verbatim}
+  === CASH-IN ===
+  Provider externe --> [Paiement] --> payment.confirmed
+                                         |
+                                    [Wallet: DEBIT external, CREDIT wallet_user]
+
+  === ACHAT AVEC ESCROW ===
+  Client paie --> [Paiement] --> payment.confirmed
+                                    |
+                               [Wallet: DEBIT external, CREDIT escrow]
+                                    |
+                           Livraison confirmee
+                                    |
+                               [Wallet: DEBIT escrow,
+                                        CREDIT wallet_vendeur (85%),
+                                        CREDIT platform_agt (15%)]
+
+  === CASH-OUT ===
+  User demande retrait
+       |
+  [Wallet: hold sur wallet_user]
+       |
+  wallet.cashout.requested --> [Paiement] --> provider
+       |                                        |
+  payment.confirmed                      payment.failed
+       |                                        |
+  [Wallet: DEBIT escrow,               [Wallet: release hold,
+   CREDIT external]                     fonds restitues]
+
+  === VIREMENT ===
+  [Wallet: DEBIT wallet_A, CREDIT wallet_B] (atomique)
+\end{verbatim}
+
+% ============================================================
+\section{Mod\'elisation}
+% ============================================================
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes complet est fourni en annexe au format PlantUML (voir section~\ref{sec:plantuml}). Il couvre les entit\'es~: \texttt{Account}, \texttt{LedgerTransaction}, \texttt{LedgerEntry}, \texttt{Hold}, \texttt{CashoutRequest} et \texttt{SplitRule}.
+
+\subsection{MLD --- Mod\`ele Logique de Donn\'ees}
+
+\subsubsection{Table \texttt{accounts}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+account\_type     & VARCHAR(20)   & NOT NULL       & user, organization, platform\_system, escrow, external \\
+owner\_type       & VARCHAR(20)   & NOT NULL       & user, organization, system \\
+owner\_id         & UUID          & NULL           & \texttt{users\_auth.id} ou \texttt{organizations.id}. NULL pour comptes syst\`eme. \\
+currency          & VARCHAR(3)    & NOT NULL       & Devise du compte (XAF, EUR, USD) \\
+balance           & DECIMAL(15,2) & DEFAULT 0      & Solde cach\'e (source de v\'erit\'e = ledger) \\
+hold\_amount      & DECIMAL(15,2) & DEFAULT 0      & Total des holds en cours \\
+status            & VARCHAR(20)   & DEFAULT 'active' & active, frozen, closed \\
+label             & VARCHAR(100)  & NULL           & Libell\'e (ex~: \og Wallet principal\fg{}, \og Escrow Market\fg{}) \\
+metadata          & JSONB         & NULL           & Donn\'ees compl\'ementaires \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(owner\_type, owner\_id, account\_type, currency)} pour les comptes user/org. Les comptes syst\`eme ont un \texttt{label} unique.
+
+\subsubsection{Table \texttt{ledger\_transactions}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                   & UUID          & PK             & Identifiant unique \\
+ledger\_reference\_id & VARCHAR(30)  & UNIQUE, NOT NULL & R\'ef\'erence s\'equentielle lisible (ex~: \texttt{LTX-2026-000001}). G\'en\'er\'ee automatiquement. \\
+idempotency\_key     & UUID          & UNIQUE, NOT NULL & Cl\'e d'idempotence \\
+transaction\_type    & VARCHAR(30)   & NOT NULL       & cashin, cashout, transfer, split, hold\_capture, hold\_release, adjustment, reversal \\
+platform\_id         & UUID          & NOT NULL       & Plateforme source \\
+source               & VARCHAR(30)   & NOT NULL       & payment, platform, admin, cron \\
+source\_reference\_id & UUID         & NULL           & R\'ef\'erence externe (payment\_id, order\_id) \\
+description          & VARCHAR(255)  & NULL           & Description lisible \\
+metadata             & JSONB         & NULL           & Donn\'ees opaques \\
+status               & VARCHAR(20)   & DEFAULT 'completed' & completed, reversed \\
+created\_at          & TIMESTAMPTZ   & NOT NULL       & Date de l'op\'eration \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{ledger\_entries}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                   & UUID          & PK             & Identifiant unique \\
+transaction\_id      & UUID          & FK $\to$ ledger\_transactions & Transaction parent \\
+account\_id          & UUID          & FK $\to$ accounts & Compte concern\'e \\
+direction            & VARCHAR(6)    & NOT NULL       & \texttt{debit} ou \texttt{credit} \\
+amount               & DECIMAL(15,2) & NOT NULL       & Montant (toujours positif) \\
+balance\_after       & DECIMAL(15,2) & NOT NULL       & Solde du compte apr\`es cette \'ecriture \\
+created\_at          & TIMESTAMPTZ   & NOT NULL       & Date \\
+\bottomrule
+\end{tabularx}
+
+Index~: \texttt{(account\_id, created\_at)} pour l'historique par compte.
+
+\begin{warnbox}[Contrainte d'\'equilibre]
+Une contrainte applicative (v\'erifi\'ee avant insertion) garantit que pour chaque \texttt{ledger\_transaction}, la somme des \texttt{amount} o\`u \texttt{direction = 'debit'} est \textbf{strictement \'egale} \`a la somme des \texttt{amount} o\`u \texttt{direction = 'credit'}. Toute violation est rejet\'ee.
+\end{warnbox}
+
+\subsubsection{Table \texttt{holds}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+account\_id       & UUID          & FK $\to$ accounts & Compte sur lequel le hold est plac\'e \\
+amount            & DECIMAL(15,2) & NOT NULL       & Montant r\'eserv\'e \\
+status            & VARCHAR(20)   & DEFAULT 'pending' & pending, captured, released, expired \\
+reason            & VARCHAR(50)   & NOT NULL       & cashout, order, escrow \\
+reference\_id     & UUID          & NULL           & R\'ef\'erence externe (cashout\_request\_id, order\_id) \\
+idempotency\_key  & UUID          & UNIQUE, NOT NULL & Idempotence \\
+expires\_at       & TIMESTAMPTZ   & NOT NULL       & Expiration du hold \\
+captured\_amount  & DECIMAL(15,2) & DEFAULT 0      & Montant effectivement captur\'e (partiel possible) \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+resolved\_at      & TIMESTAMPTZ   & NULL           & Date de capture/release/expiration \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{cashout\_requests}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                   & UUID          & PK             & Identifiant unique \\
+account\_id          & UUID          & FK $\to$ accounts & Wallet source \\
+amount               & DECIMAL(15,2) & NOT NULL       & Montant demand\'e \\
+currency             & VARCHAR(3)    & NOT NULL       & Devise \\
+destination\_provider & VARCHAR(30)  & NOT NULL       & orange\_money, mtn\_momo, bank\_transfer \\
+destination\_details & JSONB         & NOT NULL       & Num\'ero t\'el\'ephone ou IBAN (chiffr\'e) \\
+status               & VARCHAR(20)   & DEFAULT 'pending' & pending, processing, completed, failed, cancelled \\
+hold\_id             & UUID          & FK $\to$ holds & Hold associ\'e \\
+payment\_tx\_id      & UUID          & NULL           & Transaction Paiement associ\'ee \\
+idempotency\_key     & UUID          & UNIQUE, NOT NULL & Idempotence \\
+failure\_reason      & TEXT          & NULL           & Raison de l'\'echec \\
+created\_at          & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+completed\_at        & TIMESTAMPTZ   & NULL           & Date de compl\'etion \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{split\_rules}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+platform\_id      & UUID          & NOT NULL       & Plateforme \\
+name              & VARCHAR(100)  & NOT NULL       & Nom de la r\`egle (ex~: \og market\_sale\fg{}, \og ride\_completed\fg{}) \\
+splits            & JSONB         & NOT NULL       & D\'efinition des parts~: \texttt{[\{"target":"seller", "percent":85\}, \{"target":"platform", "percent":15\}]} \\
+is\_active        & BOOLEAN       & DEFAULT true   & R\`egle active \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, name)}.
+
+% ============================================================
+\section{Contrats d'API}
+% ============================================================
+
+Base URL~: \texttt{/api/v1}. Tous les endpoints retournent du JSON. Les endpoints prot\'eg\'es requi\`erent \texttt{Authorization: Bearer <token>}.
+
+\subsection{Health Check}
+
+\subsubsection{GET /wallet/health}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "status": "healthy",
+  "database": "ok",
+  "redis": "ok",
+  "rabbitmq": "ok",
+  "ledger_balanced": true,
+  "version": "1.1.0"
+}
+\end{lstlisting}
+
+\subsection{Comptes}
+
+\subsubsection{GET /wallet/accounts/me}
+
+Retourne le wallet de l'utilisateur authentifi\'e. Auth~: Bearer token.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "account_id": "acc-uuid",
+  "account_type": "user",
+  "currency": "XAF",
+  "balance": 45000,
+  "hold_amount": 5000,
+  "available_balance": 40000,
+  "status": "active"
+}
+\end{lstlisting}
+
+Codes~: 200, 401, 404 No wallet (cr\'eation automatique possible).
+
+\subsubsection{GET /wallet/accounts/\{accountId\}}
+
+D\'etail d'un compte. Auth~: admin ou propri\'etaire. Codes~: 200, 403, 404.
+
+\subsubsection{POST /wallet/accounts/\{accountId\}/freeze}
+
+Gel d'un wallet. Auth~: admin. Codes~: 200, 403, 404.
+
+\subsubsection{POST /wallet/accounts/\{accountId\}/unfreeze}
+
+D\'egel. Auth~: admin. Codes~: 200, 403, 404.
+
+\subsection{Op\'erations Ledger}
+
+\subsubsection{POST /wallet/credit}
+
+Cr\'edit d'un compte. Auth~: S2S ou admin.
+
+Request body~:
+\begin{lstlisting}
+{
+  "account_id": "acc-uuid",
+  "amount": 10000,
+  "currency": "XAF",
+  "platform_id": "uuid",
+  "source": "payment",
+  "source_reference_id": "payment-tx-uuid",
+  "idempotency_key": "unique-uuid",
+  "description": "Cash-in via Orange Money"
+}
+\end{lstlisting}
+
+Response 201~:
+\begin{lstlisting}
+{
+  "transaction_id": "ltx-uuid",
+  "account_id": "acc-uuid",
+  "amount": 10000,
+  "new_balance": 55000,
+  "message": "Credit completed"
+}
+\end{lstlisting}
+
+Codes~: 201, 200 Idempotent hit, 400, 401, 404 Account not found, 409 Account frozen.
+
+\subsubsection{POST /wallet/debit}
+
+D\'ebit d'un compte. Auth~: S2S ou admin.
+
+Request body~:
+\begin{lstlisting}
+{
+  "account_id": "acc-uuid",
+  "amount": 5000,
+  "currency": "XAF",
+  "platform_id": "uuid",
+  "source": "platform",
+  "source_reference_id": "order-uuid",
+  "idempotency_key": "unique-uuid",
+  "description": "Commission AGT"
+}
+\end{lstlisting}
+
+Codes~: 201, 200 Idempotent, 400, 403 Insufficient balance, 404, 409 Account frozen.
+
+\subsubsection{POST /wallet/transfer}
+
+Virement entre deux comptes. Auth~: S2S, admin, ou propri\'etaire du compte source.
+
+Request body~:
+\begin{lstlisting}
+{
+  "from_account_id": "acc-uuid-1",
+  "to_account_id": "acc-uuid-2",
+  "amount": 3000,
+  "currency": "XAF",
+  "platform_id": "uuid",
+  "idempotency_key": "unique-uuid",
+  "description": "Paiement fournisseur"
+}
+\end{lstlisting}
+
+Codes~: 201, 200 Idempotent, 400, 403 Insufficient balance, 404, 409 Account frozen.
+
+\subsubsection{POST /wallet/split}
+
+Partage d'un montant selon une r\`egle de split. Auth~: S2S.
+
+Request body~:
+\begin{lstlisting}
+{
+  "source_account_id": "escrow-uuid",
+  "amount": 10000,
+  "currency": "XAF",
+  "platform_id": "uuid",
+  "split_rule_id": "rule-uuid",
+  "targets": {
+    "seller": "acc-uuid-vendeur",
+    "platform": "acc-uuid-agt"
+  },
+  "idempotency_key": "unique-uuid",
+  "source_reference_id": "order-uuid"
+}
+\end{lstlisting}
+
+Response 201~:
+\begin{lstlisting}
+{
+  "transaction_id": "ltx-uuid",
+  "entries": [
+    { "account": "escrow", "direction": "debit", "amount": 10000 },
+    { "account": "vendeur", "direction": "credit", "amount": 8500 },
+    { "account": "agt", "direction": "credit", "amount": 1500 }
+  ],
+  "message": "Split completed"
+}
+\end{lstlisting}
+
+Codes~: 201, 200 Idempotent, 400 Split unbalanced, 403, 404.
+
+\subsubsection{GET /wallet/accounts/\{accountId\}/transactions}
+
+Historique des mouvements d'un compte. Query params~: \texttt{?type\&from\_date\&to\_date\&page\&limit}.
+
+Codes~: 200, 403, 404.
+
+\subsection{Holds}
+
+\subsubsection{POST /wallet/holds}
+
+Cr\'eation d'un hold. Auth~: S2S.
+
+Request body~:
+\begin{lstlisting}
+{
+  "account_id": "acc-uuid",
+  "amount": 5000,
+  "reason": "cashout",
+  "reference_id": "cashout-req-uuid",
+  "idempotency_key": "unique-uuid",
+  "ttl_seconds": 3600
+}
+\end{lstlisting}
+
+Codes~: 201, 403 Insufficient available balance, 404, 409 Account frozen.
+
+\subsubsection{POST /wallet/holds/\{holdId\}/capture}
+
+Capture totale ou partielle. Auth~: S2S.
+
+Request body~:
+\begin{lstlisting}
+{
+  "amount": 5000
+}
+\end{lstlisting}
+
+Codes~: 200, 400 Amount exceeds hold, 404, 410 Hold expired.
+
+\subsubsection{POST /wallet/holds/\{holdId\}/release}
+
+Lib\'eration du hold. Auth~: S2S. Codes~: 200, 404, 410 Already captured.
+
+\subsection{Cash-out}
+
+\subsubsection{POST /wallet/cashout}
+
+Demande de retrait. Auth~: Bearer token (propri\'etaire du wallet).
+
+Request body~:
+\begin{lstlisting}
+{
+  "amount": 5000,
+  "currency": "XAF",
+  "destination_provider": "orange_money",
+  "destination_details": {
+    "phone_number": "+237600000000"
+  },
+  "idempotency_key": "unique-uuid"
+}
+\end{lstlisting}
+
+Response 201~:
+\begin{lstlisting}
+{
+  "cashout_id": "co-uuid",
+  "status": "pending",
+  "amount": 5000,
+  "hold_id": "hold-uuid",
+  "message": "Cashout request created, processing"
+}
+\end{lstlisting}
+
+Codes~: 201, 400 Below minimum / above daily limit, 403 Insufficient balance, 409 Account frozen.
+
+\subsubsection{GET /wallet/cashout/\{cashoutId\}}
+
+D\'etail d'une demande de retrait. Codes~: 200, 404.
+
+\subsubsection{GET /wallet/cashout}
+
+Liste des demandes de retrait. Query params~: \texttt{?status\&from\_date\&to\_date\&page\&limit}. Codes~: 200, 401.
+
+\subsection{Split Rules}
+
+\subsubsection{POST /wallet/split-rules}
+
+Cr\'eation d'une r\`egle de partage. Auth~: admin plateforme.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "market_sale",
+  "splits": [
+    { "target": "seller", "percent": 85 },
+    { "target": "platform", "percent": 15 }
+  ]
+}
+\end{lstlisting}
+
+Codes~: 201, 400 Percentages don't sum to 100, 409 Name exists.
+
+\subsubsection{GET /wallet/split-rules}
+
+Query params~: \texttt{?platform\_id}. Codes~: 200.
+
+\subsubsection{PUT /wallet/split-rules/\{ruleId\}}
+
+Modification. Codes~: 200, 400. \textit{Note~: modifier une r\`egle n'affecte pas les transactions d\'ej\`a ex\'ecut\'ees.}
+
+\subsection{Administration}
+
+\subsubsection{GET /wallet/admin/stats}
+
+Query params~: \texttt{?platform\_id}. Auth~: admin.
+
+Codes~: 200, 403.
+
+\subsubsection{POST /wallet/admin/audit-ledger}
+
+Lance une v\'erification d'\'equilibre du ledger. Auth~: admin global.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "balanced": true,
+  "total_debits": 185000000,
+  "total_credits": 185000000,
+  "accounts_checked": 12450,
+  "anomalies": 0
+}
+\end{lstlisting}
+
+Codes~: 200, 403.
+
+\subsubsection{POST /wallet/admin/adjustment}
+
+Cr\'edit ou d\'ebit correctif. Auth~: admin global. Justification obligatoire.
+
+Request body~:
+\begin{lstlisting}
+{
+  "account_id": "acc-uuid",
+  "amount": 500,
+  "direction": "credit",
+  "reason": "Compensation erreur technique ref#12345",
+  "idempotency_key": "unique-uuid"
+}
+\end{lstlisting}
+
+Codes~: 201, 400, 403.
+
+\subsubsection{DELETE /wallet/by-user/\{userId\}}
+
+\textbf{Purge RGPD.} Auth~: S2S. Anonymise \texttt{owner\_id} sur les comptes et les donn\'ees personnelles dans \texttt{cashout\_requests}. Les \'ecritures du ledger sont conserv\'ees (obligation comptable).
+
+Codes~: 200, 401, 404.
+
+% ============================================================
+\section{Contrats Inter-Services}
+% ============================================================
+
+\subsection{Wallet $\to$ Auth (JWT / S2S)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint JWT  & \texttt{GET /auth/verify-token}. Cache Redis TTL 30s. \\
+Endpoint S2S  & \texttt{POST /auth/s2s/introspect} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Paiement $\to$ Wallet (\'ev\'enements RabbitMQ entrants)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement consomm\'e} & \textbf{Action Wallet} \\
+\midrule
+\texttt{payment.confirmed} o\`u \texttt{source = wallet\_cashin} & Cr\'editer le wallet utilisateur. \'Ecriture~: DEBIT \texttt{external} $\to$ CREDIT \texttt{wallet\_user}. \\
+\texttt{payment.confirmed} o\`u \texttt{source = wallet\_cashout} & Cash-out confirm\'e. Capturer le hold, lib\'erer l'escrow~: DEBIT \texttt{escrow} $\to$ CREDIT \texttt{external}. \\
+\texttt{payment.failed} o\`u \texttt{source = wallet\_cashout} & Cash-out \'echou\'e. Lib\'erer le hold (fonds retourn\'es au wallet user). \\
+\texttt{payment.confirmed} o\`u \texttt{source = subscription} & Pas consomm\'e par Wallet (consomm\'e par Abonnement). \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Wallet $\to$ Paiement (cash-out)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement publi\'e} & \textbf{Payload} \\
+\midrule
+\texttt{wallet.cashout.requested} & \texttt{event\_id}, \texttt{idempotency\_key}, \texttt{cashout\_request\_id}, \texttt{amount}, \texttt{currency}, \texttt{destination\_provider}, \texttt{destination\_details}, \texttt{user\_id} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Wallet $\to$ Notification (alertes)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Notification d\'eclench\'ee} \\
+\midrule
+Cr\'edit re\c{c}u          & Push/email~: \og Vous avez re\c{c}u X FCFA\fg{} \\
+Cash-out confirm\'e        & Push/email~: \og Retrait de X FCFA effectu\'e\fg{} \\
+Cash-out \'echou\'e        & Push~: \og \'Echec du retrait, fonds restitu\'es\fg{} \\
+Hold expir\'e              & Push~: \og R\'eservation de X FCFA lib\'er\'ee\fg{} \\
+Solde faible ($<$ seuil)   & Push~: \og Votre solde est faible\fg{} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Wallet --- \'Ev\'enements sortants g\'en\'eriques}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement publi\'e} & \textbf{Payload} \\
+\midrule
+\texttt{wallet.credited}           & \texttt{event\_id}, \texttt{account\_id}, \texttt{amount}, \texttt{currency}, \texttt{platform\_id}, \texttt{source}, \texttt{new\_balance} \\
+\texttt{wallet.debited}            & \texttt{event\_id}, \texttt{account\_id}, \texttt{amount}, \texttt{currency}, \texttt{platform\_id}, \texttt{source}, \texttt{new\_balance} \\
+\texttt{wallet.cashout.completed}  & \texttt{event\_id}, \texttt{cashout\_request\_id}, \texttt{amount}, \texttt{destination\_provider} \\
+\texttt{wallet.cashout.failed}     & \texttt{event\_id}, \texttt{cashout\_request\_id}, \texttt{failure\_reason} \\
+\texttt{wallet.hold.expired}       & \texttt{event\_id}, \texttt{hold\_id}, \texttt{account\_id}, \texttt{amount} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Users $\to$ Wallet (Purge RGPD)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint          & \texttt{DELETE /api/v1/wallet/by-user/\{userId\}} \\
+Auth              & Token S2S \\
+Donn\'ees anonymis\'ees & \texttt{owner\_id} $\to$ NULL, \texttt{destination\_details} $\to$ NULL. \'Ecritures ledger conserv\'ees. \\
+S\'equence        & Avant Auth purge \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Matrice d'Autorisation}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{lcccc}
+\toprule
+\textbf{Endpoint} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin Plat.} & \textbf{Admin Global} \\
+\midrule
+GET /wallet/accounts/me                      & $\checkmark$ &              &              &              \\
+GET /wallet/accounts/\{id\}                  & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /wallet/accounts/\{id\}/freeze          &              &              &              & $\checkmark$ \\
+POST /wallet/accounts/\{id\}/unfreeze        &              &              &              & $\checkmark$ \\
+POST /wallet/credit                          &              & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/debit                           &              & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/transfer                        & $\checkmark$ & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/split                           &              & $\checkmark$ &              & $\checkmark$ \\
+GET /wallet/accounts/\{id\}/transactions     & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /wallet/holds                           &              & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/holds/\{id\}/capture            &              & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/holds/\{id\}/release            &              & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/cashout                         & $\checkmark$ &              &              &              \\
+GET /wallet/cashout/\{id\}                   & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+GET /wallet/cashout                          & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /wallet/split-rules                     &              &              & $\checkmark$ & $\checkmark$ \\
+GET /wallet/split-rules                      &              & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+PUT /wallet/split-rules/\{id\}               &              &              & $\checkmark$ & $\checkmark$ \\
+GET /wallet/admin/stats                      &              &              & $\checkmark$ & $\checkmark$ \\
+POST /wallet/admin/audit-ledger              &              &              &              & $\checkmark$ \\
+POST /wallet/admin/adjustment                &              &              &              & $\checkmark$ \\
+DELETE /wallet/by-user/\{userId\}            &              & $\checkmark$ &              & $\checkmark$ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Recommandations \& \'Evolutions}
+% ============================================================
+
+\begin{itemize}
+  \item \textbf{Int\'er\^ets / rendements}~: calcul d'int\'er\^ets sur les soldes wallet (futur produit financier).
+  \item \textbf{Multi-devise par wallet}~: un utilisateur avec des sous-comptes en XAF, EUR, USD.
+  \item \textbf{Conversion de devises}~: taux de change entre sous-comptes.
+  \item \textbf{Limites dynamiques}~: plafonds de cash-out adapt\'es au profil de risque (KYC).
+  \item \textbf{Notifications enrichies}~: relev\'e mensuel par email.
+  \item \textbf{Monitoring}~: m\'etriques Prometheus (\'ecritures/s, solde total, holds actifs, anomalies d'\'equilibre).
+  \item \textbf{Versioning API}~: pr\'efixe \texttt{/api/v1}. Breaking changes $\to$ \texttt{/api/v2}.
+\end{itemize}
+
+% ============================================================
+\section*{Annexes}
+% ============================================================
+
+\subsection*{Glossaire}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Terme} & \textbf{D\'efinition} \\
+\midrule
+Ledger           & Registre comptable qui enregistre tous les mouvements financiers \\
+Double-entry     & Principe comptable~: chaque mouvement a un d\'ebit et un cr\'edit \'equilibr\'es \\
+Hold             & R\'eservation de fonds qui diminue le solde disponible sans d\'ebiter \\
+Escrow           & Compte de transit s\'ecurisant les fonds en attente de confirmation \\
+Cash-in          & Entr\'ee d'argent dans l'\'ecosyst\`eme (depuis un provider externe) \\
+Cash-out         & Sortie d'argent de l'\'ecosyst\`eme (vers un provider externe) \\
+Split            & R\'epartition d'un montant entre plusieurs comptes selon des pourcentages \\
+Reversal         & \'Ecriture inverse annulant une \'ecriture pr\'ec\'edente \\
+Balance          & Solde d'un compte = $\sum$ cr\'edits $-$ $\sum$ d\'ebits \\
+Available balance & Solde disponible = balance $-$ holds pending \\
+S2S              & Service-to-Service \\
+DLQ              & Dead Letter Queue \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Code PlantUML --- Diagramme de Classes}
+\label{sec:plantuml}
+
+Le code PlantUML ci-dessous correspond au diagramme de classes complet du service Wallet v1.1. Il peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+@startuml Wallet Service - Class Diagram v1.1
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "accounts" as acc {
+  * id : UUID <<PK>>
+  --
+  * account_type : VARCHAR(20)
+  * owner_type : VARCHAR(20)
+  owner_id : UUID
+  * currency : VARCHAR(3)
+  balance : DECIMAL(15,2) = 0
+  hold_amount : DECIMAL(15,2) = 0
+  status : VARCHAR(20) = 'active'
+  label : VARCHAR(100)
+  metadata : JSONB
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (owner_type, owner_id, account_type, currency)
+}
+
+entity "ledger_transactions" as ltx {
+  * id : UUID <<PK>>
+  --
+  * ledger_reference_id : VARCHAR(30) <<UQ>>
+  * idempotency_key : UUID <<UQ>>
+  * transaction_type : VARCHAR(30)
+  * platform_id : UUID
+  * source : VARCHAR(30)
+  source_reference_id : UUID
+  description : VARCHAR(255)
+  metadata : JSONB
+  status : VARCHAR(20) = 'completed'
+  * created_at : TIMESTAMPTZ
+}
+
+entity "ledger_entries" as entries {
+  * id : UUID <<PK>>
+  --
+  * transaction_id : UUID <<FK>>
+  * account_id : UUID <<FK>>
+  * direction : VARCHAR(6)
+  * amount : DECIMAL(15,2)
+  * balance_after : DECIMAL(15,2)
+  * created_at : TIMESTAMPTZ
+}
+
+entity "holds" as holds {
+  * id : UUID <<PK>>
+  --
+  * account_id : UUID <<FK>>
+  * amount : DECIMAL(15,2)
+  status : VARCHAR(20) = 'pending'
+  * reason : VARCHAR(50)
+  reference_id : UUID
+  * idempotency_key : UUID <<UQ>>
+  * expires_at : TIMESTAMPTZ
+  captured_amount : DECIMAL(15,2) = 0
+  * created_at : TIMESTAMPTZ
+  resolved_at : TIMESTAMPTZ
+}
+
+entity "cashout_requests" as cashouts {
+  * id : UUID <<PK>>
+  --
+  * account_id : UUID <<FK>>
+  * amount : DECIMAL(15,2)
+  * currency : VARCHAR(3)
+  * destination_provider : VARCHAR(30)
+  * destination_details : JSONB
+  status : VARCHAR(20) = 'pending'
+  hold_id : UUID <<FK>>
+  payment_tx_id : UUID
+  * idempotency_key : UUID <<UQ>>
+  failure_reason : TEXT
+  * created_at : TIMESTAMPTZ
+  completed_at : TIMESTAMPTZ
+}
+
+entity "split_rules" as splits {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * name : VARCHAR(100)
+  * splits : JSONB
+  is_active : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, name)
+}
+
+ltx ||--o{ entries     : "2..* entries (balanced)"
+acc ||--o{ entries     : "0..* entries"
+acc ||--o{ holds       : "0..* holds"
+acc ||--o{ cashouts    : "0..* cashout requests"
+holds ||--o| cashouts  : "0..1 cashout"
+
+@enduml
+\end{lstlisting}
+
+\vfill
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}\\[0.5em]
+{\small\textcolor{agtgray}{AG Technologies --- Document confidentiel \`a usage interne exclusivement.}}\\
+{\small\textcolor{agtgray}{Wallet Service CDC v1.1 --- Avril 2026}}
+\end{center}
+
+\end{document}

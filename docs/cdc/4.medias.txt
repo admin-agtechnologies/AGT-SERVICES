@@ -1,0 +1,1184 @@
+% ============================================================
+%  CAHIER DES CHARGES TECHNIQUE — SERVICE MÉDIA v1.4
+%  AG Technologies — Architecture de Services Partagés
+%  Aligné : Auth v2.1 · Users v1.0 · Notification v1.2
+%  Compilable sur Overleaf (pdfLaTeX)
+% ============================================================
+\documentclass[a4paper,12pt]{article}
+
+% --- Encodage & Langue ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% --- Mise en page ---
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{float}
+\usepackage{graphicx}
+
+% --- Couleurs & Graphismes ---
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+\usepackage{mdframed}
+\usepackage{letterspace}
+
+% --- Tableaux ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{colortbl}
+
+% --- Listes ---
+\usepackage{enumitem}
+
+% --- Code & Monospace ---
+\usepackage{listings}
+\usepackage{inconsolata}
+
+% --- Liens ---
+\usepackage[colorlinks=true, linkcolor=AGBlue, urlcolor=AGBlue, citecolor=AGBlue]{hyperref}
+
+% --- Icônes ---
+\usepackage{fontawesome5}
+
+% --- Numérotation & Espacement ---
+\usepackage{setspace}
+\usepackage{lastpage}
+
+% ============================================================
+%  PALETTE DE COULEURS AG TECHNOLOGIES
+% ============================================================
+\definecolor{AGBlue}{RGB}{30, 90, 168}
+\definecolor{AGLightBlue}{RGB}{220, 235, 255}
+\definecolor{AGDark}{RGB}{20, 30, 50}
+\definecolor{AGGray}{RGB}{100, 110, 125}
+\definecolor{AGLightGray}{RGB}{245, 247, 250}
+\definecolor{AGGreen}{RGB}{30, 160, 100}
+\definecolor{AGOrange}{RGB}{230, 115, 20}
+\definecolor{AGRed}{RGB}{200, 50, 50}
+\definecolor{TableHeader}{RGB}{30, 90, 168}
+\definecolor{TableAlt}{RGB}{240, 245, 255}
+\definecolor{CodeBg}{RGB}{248, 249, 252}
+
+% ============================================================
+%  STYLES DES TITRES
+% ============================================================
+\titleformat{\section}
+  {\color{AGBlue}\Large\bfseries}
+  {\thesection}{1em}{}
+  [\color{AGBlue}\titlerule]
+
+\titleformat{\subsection}
+  {\color{AGDark}\large\bfseries}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\color{AGGray}\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+\titlespacing*{\subsubsection}{0pt}{8pt}{2pt}
+
+% ============================================================
+%  EN-TÊTE & PIED DE PAGE
+% ============================================================
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.3pt}
+\fancyhead[L]{\small\color{AGGray}\textbf{AG Technologies} --- Service M\'edia}
+\fancyhead[R]{\small\color{AGGray}Cahier des Charges Technique}
+\fancyfoot[L]{\small\color{AGGray}Confidentiel --- Usage Interne}
+\fancyfoot[C]{\small\color{AGGray}\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\color{AGGray}v1.4 --- Mars 2026}
+
+% ============================================================
+%  STYLE CODE
+% ============================================================
+\lstset{
+  backgroundcolor=\color{CodeBg},
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  framesep=4pt,
+  rulecolor=\color{AGBlue!30},
+  commentstyle=\color{AGGreen},
+  keywordstyle=\color{AGBlue}\bfseries,
+  stringstyle=\color{AGOrange},
+  numbers=left,
+  numberstyle=\tiny\color{AGGray},
+  numbersep=8pt,
+  xleftmargin=16pt,
+  tabsize=2,
+  showstringspaces=false,
+}
+
+% ============================================================
+%  ENVIRONNEMENTS PERSONNALISÉS
+% ============================================================
+\newmdenv[
+  linecolor=AGBlue,
+  linewidth=2pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  backgroundcolor=AGLightBlue,
+  innerleftmargin=12pt,
+  innerrightmargin=8pt,
+  innertopmargin=6pt,
+  innerbottommargin=6pt,
+  skipabove=8pt,
+  skipbelow=8pt,
+]{infobox}
+
+\newmdenv[
+  linecolor=AGOrange,
+  linewidth=2pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  backgroundcolor=AGOrange!8,
+  innerleftmargin=12pt,
+  innerrightmargin=8pt,
+  innertopmargin=6pt,
+  innerbottommargin=6pt,
+  skipabove=8pt,
+  skipbelow=8pt,
+]{warningbox}
+
+\newmdenv[
+  linecolor=AGGreen,
+  linewidth=2pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  backgroundcolor=AGGreen!8,
+  innerleftmargin=12pt,
+  innerrightmargin=8pt,
+  innertopmargin=6pt,
+  innerbottommargin=6pt,
+  skipabove=8pt,
+  skipbelow=8pt,
+]{successbox}
+
+\newcommand{\badge}[2]{%
+  \tikz[baseline=-2pt]{\node[fill=#1, text=white, rounded corners=3pt,
+    inner sep=3pt, font=\footnotesize\bfseries]{#2};}%
+}
+
+\newcommand{\httpmethod}[1]{%
+  \colorbox{AGBlue!15}{\textcolor{AGBlue}{\ttfamily\footnotesize\bfseries #1}}%
+}
+
+% ============================================================
+%  TABLE DES MATIÈRES — STYLE
+% ============================================================
+\setcounter{tocdepth}{3}
+\renewcommand{\contentsname}{Table des Mati\`eres}
+
+% ============================================================
+%  DOCUMENT
+% ============================================================
+\begin{document}
+
+% -------------------------------------------------------
+%  PAGE DE GARDE
+% -------------------------------------------------------
+\begin{titlepage}
+\pagecolor{AGDark}
+\color{white}
+
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[AGBlue!50, opacity=0.45]
+    (current page.north west) rectangle ([yshift=-3.8cm]current page.north east);
+  \fill[AGBlue!80, opacity=0.20]
+    (current page.north west) rectangle ([yshift=-1.0cm]current page.north east);
+  \fill[white, opacity=0.025]
+    ([xshift=-1.5cm, yshift=-4.5cm]current page.north east) circle (6.0cm);
+  \fill[AGBlue!70, opacity=0.10]
+    ([xshift=2.0cm,  yshift=-9.0cm]current page.north east) circle (4.5cm);
+  \fill[AGBlue!40, opacity=0.08]
+    ([xshift=3.5cm,  yshift=-16cm]current page.north west) circle (3.2cm);
+  \fill[white, opacity=0.015]
+    ([xshift=-3cm,   yshift=6cm]current page.south west)   circle (5.0cm);
+  \fill[AGBlue,    opacity=0.55]
+    (current page.south west) rectangle ([yshift=0.65cm]current page.south east);
+  \fill[AGBlue!40, opacity=0.30]
+    ([yshift=0.65cm]current page.south west)
+    rectangle ([yshift=2.0cm]current page.south east);
+  \node[text=white!40, font=\fontsize{7}{9}\selectfont, anchor=south]
+    at ([yshift=0.18cm]current page.south)
+    {Document confidentiel $\cdot$ Usage interne AG Technologies $\cdot$ v1.4};
+\end{tikzpicture}
+
+\vspace*{1.2cm}
+
+\begin{center}
+  {\fontsize{10}{12}\selectfont\color{white!80}%
+    \textbf{AG\,TECHNOLOGIES} \quad\textcolor{white!60}{$|$}\quad
+    Architecture de Services Partag\'es}\\[0.25cm]
+  {\color{AGBlue!80}\rule{10cm}{0.6pt}}
+\end{center}
+
+\vspace{1.0cm}
+
+\begin{center}
+\begin{tikzpicture}
+  \fill[AGBlue!20, opacity=0.20] (0,0) circle (3.0cm);
+  \fill[AGBlue!40, opacity=0.22] (0,0) circle (2.3cm);
+  \fill[AGBlue!70, opacity=0.50] (0,0) circle (1.6cm);
+  \fill[AGBlue,    opacity=0.80] (0,0) circle (1.15cm);
+  \node[text=white, font=\fontsize{30}{30}\selectfont] at (0, 0)
+    {\faFile};
+  \node[text=white!75, font=\fontsize{14}{14}\selectfont]
+    at ({2.6*cos(52)},  {2.6*sin(52)})  {\faImage};
+  \node[text=white!75, font=\fontsize{14}{14}\selectfont]
+    at ({2.6*cos(128)}, {2.6*sin(128)}) {\faVideo};
+  \node[text=white!60, font=\fontsize{12}{12}\selectfont]
+    at ({2.5*cos(200)}, {2.5*sin(200)}) {\faMusic};
+  \node[text=white!60, font=\fontsize{12}{12}\selectfont]
+    at ({2.5*cos(320)}, {2.5*sin(320)}) {\faFilePdf};
+  \node[text=white!45, font=\fontsize{10}{10}\selectfont]
+    at ({2.4*cos(-90)}, {2.4*sin(-90)}) {\faCloud};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.7cm}
+
+\begin{center}
+  {\color{AGBlue!80}\rule{3.5cm}{0.6pt}}%
+  \hspace{0.4cm}{\color{AGLightBlue!70}\fontsize{8}{8}\selectfont\faCircle[regular]}%
+  \hspace{0.4cm}{\color{AGBlue!80}\rule{3.5cm}{0.6pt}}\\[0.55cm]
+
+  {\fontsize{9}{11}\selectfont\color{white!80}%
+    \textls[250]{CAHIER DES CHARGES TECHNIQUE}}\\[0.45cm]
+
+  \begin{tikzpicture}
+    \fill[AGBlue, opacity=0.70, rounded corners=7pt]
+      (-6.5,-0.62) rectangle (6.5,0.62);
+    \fill[white, opacity=0.06, rounded corners=7pt]
+      (-6.5, 0.0)  rectangle (6.5, 0.62);
+    \node[text=white, font=\LARGE\bfseries] at (0,0)
+      {\faFile\enspace Service M\'edia};
+  \end{tikzpicture}\\[0.4cm]
+
+  {\fontsize{10}{12}\selectfont\color{white}
+    Gestion Centralis\'ee des Fichiers --- Media Service}\\[0.25cm]
+
+  {\fontsize{9}{11}\selectfont\color{AGBlue!60}
+    Version 1.4 --- Final --- Align\'e Auth v2.1 $\cdot$ Users v1.0 $\cdot$ Notification v1.2}\\[0.45cm]
+
+  {\color{AGBlue!80}\rule{3.5cm}{0.6pt}}%
+  \hspace{0.4cm}{\color{AGLightBlue!70}\fontsize{8}{8}\selectfont\faCircle[regular]}%
+  \hspace{0.4cm}{\color{AGBlue!80}\rule{3.5cm}{0.6pt}}
+\end{center}
+
+\vspace{1.1cm}
+
+\begin{center}
+\begin{tikzpicture}
+  \fill[white, opacity=0.06, rounded corners=6pt] (-5.5, -1.8) rectangle (5.5, 1.8);
+  \draw[white, opacity=0.12, rounded corners=6pt] (-5.5, -1.8) rectangle (5.5, 1.8);
+  \node[text=white!50, font=\small, anchor=west] at (-4.8, 1.2)
+    {\faCalendar\enspace \textbf{Date :} Mars 2026};
+  \node[text=white!50, font=\small, anchor=west] at (-4.8, 0.5)
+    {\faTag\enspace \textbf{Version :} 1.4 (final)};
+  \node[text=white!50, font=\small, anchor=west] at (-4.8, -0.2)
+    {\faUsers\enspace \textbf{Auteur :} \'Equipe Architecture};
+  \node[text=white!50, font=\small, anchor=west] at (-4.8, -0.9)
+    {\faLock\enspace \textbf{Classification :} Confidentiel};
+  \node[text=white!50, font=\small, anchor=west] at (-4.8, -1.5)
+    {\faCheckCircle\enspace \textbf{Statut :} Implementation-ready};
+\end{tikzpicture}
+\end{center}
+
+\nopagecolor
+\end{titlepage}
+
+% -------------------------------------------------------
+%  HISTORIQUE DES RÉVISIONS
+% -------------------------------------------------------
+\newpage
+\section*{Historique des R\'evisions}
+\addcontentsline{toc}{section}{Historique des R\'evisions}
+
+\begin{tabularx}{\textwidth}{|p{1.4cm}|p{2.6cm}|X|p{2.8cm}|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Ver.} &
+  \color{white}\textbf{Date} &
+  \color{white}\textbf{Description} &
+  \color{white}\textbf{Auteur} \\
+  \hline
+  1.0 & 2026-03-21 & Cr\'eation initiale du document & \'Equipe Ing\'enierie \\
+  \hline
+  \rowcolor{TableAlt}1.2 & 2026-03-21 & Post-audit : alignement platform\_id UUID (Auth v2.1). Contrats inter-services. Stack Node.js/NestJS. Rate limiting. RGPD. Pr\'efixe /api/v1. Health check. Corrections MLD. PlantUML annexe. & \'Equipe Architecture \\
+  \hline
+  1.3 & 2026-03-21 & Ajout owner\_user\_id. Contrat Users $\leftrightarrow$ M\'edia (photo/KYC). S\'equence RGPD orchestr\'ee. Diagramme async corrig\'e. Autorisation hard delete pr\'ecis\'ee. S\'ecurit\'e SSRF from-url. D\'eduplication retir\'ee du MLD. Consommateurs futurs. & \'Equipe Architecture \\
+  \hline
+  \rowcolor{TableAlt}1.4 & 2026-03-21 & Version finale : avatar\_media\_id (pas avatar\_url) dans contrat Users. D\'ependance Notification marqu\'ee futur (pas MVP). Hard delete S2S-only. Coquilles version corrig\'ees. & \'Equipe Architecture \\
+  \hline
+\end{tabularx}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ==============================================================
+\section{Introduction}
+
+\subsection{Objet du Document}
+
+Ce document constitue le \textbf{Cahier des Charges Technique et Fonctionnel} du \textbf{Service M\'edia} d'AG Technologies, version 1.4 finale. Il int\`egre les corrections d'alignement avec Auth v2.1, Users v1.0 et Notification v1.2.
+
+\begin{infobox}
+\faInfoCircle\quad \textbf{Convention d'identit\'e (v1.4)} :\\[4pt]
+\texttt{platform\_id} = \textbf{UUID} du registre Auth (\texttt{platforms.id}).\\
+\texttt{uploaded\_by} = \texttt{users\_auth.id} --- l'acteur technique qui a effectu\'e l'upload (extrait du JWT \texttt{sub}). \texttt{NULL} si upload S2S.\\
+\texttt{owner\_user\_id} = \texttt{users\_auth.id} --- le propri\'etaire m\'etier du fichier (ex : l'utilisateur dont c'est la photo de profil ou le document KYC). Fourni en body par le service consommateur. \texttt{NULL} si non applicable.\\
+M\'edia ne stocke aucune table locale de plateformes ni d'utilisateurs. Le mapping vers \texttt{users\_profiles.id} est r\'esolu par le Service Users.
+\end{infobox}
+
+\subsection{Destinataires}
+
+\begin{tabularx}{\textwidth}{|p{3.6cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Destinataire} & \color{white}\textbf{R\^ole} \\
+  \hline
+  \'Equipe Backend & D\'eveloppement et maintenance du service \\
+  \hline
+  \rowcolor{TableAlt}\'Equipe Frontend & Int\'egration des APIs d'upload et d'affichage \\
+  \hline
+  \'Equipes consommatrices & AGT-Market, AGT-Bot, Service Users, Service Chat \\
+  \hline
+  \rowcolor{TableAlt}Lead Technique / Architecte & Validation des choix techniques \\
+  \hline
+  Chef de Projet & Suivi et validation fonctionnelle \\
+  \hline
+\end{tabularx}
+
+\subsection{P\'erim\`etre du Service}
+
+\begin{infobox}
+\faInfoCircle\quad \textbf{Inclus :} upload, validation, stockage, traitement (compression, thumbnails, conversion), contr\^ole d'acc\`es, distribution CDN, m\'etadonn\'ees, suppression, archivage, purge RGPD, logs d'acc\`es.
+\end{infobox}
+
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{Hors p\'erim\`etre :} gestion des utilisateurs (Service Users), authentification (Service Auth), envoi de notifications (Service Notification), logique m\'etier des plateformes.
+\end{warningbox}
+
+% ==============================================================
+\section{Contexte \& Probl\'ematique}
+
+\subsection{Pourquoi Ce Service Existe}
+
+Dans un \'ecosyst\`eme multi-plateformes, la gestion des fichiers est un besoin transverse critique. Sans service centralis\'e : duplication de code, incoh\'erence des traitements, risques de s\'ecurit\'e, co\^uts \'elev\'es.
+
+\subsection{Positionnement dans l'Architecture}
+
+Le Service M\'edia est un \textbf{service de base}. Il d\'epend de \textbf{Auth} (validation tokens, d\'ependance MVP). La d\'ependance vers \textbf{Notification} (alertes quota) est \textbf{future} et n'est pas requise au MVP.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\small},
+  consumer/.style={draw=AGGray, fill=AGLightGray, rounded corners=4pt,
+                   minimum width=2.6cm, minimum height=0.65cm, align=center},
+  medianode/.style={draw=AGBlue, fill=AGLightBlue, rounded corners=6pt,
+                    minimum width=3.8cm, minimum height=1.0cm,
+                    align=center, line width=1.5pt},
+  depnode/.style={draw=AGGreen!80, fill=AGGreen!10, rounded corners=4pt,
+                  minimum width=2.6cm, minimum height=0.65cm, align=center},
+]
+  \node[consumer] (market) at (-4.5, 0) {AGT-Market};
+  \node[consumer] (users)  at (-1.5, 0) {Service Users};
+  \node[consumer] (chat)   at ( 1.5, 0) {Service Chat};
+  \node[consumer] (bot)    at ( 4.5, 0) {AGT-Bot};
+  \node[medianode] (media) at (0, -2) {\textbf{\faFile\ Media Service}};
+  \node[depnode] (auth)    at (-3.5, -4) {Service Auth};
+  \node[depnode] (storage) at (   0, -4) {Stockage};
+  \node[depnode] (notif)   at ( 3.5, -4) {Notification};
+  \draw[->, thick, color=AGGray] (market) -- (media);
+  \draw[->, thick, color=AGGray] (users)  -- (media);
+  \draw[->, thick, color=AGGray] (chat)   -- (media);
+  \draw[->, thick, color=AGGray] (bot)    -- (media);
+  \draw[->, thick, color=AGGreen]  (media) -- (auth);
+  \draw[->, thick, color=AGOrange] (media) -- (storage);
+  \draw[->, thick, color=AGRed]    (media) -- (notif);
+\end{tikzpicture}
+\end{center}
+
+% ==============================================================
+\section{Vision \& Objectifs}
+
+\subsection{Concept}
+
+Service \textbf{g\'en\'erique} de fichiers. Il ne conna\^it pas le contexte m\'etier. C'est la plateforme consommatrice qui donne du sens via les m\'etadonn\'ees.
+
+\subsection{Objectifs MVP \& Long Terme}
+
+\begin{tabularx}{\textwidth}{|p{2.4cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Phase} & \color{white}\textbf{Objectifs} \\
+  \hline
+  \textbf{MVP} & Upload/t\'el\'echargement ; validation ; stockage local VPS ; compression/thumbnails (Sharp) ; acc\`es public/priv\'e ; URLs sign\'ees ; API REST \texttt{/api/v1} ; auth via Auth ; purge RGPD ; rate limiting \\
+  \hline
+  \rowcolor{TableAlt}\textbf{Long terme} & Migration cloud (S3/GCS) ; CDN ; vid\'eo avanc\'e (FFmpeg) ; quotas + alertes ; d\'eduplication SHA-256 ; versioning ; monitoring avanc\'e \\
+  \hline
+\end{tabularx}
+
+\subsection{KPIs}
+
+\begin{tabularx}{\textwidth}{|X|p{2.0cm}|p{2.4cm}|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{KPI} & \color{white}\textbf{MVP} & \color{white}\textbf{Long Terme} \\
+  \hline
+  Upload 5 MB & $<$ 3s & $<$ 2s \\
+  \hline
+  \rowcolor{TableAlt}Thumbnails & $<$ 2s & $<$ 1s \\
+  \hline
+  Resize (cache) & $<$ 1s & $<$ 500ms \\
+  \hline
+  \rowcolor{TableAlt}Disponibilit\'e & $\geq$ 99\% & $\geq$ 99,5\% \\
+  \hline
+  Taux erreur & $<$ 1\% & $<$ 0,5\% \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\section{Parties Prenantes}
+
+\subsection{Services Consommateurs}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Service} & \color{white}\textbf{Usage} \\
+  \hline
+  AGT-Market & Photos/vid\'eos produits, galeries, thumbnails \\
+  \hline
+  \rowcolor{TableAlt}Service Users & Photos de profil, documents KYC (priv\'es), purge RGPD \\
+  \hline
+  Service Chat & Pi\`eces jointes (images, documents, audio) \\
+  \hline
+  \rowcolor{TableAlt}AGT-Bot & Images r\'eponse, vocaux WhatsApp, documents FAQ \\
+  \hline
+  Notification & Images dans emails et push \\
+  \hline
+  \rowcolor{TableAlt}SALMA & Documents formation, ressources p\'edagogiques (migration pr\'evue) \\
+  \hline
+  \textit{Futures plateformes} & \textit{Tout nouveau service de l'\'ecosyst\`eme AGT peut consommer M\'edia via les m\^emes contrats (JWT ou S2S). Aucune modification de M\'edia n'est requise.} \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\section{Besoins Fonctionnels}
+
+\subsection{Module Upload}
+
+\subsubsection{Upload Simple}
+\begin{itemize}[leftmargin=1.5cm]
+  \item Upload via \texttt{multipart/form-data}
+  \item Validation type MIME, extension, taille (selon config plateforme)
+  \item Hash SHA-256 calcul\'e \`a la r\'eception
+  \item \texttt{platform\_id} extrait du JWT (\texttt{platform\_id}) ou du token S2S (via introspection)
+  \item \texttt{uploaded\_by} = \texttt{sub} du JWT ; \texttt{NULL} pour uploads S2S
+  \item \texttt{owner\_user\_id} (optionnel, en body) = propri\'etaire m\'etier du fichier (\texttt{users\_auth.id}). Utilis\'e quand un service ou un admin uploade pour le compte d'un utilisateur
+  \item D\'eclenchement automatique du pipeline de traitement
+\end{itemize}
+
+\subsubsection{Upload Multiple (Batch)}
+Upload de plusieurs fichiers en une requ\^ete. R\'eponse 207 Multi-Status avec statut par fichier.
+
+\subsubsection{Upload depuis URL Externe}
+T\'el\'echargement depuis URL HTTP/HTTPS. M\^eme pipeline que l'upload direct.
+
+\subsubsection{Types de Fichiers Support\'es}
+
+\begin{tabularx}{\textwidth}{|p{2.4cm}|p{3.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Cat\'egorie} & \color{white}\textbf{Formats} & \color{white}\textbf{Traitements} \\
+  \hline
+  Images & JPEG, PNG, WebP, GIF & Compression, thumbnails, resize \\
+  \hline
+  \rowcolor{TableAlt}Vid\'eos & MP4, WebM & Dur\'ee, thumbnail (FFmpeg) \\
+  \hline
+  Documents & PDF, DOCX, XLSX, CSV, TXT & Stockage brut \\
+  \hline
+  \rowcolor{TableAlt}Audio & MP3, WAV, OGG & Dur\'ee, stockage brut \\
+  \hline
+\end{tabularx}
+
+\subsection{Module Traitement (Sharp / FFmpeg)}
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item \textbf{Compression} : qualit\'e configurable par plateforme, original toujours conserv\'e
+  \item \textbf{Thumbnails} : tailles configurables (ex: 150$\times$150, 300$\times$300), stock\'ees comme variantes
+  \item \textbf{Resize \`a la vol\'ee} : endpoint d\'edi\'e, r\'esultat cach\'e Redis
+\end{itemize}
+
+\subsection{Module Acc\`es \& Distribution}
+
+Fichiers publics (URL directe), fichiers priv\'es (token requis), URLs temporaires sign\'ees (dur\'ee configurable), CDN futur.
+
+\subsection{Module Gestion}
+
+Soft delete, mise \`a jour m\'etadonn\'ees, changement visibilit\'e, listage pagin\'e/filtrable, \textbf{purge RGPD} (suppression totale par utilisateur).
+
+\subsection{Module M\'etadonn\'ees}
+
+Syst\`eme (UUID, nom, MIME, taille, hash, dimensions, dur\'ee, dates) + personnalis\'ees (cl\'e-valeur libre par plateforme).
+
+\subsection{Module Configuration Plateforme}
+
+Types autoris\'es, tailles max par cat\'egorie (JSONB), thumbnails, compression, quota. Approche \textbf{upsert}.
+
+\subsection{Module Statistiques}
+
+Espace global/plateforme/utilisateur, fichiers par MIME, fichiers populaires, bande passante.
+
+\subsection{Module Logs d'Acc\`es}
+
+Chaque download et g\'en\'eration d'URL sign\'ee sont logg\'es. Consultation admin par fichier.
+
+% ==============================================================
+\section{Besoins Non-Fonctionnels}
+
+\begin{tabularx}{\textwidth}{|p{2.0cm}|X|p{3.4cm}|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{ID} & \color{white}\textbf{Exigence} & \color{white}\textbf{Cible} \\
+  \hline
+  NF-01 & Upload 5 MB & $<$ 3s \\
+  \hline
+  \rowcolor{TableAlt}NF-02 & Thumbnails apr\`es upload & $<$ 2s \\
+  \hline
+  NF-03 & Resize avec cache & $<$ 1s \\
+  \hline
+  \rowcolor{TableAlt}NF-04 & Taille max d\'efaut & 50 MB (configurable) \\
+  \hline
+  NF-05 & Auth obligatoire & JWT via \texttt{verify-token} ou S2S via \texttt{introspect} \\
+  \hline
+  \rowcolor{TableAlt}NF-06 & Rate limiting upload & 30 req/min user, 100 req/min S2S \\
+  \hline
+  NF-07 & Fichiers ex\'ecutables & Interdits par d\'efaut \\
+  \hline
+  \rowcolor{TableAlt}NF-08 & Scalabilit\'e & Horizontale, provider abstrait \\
+  \hline
+  NF-09 & Disponibilit\'e & $\geq$ 99,5\% \\
+  \hline
+  \rowcolor{TableAlt}NF-10 & Health check & \texttt{GET /api/v1/media/health} \\
+  \hline
+  NF-11 & Traitement async & BullMQ (Redis) \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\section{Architecture Technique}
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{|p{3.4cm}|p{3.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Composant} & \color{white}\textbf{Technologie} & \color{white}\textbf{Justification} \\
+  \hline
+  Runtime & Node.js 20 LTS & Performance I/O, streams natifs \\
+  \hline
+  \rowcolor{TableAlt}Framework & NestJS & Modulaire, DI, TypeScript \\
+  \hline
+  Images & Sharp & Compression/resize haute perf \\
+  \hline
+  \rowcolor{TableAlt}Vid\'eo/Audio & FFmpeg & Dur\'ee, thumbnail vid\'eo \\
+  \hline
+  BDD & PostgreSQL 16+ & M\'etadonn\'ees, configs, logs \\
+  \hline
+  \rowcolor{TableAlt}ORM & TypeORM / Prisma & Mapping, migrations \\
+  \hline
+  Cache \& Queue & Redis 7+ / BullMQ & Cache, rate limiting, async \\
+  \hline
+  \rowcolor{TableAlt}Conteneur & Docker + Compose & D\'eploiement isol\'e \\
+  \hline
+\end{tabularx}
+
+\begin{warningbox}
+\faExclamationTriangle\quad Auth, Users et Notification utilisent Django/DRF. Le choix Node.js/NestJS pour M\'edia est d\'elib\'er\'e : service I/O-intensif, Sharp 5--10$\times$ plus performant que Pillow. L'h\'et\'erog\'en\'eit\'e de stack est accept\'ee en microservices.
+\end{warningbox}
+
+\subsection{Flux de Traitement Asynchrone}
+
+\begin{center}
+\begin{tikzpicture}[
+  font=\small,
+  >=stealth,
+  line width=0.8pt,
+  every node/.style={font=\small},
+  box/.style={draw, rounded corners=4pt, minimum width=3.0cm, minimum height=0.65cm, align=center},
+]
+  \node[box, draw=AGBlue, fill=AGLightBlue, line width=1.2pt] (api) at (0,0) {\faServer\ API (NestJS)};
+  \node[box, draw=AGRed!70, fill=AGRed!10] (queue) at (5,0) {\faDatabase\ BullMQ (Redis)};
+  \node[box, draw=AGOrange!80, fill=AGOrange!10] (workers) at (10,0) {\faCog\ Workers (Sharp/FFmpeg)};
+  \node[box, draw=AGOrange!90, fill=AGOrange!10] (storage) at (10,-1.8) {\faHdd\ Stockage};
+  \node[box, draw=AGBlue!70, fill=AGBlue!10] (pg) at (0,-1.8) {\faDatabase\ PostgreSQL};
+
+  \draw[->, thick, color=AGBlue] (api) -- node[above, font=\tiny]{enqueue job} (queue);
+  \draw[->, thick, color=AGRed!80] (queue) -- node[above, font=\tiny]{consume} (workers);
+  \draw[->, thick, color=AGOrange] (workers) -- (storage);
+  \draw[->, thick, color=AGBlue] (api) -- (pg);
+  \draw[->, thick, color=AGGray, dashed] (workers) -- node[below, font=\tiny]{MAJ m\'etadonn\'ees} (pg);
+\end{tikzpicture}
+\end{center}
+
+\begin{infobox}
+\faInfoCircle\quad \textbf{Flux (v1.4)} : L'API enregistre le fichier brut et enqueue un job dans BullMQ. Les Workers consomment la queue et ex\'ecutent les traitements (compression, thumbnails, extraction dur\'ee). Les Workers mettent \`a jour les m\'etadonn\'ees et variantes dans PostgreSQL une fois le traitement termin\'e.
+\end{infobox}
+
+\subsection{Provider de Stockage Abstrait}
+
+\begin{lstlisting}[language=JavaScript, caption=Interface StorageProvider (TypeScript)]
+interface StorageProvider {
+  upload(file: Buffer, key: string, opts?: UploadOptions): Promise<string>;
+  download(key: string): Promise<Buffer>;
+  delete(key: string): Promise<void>;
+  getUrl(key: string, expiresIn?: number): Promise<string>;
+  exists(key: string): Promise<boolean>;
+}
+\end{lstlisting}
+
+Providers : \texttt{LocalStorageProvider} (MVP), \texttt{S3StorageProvider} (futur), \texttt{GCSStorageProvider} (futur).
+
+Organisation : \texttt{/\{platformUUID\}/\{ann\'ee\}/\{mois\}/\{fileUUID\}/}
+
+% ==============================================================
+\section{Mod\'elisation}
+
+\subsection{Table \texttt{media\_files}}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.6cm}|p{2.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+  \hline
+  id & UUID & PK & Identifiant unique \\
+  \hline
+  \rowcolor{TableAlt}original\_name & VARCHAR(255) & NOT NULL & Nom original \\
+  \hline
+  mime\_type & VARCHAR(100) & NOT NULL & Type MIME \\
+  \hline
+  \rowcolor{TableAlt}size\_bytes & BIGINT & NOT NULL & Taille en octets \\
+  \hline
+  sha256\_hash & CHAR(64) & NOT NULL & Hash d'int\'egrit\'e \\
+  \hline
+  \rowcolor{TableAlt}storage\_key & VARCHAR(500) & NOT NULL & Cl\'e stockage \\
+  \hline
+  visibility & VARCHAR(20) & NOT NULL & public / private \\
+  \hline
+  \rowcolor{TableAlt}platform\_id & UUID & NOT NULL & FK logique $\to$ Auth platforms.id \\
+  \hline
+  uploaded\_by & UUID & NULL & FK logique $\to$ Auth users\_auth.id \\
+  \hline
+  \rowcolor{TableAlt}owner\_user\_id & UUID & NULL & Propri\'etaire m\'etier. FK logique $\to$ Auth users\_auth.id \\
+  \hline
+  width & INTEGER & NULL & Largeur (images/vid\'eos) \\
+  \hline
+  height & INTEGER & NULL & Hauteur \\
+  \hline
+  \rowcolor{TableAlt}duration\_ms & INTEGER & NULL & Dur\'ee (vid\'eo/audio) \\
+  \hline
+  deleted\_at & TIMESTAMPTZ & NULL & Soft delete \\
+  \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\
+  \hline
+  updated\_at & TIMESTAMPTZ & NOT NULL & Mise \`a jour \\
+  \hline
+\end{tabularx}
+
+\subsection{Table \texttt{media\_variants}}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.6cm}|p{2.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+  \hline
+  id & UUID & PK & Identifiant \\
+  \hline
+  \rowcolor{TableAlt}media\_id & UUID & FK & Fichier parent \\
+  \hline
+  variant\_type & VARCHAR(20) & NOT NULL & thumbnail / compressed / resized \\
+  \hline
+  \rowcolor{TableAlt}width & INTEGER & NULL & Largeur \\
+  \hline
+  height & INTEGER & NULL & Hauteur \\
+  \hline
+  \rowcolor{TableAlt}storage\_key & VARCHAR(500) & NOT NULL & Cl\'e stockage \\
+  \hline
+  size\_bytes & BIGINT & NOT NULL & Taille \\
+  \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\
+  \hline
+\end{tabularx}
+
+\subsection{Table \texttt{media\_metadata}}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.6cm}|p{2.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+  \hline
+  id & UUID & PK & Identifiant \\
+  \hline
+  \rowcolor{TableAlt}media\_id & UUID & FK & Fichier \\
+  \hline
+  key & VARCHAR(100) & NOT NULL & Cl\'e \\
+  \hline
+  \rowcolor{TableAlt}value & TEXT & NOT NULL & Valeur \\
+  \hline
+  created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\
+  \hline
+\end{tabularx}
+
+\subsection{Table \texttt{platform\_media\_configs}}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.6cm}|p{2.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+  \hline
+  platform\_id & UUID & PK & FK logique $\to$ Auth \\
+  \hline
+  \rowcolor{TableAlt}allowed\_types & JSONB & NOT NULL & Types MIME autoris\'es \\
+  \hline
+  max\_size\_bytes & JSONB & NOT NULL & Limites par cat\'egorie \\
+  \hline
+  \rowcolor{TableAlt}thumbnail\_sizes & JSONB & NOT NULL & Tailles thumbnails \\
+  \hline
+  compression\_quality & INTEGER & NULL & Qualit\'e 1--100 \\
+  \hline
+  \rowcolor{TableAlt}storage\_quota\_bytes & BIGINT & NULL & Quota optionnel \\
+  \hline
+  created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\
+  \hline
+  \rowcolor{TableAlt}updated\_at & TIMESTAMPTZ & NOT NULL & Mise \`a jour \\
+  \hline
+\end{tabularx}
+
+\subsection{Table \texttt{media\_access\_logs}}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.6cm}|p{2.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+  \hline
+  id & BIGSERIAL & PK & Auto-incr\'ement \\
+  \hline
+  \rowcolor{TableAlt}media\_id & UUID & FK & Fichier acc\'ed\'e \\
+  \hline
+  accessed\_by & UUID & NULL & Utilisateur \\
+  \hline
+  \rowcolor{TableAlt}ip\_address & INET & NULL & Adresse IP \\
+  \hline
+  action & VARCHAR(50) & NOT NULL & download / signed\_url / view \\
+  \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Horodatage \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\section{Contrats d'API}
+
+\begin{infobox}
+\faLock\quad Tous les endpoints (sauf publics et sign\'es) requi\`erent : \texttt{Authorization: Bearer <token>}\\
+Valid\'e via \texttt{GET /auth/verify-token} (JWT) ou \texttt{POST /auth/s2s/introspect} (S2S).\\
+\textbf{Pr\'efixe :} \texttt{/api/v1}
+\end{infobox}
+
+\subsection{Health Check}
+
+\subsubsection{\httpmethod{GET} /api/v1/media/health}
+
+Sans authentification. Retourne l'\'etat du service et de ses d\'ependances.
+
+\subsection{Upload}
+
+\subsubsection{\httpmethod{POST} /api/v1/media}
+Upload fichier unique. \texttt{platform\_id} et \texttt{uploaded\_by} extraits du token.\\
+Body \texttt{multipart/form-data} : \texttt{file} (requis), \texttt{visibility} (d\'efaut: public), \texttt{metadata} (JSON), \texttt{owner\_user\_id} (UUID, optionnel --- propri\'etaire m\'etier).\\
+Si \texttt{visibility=public} : champ \texttt{url} renseign\'e, \texttt{signed\_url} null.\\
+Si \texttt{visibility=private} : champ \texttt{url} null, \texttt{signed\_url} renseign\'e (TTL 1h).\\
+Codes : 201, 400, 401, 413, 429, 500.
+
+\subsubsection{\httpmethod{POST} /api/v1/media/batch}
+Upload multiple. R\'eponse 207 Multi-Status.
+
+\subsubsection{\httpmethod{POST} /api/v1/media/from-url}
+Upload depuis URL externe. Body JSON : \texttt{url}, \texttt{visibility}, \texttt{metadata}, \texttt{owner\_user\_id} (optionnel).
+
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{S\'ecurit\'e SSRF (v1.4)} : r\`egles obligatoires pour cet endpoint :\\[4pt]
+--- Sch\'emas autoris\'es : \texttt{http}, \texttt{https} uniquement\\
+--- Refus des IP priv\'ees, localhost, 127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.169.254 (metadata cloud)\\
+--- Maximum 3 redirections HTTP\\
+--- Timeout r\'eseau : 10 secondes\\
+--- Taille max t\'el\'echarg\'ee : selon \texttt{max\_size\_bytes} de la config plateforme\\
+--- R\'esolution DNS v\'erifi\'ee avant connexion (pas de DNS rebinding)
+\end{warningbox}
+
+\subsection{Consultation}
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}}
+T\'el\'echargement binaire. D\'eclenche un log d'acc\`es. Codes : 200, 401, 404.
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/info}
+M\'etadonn\'ees uniquement (JSON).
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/thumbnails}
+Liste des variantes thumbnails.
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/thumbnail/\{size\}}
+Thumbnail sp\'ecifique (ex: 300x300).
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/resize}
+Resize \`a la vol\'ee. Query : \texttt{w}, \texttt{h}, \texttt{crop}. Cache Redis.
+
+\subsubsection{\httpmethod{GET} /api/v1/media}
+Listage pagin\'e. Query : \texttt{platform\_id}, \texttt{uploaded\_by}, \texttt{owner\_user\_id}, \texttt{mime\_type}, \texttt{visibility}, \texttt{from}, \texttt{to}, \texttt{page}, \texttt{limit}.
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/access-logs}
+Logs d'acc\`es. Admin ou propri\'etaire. Pagin\'e.
+
+\subsection{Gestion}
+
+\subsubsection{\httpmethod{PUT} /api/v1/media/\{id\}/metadata}
+MAJ m\'etadonn\'ees personnalis\'ees.
+
+\subsubsection{\httpmethod{PUT} /api/v1/media/\{id\}/visibility}
+Changement de visibilit\'e.
+
+\subsubsection{\httpmethod{DELETE} /api/v1/media/\{id\}}
+Soft delete. 204 No Content.
+
+\subsubsection{\httpmethod{DELETE} /api/v1/media/\{id\}/permanent}
+Hard delete. \textbf{Autoris\'e uniquement via token S2S.} M\'edia ne v\'erifie pas les r\^oles utilisateur --- si un service consommateur souhaite offrir la suppression d\'efinitive \`a un utilisateur final, c'est ce service qui valide les permissions puis appelle M\'edia via son propre token S2S. Codes : 204, 401, 403, 404.
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/signed-url}
+URL temporaire sign\'ee. Query : \texttt{expires} (secondes, d\'efaut 3600). D\'eclenche un log.
+
+\subsubsection{\httpmethod{DELETE} /api/v1/media/by-user/\{userId\}}
+\badge{AGRed}{RGPD} Purge physique totale des fichiers d'un utilisateur. Token S2S uniquement. \texttt{userId} = \texttt{users\_auth.id}. Supprime tous les fichiers o\`u \texttt{uploaded\_by = userId} OU \texttt{owner\_user\_id = userId}, ainsi que leurs variantes, m\'etadonn\'ees et logs d'acc\`es.\\
+R\'eponse 200 : \texttt{files\_deleted}, \texttt{variants\_deleted}, \texttt{storage\_freed\_bytes}.\\
+Codes : 200, 401, 404, 500.
+
+\subsection{Configuration Plateforme}
+
+\subsubsection{\httpmethod{GET} /api/v1/platforms/\{platformId\}/media-config}
+Config m\'edia d'une plateforme.
+
+\subsubsection{\httpmethod{PUT} /api/v1/platforms/\{platformId\}/media-config}
+\textbf{Upsert} : cr\'eation ou mise \`a jour. S2S ou admin requis. Codes : 200/201, 400, 401.
+
+\subsection{Statistiques}
+
+\subsubsection{\httpmethod{GET} /api/v1/media/stats}
+Stats globales.
+
+\subsubsection{\httpmethod{GET} /api/v1/media/stats/\{platformId\}}
+Stats par plateforme.
+
+% ==============================================================
+\section{Contrats Inter-Services}
+
+\subsection{M\'edia $\to$ Auth (JWT utilisateur)}
+
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\
+  \hline
+  Endpoint & \texttt{GET /auth/verify-token} \\
+  \hline
+  \rowcolor{TableAlt}Auth & \texttt{Authorization: Bearer <access\_token>} \\
+  \hline
+  Donn\'ees & \texttt{user\_id} (sub), \texttt{platform\_id} \\
+  \hline
+  \rowcolor{TableAlt}Cache & Redis TTL 30s \\
+  \hline
+\end{tabularx}
+
+\subsection{M\'edia $\to$ Auth (token S2S)}
+
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\
+  \hline
+  Endpoint & \texttt{POST /auth/s2s/introspect} \\
+  \hline
+  \rowcolor{TableAlt}Donn\'ees & \texttt{client\_id} (= platform\_id), \texttt{service\_name} \\
+  \hline
+  Usage & Uploads S2S (AGT-Bot, Users, etc.) \\
+  \hline
+\end{tabularx}
+
+\subsection{Users $\to$ M\'edia (Photo de profil \& Documents KYC)}
+
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\
+  \hline
+  Flux photo & Users appelle \texttt{POST /api/v1/media} (token S2S, \texttt{owner\_user\_id} = auth\_user\_id de l'utilisateur). M\'edia retourne \texttt{media\_id}. Users stocke ce \texttt{media\_id} dans un champ d\'edi\'e (ex: \texttt{avatar\_media\_id} de type UUID, distinct de \texttt{avatar\_url}). L'URL publique est r\'esolue \`a la lecture via \texttt{GET /api/v1/media/\{id\}/info}. \\
+  \hline
+  \rowcolor{TableAlt}Flux KYC & Idem. Users stocke \texttt{media\_id} dans \texttt{documents.media\_id}. M\'edia re\c{c}oit \texttt{visibility=private} et \texttt{metadata=\{"context":"kyc"\}}. \\
+  \hline
+  V\'erit\'e m\'etier & \textbf{Users} porte la logique m\'etier (quel fichier est une photo de profil, quel fichier est un document KYC). \textbf{M\'edia} reste g\'en\'erique et ne conna\^it pas le contexte m\'etier. \\
+  \hline
+  \rowcolor{TableAlt}R\'ef\'erencement & Users stocke les \texttt{media\_id} dans ses propres tables. M\'edia ne stocke aucune r\'ef\'erence vers Users. \\
+  \hline
+\end{tabularx}
+
+\subsection{Users $\to$ M\'edia (Purge RGPD)}
+
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\
+  \hline
+  Endpoint & \texttt{DELETE /api/v1/media/by-user/\{userId\}} \\
+  \hline
+  \rowcolor{TableAlt}Auth & Token S2S \\
+  \hline
+  S\'equence & 1. Users marque le profil \texttt{status=deletion\_in\_progress}\\
+  & 2. Users appelle M\'edia purge (\texttt{userId} = \texttt{auth\_user\_id})\\
+  & 3. Users appelle Auth purge\\
+  & 4. Users finalise son propre hard delete\\
+  & Le \texttt{userId} est conserv\'e jusqu'\`a la fin du workflow. \\
+  \hline
+  \rowcolor{TableAlt}Tol\'erance erreurs & Si M\'edia \'echoue (500), Users conserve le statut \texttt{deletion\_in\_progress} et peut retenter. Aucune donn\'ee n'est perdue. Un cron de rattrapage peut relancer les purges \'echou\'ees. \\
+  \hline
+\end{tabularx}
+
+\subsection{M\'edia $\to$ Notification (Alertes quota)}
+
+\badge{AGOrange}{FUTUR --- NON REQUIS AU MVP}
+
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\
+  \hline
+  Endpoint & \texttt{POST /api/v1/notifications/send} \\
+  \hline
+  \rowcolor{TableAlt}D\'eclencheur & Stockage plateforme $\geq$ 80\% ou 100\% du quota \\
+  \hline
+  Templates & \texttt{media\_quota\_warning} / \texttt{media\_quota\_exceeded} \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\section{Infrastructure}
+
+\subsection{Variables d'Environnement}
+
+\begin{tabularx}{\textwidth}{|p{4.4cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Variable} & \color{white}\textbf{Description} \\
+  \hline
+  \texttt{STORAGE\_PROVIDER} & local | s3 | gcs \\
+  \hline
+  \rowcolor{TableAlt}\texttt{LOCAL\_STORAGE\_PATH} & Chemin racine stockage \\
+  \hline
+  \texttt{DATABASE\_URL} & PostgreSQL \\
+  \hline
+  \rowcolor{TableAlt}\texttt{REDIS\_URL} & Redis \\
+  \hline
+  \texttt{AUTH\_SERVICE\_URL} & URL Service Auth \\
+  \hline
+  \rowcolor{TableAlt}\texttt{NOTIFICATION\_SERVICE\_URL} & URL Service Notification (futur --- alertes quota) \\
+  \hline
+  \texttt{S2S\_CLIENT\_ID} & Client ID pour tokens S2S \\
+  \hline
+  \rowcolor{TableAlt}\texttt{S2S\_CLIENT\_SECRET} & Client secret \\
+  \hline
+  \texttt{SIGNED\_URL\_SECRET} & Cl\'e HMAC URLs sign\'ees \\
+  \hline
+  \rowcolor{TableAlt}\texttt{SOFT\_DELETE\_RETENTION\_DAYS} & D\'elai avant purge \\
+  \hline
+  \texttt{RATE\_LIMIT\_USER} & 30 req/min (d\'efaut) \\
+  \hline
+  \rowcolor{TableAlt}\texttt{RATE\_LIMIT\_S2S} & 100 req/min (d\'efaut) \\
+  \hline
+\end{tabularx}
+
+\subsection{Docker Compose}
+
+\begin{lstlisting}[language=bash, caption=docker-compose.yml --- Media Service v1.4]
+services:
+  media-service:
+    build: ./media-service
+    ports:
+      - "3003:3003"
+    volumes:
+      - media_storage:/data/media
+    environment:
+      - STORAGE_PROVIDER=local
+      - LOCAL_STORAGE_PATH=/data/media
+      - DATABASE_URL=postgresql://...
+      - REDIS_URL=redis://redis:6379
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - NOTIFICATION_SERVICE_URL=http://notif-service:3004
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:16-alpine
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  media_storage:
+  pg_data:
+\end{lstlisting}
+
+% ==============================================================
+\section{Recommandations \& \'Evolutions}
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item \textbf{D\'eduplication SHA-256 (futur v2)} : si hash identique pour m\^eme plateforme, retourner r\'ef\'erence existante. N\'ecessitera un champ \texttt{ref\_count} dans \texttt{media\_files} --- non mod\'elis\'e en v1.4 pour garder le MLD simple au MVP
+  \item \textbf{Migration Local $\to$ Cloud} : double \'ecriture, migration async, bascule, v\'erification int\'egrit\'e
+  \item \textbf{Quotas + alertes} : 80\% warning, 100\% blocage (429), via Service Notification
+  \item \textbf{Optimisation Web} : conversion WebP/AVIF auto (header Accept), compression progressive JPEG
+  \item \textbf{Soft vs Hard delete} : soft = utilisateur, hard auto = cron apr\`es X jours, hard imm\'ediat = admin, purge RGPD = S2S Users
+\end{itemize}
+
+% ==============================================================
+\newpage
+\section*{Annexe A --- Glossaire}
+\addcontentsline{toc}{section}{Annexe A --- Glossaire}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Terme} & \color{white}\textbf{D\'efinition} \\
+  \hline
+  CDN & R\'eseau de distribution de contenu \\
+  \hline
+  \rowcolor{TableAlt}Soft Delete & Suppression logique, donn\'ees conserv\'ees \\
+  \hline
+  Hard Delete & Suppression physique d\'efinitive \\
+  \hline
+  \rowcolor{TableAlt}Signed URL & URL temporaire avec signature cryptographique \\
+  \hline
+  SHA-256 & Hachage cryptographique pour int\'egrit\'e \\
+  \hline
+  \rowcolor{TableAlt}S2S & Service-to-Service (inter-microservices) \\
+  \hline
+  BullMQ & File d'attente Node.js bas\'ee sur Redis \\
+  \hline
+  \rowcolor{TableAlt}Sharp & Librairie Node.js haute performance pour images \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\newpage
+\section*{Annexe B --- Diagramme de Classes (PlantUML)}
+\addcontentsline{toc}{section}{Annexe B --- Diagramme de Classes (PlantUML)}
+
+Le code ci-dessous peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language=Java, caption=PlantUML --- Media Service v1.4, basicstyle=\ttfamily\scriptsize]
+@startuml Media Service - Class Diagram v1.4
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "media_files" as media_files {
+  * id : UUID <<PK>>
+  --
+  * original_name : VARCHAR(255)
+  * mime_type : VARCHAR(100)
+  * size_bytes : BIGINT
+  * sha256_hash : CHAR(64)
+  * storage_key : VARCHAR(500)
+  * visibility : VARCHAR(20)
+  * platform_id : UUID <<FK logique -> Auth platforms.id>>
+  uploaded_by : UUID <<FK logique -> Auth users_auth.id>>
+  owner_user_id : UUID <<FK logique -> Auth users_auth.id>>
+  width : INTEGER
+  height : INTEGER
+  duration_ms : INTEGER
+  deleted_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "media_variants" as media_variants {
+  * id : UUID <<PK>>
+  --
+  * media_id : UUID <<FK>>
+  * variant_type : VARCHAR(20)
+  width : INTEGER
+  height : INTEGER
+  * storage_key : VARCHAR(500)
+  * size_bytes : BIGINT
+  * created_at : TIMESTAMPTZ
+}
+
+entity "media_metadata" as media_metadata {
+  * id : UUID <<PK>>
+  --
+  * media_id : UUID <<FK>>
+  * key : VARCHAR(100)
+  * value : TEXT
+  * created_at : TIMESTAMPTZ
+}
+
+entity "platform_media_configs" as platform_configs {
+  * platform_id : UUID <<PK, FK logique -> Auth>>
+  --
+  * allowed_types : JSONB
+  * max_size_bytes : JSONB
+  * thumbnail_sizes : JSONB
+  compression_quality : INTEGER
+  storage_quota_bytes : BIGINT
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "media_access_logs" as access_logs {
+  * id : BIGSERIAL <<PK>>
+  --
+  * media_id : UUID <<FK>>
+  accessed_by : UUID
+  ip_address : INET
+  * action : VARCHAR(50)
+  * created_at : TIMESTAMPTZ
+}
+
+class "<<interface>>\nStorageProvider" as SP {
+  +upload(file, key) : String
+  +download(key) : Buffer
+  +delete(key) : void
+  +getUrl(key, ttl) : String
+  +exists(key) : Boolean
+}
+
+class "LocalStorageProvider" as LSP {
+  +base_path : String
+}
+
+class "S3StorageProvider" as S3P {
+  +bucket_name : String
+  +region : String
+}
+
+media_files ||--o{ media_variants : "has variants"
+media_files ||--o{ media_metadata : "has metadata"
+media_files ||--o{ access_logs : "has logs"
+platform_configs ||--o{ media_files : "configures"
+
+SP <|.. LSP : implements
+SP <|.. S3P : implements
+media_files ..> SP : "uses"
+
+@enduml
+\end{lstlisting}
+
+\vspace{2cm}
+\begin{center}
+  \color{AGGray}\small
+  \textbf{AG Technologies} --- Document confidentiel \`a usage interne exclusivement.\\
+  \textit{Media Service CDC v1.4 --- Mars 2026}
+\end{center}
+
+\end{document}

@@ -1,0 +1,1570 @@
+\documentclass[a4paper,11pt]{article}
+
+% === Packages ===
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{lastpage}
+
+\geometry{margin=2.5cm, top=3cm, bottom=3cm}
+
+% === Couleurs ===
+\definecolor{agtblue}{HTML}{1A56DB}
+\definecolor{agtgray}{HTML}{6B7280}
+\definecolor{agtgreen}{HTML}{059669}
+\definecolor{agtred}{HTML}{DC2626}
+\definecolor{agtorange}{HTML}{D97706}
+\definecolor{codebg}{HTML}{F3F4F6}
+\definecolor{notebg}{HTML}{EFF6FF}
+\definecolor{warnbg}{HTML}{FFFBEB}
+
+% === Hyperref ===
+\hypersetup{
+  colorlinks=true,
+  linkcolor=agtblue,
+  urlcolor=agtblue,
+  citecolor=agtblue
+}
+
+% === Headers/Footers ===
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{AG Technologies} --- Service Recherche}
+\fancyhead[R]{\textit{Cahier des Charges Technique}}
+\fancyfoot[L]{Confidentiel --- Usage Interne}
+\fancyfoot[C]{\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{v1.2 --- 21 mars 2026}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% === Listings ===
+\lstset{
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{agtgray!30},
+  numbers=left,
+  numberstyle=\tiny\color{agtgray},
+  keywordstyle=\color{agtblue},
+  stringstyle=\color{agtgreen},
+  commentstyle=\color{agtgray},
+  tabsize=2,
+  showstringspaces=false
+}
+
+% === tcolorbox ===
+\newtcolorbox{notebox}{
+  colback=notebg, colframe=agtblue!50, 
+  fonttitle=\bfseries, title={\textsf{Note}},
+  boxrule=0.5pt, arc=2pt
+}
+\newtcolorbox{warnbox}{
+  colback=warnbg, colframe=agtorange!50,
+  fonttitle=\bfseries, title={\textsf{Attention}},
+  boxrule=0.5pt, arc=2pt
+}
+\newtcolorbox{infobox}[1][]{
+  colback=notebg, colframe=agtblue!50,
+  fonttitle=\bfseries, title={#1},
+  boxrule=0.5pt, arc=2pt
+}
+
+% === Titre sections ===
+\titleformat{\section}{\Large\bfseries\color{agtblue}}{{\thesection}}{1em}{}
+\titleformat{\subsection}{\large\bfseries}{{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{{\thesubsubsection}}{1em}{}
+
+\begin{document}
+
+% ============================================================
+% PAGE DE TITRE
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{3cm}
+{\Huge\bfseries\color{agtblue} AG Technologies\par}
+\vspace{0.5cm}
+{\Large Service Recherche\par}
+\vspace{0.3cm}
+{\Large Cahier des Charges Technique et Fonctionnel\par}
+\vspace{2cm}
+{\large Version 1.2 --- 21 mars 2026\par}
+\vspace{1cm}
+{\large\color{agtgray} Statut : \textbf{\color{agtgreen}Implementation-ready}\par}
+\vspace{2cm}
+
+\begin{tabular}{ll}
+\toprule
+\textbf{Attribut} & \textbf{Valeur} \\
+\midrule
+Document & CDC Technique et Fonctionnel \\
+Service & Search Service \\
+Version & 1.2 \\
+Classification & Confidentiel --- Usage interne \\
+Stack & Django / DRF / Elasticsearch / Redis / PostgreSQL \\
+Dépendances validées & Auth v2.1, Users v1.0, Notification v1.2, Média v1.4 \\
+\bottomrule
+\end{tabular}
+
+\vfill
+{\small AG Technologies --- Document confidentiel à usage interne exclusivement.}
+\end{titlepage}
+
+% ============================================================
+% HISTORIQUE DES RÉVISIONS
+% ============================================================
+\newpage
+\section*{Historique des Révisions}
+
+\begin{tabularx}{\textwidth}{llXl}
+\toprule
+\textbf{Version} & \textbf{Date} & \textbf{Description} & \textbf{Auteur} \\
+\midrule
+1.0 & 21 mars 2026 & Création initiale du document & Équipe Ingénierie \\
+\addlinespace
+1.1 & 21 mars 2026 & Post-audit : alignement \texttt{platform\_id} UUID (Auth v2.1). Préfixe \texttt{/api/v1} sur tous les endpoints. Contrainte UNIQUE \texttt{(name, platform\_id)}. Table \texttt{popular\_searches} documentée. \texttt{TIMESTAMPTZ} partout. Contrats inter-services formalisés (Auth, RGPD). Codes HTTP sur tous les endpoints. Identité \texttt{user\_id = users\_auth.id}. Isolation multi-tenant documentée. Celery ajouté à la stack. Contrat d'événements d'indexation. Garde-fous anti-abus. Health check détaillé. PlantUML en annexe. & Équipe Architecture \\
+\addlinespace
+1.2 & 21 mars 2026 & Version finale : règle d'architecture Search $\neq$ Users (profils jamais indexés par Search). Gouvernance des index (nommage, quotas, bulk max, suppression prod). Matrice d'autorisation exhaustive par endpoint (JWT / S2S / Admin / Public). Statut passé à \textit{Implementation-ready}. & Équipe Architecture \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% TABLE DES MATIÈRES
+% ============================================================
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+% 1. INTRODUCTION
+% ============================================================
+\section{Introduction}
+
+\subsection{Objet du Document}
+
+Ce document constitue le Cahier des Charges Technique et Fonctionnel du Service Recherche (Search Service) d'AG Technologies. Il définit de manière exhaustive les objectifs, les fonctionnalités, l'architecture technique et les contrats d'API de ce service partagé.
+
+Il sert de référence officielle pour :
+\begin{itemize}[nosep]
+  \item La conception et la modélisation du service
+  \item Le développement et l'implémentation
+  \item Les décisions techniques et les arbitrages d'architecture
+  \item L'intégration par les équipes et services consommateurs
+\end{itemize}
+
+\subsection{Destinataires}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Destinataire} & \textbf{Rôle} \\
+\midrule
+Équipe Backend & Développement et maintenance du service \\
+Équipe Frontend & Intégration des APIs de recherche et d'auto-complétion \\
+Équipes consommatrices & AGT-Market, AGT-Bot, SALMA, Service Chatbot, et toute future plateforme AG Technologies \\
+Lead Technique / Architecte & Validation des choix techniques \\
+Chef de Projet & Suivi et validation fonctionnelle \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Périmètre du Service}
+
+\begin{infobox}[Périmètre inclus]
+Gestion des index dynamiques, indexation unitaire et bulk, recherche full-text avec scoring, auto-complétion, filtres avancés avec facettes, boost de résultats, recherche par similarité, historique de recherche, statistiques et configuration par index.
+\end{infobox}
+
+\begin{warnbox}
+\textbf{Hors périmètre :} authentification (déléguée au Service Auth v2.1), stockage des données source (chaque plateforme conserve sa propre base), facturation du boost (déléguée au Service Abonnement), accès direct à Elasticsearch (jamais exposé aux plateformes), gestion des rôles et permissions (déléguée au Service Users v1.0).
+\end{warnbox}
+
+\subsection{Conventions écosystème AG Technologies}
+\label{sec:conventions}
+
+\begin{notebox}
+Ce service s'intègre dans un écosystème dont les conventions suivantes sont \textbf{non négociables} (validées dans Auth v2.1, Users v1.0, Notification v1.2, Média v1.4) :
+\begin{itemize}[nosep]
+  \item \texttt{platform\_id} = UUID du registre Auth (\texttt{platforms.id})
+  \item Identité utilisateur = \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item JWT validé via \texttt{GET /auth/verify-token} ; token S2S via \texttt{POST /auth/s2s/introspect}
+  \item Préfixe API : \texttt{/api/v1}
+  \item Rôles et permissions gérés par Users, pas par Auth
+  \item RGPD orchestré par Users
+  \item Stack : Django/DRF pour Auth, Users, Notif ; Node.js/NestJS pour Média ; Django/DRF pour Recherche
+  \item Timestamps : \texttt{TIMESTAMPTZ} (avec timezone)
+\end{itemize}
+\end{notebox}
+
+\subsection{Règle d'architecture : frontière Search / Users (v1.2)}
+\label{sec:boundary}
+
+\begin{warnbox}
+\textbf{Règle non négociable :} Le Service Recherche n'indexe \textbf{jamais} de profils utilisateurs. La recherche d'utilisateurs (par nom, email, téléphone) est une responsabilité exclusive du Service Users (endpoint interne Users, cible $<$ 500ms).
+
+Le Service Recherche indexe uniquement des \textbf{données métier} fournies par les plateformes consommatrices : produits (AGT-Market), FAQ (AGT-Bot), formations (SALMA), base de connaissances (Chatbot).
+
+Si une plateforme a besoin de rechercher des utilisateurs \textit{et} des produits, elle appelle deux services distincts :
+\begin{itemize}[nosep]
+  \item \texttt{GET /api/v1/users?search=...} $\rightarrow$ Service Users
+  \item \texttt{POST /api/v1/search/query} $\rightarrow$ Service Recherche
+\end{itemize}
+
+Cette séparation garantit que les données PII (email, téléphone, date de naissance) ne transitent jamais dans Elasticsearch, conformément à la stratégie RGPD de l'écosystème.
+\end{warnbox}
+
+% ============================================================
+% 2. CONTEXTE & PROBLÉMATIQUE
+% ============================================================
+\section{Contexte \& Problématique}
+
+\subsection{Pourquoi Ce Service Existe}
+
+Dans un écosystème multi-plateformes, chaque application a besoin de capacités de recherche performantes : produits sur AGT-Market, FAQ sur AGT-Bot, formations sur SALMA. Sans service centralisé, chaque plateforme développerait sa propre intégration Elasticsearch, entraînant :
+
+\begin{itemize}[nosep]
+  \item \textbf{Duplication de la complexité} --- chaque équipe gère ses propres index, mappings et analyseurs
+  \item \textbf{Incohérence de l'expérience} --- résultats de qualité hétérogène selon la plateforme
+  \item \textbf{Coûts d'infrastructure multipliés} --- plusieurs clusters Elasticsearch au lieu d'un seul
+  \item \textbf{Exposition directe d'Elasticsearch} --- risques de sécurité et de mauvaise utilisation
+  \item \textbf{Absence de statistiques unifiées} --- impossible de mesurer la qualité globalement
+\end{itemize}
+
+\subsection{Problèmes Résolus}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Problème} & \textbf{Solution apportée} \\
+\midrule
+Intégration ES complexe & API REST simplifiée masquant toute la complexité Elasticsearch \\
+Index rigides codés en dur & Index 100\% dynamiques définis par les plateformes via l'API \\
+Recherche lente et peu pertinente & Full-text avec scoring, boost, fuzzy et analyseurs configurables \\
+Pas de suggestions temps réel & Auto-complétion dédiée optimisée < 50ms \\
+Statistiques absentes & Historique, termes populaires, recherches sans résultat \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Positionnement dans l'Architecture Globale}
+
+Le Service Recherche est un service de base consommé par toutes les plateformes. Il encapsule Elasticsearch et n'expose que son API REST.
+
+\begin{verbatim}
+  AGT-Market    AGT-Bot    SALMA    Chatbot
+       |            |         |        |
+       +------+-----+----+----+--------+
+              |           |
+         Search Service (API REST)
+              |           |
+    +---------+-----------+----------+
+    |         |           |          |
+Service Auth  ES       Redis    PostgreSQL
+\end{verbatim}
+
+% ============================================================
+% 3. VISION & OBJECTIFS
+% ============================================================
+\section{Vision \& Objectifs}
+
+\subsection{Concept du Service}
+
+Le Service Recherche est le moteur de recherche unifié et générique de toutes les plateformes AG Technologies. Il ne connaît aucun concept métier. Il gère des index abstraits contenant des documents avec des champs définis dynamiquement par les plateformes.
+
+\begin{infobox}[Principe fondamental]
+Elasticsearch est entièrement encapsulé. Les plateformes n'y accèdent jamais directement --- tout passe par l'API du Service Recherche. La plateforme crée ses index, définit ses schémas et indexe ses documents. Le service gère la complexité.
+\end{infobox}
+
+\subsection{Objectifs MVP \& Long Terme}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Phase} & \textbf{Objectifs} \\
+\midrule
+MVP & Index dynamiques avec schéma configurable ; recherche full-text multi-champs avec scoring ; filtres avancés et facettes ; auto-complétion (< 50ms) ; fuzzy matching ; boost de résultats ; indexation unitaire et bulk ; historique de recherche ; API REST complète \\
+\addlinespace
+Long terme & Recherche sémantique par embeddings vectoriels ; personnalisation des résultats par utilisateur ; synonymes auto-enrichis basés sur les recherches ; A/B testing des algorithmes de ranking ; monitoring Elasticsearch avancé \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Indicateurs de Performance (KPIs)}
+
+\begin{tabularx}{\textwidth}{Xcc}
+\toprule
+\textbf{KPI} & \textbf{Cible MVP} & \textbf{Cible Long Terme} \\
+\midrule
+Temps de réponse recherche full-text & < 200ms & < 100ms \\
+Temps auto-complétion & < 50ms & < 30ms \\
+Indexation unitaire & < 100ms & < 50ms \\
+Indexation bulk (1000 docs) & < 5s & < 2s \\
+Disponibilité du service & $\geq$ 99\% & $\geq$ 99,5\% \\
+Taux d'erreur API & < 1\% & < 0,5\% \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% 4. PARTIES PRENANTES
+% ============================================================
+\section{Parties Prenantes \& Utilisateurs}
+
+\subsection{Équipe Technique}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Rôle} & \textbf{Responsabilités} \\
+\midrule
+Ingénieur Backend & Développement API, intégration Elasticsearch, pipeline d'indexation \\
+Lead Technique & Architecture, tuning Elasticsearch, décisions de performance \\
+Ingénieur DevOps & Cluster ES, Redis, monitoring, volumes persistants \\
+Ingénieur Frontend & Intégration barre de recherche, auto-complétion, facettes \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Services Consommateurs}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Service} & \textbf{Usage} \\
+\midrule
+AGT-Market & Index produits et boutiques ; filtres prix/catégorie ; boost sponsorisé ; auto-complétion \\
+AGT-Bot & Index FAQ ; recherche par similarité pour trouver la réponse la plus proche \\
+SALMA & Index formations ; recherche par niveau, prix, domaine \\
+Service Chatbot & Recherche sémantique dans la base de connaissances \\
+\textit{Futures plateformes} & \textit{Tout nouveau service AG Technologies peut créer ses propres index dynamiquement via l'API. La liste ci-dessus n'est pas figée.} \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% 5. BESOINS FONCTIONNELS
+% ============================================================
+\section{Besoins Fonctionnels}
+
+\subsection{Module Index Dynamiques}
+
+\begin{infobox}[Principe clé]
+Aucun index n'est codé en dur. Chaque plateforme crée et gère ses propres index via l'API, en définissant librement le schéma de ses documents.
+\end{infobox}
+
+\subsubsection{Types de Champs Supportés}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Type} & \textbf{Description \& usage} \\
+\midrule
+\texttt{text} & Contenu textuel recherchable en full-text (analysé, tokenizé) \\
+\texttt{keyword} & Valeur exacte, filtrable et triable (catégorie, statut, ID) \\
+\texttt{number} & Valeur numérique, filtrable et triable (prix, note, quantité) \\
+\texttt{date} & Date/heure, filtrable et triable \\
+\texttt{boolean} & Vrai/faux, filtrable \\
+\texttt{geo\_point} & Coordonnées géographiques --- recherche par distance (futur) \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Propriétés Configurables par Champ}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Propriété} & \textbf{Description} \\
+\midrule
+\texttt{searchable} & Le champ est inclus dans la recherche full-text \\
+\texttt{filterable} & Le champ peut être utilisé comme filtre \\
+\texttt{sortable} & Le champ peut servir de critère de tri \\
+\texttt{autocomplete} & Le champ est utilisé pour l'auto-complétion \\
+\texttt{boost\_weight} & Poids du champ dans le score de pertinence \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Exemple de Schéma --- Index Produits (AGT-Market)}
+
+\begin{lstlisting}[language=Java,caption={Exemple de mapping index products}]
+{
+  "index": "products",
+  "platform_id": "uuid-agt-market-123",
+  "analyzer": "french",
+  "fields": {
+    "title": { "type": "text", "searchable": true,
+      "autocomplete": true, "boost_weight": 3 },
+    "description": { "type": "text", "searchable": true,
+      "boost_weight": 1 },
+    "price": { "type": "number", "filterable": true,
+      "sortable": true },
+    "category": { "type": "keyword", "filterable": true },
+    "rating": { "type": "number", "filterable": true,
+      "sortable": true },
+    "is_boosted": { "type": "boolean", "filterable": true },
+    "created_at": { "type": "date", "filterable": true,
+      "sortable": true }
+  }
+}
+\end{lstlisting}
+
+\subsection{Module Indexation}
+
+\begin{itemize}[nosep]
+  \item Indexation unitaire : ajout ou mise à jour d'un document dans un index (< 100ms)
+  \item Suppression unitaire : retrait d'un document de l'index
+  \item Indexation bulk : ajout, mise à jour et suppression de centaines de documents en une requête
+  \item Réindexation complète : reconstruction de l'index après modification du schéma (via alias ES, cf. section~\ref{sec:reindex})
+  \item Les plateformes sont responsables de maintenir leurs index synchronisés avec leur base de données
+  \item Pattern recommandé : événement asynchrone via message broker après chaque modification en base (cf. section~\ref{sec:event-contract})
+\end{itemize}
+
+\subsection{Module Recherche Full-Text}
+
+\begin{itemize}[nosep]
+  \item Recherche multi-champs dans tous les champs marqués \texttt{searchable}
+  \item Analyse linguistique : tokenisation, stemming, suppression des stop words
+  \item Support français et anglais (analyseurs configurables par index)
+  \item Fuzzy matching : tolérance aux fautes de frappe configurable
+  \item Score de pertinence : chaque résultat est classé selon sa correspondance
+  \item Boost : les documents avec \texttt{is\_boosted = true} remontent dans les résultats
+  \item Pagination (\texttt{page}, \texttt{limit}) et tri multi-critères
+\end{itemize}
+
+\subsection{Module Auto-Complétion}
+
+\begin{itemize}[nosep]
+  \item Endpoint dédié optimisé pour la vitesse (< 50ms)
+  \item Suggestions basées sur les champs marqués \texttt{autocomplete}
+  \item Suggestions enrichies par les recherches populaires (historique agrégé anonymisé)
+  \item Nombre de suggestions configurable (défaut : 8)
+  \item Support du prefix matching : \texttt{"chaus"} $\rightarrow$ \texttt{"chaussures"}, \texttt{"chaussettes"}
+  \item Highlight : la partie matchée est identifiée dans la suggestion
+\end{itemize}
+
+\subsection{Module Filtres \& Facettes}
+
+\begin{itemize}[nosep]
+  \item Filtre exact : \texttt{category = "Électronique"}
+  \item Filtre range : \texttt{price >= 5000 AND price <= 50000}
+  \item Filtre multi-valeurs : \texttt{category IN ["Électronique", "Mode"]}
+  \item Filtre booléen : \texttt{is\_available = true}
+  \item Filtre date : \texttt{created\_at >= "2026-01-01"}
+  \item Filtre géographique (futur) : distance $\leq$ 10km de (lat, lng)
+  \item Les filtres sont combinables entre eux (AND logique)
+  \item Facettes : le service retourne les compteurs par valeur de filtre pour alimenter l'UI
+\end{itemize}
+
+\subsection{Module Recherche par Similarité}
+
+\begin{itemize}[nosep]
+  \item Comprend le sens de la requête au-delà des mots exacts
+  \item \texttt{"téléphone portable"} trouve aussi \texttt{"smartphone"}, \texttt{"mobile"}
+  \item Utile pour le Service Chatbot (FAQ la plus proche d'une question reformulée)
+  \item MVP : synonymes + fuzzy matching Elasticsearch
+  \item Futur : embeddings vectoriels via API IA stockés dans Elasticsearch \texttt{dense\_vector}
+\end{itemize}
+
+\subsection{Module Historique \& Statistiques}
+
+\begin{itemize}[nosep]
+  \item Chaque recherche est enregistrée : requête, filtres, index, \texttt{user\_id}, timestamp, nb résultats
+  \item L'utilisateur peut consulter et supprimer son historique (RGPD)
+  \item Les recherches populaires sont agrégées de façon anonymisée (table \texttt{popular\_searches})
+  \item Statistiques admin : termes les plus recherchés, recherches sans résultat, temps de réponse
+\end{itemize}
+
+% ============================================================
+% 6. BESOINS NON-FONCTIONNELS
+% ============================================================
+\section{Besoins Non-Fonctionnels}
+
+\subsection{Performance}
+
+\begin{tabularx}{\textwidth}{Xl}
+\toprule
+\textbf{Exigence} & \textbf{Valeur cible} \\
+\midrule
+Temps de réponse recherche full-text & < 200ms \\
+Temps de réponse auto-complétion & < 50ms \\
+Indexation unitaire & < 100ms \\
+Indexation bulk (1000 documents) & < 5 secondes \\
+Cache Redis (auto-complétions fréquentes) & TTL configurable \\
+RAM Elasticsearch (heap JVM) & $\geq$ 2 GB dédiés \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Sécurité}
+
+\begin{itemize}[nosep]
+  \item \textbf{Authentification obligatoire} : tous les endpoints (sauf health check) requièrent un token Bearer valide (Service Auth v2.1)
+  \item \textbf{Isolation des index} : une plateforme ne peut accéder qu'à ses propres index. Le \texttt{platform\_id} est extrait du JWT vérifié (champ \texttt{platform\_id} du payload, cf. Auth v2.1 section 7.4). Toute requête est automatiquement scopée côté serveur --- jamais de trust client
+  \item \textbf{Elasticsearch jamais exposé} : aucun endpoint ES n'est accessible depuis l'extérieur
+  \item \textbf{Données historique RGPD} : droit à la suppression de l'historique par utilisateur
+  \item \textbf{Rate limiting} : protection contre les abus via Redis
+\end{itemize}
+
+\subsubsection{Garde-fous anti-abus (v1.1)}
+\label{sec:guardrails}
+
+\begin{tabularx}{\textwidth}{lXl}
+\toprule
+\textbf{Protection} & \textbf{Description} & \textbf{Valeur} \\
+\midrule
+\texttt{limit} max & Plafond de résultats par requête & 100 \\
+Timeout query ES & Timeout côté Elasticsearch pour éviter les requêtes lourdes & 5s \\
+Wildcards & Interdiction des wildcards en début de terme (\texttt{*chaussure}) & Bloqué \\
+Fuzzy distance max & Distance d'édition maximale autorisée & 2 \\
+Rate limit recherche & Requêtes de recherche par minute par plateforme & 600/min \\
+Rate limit indexation & Requêtes d'indexation par minute par plateforme & 120/min \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Gouvernance des index (v1.2)}
+\label{sec:governance}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Règle} & \textbf{Description} \\
+\midrule
+\textbf{Convention de nommage} & \texttt{snake\_case}, lettres minuscules, pas d'espaces ni de caractères spéciaux. Exemples valides : \texttt{products}, \texttt{faq\_entries}, \texttt{formations\_salma}. Validé par regex côté serveur : \texttt{\^{}[a-z][a-z0-9\_]\{2,49\}\$} \\
+\addlinespace
+\textbf{Quota d'index par plateforme} & Maximum 20 index actifs par plateforme (configurable via variable d'environnement \texttt{MAX\_INDEXES\_PER\_PLATFORM}). Au-delà $\rightarrow$ erreur 429. \\
+\addlinespace
+\textbf{Taille max bulk payload} & Maximum 500 opérations par requête bulk. Maximum 10 MB par requête. Au-delà $\rightarrow$ erreur 413 Payload Too Large. \\
+\addlinespace
+\textbf{Taille max document} & Un document individuel ne peut pas dépasser 1 MB (données JSON). \\
+\addlinespace
+\textbf{Suppression d'index en prod} & \texttt{DELETE /api/v1/search/indexes/\{indexName\}} est irréversible. Le statut passe à \texttt{deleted} en PostgreSQL. L'alias ES et l'index physique sont supprimés. Aucune récupération possible. En production, cette opération devrait être protégée par une permission spécifique côté plateforme (vérifiée via Service Users). \\
+\addlinespace
+\textbf{Nombre max de champs par index} & Maximum 100 champs par schéma d'index. Protection contre l'explosion du mapping ES. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Scalabilité}
+
+\begin{itemize}[nosep]
+  \item Scalabilité horizontale de l'API : plusieurs instances derrière un load balancer
+  \item Elasticsearch scalable par ajout de nœuds (shards et replicas configurables)
+  \item Cache Redis pour les auto-complétions et recherches populaires fréquentes
+  \item Cohérence éventuelle acceptable : l'index reflète l'état de la base source avec un léger délai
+  \item Le service est stateless --- tout l'état est dans Elasticsearch et Redis
+\end{itemize}
+
+\subsection{Disponibilité}
+
+\begin{itemize}[nosep]
+  \item Disponibilité cible : $\geq$ 99,5\%
+  \item Elasticsearch sur volume Docker persistant (SSD recommandé)
+  \item Health check exposé sur \texttt{GET /api/v1/search/health} (état API + état cluster ES + Redis + PostgreSQL)
+  \item Déploiement sans interruption (rolling updates)
+\end{itemize}
+
+% ============================================================
+% 7. ARCHITECTURE TECHNIQUE
+% ============================================================
+\section{Architecture Technique}
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Composant} & \textbf{Technologie} & \textbf{Rôle} \\
+\midrule
+Runtime & Django (Python 3.11+) & Logique applicative, orchestration des requêtes ES \\
+Framework API & Django REST Framework & Exposition des endpoints REST \\
+Moteur de recherche & Elasticsearch 8.x & Stockage, indexation, recherche full-text \\
+Client ES & \texttt{elasticsearch-py} & Librairie Python officielle pour Elasticsearch \\
+Base de données & PostgreSQL 15+ & Métadonnées, historique, synonymes, configs \\
+Cache & Redis 7+ & Auto-complétions, recherches populaires, rate limiting \\
+Workers async & Celery & Consommation des événements d'indexation \\
+Message Broker & RabbitMQ & File d'attente pour indexation asynchrone \\
+Conteneurisation & Docker + Docker Compose & Elasticsearch + API dans des conteneurs dédiés \\
+\bottomrule
+\end{tabularx}
+
+\begin{notebox}
+\textbf{Choix de stack (v1.1) :} Django/DRF est retenu pour cohérence avec Auth, Users et Notification. Celery + RabbitMQ est ajouté pour le pipeline d'indexation asynchrone, conformément au pattern utilisé dans le Service Notification (Celery + RabbitMQ pour le traitement des envois).
+\end{notebox}
+
+\subsection{Schéma d'Architecture}
+
+\begin{verbatim}
+  Couche clients
+  +-------------+----------+---------+----------+
+  | AGT-Market  | AGT-Bot  | SALMA   | Chatbot  |
+  +------+------+----+-----+----+----+-----+----+
+         |           |          |           |
+  Couche securite
+  +------+-----------+----------+-----------+----+
+  |    Auth Middleware -> Service Auth (JWT)      |
+  +------+-----------+----------+-----------+----+
+         |           |          |           |
+  Couche application
+  +------+-----------+----------+-----------+----+
+  |        API REST -- Search Service            |
+  +------+-----------+----------+-----------+----+
+  |  Recherche | Autocompl. | Indexation | Histo. |
+  +------+-----+------+-----+-----+------+------+
+         |            |           |
+  Couche persistance
+  +------+-----+ +----+----+ +--+--------+
+  | PostgreSQL | | Redis   | | Celery    |
+  +------------+ +---------+ +-----+-----+
+                                    |
+                              +-----+-----+
+                              | RabbitMQ  |
+                              +-----------+
+         |
+  +------+----------+
+  | Elasticsearch   |
+  +-----------------+
+\end{verbatim}
+
+\subsection{Intégrations Externes}
+
+\begin{tabularx}{\textwidth}{lXl}
+\toprule
+\textbf{Service externe} & \textbf{Rôle} & \textbf{Phase} \\
+\midrule
+Service Auth v2.1 & Validation obligatoire du token Bearer sur chaque requête (\texttt{GET /auth/verify-token}) & MVP \\
+Elasticsearch 8.x & Moteur de recherche et stockage des index & MVP \\
+Redis 7+ & Cache auto-complétion, recherches populaires, rate limiting & MVP \\
+RabbitMQ & Indexation asynchrone depuis les plateformes (via Celery) & MVP \\
+PostgreSQL 15+ & Métadonnées d'index, historique, synonymes, configs & MVP \\
+API Embeddings (OpenAI) & Génération de vecteurs pour recherche sémantique & Futur \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% 8. MODÉLISATION
+% ============================================================
+\section{Modélisation}
+
+\begin{notebox}
+\textbf{Note d'architecture :} Les données recherchables (documents indexés) résident dans \textbf{Elasticsearch}, pas en PostgreSQL. PostgreSQL stocke uniquement les métadonnées de gestion : registre des index, configurations, historique de recherche, recherches populaires et synonymes.
+\end{notebox}
+
+\subsection{Diagramme de Classes}
+
+Voir \textbf{Annexe A} pour le code PlantUML complet du diagramme de classes.
+
+\subsection{Modèle Logique de Données (MLD)}
+
+\subsubsection{Table \texttt{indexes\_registry}}
+
+\begin{tabularx}{\textwidth}{llllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{id} & UUID & PK & Identifiant \\
+\texttt{name} & VARCHAR(100) & NOT NULL & Nom de l'index \\
+\texttt{platform\_id} & UUID & NOT NULL & Plateforme propriétaire (FK logique $\rightarrow$ Auth \texttt{platforms.id}) \\
+\texttt{es\_alias} & VARCHAR(150) & NOT NULL, UNIQUE & Alias Elasticsearch actif (ex: \texttt{products\_live}) \\
+\texttt{doc\_count} & BIGINT & NOT NULL, DEFAULT 0 & Nombre de documents indexés \\
+\texttt{status} & VARCHAR(20) & NOT NULL & \texttt{active} / \texttt{rebuilding} / \texttt{deleted} \\
+\texttt{created\_at} & TIMESTAMPTZ & NOT NULL & Date de création \\
+\texttt{updated\_at} & TIMESTAMPTZ & NOT NULL & Dernière mise à jour \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}
+\textbf{Contrainte UNIQUE (v1.1) :} \texttt{UNIQUE(name, platform\_id)} --- deux plateformes différentes peuvent avoir un index nommé \texttt{"products"}. L'unicité est scopée par plateforme.
+\end{warnbox}
+
+\subsubsection{Table \texttt{index\_schemas}}
+
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{id} & UUID & PK & Identifiant \\
+\texttt{index\_id} & UUID & FK $\rightarrow$ \texttt{indexes\_registry.id} & Index parent \\
+\texttt{field\_name} & VARCHAR(100) & NOT NULL & Nom du champ \\
+\texttt{field\_type} & VARCHAR(20) & NOT NULL & \texttt{text} / \texttt{keyword} / \texttt{number} / \texttt{date} / \texttt{boolean} \\
+\texttt{searchable} & BOOLEAN & NOT NULL & Inclus dans la recherche full-text \\
+\texttt{filterable} & BOOLEAN & NOT NULL & Utilisable comme filtre \\
+\texttt{sortable} & BOOLEAN & NOT NULL & Utilisable comme critère de tri \\
+\texttt{autocomplete} & BOOLEAN & NOT NULL & Utilisé pour l'auto-complétion \\
+\texttt{boost\_weight} & INTEGER & NULL, DEFAULT 1 & Poids dans le score \\
+\texttt{created\_at} & TIMESTAMPTZ & NOT NULL & Date de création \\
+\texttt{updated\_at} & TIMESTAMPTZ & NOT NULL & Dernière mise à jour \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{search\_history}}
+
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{id} & BIGSERIAL & PK & Identifiant auto-incrémenté \\
+\texttt{user\_id} & UUID & NULL & Utilisateur (\texttt{users\_auth.id} = \texttt{sub} du JWT). NULL si anonyme \\
+\texttt{platform\_id} & UUID & NOT NULL & Plateforme (FK logique $\rightarrow$ Auth \texttt{platforms.id}) \\
+\texttt{index\_name} & VARCHAR(100) & NOT NULL & Index interrogé \\
+\texttt{query} & TEXT & NOT NULL & Requête saisie \\
+\texttt{filters\_applied} & JSONB & NULL & Filtres utilisés (v1.1) \\
+\texttt{result\_count} & INTEGER & NOT NULL & Nombre de résultats retournés \\
+\texttt{took\_ms} & INTEGER & NOT NULL & Temps de réponse en ms \\
+\texttt{created\_at} & TIMESTAMPTZ & NOT NULL & Horodatage de la recherche \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{search\_configs}}
+
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{index\_id} & UUID & PK, FK $\rightarrow$ \texttt{indexes\_registry.id} & Index concerné \\
+\texttt{analyzer} & VARCHAR(50) & NOT NULL & Analyseur linguistique (\texttt{french}, \texttt{english}) \\
+\texttt{fuzzy\_enabled} & BOOLEAN & NOT NULL, DEFAULT true & Fuzzy matching activé \\
+\texttt{fuzzy\_distance} & INTEGER & NOT NULL, DEFAULT 1 & Distance d'édition (1 ou 2) \\
+\texttt{highlight\_enabled} & BOOLEAN & NOT NULL, DEFAULT true & Highlight dans les résultats (v1.1) \\
+\texttt{min\_score} & FLOAT & NULL & Seuil de pertinence minimum (v1.1) \\
+\texttt{max\_results} & INTEGER & NOT NULL, DEFAULT 100 & Limite max de résultats (v1.1) \\
+\texttt{updated\_at} & TIMESTAMPTZ & NOT NULL & Dernière mise à jour \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{synonyms}}
+
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{id} & UUID & PK & Identifiant \\
+\texttt{index\_id} & UUID & FK $\rightarrow$ \texttt{indexes\_registry.id} & Index parent \\
+\texttt{term} & VARCHAR(100) & NOT NULL & Terme source \\
+\texttt{equivalents} & TEXT & NOT NULL & Liste de synonymes (séparés par virgule) \\
+\texttt{created\_at} & TIMESTAMPTZ & NOT NULL & Date de création \\
+\bottomrule
+\end{tabularx}
+
+\begin{notebox}
+\textbf{Renommage v1.1 :} la colonne \texttt{synonyms} de la v1.0 est renommée \texttt{equivalents} pour cohérence avec le body API et éviter la confusion table/colonne.
+\end{notebox}
+
+\subsubsection{Table \texttt{popular\_searches} (v1.1 --- documentée)}
+
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{id} & UUID & PK & Identifiant \\
+\texttt{index\_name} & VARCHAR(100) & NOT NULL & Index concerné \\
+\texttt{platform\_id} & UUID & NOT NULL & Plateforme (FK logique $\rightarrow$ Auth) \\
+\texttt{term} & VARCHAR(255) & NOT NULL & Terme recherché (anonymisé) \\
+\texttt{search\_count} & BIGINT & NOT NULL, DEFAULT 0 & Nombre total de recherches \\
+\texttt{last\_searched\_at} & TIMESTAMPTZ & NOT NULL & Dernière occurrence \\
+\texttt{updated\_at} & TIMESTAMPTZ & NOT NULL & Dernière agrégation \\
+\bottomrule
+\end{tabularx}
+
+Contrainte : \texttt{UNIQUE(index\_name, platform\_id, term)}.
+
+Cette table est alimentée par un job Celery périodique qui agrège les données de \texttt{search\_history} de manière anonymisée (sans \texttt{user\_id}). Elle sert à enrichir les suggestions d'auto-complétion et à alimenter l'endpoint \texttt{GET /api/v1/search/popular}.
+
+% ============================================================
+% 9. CONTRATS D'API
+% ============================================================
+\section{Contrats d'API}
+
+\begin{infobox}[Conventions API]
+Base URL : \texttt{/api/v1}. Tous les endpoints retournent du JSON. Tous les endpoints protégés requièrent le header \texttt{Authorization: Bearer <token>}, validé via \texttt{GET /auth/verify-token} (Auth v2.1).
+
+\textbf{Isolation multi-tenant (v1.1) :} le \texttt{platform\_id} est extrait du JWT vérifié. Toute opération est automatiquement scopée à la plateforme du token. Un index appartenant à une plateforme A n'est jamais accessible via un token de plateforme B.
+
+\textbf{Identité utilisateur (v1.1) :} \texttt{user\_id} = \texttt{sub} du JWT = \texttt{users\_auth.id}.
+\end{infobox}
+
+\subsection{Matrice d'autorisation par endpoint (v1.2)}
+\label{sec:auth-matrix}
+
+\begin{small}
+\begin{longtable}{llcccc}
+\toprule
+\textbf{Endpoint} & \textbf{Méthode} & \textbf{Public} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Endpoint} & \textbf{Méthode} & \textbf{Public} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin} \\
+\midrule
+\endhead
+\texttt{/search/health} & GET & $\checkmark$ & & & \\
+\texttt{/search/indexes} & POST & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes} & GET & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}} & GET & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/schema} & PUT & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}} & DELETE & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/reindex} & POST & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/documents} & POST & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/documents/\{d\}} & PUT & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/documents/\{d\}} & DELETE & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/documents/bulk} & POST & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/query} & POST & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/autocomplete} & GET & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/history} & GET & & $\checkmark$ & & \\
+\texttt{/search/history} & DELETE & & $\checkmark$ & & \\
+\texttt{/search/history/by-user/\{id\}} & DELETE & & & $\checkmark$ & \\
+\texttt{/search/popular} & GET & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/no-results} & GET & & & $\checkmark$ & $\checkmark$ \\
+\texttt{/search/indexes/\{n\}/config} & GET & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/config} & PUT & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/synonyms} & PUT & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/stats} & GET & & & $\checkmark$ & $\checkmark$ \\
+\texttt{/search/stats/terms} & GET & & & $\checkmark$ & $\checkmark$ \\
+\bottomrule
+\end{longtable}
+\end{small}
+
+\begin{notebox}
+\textbf{Légende :}
+\begin{itemize}[nosep]
+  \item \textbf{Public} : aucune authentification requise.
+  \item \textbf{JWT} : token Bearer utilisateur, validé via \texttt{GET /auth/verify-token}. L'accès est scopé automatiquement à la plateforme du token.
+  \item \textbf{S2S} : token Service-to-Service, validé via \texttt{POST /auth/s2s/introspect}. Utilisé pour les appels machine-to-machine (indexation automatisée, purge RGPD, stats).
+  \item \textbf{Admin} : réservé aux opérateurs AG Technologies. Authentification S2S + vérification d'un rôle admin global (vérifié via Service Users).
+\end{itemize}
+
+\textbf{Règle v1.2 :} les endpoints \texttt{history} (GET, DELETE) sont strictement personnels --- un utilisateur ne voit et ne supprime que son propre historique. La purge RGPD \texttt{by-user/\{id\}} est S2S-only (orchestrée par Users). Les endpoints \texttt{stats} et \texttt{no-results} sont réservés aux tokens S2S ou admin car ils exposent des données agrégées cross-utilisateurs.
+\end{notebox}
+
+\subsection{Health Check}
+
+\subsubsection{\texttt{GET /api/v1/search/health}}
+
+Vérifie l'état du service et de ses dépendances. Aucune authentification requise.
+
+\begin{lstlisting}[caption={Réponse 200 --- Health Check}]
+{
+  "status": "healthy",
+  "database": "ok",
+  "redis": "ok",
+  "elasticsearch": "ok",
+  "version": "1.1.0"
+}
+\end{lstlisting}
+
+Codes : 200 OK, 503 Service Unavailable (si une dépendance est down).
+
+\subsection{Gestion des Index}
+
+\subsubsection{\texttt{POST /api/v1/search/indexes}}
+
+Création d'un nouvel index. Le \texttt{platform\_id} est extrait automatiquement du JWT.
+
+\begin{lstlisting}[caption={Body POST /api/v1/search/indexes}]
+{
+  "name": "products",
+  "analyzer": "french",
+  "fields": {
+    "title": { "type": "text", "searchable": true,
+      "autocomplete": true, "boost_weight": 3 },
+    "price": { "type": "number", "filterable": true,
+      "sortable": true },
+    "category": { "type": "keyword", "filterable": true }
+  }
+}
+\end{lstlisting}
+
+Codes : 201 Created, 400 Validation error, 401 Unauthorized, 409 Index already exists (pour cette plateforme).
+
+\subsubsection{\texttt{GET /api/v1/search/indexes}}
+
+Liste des index de la plateforme authentifiée. Codes : 200, 401.
+
+\subsubsection{\texttt{GET /api/v1/search/indexes/\{indexName\}}}
+
+Détail d'un index (schéma, config, stats). Codes : 200, 401, 403 (index d'une autre plateforme), 404.
+
+\subsubsection{\texttt{PUT /api/v1/search/indexes/\{indexName\}/schema}}
+
+Ajout de nouveaux champs au schéma existant. Codes : 200, 400, 401, 403, 404.
+
+\begin{warnbox}
+Seul l'ajout de champs est supporté. La modification du type d'un champ existant nécessite une réindexation complète via \texttt{POST .../reindex}.
+\end{warnbox}
+
+\subsubsection{\texttt{DELETE /api/v1/search/indexes/\{indexName\}}}
+
+Suppression de l'index et de tous ses documents. Action irréversible. Codes : 204, 401, 403, 404.
+
+\subsubsection{\texttt{POST /api/v1/search/indexes/\{indexName\}/reindex}}
+\label{sec:reindex}
+
+Reconstruction complète de l'index via la stratégie alias Elasticsearch : création d'un nouvel index physique, migration des données, bascule atomique de l'alias, suppression de l'ancien index. Zéro downtime.
+
+Codes : 202 Accepted (tâche Celery lancée), 401, 403, 404.
+
+\begin{lstlisting}[caption={Réponse 202 --- Reindex}]
+{
+  "message": "Reindex started",
+  "task_id": "celery-task-uuid",
+  "index": "products",
+  "status": "rebuilding"
+}
+\end{lstlisting}
+
+\subsection{Indexation}
+
+\subsubsection{\texttt{POST /api/v1/search/indexes/\{indexName\}/documents}}
+
+Indexation d'un document (ajout ou mise à jour).
+
+\begin{lstlisting}[caption={Body POST document}]
+{
+  "doc_id": "prod-123",
+  "data": {
+    "title": "Nike Air Max 270",
+    "price": 35000,
+    "category": "Chaussures",
+    "is_boosted": false,
+    "created_at": "2026-01-10T08:00:00Z"
+  }
+}
+\end{lstlisting}
+
+Codes : 201 Created / 200 Updated, 400 Validation error, 401, 403, 404 (index inexistant).
+
+\subsubsection{\texttt{PUT /api/v1/search/indexes/\{indexName\}/documents/\{docId\}}}
+
+Mise à jour complète d'un document existant. Codes : 200, 400, 401, 403, 404.
+
+\subsubsection{\texttt{DELETE /api/v1/search/indexes/\{indexName\}/documents/\{docId\}}}
+
+Suppression d'un document de l'index. Codes : 204, 401, 403, 404.
+
+\subsubsection{\texttt{POST /api/v1/search/indexes/\{indexName\}/documents/bulk}}
+
+Indexation en masse.
+
+\begin{lstlisting}[caption={Body POST bulk}]
+{
+  "operations": [
+    { "action": "index", "doc_id": "prod-001",
+      "data": { "title": "Produit A", "price": 5000 } },
+    { "action": "index", "doc_id": "prod-002",
+      "data": { "title": "Produit B", "price": 8000 } },
+    { "action": "delete", "doc_id": "prod-999" }
+  ]
+}
+\end{lstlisting}
+
+Réponse 207 Multi-Status : résumé avec succès et erreurs par opération.
+
+\begin{lstlisting}[caption={Réponse 207 --- Bulk}]
+{
+  "total": 3,
+  "succeeded": 2,
+  "failed": 1,
+  "errors": [
+    { "doc_id": "prod-999", "action": "delete",
+      "error": "Document not found" }
+  ]
+}
+\end{lstlisting}
+
+Codes : 207 Multi-Status, 400, 401, 403, 404.
+
+\subsection{Recherche}
+
+\subsubsection{\texttt{POST /api/v1/search/query}}
+
+Recherche full-text principale.
+
+\begin{lstlisting}[caption={Body POST /api/v1/search/query}]
+{
+  "index": "products",
+  "query": "chaussures nike",
+  "search_type": "fulltext",
+  "filters": [
+    { "field": "price", "operator": "range",
+      "min": 5000, "max": 50000 },
+    { "field": "category", "operator": "eq",
+      "value": "Chaussures" }
+  ],
+  "sort": { "field": "rating", "order": "desc" },
+  "page": 1,
+  "limit": 20,
+  "include_facets": true
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Réponse 200 --- Search}]
+{
+  "results": [
+    { "doc_id": "prod-123", "score": 4.82,
+      "data": { "title": "Nike Air Max 270",
+                "price": 35000 },
+      "highlights": { "title": "<em>Nike</em> Air Max 270" }
+    }
+  ],
+  "total": 48,
+  "page": 1,
+  "limit": 20,
+  "took_ms": 34,
+  "facets": {
+    "category": { "Chaussures": 28, "Accessoires": 12 },
+    "price_range": { "0-10000": 10, "10000-50000": 30 }
+  }
+}
+\end{lstlisting}
+
+Codes : 200 OK, 400 Validation error (query vide, limit > 100, wildcard interdit), 401, 403, 408 Timeout (query ES > 5s), 429 Rate limited.
+
+\begin{notebox}
+\textbf{v1.1 :} le \texttt{limit} est plafonné à 100 (cf. section~\ref{sec:guardrails}). Les wildcards en début de terme sont rejetés avec une erreur 400.
+\end{notebox}
+
+\subsubsection{\texttt{GET /api/v1/search/autocomplete}}
+
+Auto-complétion en temps réel.
+
+Query params : \texttt{index} (obligatoire), \texttt{prefix} (obligatoire), \texttt{limit} (défaut : 8, max : 20).
+
+\begin{lstlisting}[caption={Réponse GET /api/v1/search/autocomplete}]
+{
+  "suggestions": [
+    { "text": "chaussures",
+      "highlight": "<em>chau</em>ssures" },
+    { "text": "chaussures de sport",
+      "highlight": "<em>chau</em>ssures de sport" },
+    { "text": "chaussettes",
+      "highlight": "<em>chau</em>ssettes" }
+  ],
+  "took_ms": 12
+}
+\end{lstlisting}
+
+Codes : 200, 400 (prefix manquant), 401, 403, 429.
+
+\subsection{Historique de Recherche}
+
+\subsubsection{\texttt{GET /api/v1/search/history}}
+
+Historique de l'utilisateur authentifié. Query params : \texttt{page}, \texttt{limit}. Codes : 200, 401.
+
+\subsubsection{\texttt{DELETE /api/v1/search/history}}
+
+Suppression de tout l'historique de l'utilisateur (RGPD). Codes : 204, 401.
+
+\subsubsection{\texttt{DELETE /api/v1/search/history/by-user/\{userId\}} (v1.1 --- S2S)}
+\label{sec:rgpd-endpoint}
+
+Purge RGPD de l'historique d'un utilisateur. \textbf{Token S2S uniquement.} \texttt{userId} = \texttt{users\_auth.id}.
+
+Supprime toutes les entrées de \texttt{search\_history} où \texttt{user\_id = userId}.
+
+\begin{lstlisting}[caption={Réponse 200 --- RGPD purge}]
+{
+  "message": "Search history purged",
+  "user_id": "uuid",
+  "entries_deleted": 342
+}
+\end{lstlisting}
+
+Codes : 200, 401, 404, 500.
+
+\subsubsection{\texttt{GET /api/v1/search/popular}}
+
+Recherches populaires agrégées et anonymisées. Query params : \texttt{index} (obligatoire), \texttt{limit} (défaut : 10). Codes : 200, 400, 401.
+
+\subsubsection{\texttt{GET /api/v1/search/no-results}}
+
+Recherches sans résultats (endpoint admin / S2S). Query params : \texttt{index}, \texttt{from}, \texttt{to}. Codes : 200, 400, 401, 403.
+
+\subsection{Configuration}
+
+\subsubsection{\texttt{GET /api/v1/search/indexes/\{indexName\}/config}}
+
+Récupère la configuration d'un index. Codes : 200, 401, 403, 404.
+
+\subsubsection{\texttt{PUT /api/v1/search/indexes/\{indexName\}/config}}
+
+\begin{lstlisting}[caption={Body PUT config}]
+{
+  "analyzer": "french",
+  "fuzzy_enabled": true,
+  "fuzzy_distance": 1,
+  "highlight_enabled": true,
+  "min_score": 0.5,
+  "max_results": 100
+}
+\end{lstlisting}
+
+Codes : 200, 400, 401, 403, 404.
+
+\subsubsection{\texttt{PUT /api/v1/search/indexes/\{indexName\}/synonyms}}
+
+\begin{lstlisting}[caption={Body PUT synonyms}]
+{
+  "synonyms": [
+    { "term": "telephone",
+      "equivalents": ["smartphone", "mobile", "cellulaire"] },
+    { "term": "chaussure",
+      "equivalents": ["basket", "sneaker", "shoe"] }
+  ]
+}
+\end{lstlisting}
+
+Codes : 200, 400, 401, 403, 404.
+
+\subsection{Statistiques}
+
+\subsubsection{\texttt{GET /api/v1/search/stats}}
+
+\begin{lstlisting}[caption={Réponse GET /api/v1/search/stats}]
+{
+  "total_searches": 125430,
+  "avg_response_ms": 87,
+  "by_index": {
+    "products": { "searches": 98000, "avg_ms": 72 },
+    "faq": { "searches": 27430, "avg_ms": 120 }
+  }
+}
+\end{lstlisting}
+
+Codes : 200, 401.
+
+\subsubsection{\texttt{GET /api/v1/search/stats/terms}}
+
+Termes les plus recherchés. Query params : \texttt{index} (obligatoire), \texttt{limit}, \texttt{from}, \texttt{to}. Codes : 200, 400, 401.
+
+% ============================================================
+% 10. CONTRATS INTER-SERVICES
+% ============================================================
+\section{Contrats Inter-Services}
+
+\subsection{Recherche $\rightarrow$ Auth (JWT utilisateur)}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Paramètre} & \textbf{Valeur} \\
+\midrule
+Endpoint & \texttt{GET /auth/verify-token} \\
+Auth & \texttt{Authorization: Bearer <access\_token>} \\
+Données extraites & \texttt{user\_id} (\texttt{sub}), \texttt{platform\_id} \\
+Cache & Redis TTL 30s \\
+Comportement en cas d'échec & Retourner 401 Unauthorized \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Recherche $\rightarrow$ Auth (token S2S)}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Paramètre} & \textbf{Valeur} \\
+\midrule
+Endpoint & \texttt{POST /auth/s2s/introspect} \\
+Données & \texttt{client\_id} (= \texttt{platform\_id}), \texttt{service\_name} \\
+Usage & Appels S2S entrants (ex: indexation automatisée depuis AGT-Market) \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Users $\rightarrow$ Recherche (Purge RGPD)}
+\label{sec:rgpd-contract}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Paramètre} & \textbf{Valeur} \\
+\midrule
+Endpoint & \texttt{DELETE /api/v1/search/history/by-user/\{userId\}} \\
+Auth & Token S2S \\
+\texttt{userId} & \texttt{users\_auth.id} (convention écosystème) \\
+Séquence & Appelé par Users dans son workflow de purge RGPD, \textbf{avant} l'appel à Auth purge et Média purge \\
+Données supprimées & Toutes les entrées \texttt{search\_history} où \texttt{user\_id = userId} \\
+Tolérance erreurs & Si Recherche échoue (500), Users conserve le statut \texttt{deletion\_in\_progress} et peut retenter. Un cron de rattrapage peut relancer les purges échouées. \\
+\bottomrule
+\end{tabularx}
+
+\begin{notebox}
+\textbf{Séquence RGPD complète (orchestrée par Users) :}
+\begin{enumerate}[nosep]
+  \item Users marque le profil \texttt{status=deletion\_in\_progress}
+  \item Users appelle \textbf{Recherche} purge (\texttt{DELETE .../by-user/\{userId\}})
+  \item Users appelle \textbf{Média} purge (\texttt{DELETE /api/v1/media/by-user/\{userId\}})
+  \item Users appelle \textbf{Notification} purge (préférences + historique)
+  \item Users appelle \textbf{Auth} purge (\texttt{DELETE /auth/admin/purge/\{authUserId\}})
+  \item Users finalise son propre hard delete
+\end{enumerate}
+\end{notebox}
+
+\subsection{Contrat d'événements d'indexation}
+\label{sec:event-contract}
+
+Les plateformes consommatrices publient des événements d'indexation sur RabbitMQ. Le Service Recherche consomme ces événements via des workers Celery.
+
+\subsubsection{Format de message standard}
+
+\begin{lstlisting}[caption={Format événement d'indexation}]
+{
+  "event_type": "INDEX | UPDATE | DELETE",
+  "platform_id": "uuid-platform",
+  "index_name": "products",
+  "doc_id": "prod-123",
+  "payload": {
+    "title": "Nike Air Max 270",
+    "price": 35000
+  },
+  "version": 1,
+  "timestamp": "2026-03-21T10:30:00Z",
+  "idempotency_key": "uuid-unique"
+}
+\end{lstlisting}
+
+\subsubsection{Règles de traitement}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Règle} & \textbf{Description} \\
+\midrule
+Idempotence & Chaque message contient un \texttt{idempotency\_key} (UUID unique). Les doublons sont ignorés (vérification Redis, TTL 24h). \\
+Retry & 3 tentatives avec backoff exponentiel (1s, 5s, 25s) \\
+DLQ (Dead Letter Queue) & Après 3 échecs, le message est routé vers une DLQ pour investigation manuelle \\
+Versioning & Le champ \texttt{version} permet de gérer l'ordre des mises à jour concurrentes (last-write-wins basé sur version) \\
+Routing key & \texttt{search.index.\{platform\_id\}} --- permet un filtrage par plateforme \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% 11. INFRASTRUCTURE
+% ============================================================
+\section{Infrastructure}
+
+\subsection{Composants d'Infrastructure}
+
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Composant} & \textbf{Phase} & \textbf{Détails} \\
+\midrule
+Elasticsearch 8.x & MVP & Moteur de recherche, auto-hébergé dans Docker \\
+PostgreSQL 15+ & MVP & Métadonnées, historique, synonymes, configs \\
+Redis 7+ & MVP & Cache auto-complétion, recherches populaires, rate limiting, idempotency keys \\
+RabbitMQ & MVP & File d'attente pour indexation asynchrone (Celery) \\
+Celery & MVP & Workers de consommation des événements d'indexation \\
+Celery Beat & MVP & Jobs planifiés (agrégation popular\_searches, purge) \\
+Docker & MVP & Conteneurisation de l'API et d'Elasticsearch \\
+SSD (stockage) & MVP & Recommandé pour les I/O Elasticsearch \\
+API Embeddings & Futur & Recherche sémantique vectorielle \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}
+\textbf{Ressources Elasticsearch :} le moteur nécessite un minimum de 2 GB de RAM dédiés pour la JVM heap. Prévoir au moins 4 GB de RAM totale sur le serveur hébergeant Elasticsearch en production.
+\end{warnbox}
+
+\subsection{Variables d'Environnement}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{ELASTICSEARCH\_URL} & URL du cluster Elasticsearch \\
+\texttt{ELASTICSEARCH\_API\_KEY} & Clé d'API Elasticsearch \\
+\texttt{DATABASE\_URL} & URL de connexion PostgreSQL \\
+\texttt{REDIS\_URL} & URL de connexion Redis \\
+\texttt{AUTH\_SERVICE\_URL} & URL du Service Auth \\
+\texttt{BROKER\_URL} & URL RabbitMQ (\texttt{amqp://...}) \\
+\texttt{CELERY\_RESULT\_BACKEND} & Backend de résultats Celery (Redis) \\
+\texttt{AUTOCOMPLETE\_CACHE\_TTL} & TTL cache auto-complétion (secondes) \\
+\texttt{POPULAR\_CACHE\_TTL} & TTL cache recherches populaires (secondes) \\
+\texttt{ES\_HEAP\_SIZE} & Taille heap JVM Elasticsearch (ex : 2g) \\
+\texttt{ES\_QUERY\_TIMEOUT} & Timeout requête ES (défaut : 5s) \\
+\texttt{SECRET\_KEY} & Clé secrète Django \\
+\texttt{RATE\_LIMIT\_SEARCH} & Limite recherche/min/plateforme (défaut : 600) \\
+\texttt{RATE\_LIMIT\_INDEX} & Limite indexation/min/plateforme (défaut : 120) \\
+\texttt{MAX\_INDEXES\_PER\_PLATFORM} & Quota max d'index actifs par plateforme (défaut : 20) \\
+\texttt{MAX\_BULK\_OPERATIONS} & Max opérations par requête bulk (défaut : 500) \\
+\texttt{MAX\_BULK\_SIZE\_MB} & Taille max requête bulk en MB (défaut : 10) \\
+\texttt{MAX\_DOC\_SIZE\_MB} & Taille max d'un document en MB (défaut : 1) \\
+\texttt{MAX\_FIELDS\_PER\_INDEX} & Max champs par schéma d'index (défaut : 100) \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Docker Compose (Extrait)}
+
+\begin{lstlisting}[caption={docker-compose.yml --- Search Service}]
+services:
+  search-service:
+    build: ./search-service
+    ports:
+      - "3004:3004"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - DATABASE_URL=postgresql://...
+      - REDIS_URL=redis://redis:6379
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+    depends_on:
+      - elasticsearch
+      - postgres
+      - redis
+      - rabbitmq
+
+  celery-worker:
+    build: ./search-service
+    command: celery -A search worker -l info -Q indexation
+    environment:
+      - BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+      - DATABASE_URL=postgresql://...
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - rabbitmq
+      - elasticsearch
+
+  celery-beat:
+    build: ./search-service
+    command: celery -A search beat -l info
+    depends_on:
+      - rabbitmq
+
+  elasticsearch:
+    image: elasticsearch:8.13.0
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - xpack.security.enabled=false
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+  postgres:
+    image: postgres:16-alpine
+    volumes:
+      - search_pg_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+volumes:
+  es_data:
+  search_pg_data:
+\end{lstlisting}
+
+% ============================================================
+% 12. RECOMMANDATIONS & ÉVOLUTIONS
+% ============================================================
+\section{Recommandations \& Évolutions}
+
+\subsection{Réindexation sans Downtime (Alias Elasticsearch)}
+
+La stratégie recommandée utilise les alias Elasticsearch. L'index actif est référencé par un alias (ex: \texttt{products\_live}). Une réindexation crée un nouvel index \texttt{products\_v2}, le peuple entièrement, puis bascule l'alias en une opération atomique. L'ancien index est supprimé après validation.
+
+Cette stratégie est implémentée par l'endpoint \texttt{POST /api/v1/search/indexes/\{indexName\}/reindex} et gérée en tâche de fond par Celery.
+
+\subsection{Recherche Sémantique par Embeddings}
+
+Pour la phase future, chaque document est enrichi à l'indexation d'un embedding calculé via l'API OpenAI, stocké dans un champ \texttt{dense\_vector} Elasticsearch. Les requêtes sont également transformées en vecteurs, puis la similarité cosinus retourne les documents sémantiquement proches.
+
+\subsection{Synonymes Auto-Enrichis}
+
+Les termes recherchés sans résultat sont analysés périodiquement via un job Celery Beat qui identifie les termes récurrents dans \texttt{search\_history} où \texttt{result\_count = 0} et propose des synonymes aux admins de chaque plateforme.
+
+\subsection{Monitoring Elasticsearch}
+
+Surveiller en permanence : santé du cluster (green/yellow/red), taux de rejet (circuit breaker), latence des requêtes (P50, P95, P99), espace disque et mémoire heap JVM. Alertes à configurer dès que le heap dépasse 85\% ou que le cluster passe en yellow.
+
+\subsection{Suppression : Stratégies}
+
+\begin{tabularx}{\textwidth}{lXX}
+\toprule
+\textbf{Stratégie} & \textbf{Comportement} & \textbf{Usage} \\
+\midrule
+Suppression document & Retrait de l'index ES immédiatement & Mise à jour depuis la plateforme source \\
+Suppression index & Index ES supprimé + registre PostgreSQL mis à jour & Décision de la plateforme \\
+Suppression historique & Suppression physique des lignes \texttt{search\_history} & Demande utilisateur (RGPD) \\
+Purge RGPD S2S & Suppression de tout l'historique d'un \texttt{user\_id} & Orchestré par Users \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% ANNEXE A — PLANTUML
+% ============================================================
+\newpage
+\appendix
+\section{Annexe A --- Diagramme de Classes (PlantUML)}
+
+\begin{lstlisting}[caption={Code PlantUML --- Diagramme de Classes Search Service v1.2},basicstyle=\ttfamily\footnotesize]
+@startuml Search Service - Class Diagram v1.2
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "indexes_registry" as idx {
+  * id : UUID <<PK>>
+  --
+  * name : VARCHAR(100)
+  * platform_id : UUID <<FK logique -> Auth platforms.id>>
+  * es_alias : VARCHAR(150) <<UNIQUE>>
+  doc_count : BIGINT = 0
+  * status : VARCHAR(20)
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  UNIQUE(name, platform_id)
+}
+
+entity "index_schemas" as sch {
+  * id : UUID <<PK>>
+  --
+  * index_id : UUID <<FK>>
+  * field_name : VARCHAR(100)
+  * field_type : VARCHAR(20)
+  * searchable : BOOLEAN
+  * filterable : BOOLEAN
+  * sortable : BOOLEAN
+  * autocomplete : BOOLEAN
+  boost_weight : INTEGER = 1
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "search_configs" as cfg {
+  * index_id : UUID <<PK, FK>>
+  --
+  * analyzer : VARCHAR(50)
+  * fuzzy_enabled : BOOLEAN = true
+  * fuzzy_distance : INTEGER = 1
+  * highlight_enabled : BOOLEAN = true
+  min_score : FLOAT
+  * max_results : INTEGER = 100
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "synonyms" as syn {
+  * id : UUID <<PK>>
+  --
+  * index_id : UUID <<FK>>
+  * term : VARCHAR(100)
+  * equivalents : TEXT
+  * created_at : TIMESTAMPTZ
+}
+
+entity "search_history" as hist {
+  * id : BIGSERIAL <<PK>>
+  --
+  user_id : UUID
+  * platform_id : UUID
+  * index_name : VARCHAR(100)
+  * query : TEXT
+  filters_applied : JSONB
+  * result_count : INTEGER
+  * took_ms : INTEGER
+  * created_at : TIMESTAMPTZ
+}
+
+entity "popular_searches" as pop {
+  * id : UUID <<PK>>
+  --
+  * index_name : VARCHAR(100)
+  * platform_id : UUID
+  * term : VARCHAR(255)
+  * search_count : BIGINT = 0
+  * last_searched_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  UNIQUE(index_name, platform_id, term)
+}
+
+class "SearchQuery" as sq {
+  +query : String
+  +index : String
+  +search_type : Enum
+  +filters : List<Filter>
+  +sort : SortOption
+  +page : Integer
+  +limit : Integer
+  +include_facets : Boolean
+  --
+  +execute() : SearchResult
+  +validate() : Boolean
+  +buildESQuery() : JSON
+}
+
+class "SearchResult" as sr {
+  +results : List<Hit>
+  +total : Integer
+  +page : Integer
+  +limit : Integer
+  +took_ms : Integer
+  +facets : Map<String, Map>
+  --
+  +toResponse() : JSON
+}
+
+class "AutocompleteQuery" as aq {
+  +index : String
+  +prefix : String
+  +limit : Integer
+  --
+  +execute() : List<Suggestion>
+}
+
+class "SearchDocument" as doc {
+  +doc_id : String
+  +index_name : String
+  +platform_id : UUID
+  +data : JSON
+  +indexed_at : Timestamp
+  --
+  +index() : void
+  +update() : void
+  +delete() : void
+}
+
+idx ||--o{ sch : "has fields"
+idx ||--|| cfg : "configured by"
+idx ||--o{ syn : "has synonyms"
+idx ||--o{ hist : "logged in"
+sq --> idx : "targets"
+sq --> sr : "produces"
+doc --> idx : "belongs to"
+aq --> idx : "queries"
+
+@enduml
+\end{lstlisting}
+
+% ============================================================
+% GLOSSAIRE
+% ============================================================
+\newpage
+\section{Annexe B --- Glossaire}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Terme} & \textbf{Définition} \\
+\midrule
+Elasticsearch & Moteur de recherche distribué basé sur Apache Lucene \\
+Index & Collection de documents structurés dans Elasticsearch \\
+Mapping & Définition du schéma d'un index (types et propriétés des champs) \\
+Full-text search & Recherche dans le contenu textuel avec analyse linguistique \\
+Fuzzy matching & Tolérance aux fautes de frappe basée sur la distance d'édition \\
+Facette & Compteur de résultats par valeur de filtre (ex : catégorie : 42) \\
+Boost & Mécanisme d'élévation du score de certains documents \\
+Stemming & Réduction d'un mot à sa racine (chaussures $\rightarrow$ chaussure) \\
+Embedding & Représentation vectorielle d'un texte pour la recherche sémantique \\
+Alias ES & Pointeur vers un index ES, permet la réindexation sans downtime \\
+Shard & Unité de distribution des données dans Elasticsearch \\
+TTL & Time To Live --- durée de vie d'une entrée en cache Redis \\
+DLQ & Dead Letter Queue --- file d'attente pour messages en échec \\
+S2S & Service-to-Service --- communication inter-microservices \\
+Celery & Framework Python de tâches asynchrones distribuées \\
+\bottomrule
+\end{tabularx}
+
+\vfill
+\begin{center}
+\textit{AG Technologies --- Document confidentiel à usage interne exclusivement.}\\
+\textit{Search Service CDC v1.2 --- 21 mars 2026}
+\end{center}
+
+\end{document}

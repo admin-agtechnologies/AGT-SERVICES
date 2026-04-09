@@ -1,0 +1,1263 @@
+\documentclass[11pt,a4paper]{article}
+
+% === Encodage & Langue ===
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% === Mise en page ===
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+% === Tableaux ===
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+
+% === Code & couleurs ===
+\usepackage{listings}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{lastpage}
+\usepackage{amssymb}
+
+% === Boites ===
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% === Couleurs AGT ===
+\definecolor{agtblue}{HTML}{1A3A5C}
+\definecolor{agtgray}{HTML}{4A4A4A}
+\definecolor{agtgreen}{HTML}{2E7D32}
+\definecolor{agtred}{HTML}{C62828}
+\definecolor{agtorange}{HTML}{E65100}
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{lightbg}{HTML}{E8EEF4}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=agtblue,
+  urlcolor=agtblue,
+  pdfauthor={AG Technologies},
+  pdftitle={Service Paiement - CDC v1.2},
+}
+
+% === Listings JSON ===
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  string=[s]{"}{"},
+  stringstyle=\color{agtgreen},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{codebg},
+  rulecolor=\color{gray!30},
+  showstringspaces=false,
+  literate=
+    *{:}{{{\color{agtblue}:}}}{1}
+     {,}{{{\color{agtblue},}}}{1}
+     {\{}{{{\color{agtblue}\{}}}{1}
+     {\}}{{{\color{agtblue}\}}}}{1}
+     {[}{{{\color{agtblue}[}}}{1}
+     {]}{{{\color{agtblue}]}}}{1},
+}
+\lstset{language=json}
+
+% === Boites info/warn ===
+\newtcolorbox{infobox}[1][]{
+  colback=lightbg,colframe=agtblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtblue,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=orange!5,colframe=agtorange,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtorange,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+
+% === Header/Footer ===
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{agtgray}{AGT --- Service Paiement}}
+\fancyhead[R]{\small\textcolor{agtgray}{v1.2 --- Confidentiel}}
+\fancyfoot[C]{\small\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\textcolor{agtgray}{Avril 2026}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.2pt}
+
+% === Titres ===
+\titleformat{\section}{\Large\bfseries\color{agtblue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{agtblue!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{agtblue!60}}{\thesubsubsection}{1em}{}
+
+% === Commandes ===
+\newcommand{\urgent}{\textcolor{agtred}{\textbf{Urgent}}}
+\newcommand{\normale}{\textcolor{agtorange}{Normale}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+% ============================================================
+%  PAGE DE TITRE
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\Huge\bfseries\textcolor{agtblue}{AG TECHNOLOGIES}\\[0.3cm]}
+{\large\textcolor{agtgray}{Architecture de Services Partag\'es}\\[2cm]}
+\rule{\textwidth}{1.5pt}\\[0.5cm]
+{\LARGE\bfseries Cahier des Charges Technique\\[0.3cm]}
+{\Large Service de Paiement Centralis\'e\\[0.3cm]}
+{\large\textit{Payment Service --- AGT-Payment}\\[0.5cm]}
+\rule{\textwidth}{1.5pt}\\[2cm]
+\begin{tabular}{ll}
+\textbf{Version}        & 1.2 \\
+\textbf{Date}           & Avril 2026 \\
+\textbf{Statut}         & Implementation-ready \\
+\textbf{Classification} & Confidentiel \\
+\textbf{Auteur}         & \'Equipe Architecture \\
+\textbf{D\'ependances}  & Auth v2.1, Users v1.0, Abonnement v1.2, Notification v1.2 \\
+\end{tabular}
+\vfill
+{\small\textcolor{agtgray}{Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies}}
+\end{titlepage}
+
+% ============================================================
+%  HISTORIQUE
+% ============================================================
+\section*{Historique des R\'evisions}
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Ver.} & \textbf{Date} & \textbf{Auteur} & \textbf{Description} \\
+\midrule
+1.0 & 2026-04-03 & \'Equipe Archi. & Cr\'eation initiale. Ex\'ecutant pur (event-driven). Providers~: Orange Money, MTN MoMo, Stripe, PayPal. Webhooks normalis\'es. Idempotence. R\'econciliation. Contrats inter-services formalis\'es (Abonnement, Wallet, Notification). Diagramme PlantUML en annexe. \\
+1.1 & 2026-04-04 & \'Equipe Archi. & Post-audit~: machine \`a \'etats formalis\'ee (transitions autoris\'ees). Mod\`ele \texttt{PaymentMethod} abstrait. S\'ecurit\'e webhooks d\'etaill\'ee (HMAC, IP whitelist, replay protection, timestamp validation). Timeout/expiration par provider. Idempotence renforc\'ee (visibilit\'e contractuelle). \\
+1.2 & 2026-04-04 & \'Equipe Archi. & Version finale~: statut \textit{Implementation-ready}. Matrice d'autorisation avec chemins complets. S\'emantique PaymentMethod corrig\'ee (\texttt{external\_wallet} pour PayPal). Propagation compl\`ete du statut \texttt{cancelled} (normalisation, \'ev\'enements, admin). \\
+\bottomrule
+\end{tabularx}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+Ce document constitue le cahier des charges du \textbf{Service de Paiement Centralis\'e} (ci-apr\`es \og~Payment Service~\fg{}) destin\'e \`a l'\'ecosyst\`eme AGT. Il sert de r\'ef\'erence unique pour la conception, le d\'eveloppement et les d\'ecisions techniques.
+
+\subsection{P\'erim\`etre}
+
+Le service Paiement couvre l'\textbf{ex\'ecution des transactions financi\`eres}~: initiation de paiements via providers externes, r\'eception et normalisation des webhooks, confirmation ou \'echec des transactions, tra\c{c}abilit\'e compl\`ete et r\'econciliation.
+
+\begin{infobox}[Principe fondamental]
+Paiement est un \textbf{ex\'ecutant pur}. Il ne d\'ecide pas \textit{quoi} facturer ni \textit{combien}~: c'est le service demandeur (Abonnement, Wallet, ou une plateforme) qui envoie un ordre de paiement. Paiement l'ex\'ecute et confirme le r\'esultat.
+\end{infobox}
+
+\subsection{Hors p\'erim\`etre}
+
+\begin{itemize}[nosep]
+  \item Authentification (d\'el\'egu\'ee au Service Auth v2.1)
+  \item Gestion des abonnements, plans, quotas (Service Abonnement v1.2)
+  \item R\'epartition des fonds, commissions, soldes (futur Service Wallet)
+  \item Profils utilisateur (Service Users v1.0)
+  \item Paiement de courses temps r\'eel MboaMove (g\'er\'e par MboaMove)
+  \item Remboursements (phase 2)
+  \item Logique m\'etier propre aux plateformes
+\end{itemize}
+
+\begin{warnbox}[Convention d'identit\'e]
+Dans tout ce document~:
+\begin{itemize}[nosep]
+  \item \texttt{user\_id} d\'esigne \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item \texttt{platform\_id} d\'esigne un UUID du registre Auth (\texttt{platforms.id})
+  \item Paiement ne stocke aucune table locale de plateformes ni d'utilisateurs.
+\end{itemize}
+\end{warnbox}
+
+% ============================================================
+\section{Contexte \& Probl\'ematique}
+% ============================================================
+
+\subsection{Contexte}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Plateforme} & \textbf{Statut} & \textbf{Besoin paiement} \\
+\midrule
+AGT-Bot    & En d\'eveloppement & Paiement d'abonnements (plans Pro, Enterprise) \\
+AGT-Market & En d\'eveloppement & Paiement de produits/services, commissions vendeurs \\
+MboaMove   & En d\'eveloppement & Cash-in/cash-out wallet chauffeurs et passagers \\
+SALMA      & Migration pr\'evue & Paiement de formations et certifications \\
+Futures    & Planifi\'e         & Toute plateforme n\'ecessitant un encaissement \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Probl\'ematique}
+
+Sans service centralis\'e, chaque plateforme int\'egrerait ses propres providers de paiement, entra\^inant~: duplication des int\'egrations (Orange Money, Stripe, etc.), incoh\'erence dans la gestion des webhooks, absence de r\'econciliation unifi\'ee, risques de s\'ecurit\'e li\'es \`a la manipulation de donn\'ees financi\`eres, et impossibilit\'e de tracer les transactions \`a travers l'\'ecosyst\`eme.
+
+% ============================================================
+\section{Vision \& Objectifs}
+% ============================================================
+
+\subsection{Vision}
+
+Un service \textbf{g\'en\'erique et abstrait} qui encapsule tous les providers de paiement. Les plateformes et services internes ne parlent jamais directement \`a Orange Money, Stripe ou PayPal~: ils envoient un ordre de paiement au Payment Service, qui s'occupe du reste.
+
+\begin{warnbox}[S\'eparation des responsabilit\'es financi\`eres]
+\begin{itemize}[nosep]
+  \item \textbf{Abonnement} d\'ecide quoi facturer (plans, quotas, overage)
+  \item \textbf{Paiement} ex\'ecute la transaction via le provider externe
+  \item \textbf{Wallet} r\'epartit les fonds (commissions, soldes, cr\'edits)
+\end{itemize}
+Aucun de ces services ne doit empi\'eter sur la responsabilit\'e des deux autres.
+\end{warnbox}
+
+\subsection{Objectifs}
+
+\begin{tabularx}{\textwidth}{clL}
+\toprule
+\textbf{\#} & \textbf{Objectif} & \textbf{Indicateur} \\
+\midrule
+O1 & Abstraction providers     & Un seul contrat d'API, quel que soit le provider \\
+O2 & Multi-provider            & Orange Money, MTN MoMo, Stripe, PayPal au MVP \\
+O3 & Idempotence               & Aucune double facturation, m\^eme en cas de retry \\
+O4 & Webhooks normalis\'es     & Tous les providers convergent vers un statut unifi\'e \\
+O5 & Tra\c{c}abilit\'e         & Chaque transaction trac\'ee de bout en bout \\
+O6 & R\'econciliation          & Rapprochement automatique provider $\leftrightarrow$ transactions internes \\
+O7 & Event-driven              & Confirmation/\'echec propag\'es via RabbitMQ \\
+O8 & Multi-devise              & Configurable par plateforme \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Parties Prenantes \& Utilisateurs}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{R\^ole} & \textbf{Type} & \textbf{Responsabilit\'e} \\
+\midrule
+Product Owner       & Interne & Priorisation des fonctionnalit\'es \\
+\'Equipe Backend    & Interne & D\'eveloppement, int\'egration providers \\
+\'Equipe Frontend   & Interne & Int\'egration UI paiement (formulaires, redirections) \\
+DevOps              & Interne & Infrastructure, s\'ecurit\'e, monitoring \\
+Admin global AGT    & Interne & Configuration providers, r\'econciliation \\
+Admin plateforme    & Interne & Consultation transactions de sa plateforme \\
+Services internes   & Interne & Abonnement (d\'eclencheur principal), Wallet (futur) \\
+Utilisateurs finaux & Externe & Paiement via Mobile Money, carte, PayPal \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Fonctionnels}
+% ============================================================
+
+\subsection{Initiation de Paiement}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-PAY-01 & Initier un paiement       & Cr\'eer une transaction avec montant, devise, provider, et r\'ef\'erence externe & \urgent \\
+F-PAY-02 & Choix du provider         & Le demandeur sp\'ecifie le provider ou laisse Paiement choisir selon la config plateforme & \urgent \\
+F-PAY-03 & URL de paiement           & Pour les providers redirect (Stripe, PayPal)~: retourner l'URL de checkout & \urgent \\
+F-PAY-04 & USSD push                 & Pour Mobile Money~: d\'eclencher le push USSD sur le t\'el\'ephone du payeur & \urgent \\
+F-PAY-05 & Idempotence               & Chaque demande porte un \texttt{idempotency\_key}. Doublon = retour du r\'esultat existant & \urgent \\
+F-PAY-06 & M\'etadonn\'ees libres    & Le demandeur attache des \texttt{metadata} (subscription\_id, order\_id, etc.) & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Webhooks \& Confirmation}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-WH-01 & R\'eception webhook       & Endpoint par provider pour recevoir les callbacks & \urgent \\
+F-WH-02 & V\'erification signature  & Valider l'authenticit\'e du webhook (HMAC, IP whitelist, etc.) & \urgent \\
+F-WH-03 & Normalisation statut      & Convertir le statut provider vers le statut interne unifi\'e & \urgent \\
+F-WH-04 & Mise \`a jour transaction & Passer la transaction en \texttt{succeeded}, \texttt{failed}, ou \texttt{expired} & \urgent \\
+F-WH-05 & \'Emission \'ev\'enement  & Publier \texttt{payment.confirmed}, \texttt{payment.failed} ou \texttt{payment.cancelled} sur RabbitMQ & \urgent \\
+F-WH-06 & Idempotence webhook       & Un m\^eme webhook re\c{c}u N fois ne modifie la transaction qu'une fois & \urgent \\
+F-WH-07 & Log brut                  & Stocker le payload brut du webhook pour audit et debug & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Normalisation des statuts]
+Chaque provider a sa propre terminologie. Paiement normalise vers un statut unique~:
+
+\begin{tabularx}{\textwidth}{lllll}
+\toprule
+\textbf{Statut interne} & \textbf{Stripe} & \textbf{Orange Money} & \textbf{MTN MoMo} & \textbf{PayPal} \\
+\midrule
+\texttt{pending}   & payment\_intent.created  & INITIATED  & PENDING    & CREATED \\
+\texttt{processing} & payment\_intent.processing & PENDING & PENDING & APPROVED \\
+\texttt{succeeded} & payment\_intent.succeeded & SUCCESS & SUCCESSFUL & COMPLETED \\
+\texttt{failed}    & payment\_intent.payment\_failed & FAILED & FAILED & VOIDED \\
+\texttt{expired}   & --- & EXPIRED & EXPIRED & EXPIRED \\
+\texttt{cancelled} & payment\_intent.canceled & --- & --- & VOIDED \\
+\bottomrule
+\end{tabularx}
+\end{warnbox}
+
+\begin{warnbox}[Machine \`a \'etats --- Transitions autoris\'ees (v1.1)]
+Toute transition non list\'ee ci-dessous est \textbf{interdite}. Le code doit rejeter les transitions invalides avec une erreur 400.
+
+\begin{verbatim}
+  [creation] --> pending
+  pending    --> processing       (provider a accuse reception)
+  pending    --> succeeded        (confirmation instantanee, ex: carte)
+  pending    --> failed           (rejet immediat provider)
+  pending    --> expired          (TTL depasse sans reponse)
+  pending    --> cancelled        (annulation avant traitement)
+  processing --> succeeded        (webhook confirmation)
+  processing --> failed           (webhook echec)
+  processing --> expired          (TTL depasse en cours de traitement)
+\end{verbatim}
+
+\textbf{\'Etats terminaux} (aucune transition sortante)~: \texttt{succeeded}, \texttt{failed}, \texttt{expired}, \texttt{cancelled}.
+
+\textbf{Exception admin}~: un admin global peut forcer \texttt{pending $\to$ succeeded} ou \texttt{pending $\to$ failed} via \texttt{force-status}, uniquement apr\`es v\'erification manuelle. Cette action est logg\'ee dans \texttt{transaction\_status\_history} avec \texttt{trigger = admin\_manual}.
+\end{warnbox}
+
+\begin{infobox}[Mod\`ele PaymentMethod abstrait (v1.1)]
+Le demandeur d'un paiement sp\'ecifie un \texttt{payment\_method} qui abstrait le type et le provider~:
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{type} & \textbf{provider} & \textbf{Donn\'ees requises} \\
+\midrule
+\texttt{mobile\_money} & orange\_money & \texttt{phone\_number} \\
+\texttt{mobile\_money} & mtn\_momo     & \texttt{phone\_number} \\
+\texttt{card}          & stripe        & Aucune (redirect vers Stripe Checkout) \\
+\texttt{external\_wallet} & paypal        & Aucune (redirect vers PayPal). Distinct du futur Wallet AGT. \\
+\bottomrule
+\end{tabularx}
+
+Si le demandeur ne sp\'ecifie que le \texttt{type} (ex~: \texttt{mobile\_money}) sans pr\'eciser le provider, Paiement choisit automatiquement le provider de plus haute priorit\'e pour ce type dans la config plateforme.
+\end{infobox}
+
+\subsection{Gestion des Providers}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-PRV-01 & Configuration provider    & Cr\'eer/modifier un provider avec credentials chiffr\'ees (AES-256) & \urgent \\
+F-PRV-02 & Providers par plateforme  & Chaque plateforme configure ses providers actifs et leur priorit\'e & \urgent \\
+F-PRV-03 & Fallback provider         & Si le provider principal \'echoue, tenter le suivant dans l'ordre de priorit\'e & \normale \\
+F-PRV-04 & Circuit breaker           & D\'esactiver temporairement un provider en cas d'\'echecs r\'ep\'et\'es & \normale \\
+F-PRV-05 & Health check provider     & V\'erifier p\'eriodiquement la disponibilit\'e de chaque provider & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Architecture provider --- Strategy Pattern]
+Chaque provider est impl\'ement\'e comme un \textbf{adapter} derri\`ere une interface commune~:
+\begin{itemize}[nosep]
+  \item \texttt{initiate\_payment(amount, currency, metadata)} $\to$ \texttt{PaymentResult}
+  \item \texttt{verify\_webhook(headers, payload)} $\to$ \texttt{bool}
+  \item \texttt{normalize\_status(raw\_status)} $\to$ \texttt{InternalStatus}
+  \item \texttt{get\_payment\_url()} $\to$ \texttt{str | None}
+\end{itemize}
+Ajouter un nouveau provider = ajouter un adapter, z\'ero modification du code m\'etier.
+\end{infobox}
+
+\subsection{Transactions \& Tra\c{c}abilit\'e}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-TRX-01 & D\'etail transaction      & Consulter une transaction avec son historique de statuts & \urgent \\
+F-TRX-02 & Liste transactions        & Filtrer par plateforme, statut, provider, date, user & \urgent \\
+F-TRX-03 & Historique de statuts     & Chaque changement de statut est logg\'e avec timestamp & \urgent \\
+F-TRX-04 & R\'ef\'erence crois\'ee   & Chaque transaction porte la r\'ef\'erence provider ET la r\'ef\'erence interne du demandeur & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{R\'econciliation}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-REC-01 & R\'econciliation auto     & Cron~: comparer les transactions internes avec les relev\'es providers & \urgent \\
+F-REC-02 & D\'etection anomalies     & Identifier les transactions pay\'ees chez le provider mais non confirm\'ees en interne (et inversement) & \urgent \\
+F-REC-03 & Rapport de r\'econciliation & G\'en\'erer un rapport par provider et par p\'eriode & \normale \\
+F-REC-04 & R\'esolution manuelle     & Interface admin pour r\'esoudre les anomalies & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Sc\'enarios de r\'econciliation]
+\begin{itemize}[nosep]
+  \item \textbf{Paiement confirm\'e chez le provider, pending en interne}~: webhook perdu. Le cron de r\'econciliation interroge l'API du provider et met \`a jour.
+  \item \textbf{Transaction interne succeeded, absente chez le provider}~: anomalie critique. Alerte admin imm\'ediate.
+  \item \textbf{Montant diff\'erent}~: anomalie. Transaction flag\'ee pour r\'esolution manuelle.
+\end{itemize}
+Fr\'equence~: toutes les 6 heures pour les transactions des derni\`eres 48h.
+\end{warnbox}
+
+\subsection{Administration}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ADM-01 & Stats par plateforme      & Volume, montant total, taux de succ\`es, par provider & \normale \\
+F-ADM-02 & Stats par provider        & Latence, taux d'\'echec, disponibilit\'e & \normale \\
+F-ADM-03 & Forcer un statut          & Admin peut forcer \texttt{succeeded} ou \texttt{failed} apr\`es v\'erification manuelle & \urgent \\
+F-ADM-04 & Rejouer un webhook        & Resoumettre un webhook en cas de traitement \'echou\'e & \normale \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Non-Fonctionnels}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{clLc}
+\toprule
+\textbf{ID} & \textbf{Cat\'egorie} & \textbf{Exigence} & \textbf{Cible} \\
+\midrule
+NF-01 & Performance    & Temps d'initiation paiement          & < 500ms (P95) hors latence provider \\
+NF-02 & Performance    & Traitement webhook                   & < 200ms (P95) \\
+NF-03 & Disponibilit\'e & Uptime                              & 99.9\% \\
+NF-04 & S\'ecurit\'e   & Credentials providers chiffr\'es     & AES-256 \\
+NF-05 & S\'ecurit\'e   & Webhooks v\'erifi\'es                & Signature HMAC ou IP whitelist \\
+NF-06 & S\'ecurit\'e   & Auth obligatoire                     & JWT ou S2S \\
+NF-07 & S\'ecurit\'e   & PCI-DSS                              & Aucune donn\'ee carte stock\'ee (d\'el\'egu\'e \`a Stripe) \\
+NF-08 & S\'ecurit\'e   & Rate limiting                        & Configurable par endpoint \\
+NF-09 & Scalabilit\'e  & Horizontal                           & Stateless, multi-instance \\
+NF-10 & Observabilit\'e & Logs structur\'es                   & JSON, request ID, masquage donn\'ees sensibles \\
+NF-11 & Observabilit\'e & Health check                        & \texttt{GET /payments/health} \\
+NF-12 & Donn\'ees      & Timestamps                           & TIMESTAMPTZ \\
+NF-13 & Traitement     & Crons r\'econciliation               & Celery Beat, retry 3x backoff (1min, 5min, 15min), DLQ \\
+NF-14 & Fiabilit\'e    & Idempotence                          & Sur initiation ET sur webhook \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Architecture Technique}
+% ============================================================
+
+\subsection{Vue d'ensemble}
+
+Le service Paiement est un microservice REST stateless, d\'eploy\'e en conteneur Docker. Il expose une API JSON consomm\'ee par les services internes (Abonnement, Wallet) et les plateformes clientes. Il re\c{c}oit les webhooks des providers externes sur des endpoints d\'edi\'es.
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Composant} & \textbf{Technologie} \\
+\midrule
+Langage \& Framework & Python 3.11+ / Django 5.x \\
+API                  & Django REST Framework (DRF) \\
+Base de donn\'ees    & PostgreSQL 15+ \\
+ORM                  & Django ORM \\
+Migrations           & Django Migrations \\
+Cache                & Redis 7+ (idempotence, circuit breaker) \\
+Scheduler            & Celery + Celery Beat (r\'econciliation, relance) \\
+Message Broker       & RabbitMQ (\'ev\'enements sortants) \\
+Chiffrement          & AES-256 pour credentials providers \\
+Validation           & DRF Serializers \\
+Conteneurisation     & Docker + Docker Compose \\
+CI/CD                & GitHub Actions \\
+\bottomrule
+\end{tabularx}
+
+\subsection{D\'ependances \& R\`egles d'Architecture}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Service} & \textbf{Type} & \textbf{Usage} \\
+\midrule
+Service Auth          & Interne  & Validation JWT via \texttt{GET /auth/verify-token}. Validation S2S via \texttt{POST /auth/s2s/introspect}. \\
+Service Users         & Interne  & R\'esolution \texttt{user\_id}, v\'erification statut actif avant paiement. \\
+Service Abonnement    & Interne  & Consommateur principal. \'Emet \texttt{subscription.payment\_required}. Re\c{c}oit \texttt{payment.confirmed/failed/cancelled}. \\
+Service Wallet        & Interne (futur) & Cash-in/cash-out. Re\c{c}oit \texttt{payment.confirmed} pour cr\'editer les wallets. \\
+Service Notification  & Interne  & Alertes~: paiement r\'eussi, \'echou\'e, re\c{c}u de paiement. \\
+Orange Money API      & Externe  & Provider Mobile Money Orange Cameroun \\
+MTN MoMo API          & Externe  & Provider Mobile Money MTN Cameroun \\
+Stripe API            & Externe  & Provider carte bancaire (Visa, Mastercard) \\
+PayPal API            & Externe  & Provider paiement international \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egle stricte de d\'ependance]
+Paiement ne d\'epend d'aucun service m\'etier. Il est \textbf{consomm\'e} par Abonnement et Wallet via RabbitMQ (event-driven) ou par les plateformes via API REST. Paiement ne conna\^it pas la nature de ce qui est pay\'e~: il re\c{c}oit un montant, une devise, un provider et des metadata opaques.
+
+\textbf{Flux principal}~:
+\begin{enumerate}[nosep]
+  \item Abonnement \'emet \texttt{subscription.payment\_required}
+  \item Paiement consomme l'\'ev\'enement, initie la transaction chez le provider
+  \item Provider confirme (webhook)
+  \item Paiement \'emet \texttt{payment.confirmed}
+  \item Abonnement consomme et active l'abonnement
+\end{enumerate}
+\end{warnbox}
+
+\subsection{Strat\'egie de r\'esilience}
+
+\begin{infobox}[Fallback et circuit breaker]
+\textbf{Fallback provider}~: si le provider principal \'echoue (timeout, 5xx, indisponibilit\'e), Paiement tente le provider suivant dans l'ordre de priorit\'e configur\'e par la plateforme. Le fallback ne s'applique qu'aux erreurs techniques, pas aux refus de paiement (fonds insuffisants, carte refus\'ee).
+
+\textbf{Circuit breaker}~: si un provider accumule $>$ 50\% d'\'echecs techniques sur les 100 derni\`eres requ\^etes (fen\^etre glissante), il est automatiquement d\'esactiv\'e pour 5 minutes. Apr\`es la p\'eriode de cooldown, un appel de test est envoy\'e. Si succ\`es, le circuit se referme. \'Etat stock\'e dans Redis.
+
+\textbf{Webhook retry}~: si le traitement interne d'un webhook \'echoue (erreur applicative, DB down), le webhook brut est persist\'e dans \texttt{webhook\_logs} et un cron de rattrapage le retraite dans les 15 minutes.
+\end{infobox}
+
+\begin{warnbox}[Timeout et expiration par provider (v1.1)]
+Chaque provider a un comportement temporel diff\'erent. Paiement g\`ere les TTL suivants~:
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Provider} & \textbf{TTL par d\'efaut} & \textbf{Comportement \`a expiration} \\
+\midrule
+Orange Money & 5 minutes & Le push USSD expire. Transaction $\to$ \texttt{expired}. \\
+MTN MoMo     & 5 minutes & Idem. \\
+Stripe       & 30 minutes & La session Checkout expire. Transaction $\to$ \texttt{expired}. \\
+PayPal       & 60 minutes & Le lien de paiement expire. Transaction $\to$ \texttt{expired}. \\
+\bottomrule
+\end{tabularx}
+
+\textbf{Impl\'ementation}~: \`a la cr\'eation de la transaction, \texttt{expires\_at} est calcul\'e selon le provider. Un cron Celery Beat (toutes les minutes) passe les transactions \texttt{pending} dont \texttt{expires\_at < now()} en statut \texttt{expired} et \'emet \texttt{payment.failed} avec \texttt{failure\_reason = "expired"}.
+
+\textbf{Annulation}~: un utilisateur peut annuler un paiement \texttt{pending} via l'API (\texttt{POST /payments/\{id\}/cancel}). La transaction passe en \texttt{cancelled}. Si le provider supporte l'annulation, elle est propag\'ee.
+\end{warnbox}
+
+\subsection{Diagramme d'architecture}
+
+\begin{verbatim}
+  Abonnement       Wallet (futur)      Plateformes
+      |                 |                   |
+  [RabbitMQ]        [RabbitMQ]          [REST API]
+      |                 |                   |
+      +--------+--------+-------+-----------+
+               |                |
+        Payment Service (API REST + Workers)
+          |        |        |        |
+      Orange    MTN MoMo  Stripe   PayPal
+      Money
+          |        |        |        |
+          +---[webhooks]----+--------+
+                   |
+           Payment Service
+                   |
+        [RabbitMQ: payment.confirmed / failed / cancelled]
+                   |
+           +-------+-------+
+           |               |
+       Abonnement       Wallet
+\end{verbatim}
+
+% ============================================================
+\section{Mod\'elisation}
+% ============================================================
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes complet est fourni en annexe au format PlantUML (voir section~\ref{sec:plantuml}). Il couvre les entit\'es~: \texttt{Transaction}, \texttt{TransactionStatusHistory}, \texttt{WebhookLog}, \texttt{ProviderConfig}, \texttt{PlatformPaymentConfig} et \texttt{ReconciliationReport}.
+
+\subsection{MLD --- Mod\`ele Logique de Donn\'ees}
+
+\subsubsection{Table \texttt{transactions}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                     & UUID          & PK             & Identifiant unique \\
+platform\_id           & UUID          & NOT NULL       & Plateforme (UUID Auth) \\
+user\_id               & UUID          & NULL           & Payeur (\texttt{users\_auth.id}). NULL si paiement S2S sans user. \\
+provider               & VARCHAR(30)   & NOT NULL       & orange\_money, mtn\_momo, stripe, paypal \\
+provider\_tx\_id       & VARCHAR(255)  & NULL           & Identifiant de la transaction chez le provider \\
+idempotency\_key       & UUID          & UNIQUE, NOT NULL & Cl\'e d'idempotence fournie par le demandeur \\
+amount                 & DECIMAL(12,2) & NOT NULL       & Montant \\
+currency               & VARCHAR(3)    & NOT NULL       & Devise (XAF, EUR, USD) \\
+status                 & VARCHAR(20)   & NOT NULL       & pending, processing, succeeded, failed, expired, cancelled \\
+source                 & VARCHAR(30)   & NOT NULL       & Origine~: subscription, wallet, platform\_direct \\
+source\_reference\_id  & UUID          & NULL           & R\'ef\'erence du demandeur (subscription\_id, order\_id, etc.) \\
+metadata               & JSONB         & NULL           & Donn\'ees opaques du demandeur \\
+payment\_url           & TEXT          & NULL           & URL de checkout (Stripe, PayPal) \\
+phone\_number          & VARCHAR(20)   & NULL           & Num\'ero pour Mobile Money (masqu\'e dans les logs) \\
+failure\_reason        & TEXT          & NULL           & Raison de l'\'echec (normalis\'ee) \\
+provider\_raw\_status  & VARCHAR(50)   & NULL           & Statut brut du provider \\
+expires\_at            & TIMESTAMPTZ   & NULL           & Expiration de la transaction (si applicable) \\
+confirmed\_at          & TIMESTAMPTZ   & NULL           & Date de confirmation \\
+created\_at            & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at            & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Index~: \texttt{(platform\_id, status)}, \texttt{(user\_id)}, \texttt{(provider\_tx\_id)}, \texttt{(source, source\_reference\_id)}.
+
+\subsubsection{Table \texttt{transaction\_status\_history}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+transaction\_id   & UUID          & FK $\to$ transactions & Transaction \\
+from\_status      & VARCHAR(20)   & NULL           & Statut pr\'ec\'edent (NULL si cr\'eation) \\
+to\_status        & VARCHAR(20)   & NOT NULL       & Nouveau statut \\
+trigger           & VARCHAR(30)   & NOT NULL       & webhook, cron\_reconciliation, admin\_manual, api\_call \\
+provider\_raw     & JSONB         & NULL           & Donn\'ees brutes du provider au moment du changement \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Date du changement \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{webhook\_logs}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+provider          & VARCHAR(30)   & NOT NULL       & Provider source \\
+event\_type       & VARCHAR(50)   & NOT NULL       & Type d'\'ev\'enement provider \\
+payload           & JSONB         & NOT NULL       & Payload brut (donn\'ees sensibles masqu\'ees) \\
+headers           & JSONB         & NULL           & Headers de la requ\^ete \\
+signature\_valid  & BOOLEAN       & NOT NULL       & Signature v\'erifi\'ee \\
+transaction\_id   & UUID          & FK $\to$ transactions, NULL & Transaction associ\'ee (NULL si non trouv\'ee) \\
+processing\_status & VARCHAR(20)  & DEFAULT 'pending' & pending, processed, failed, ignored \\
+error\_message    & TEXT          & NULL           & Erreur de traitement \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Date de r\'eception \\
+processed\_at     & TIMESTAMPTZ   & NULL           & Date de traitement \\
+\bottomrule
+\end{tabularx}
+
+Index~: \texttt{(provider, processing\_status)} pour le cron de rattrapage.
+
+\subsubsection{Table \texttt{provider\_configs}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                    & UUID          & PK             & Identifiant unique \\
+provider              & VARCHAR(30)   & NOT NULL       & orange\_money, mtn\_momo, stripe, paypal \\
+display\_name         & VARCHAR(100)  & NOT NULL       & Nom affich\'e \\
+is\_active            & BOOLEAN       & DEFAULT true   & Provider actif globalement \\
+credentials\_encrypted & TEXT         & NOT NULL       & Credentials chiffr\'ees AES-256 \\
+api\_base\_url        & VARCHAR(255)  & NOT NULL       & URL de base de l'API provider \\
+webhook\_secret\_encrypted & TEXT     & NULL           & Secret de v\'erification webhook (chiffr\'e) \\
+supported\_currencies & JSONB         & NOT NULL       & Devises support\'ees \\
+config                & JSONB         & NULL           & Config sp\'ecifique (timeout, options) \\
+created\_at           & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at           & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(provider)}.
+
+\subsubsection{Table \texttt{platform\_payment\_configs}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                    & UUID          & PK             & Identifiant unique \\
+platform\_id          & UUID          & NOT NULL       & Plateforme (UUID Auth) \\
+provider              & VARCHAR(30)   & NOT NULL       & Provider \\
+is\_active            & BOOLEAN       & DEFAULT true   & Actif pour cette plateforme \\
+priority              & INT           & DEFAULT 0      & Ordre de priorit\'e (fallback) \\
+default\_currency     & VARCHAR(3)    & DEFAULT 'XAF'  & Devise par d\'efaut \\
+config\_overrides     & JSONB         & NULL           & Surcharges de config sp\'ecifiques \`a la plateforme \\
+created\_at           & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at           & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, provider)}.
+
+\subsubsection{Table \texttt{reconciliation\_reports}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                    & UUID          & PK             & Identifiant unique \\
+provider              & VARCHAR(30)   & NOT NULL       & Provider concern\'e \\
+period\_start         & TIMESTAMPTZ   & NOT NULL       & D\'ebut de la p\'eriode \\
+period\_end           & TIMESTAMPTZ   & NOT NULL       & Fin de la p\'eriode \\
+total\_internal       & INT           & NOT NULL       & Nombre de transactions internes \\
+total\_provider       & INT           & NOT NULL       & Nombre de transactions provider \\
+matched               & INT           & NOT NULL       & Transactions concordantes \\
+mismatched            & INT           & NOT NULL       & Anomalies d\'etect\'ees \\
+missing\_internal     & INT           & NOT NULL       & Pr\'esentes chez provider, absentes en interne \\
+missing\_provider     & INT           & NOT NULL       & Pr\'esentes en interne, absentes chez provider \\
+details               & JSONB         & NULL           & D\'etail des anomalies \\
+status                & VARCHAR(20)   & NOT NULL       & completed, failed \\
+created\_at           & TIMESTAMPTZ   & NOT NULL       & Date du rapport \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Contrats d'API}
+% ============================================================
+
+Base URL~: \texttt{/api/v1}. Tous les endpoints retournent du JSON. Les endpoints prot\'eg\'es requi\`erent \texttt{Authorization: Bearer <token>}.
+
+\subsection{Health Check}
+
+\subsubsection{GET /payments/health}
+
+V\'erifie l'\'etat du service. Aucune authentification requise.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "status": "healthy",
+  "database": "ok",
+  "redis": "ok",
+  "rabbitmq": "ok",
+  "version": "1.2.0"
+}
+\end{lstlisting}
+
+\subsection{Initiation de Paiement}
+
+\subsubsection{POST /payments/initiate}
+
+Initie une transaction. Auth~: Bearer token ou S2S.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "user_id": "user-uuid",
+  "provider": "orange_money",
+  "amount": 15000,
+  "currency": "XAF",
+  "source": "subscription",
+  "source_reference_id": "sub-uuid",
+  "idempotency_key": "unique-uuid",
+  "phone_number": "+237600000000",
+  "metadata": {
+    "subscription_id": "sub-uuid",
+    "plan_name": "Pro",
+    "reason": "renewal"
+  }
+}
+\end{lstlisting}
+
+Response 201 (Mobile Money --- USSD push d\'eclench\'e)~:
+\begin{lstlisting}
+{
+  "transaction_id": "tx-uuid",
+  "status": "pending",
+  "provider": "orange_money",
+  "amount": 15000,
+  "currency": "XAF",
+  "message": "USSD push sent, waiting for user confirmation"
+}
+\end{lstlisting}
+
+Response 201 (Stripe/PayPal --- URL de checkout)~:
+\begin{lstlisting}
+{
+  "transaction_id": "tx-uuid",
+  "status": "pending",
+  "provider": "stripe",
+  "amount": 15000,
+  "currency": "XAF",
+  "payment_url": "https://checkout.stripe.com/pay/cs_xxx",
+  "message": "Redirect user to payment_url"
+}
+\end{lstlisting}
+
+Response 200 (idempotence --- transaction d\'ej\`a cr\'e\'ee)~:
+\begin{lstlisting}
+{
+  "transaction_id": "tx-uuid-existing",
+  "status": "pending",
+  "message": "Idempotent request, returning existing transaction"
+}
+\end{lstlisting}
+
+Codes~: 201 Created, 200 Idempotent hit, 400 Validation error, 401 Unauthorized, 404 Provider not found, 422 Provider rejected, 503 Provider unavailable.
+
+\begin{warnbox}[Contrat d'idempotence (v1.1)]
+\textbf{R\`egle contractuelle}~: le champ \texttt{idempotency\_key} est \textbf{obligatoire} sur \texttt{POST /payments/initiate}. C'est une contrainte \texttt{UNIQUE NOT NULL} en base.
+
+\textbf{Comportement}~:
+\begin{itemize}[nosep]
+  \item Premi\`ere requ\^ete avec une cl\'e donn\'ee $\to$ 201 Created, transaction cr\'e\'ee
+  \item Requ\^ete identique (m\^eme cl\'e) $\to$ 200 OK, transaction existante retourn\'ee sans modification ni double envoi au provider
+  \item Requ\^ete avec m\^eme cl\'e mais payload diff\'erent $\to$ 409 Conflict
+\end{itemize}
+
+\textbf{Responsabilit\'e du demandeur}~: g\'en\'erer un UUID v4 unique par intention de paiement. Le m\^eme UUID doit \^etre renvoy\'e en cas de retry r\'eseau. Cela couvre~: double-clic frontend, retry RabbitMQ, timeout HTTP avec relance.
+
+\textbf{TTL}~: les cl\'es d'idempotence sont conserv\'ees en base ind\'efiniment (li\'ees \`a la transaction). Pas de TTL~: une transaction existe pour toujours.
+\end{warnbox}
+
+\subsubsection{GET /payments/\{transactionId\}}
+
+D\'etail d'une transaction avec historique de statuts.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "id": "tx-uuid",
+  "platform_id": "uuid",
+  "user_id": "user-uuid",
+  "provider": "orange_money",
+  "amount": 15000,
+  "currency": "XAF",
+  "status": "succeeded",
+  "source": "subscription",
+  "source_reference_id": "sub-uuid",
+  "provider_tx_id": "OM-123456",
+  "confirmed_at": "2026-04-03T12:05:00Z",
+  "created_at": "2026-04-03T12:00:00Z",
+  "status_history": [
+    { "from": null, "to": "pending", "trigger": "api_call", "at": "..." },
+    { "from": "pending", "to": "succeeded", "trigger": "webhook", "at": "..." }
+  ]
+}
+\end{lstlisting}
+
+Codes~: 200, 404.
+
+\subsubsection{GET /payments}
+
+Liste des transactions. Query params~: \texttt{?platform\_id\&user\_id\&status\&provider\&source\&from\_date\&to\_date\&page\&limit}.
+
+Codes~: 200, 401.
+
+\subsubsection{POST /payments/\{transactionId\}/cancel (v1.1)}
+
+Annulation d'un paiement \texttt{pending}. Auth~: Bearer token ou S2S.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "transaction_id": "tx-uuid",
+  "status": "cancelled",
+  "message": "Payment cancelled"
+}
+\end{lstlisting}
+
+Codes~: 200, 400 Transaction not in pending state, 404.
+
+\subsection{Webhooks Providers}
+
+\subsubsection{POST /payments/webhooks/orange-money}
+\subsubsection{POST /payments/webhooks/mtn-momo}
+\subsubsection{POST /payments/webhooks/stripe}
+\subsubsection{POST /payments/webhooks/paypal}
+
+Chaque endpoint re\c{c}oit le callback du provider. \textbf{Aucune authentification JWT}~: la v\'erification se fait par signature HMAC ou IP whitelist selon le provider.
+
+\textbf{Comportement commun}~:
+\begin{enumerate}[nosep]
+  \item V\'erifier la signature du webhook
+  \item Stocker le payload brut dans \texttt{webhook\_logs}
+  \item Identifier la transaction via \texttt{provider\_tx\_id}
+  \item Normaliser le statut
+  \item Mettre \`a jour la transaction si le statut est un \'etat terminal (\texttt{succeeded}, \texttt{failed})
+  \item \'Emettre l'\'ev\'enement RabbitMQ correspondant
+\end{enumerate}
+
+Response~: 200 OK (toujours, m\^eme en cas d'erreur interne, pour \'eviter les retries provider inutiles). Les erreurs sont g\'er\'ees en interne via le cron de rattrapage.
+
+\begin{warnbox}[S\'ecurit\'e des webhooks (v1.1)]
+\textbf{4 couches de protection}~:
+
+\begin{enumerate}[nosep]
+  \item \textbf{Signature HMAC}~: chaque provider signe ses webhooks (Stripe~: \texttt{Stripe-Signature} HMAC-SHA256, Orange/MTN~: header propri\'etaire). Le secret est stock\'e chiffr\'e dans \texttt{provider\_configs.webhook\_secret\_encrypted}. Toute signature invalide $\to$ log + rejet silencieux (200 OK retourn\'e pour ne pas r\'ev\'eler l'erreur).
+  \item \textbf{IP whitelist}~: pour les providers Mobile Money qui ne signent pas syst\'ematiquement, filtrage par IP source. Liste configurable dans \texttt{provider\_configs.config}.
+  \item \textbf{Replay protection}~: chaque webhook porte un identifiant unique (ex~: \texttt{event\_id} Stripe). Paiement stocke les IDs trait\'es dans Redis (TTL 72h). Tout doublon est ignor\'e.
+  \item \textbf{Timestamp validation}~: si le webhook contient un timestamp, rejeter s'il date de plus de 5 minutes (protection contre les attaques par replay diff\'er\'e).
+\end{enumerate}
+\end{warnbox}
+
+\subsection{Configuration Providers}
+
+\subsubsection{POST /payments/providers}
+
+Cr\'eation d'un provider. Auth~: admin global.
+
+Request body~:
+\begin{lstlisting}
+{
+  "provider": "orange_money",
+  "display_name": "Orange Money Cameroun",
+  "credentials": { "api_key": "xxx", "api_secret": "yyy" },
+  "api_base_url": "https://api.orange.com/...",
+  "webhook_secret": "whsec_xxx",
+  "supported_currencies": ["XAF"]
+}
+\end{lstlisting}
+
+Codes~: 201, 400, 409 Provider already exists.
+
+\textit{Note~: \texttt{credentials} et \texttt{webhook\_secret} sont chiffr\'es AES-256 avant stockage. Le secret brut n'est jamais retourn\'e.}
+
+\subsubsection{PUT /payments/providers/\{provider\}}
+
+Modification. Codes~: 200, 400, 404.
+
+\subsubsection{PUT /payments/platforms/\{platformId\}/providers}
+
+Configuration des providers pour une plateforme (priorit\'e, devise, overrides).
+
+Request body~:
+\begin{lstlisting}
+{
+  "providers": [
+    { "provider": "orange_money", "priority": 1, "is_active": true },
+    { "provider": "mtn_momo", "priority": 2, "is_active": true },
+    { "provider": "stripe", "priority": 3, "is_active": true }
+  ],
+  "default_currency": "XAF"
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 403.
+
+\subsection{Administration}
+
+\subsubsection{GET /payments/admin/stats}
+
+Query params~: \texttt{?platform\_id\&provider\&from\_date\&to\_date}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "total_transactions": 12450,
+  "total_amount": 185000000,
+  "currency": "XAF",
+  "success_rate": 94.2,
+  "by_provider": [
+    { "provider": "orange_money", "count": 8200, "success_rate": 95.1 },
+    { "provider": "stripe", "count": 3100, "success_rate": 93.8 },
+    { "provider": "mtn_momo", "count": 1150, "success_rate": 91.5 }
+  ]
+}
+\end{lstlisting}
+
+Codes~: 200, 403.
+
+\subsubsection{POST /payments/admin/\{transactionId\}/force-status}
+
+Forcer un statut apr\`es v\'erification manuelle. Auth~: admin global.
+
+Request body~:
+\begin{lstlisting}
+{
+  "status": "succeeded",
+  "reason": "Verified manually via Orange Money dashboard"
+}
+\end{lstlisting}
+
+Codes~: 200, 400 Invalid status transition, 403, 404.
+
+\subsubsection{GET /payments/admin/reconciliation}
+
+Liste des rapports de r\'econciliation. Query params~: \texttt{?provider\&from\_date\&to\_date}.
+
+Codes~: 200, 403.
+
+\subsubsection{DELETE /payments/by-user/\{userId\}}
+
+\textbf{Purge RGPD.} Auth~: S2S token. Anonymise les donn\'ees personnelles des transactions (phone\_number, user\_id) sans supprimer les transactions (obligation comptable).
+
+Codes~: 200, 401, 404.
+
+% ============================================================
+\section{Contrats Inter-Services}
+% ============================================================
+
+\subsection{Paiement $\to$ Auth (JWT utilisateur)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint           & \texttt{GET /auth/verify-token} \\
+Auth               & \texttt{Authorization: Bearer <access\_token>} \\
+Donn\'ees extraites & \texttt{user\_id} (\texttt{sub}), \texttt{platform\_id} \\
+Cache              & Redis TTL 30s \\
+Comportement \'echec & Retourner 401 Unauthorized \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Paiement $\to$ Auth (token S2S)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint & \texttt{POST /auth/s2s/introspect} \\
+Donn\'ees & \texttt{client\_id}, \texttt{service\_name} \\
+Usage    & Appels S2S entrants (Abonnement d\'eclenchant un paiement) \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Abonnement $\to$ Paiement (\'ev\'enements RabbitMQ entrants)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement consomm\'e} & \textbf{Action Paiement} \\
+\midrule
+\texttt{subscription.payment\_required} & Initier une transaction. Payload contient~: \texttt{idempotency\_key}, \texttt{subscription\_id}, \texttt{amount}, \texttt{currency}, \texttt{subscriber\_type}, \texttt{subscriber\_id}, \texttt{reason}. Paiement r\'esout le provider via la config plateforme. \\
+\texttt{subscription.overage\_billing}  & Initier une transaction pour facturation overage. Payload contient~: \texttt{idempotency\_key}, \texttt{quota\_snapshot}. \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Idempotence \'ev\'enements entrants]
+Paiement d\'eduplique sur \texttt{idempotency\_key}. Si une transaction existe d\'ej\`a pour cette cl\'e, l'\'ev\'enement est ignor\'e (log info). Cela couvre les retries RabbitMQ et les doubles \'emissions.
+\end{warnbox}
+
+\subsection{Paiement $\to$ Abonnement / Wallet (\'ev\'enements RabbitMQ sortants)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement publi\'e} & \textbf{Payload} \\
+\midrule
+\texttt{payment.confirmed} & \texttt{event\_id} (UUID), \texttt{payment\_reference\_id} (= transaction.id), \texttt{idempotency\_key}, \texttt{amount}, \texttt{currency}, \texttt{provider}, \texttt{source}, \texttt{source\_reference\_id}, \texttt{metadata}, \texttt{confirmed\_at} \\
+\texttt{payment.failed}    & \texttt{event\_id}, \texttt{payment\_reference\_id}, \texttt{idempotency\_key}, \texttt{amount}, \texttt{currency}, \texttt{provider}, \texttt{source}, \texttt{source\_reference\_id}, \texttt{failure\_reason}, \texttt{failed\_at} \\
+\texttt{payment.cancelled} & \texttt{event\_id}, \texttt{payment\_reference\_id}, \texttt{idempotency\_key}, \texttt{source}, \texttt{source\_reference\_id}, \texttt{cancelled\_at} \\
+\texttt{payment.cancelled} & \texttt{event\_id}, \texttt{payment\_reference\_id}, \texttt{idempotency\_key}, \texttt{source}, \texttt{source\_reference\_id}, \texttt{cancelled\_at} \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Routage des \'ev\'enements]
+Les \'ev\'enements sont publi\'es sur un exchange RabbitMQ de type \texttt{topic}. Les consommateurs s'abonnent selon leur besoin~:
+\begin{itemize}[nosep]
+  \item Abonnement \'ecoute \texttt{payment.confirmed} et \texttt{payment.cancelled} o\`u \texttt{source = subscription}
+  \item Wallet \'ecoutera \texttt{payment.confirmed} o\`u \texttt{source = wallet}
+  \item Notification \'ecoute \texttt{payment.confirmed}, \texttt{payment.failed} et \texttt{payment.cancelled} pour envoyer les alertes
+\end{itemize}
+\end{infobox}
+
+\subsection{Paiement $\to$ Notification (alertes)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Notification d\'eclench\'ee} \\
+\midrule
+Transaction succeeded  & Email/push~: \og Paiement de X FCFA re\c{c}u\fg{} + re\c{c}u \\
+Transaction failed    & Email/push~: \og \'Echec du paiement, veuillez r\'eessayer\fg{} \\
+Transaction cancelled & Push~: \og Votre paiement a \'et\'e annul\'e\fg{} \\
+Transaction expired   & Push~: \og Votre paiement a expir\'e\fg{} \\
+Transaction cancelled & Push~: \og Votre paiement a \'et\'e annul\'e\fg{} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Users $\to$ Paiement (Purge RGPD)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint          & \texttt{DELETE /api/v1/payments/by-user/\{userId\}} \\
+Auth              & Token S2S \\
+Usage             & Appel\'e par Users dans le workflow de purge RGPD \\
+Donn\'ees anonymis\'ees & \texttt{user\_id} $\to$ NULL, \texttt{phone\_number} $\to$ NULL. Transactions conserv\'ees (obligation comptable). \\
+S\'equence        & Avant Auth purge \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[RGPD --- obligation comptable]
+Les transactions ne sont \textbf{jamais supprim\'ees} physiquement. La purge RGPD \textbf{anonymise} les donn\'ees personnelles (\texttt{user\_id}, \texttt{phone\_number}) tout en conservant les montants, dates et r\'ef\'erences pour la tra\c{c}abilit\'e comptable l\'egale.
+\end{warnbox}
+
+% ============================================================
+\section{Matrice d'Autorisation}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{lcccc}
+\toprule
+\textbf{Endpoint} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin Plat.} & \textbf{Admin Global} \\
+\midrule
+POST /payments/initiate                              & $\checkmark$ & $\checkmark$ &              &              \\
+GET /payments/\{id\}                                 & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+GET /payments                                        & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /payments/\{id\}/cancel                         & $\checkmark$ & $\checkmark$ &              & $\checkmark$ \\
+POST /payments/webhooks/*                            & \multicolumn{4}{c}{\textit{Signature provider (pas de JWT)}} \\
+POST /payments/providers                             &              &              &              & $\checkmark$ \\
+PUT /payments/providers/\{provider\}                 &              &              &              & $\checkmark$ \\
+PUT /payments/platforms/\{platformId\}/providers     &              &              & $\checkmark$ & $\checkmark$ \\
+GET /payments/admin/stats                            &              &              & $\checkmark$ & $\checkmark$ \\
+POST /payments/admin/\{id\}/force-status             &              &              &              & $\checkmark$ \\
+GET /payments/admin/reconciliation                   &              &              &              & $\checkmark$ \\
+DELETE /payments/by-user/\{userId\}                  &              & $\checkmark$ &              & $\checkmark$ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Recommandations \& \'Evolutions}
+% ============================================================
+
+\begin{itemize}
+  \item \textbf{Remboursements (phase 2)}~: endpoint \texttt{POST /payments/\{id\}/refund} avec montant partiel ou total, propag\'e vers le provider.
+  \item \textbf{Nouveaux providers}~: CinetPay, Campay, Flutterwave via le pattern adapter.
+  \item \textbf{Paiement r\'ecurrent natif}~: certains providers (Stripe) supportent la r\'ecurrence native. Possibilit\'e de d\'el\'eguer la r\'ecurrence au provider pour r\'eduire la charge sur Abonnement.
+  \item \textbf{3D Secure}~: gestion du challenge d'authentification carte.
+  \item \textbf{Monitoring}~: m\'etriques Prometheus (transactions/s, latence par provider, taux de succ\`es, circuit breaker state).
+  \item \textbf{Versioning API}~: pr\'efixe \texttt{/api/v1}. Breaking changes $\to$ \texttt{/api/v2}.
+  \item \textbf{Dashboard financier}~: vue consolid\'ee cross-plateforme pour la direction.
+\end{itemize}
+
+% ============================================================
+\section*{Annexes}
+% ============================================================
+
+\subsection*{Glossaire}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Terme} & \textbf{D\'efinition} \\
+\midrule
+Provider        & Fournisseur de paiement externe (Orange Money, Stripe, etc.) \\
+Transaction     & Unit\'e de paiement trac\'ee de l'initiation \`a la confirmation \\
+Webhook         & Callback HTTP envoy\'e par le provider pour notifier un changement de statut \\
+Idempotence     & Garantie qu'une op\'eration ex\'ecut\'ee N fois produit le m\^eme r\'esultat \\
+Circuit breaker & M\'ecanisme de protection qui d\'esactive un provider d\'efaillant temporairement \\
+R\'econciliation & Rapprochement entre les transactions internes et les relev\'es du provider \\
+USSD push       & Notification envoy\'ee sur le t\'el\'ephone du payeur pour confirmer un paiement Mobile Money \\
+PCI-DSS         & Norme de s\'ecurit\'e pour le traitement des donn\'ees de carte bancaire \\
+DLQ             & Dead Letter Queue --- file d'attente pour les messages non trait\'es \\
+S2S             & Service-to-Service --- communication entre microservices \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Code PlantUML --- Diagramme de Classes}
+\label{sec:plantuml}
+
+Le code PlantUML ci-dessous correspond au diagramme de classes complet du service Paiement v1.2. Il peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+@startuml Payment Service - Class Diagram v1.2
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "transactions" as tx {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  user_id : UUID
+  * provider : VARCHAR(30)
+  provider_tx_id : VARCHAR(255)
+  * idempotency_key : UUID <<UQ>>
+  * amount : DECIMAL(12,2)
+  * currency : VARCHAR(3)
+  * status : VARCHAR(20)
+  * source : VARCHAR(30)
+  source_reference_id : UUID
+  metadata : JSONB
+  payment_url : TEXT
+  phone_number : VARCHAR(20)
+  failure_reason : TEXT
+  provider_raw_status : VARCHAR(50)
+  expires_at : TIMESTAMPTZ
+  confirmed_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "transaction_status_history" as history {
+  * id : UUID <<PK>>
+  --
+  * transaction_id : UUID <<FK>>
+  from_status : VARCHAR(20)
+  * to_status : VARCHAR(20)
+  * trigger : VARCHAR(30)
+  provider_raw : JSONB
+  * created_at : TIMESTAMPTZ
+}
+
+entity "webhook_logs" as whlogs {
+  * id : UUID <<PK>>
+  --
+  * provider : VARCHAR(30)
+  * event_type : VARCHAR(50)
+  * payload : JSONB
+  headers : JSONB
+  * signature_valid : BOOLEAN
+  transaction_id : UUID <<FK>>
+  processing_status : VARCHAR(20) = 'pending'
+  error_message : TEXT
+  * created_at : TIMESTAMPTZ
+  processed_at : TIMESTAMPTZ
+}
+
+entity "provider_configs" as providers {
+  * id : UUID <<PK>>
+  --
+  * provider : VARCHAR(30) <<UQ>>
+  * display_name : VARCHAR(100)
+  is_active : BOOLEAN = true
+  * credentials_encrypted : TEXT
+  * api_base_url : VARCHAR(255)
+  webhook_secret_encrypted : TEXT
+  * supported_currencies : JSONB
+  config : JSONB
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "platform_payment_configs" as platconfigs {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * provider : VARCHAR(30)
+  is_active : BOOLEAN = true
+  priority : INT = 0
+  default_currency : VARCHAR(3) = 'XAF'
+  config_overrides : JSONB
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, provider)
+}
+
+entity "reconciliation_reports" as recon {
+  * id : UUID <<PK>>
+  --
+  * provider : VARCHAR(30)
+  * period_start : TIMESTAMPTZ
+  * period_end : TIMESTAMPTZ
+  * total_internal : INT
+  * total_provider : INT
+  * matched : INT
+  * mismatched : INT
+  * missing_internal : INT
+  * missing_provider : INT
+  details : JSONB
+  * status : VARCHAR(20)
+  * created_at : TIMESTAMPTZ
+}
+
+tx ||--o{ history    : "1..* status changes"
+tx ||--o{ whlogs     : "0..* webhook logs"
+
+@enduml
+\end{lstlisting}
+
+\vfill
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}\\[0.5em]
+{\small\textcolor{agtgray}{AG Technologies --- Document confidentiel \`a usage interne exclusivement.}}\\
+{\small\textcolor{agtgray}{Payment Service CDC v1.2 --- Avril 2026}}
+\end{center}
+
+\end{document}

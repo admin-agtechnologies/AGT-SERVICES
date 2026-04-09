@@ -1,0 +1,729 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel} % Remplacer par [french] si texlive-lang-french install\'e
+\usepackage[margin=2cm,bottom=2.5cm]{geometry}
+%\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{colortbl}
+\usepackage{lastpage}
+
+\definecolor{dark}{HTML}{1a1a2e}
+\definecolor{primary}{HTML}{16213e}
+\definecolor{accent}{HTML}{0f3460}
+\definecolor{lightbg}{HTML}{f8f9fa}
+\definecolor{border}{HTML}{dee2e6}
+\definecolor{muted}{HTML}{6c757d}
+\definecolor{codepink}{HTML}{d63384}
+\definecolor{warnbg}{HTML}{fff3cd}
+\definecolor{warntxt}{HTML}{856404}
+\definecolor{infobg}{HTML}{d1ecf1}
+\definecolor{infotxt}{HTML}{0c5460}
+
+\titleformat{\section}{\Large\bfseries\color{dark}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{accent}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{primary}}{}{0em}{}
+\titlespacing*{\section}{0pt}{16pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+\titlespacing*{\subsubsection}{0pt}{8pt}{3pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}AGT --- Service Users v2.1 --- Confidentiel}
+\fancyfoot[L]{\small\color{muted}AG Technologies --- Confidentiel}
+\fancyfoot[R]{\small\color{muted}\thepage\ / \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\lstset{
+  basicstyle=\small\ttfamily\color{codepink},
+  backgroundcolor=\color{lightbg},
+  frame=single, rulecolor=\color{border},
+  breaklines=true, tabsize=2, showstringspaces=false,
+  xleftmargin=4pt, xrightmargin=4pt,
+  aboveskip=6pt, belowskip=6pt,
+}
+
+\tcbuselibrary{skins,breakable}
+\newtcolorbox{warningbox}{colback=warnbg,colframe=warntxt,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable}
+\newtcolorbox{infobox}{colback=infobg,colframe=infotxt,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcommand{\thdr}[1]{\textcolor{white}{\textbf{#1}}}
+\newcommand{\hdrrow}{\rowcolor{accent}}
+
+\hypersetup{colorlinks=true,linkcolor=accent,urlcolor=accent,
+  pdftitle={AG Technologies - User Service CDC v2.1},pdfauthor={Equipe Architecture}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\vspace*{5cm}
+\begin{center}
+\colorbox{dark}{\parbox{14cm}{\centering\vspace{12pt}
+  {\Huge\bfseries\color{white}AG TECHNOLOGIES}\par\vspace{6pt}
+  {\large\color{white!70}Service Gestion des Utilisateurs}\par\vspace{2pt}
+  {\normalsize\color{white!70}Profils, R\^oles \& Permissions Dynamiques --- User Service}\par\vspace{10pt}
+  {\large\color{white!70}Cahier des Charges Technique v2.1}\par\vspace{2pt}
+  {\normalsize\color{white!60}implementation-ready}\par\vspace{12pt}
+}}
+\end{center}
+\vspace{2cm}
+\begin{center}
+\begin{tabular}{ll}
+\textbf{Version} & 2.1 (implementation-ready) \\
+\textbf{Date} & Mars 2026 \\
+\textbf{Statut} & Post-audit --- Corrections appliqu\'ees \\
+\textbf{Classification} & Confidentiel \\
+\textbf{Auteur} & \'Equipe Architecture \\
+\end{tabular}
+\end{center}
+\vfill
+\begin{center}\small\color{muted}Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies\end{center}
+\newpage
+
+\section*{Historique des R\'evisions}
+{\small\begin{tabularx}{\textwidth}{L{1cm}L{2.5cm}X}\toprule
+\hdrrow \thdr{Ver.} & \thdr{Date} & \thdr{Description} \\\midrule
+1.0 & 20/03/2026 & Cr\'eation initiale \\
+2.0 & 20/03/2026 & Post-audit : plateformes unifi\'ees (Auth=ma\^itre, UUID), email/phone read-only, contrats inter-services, MLD corrig\'e, rate limiting, health check \\
+2.1 & 20/03/2026 & Clarifications finales : mod\`ele de suppression dual (quitter plateforme vs soft delete g\'en\'eral + deactivate Auth), s\'equence hard delete s\'ecuris\'ee, endpoint retrait plateforme, \{id\}=users\_profiles.id explicit\'e, endpoint lookup par auth\_user\_id, assigned\_by clarifi\'e \\
+\bottomrule\end{tabularx}}
+\newpage\tableofcontents\newpage
+
+\section{Introduction}
+\subsection{Objet}
+Cahier des charges technique du User Service d'AG Technologies.
+
+\subsection{P\'erim\`etre}
+\textbf{Inclus :} profils, adresses, RBAC dynamique, documents, m\'etadonn\'ees, recherche, statistiques, audit trail.
+
+\textbf{Hors p\'erim\`etre :}
+\begin{itemize}[nosep]
+\item Authentification, credentials, tokens $\to$ Service Auth
+\item Stockage fichiers $\to$ Service M\'edia
+\item Envoi emails/SMS $\to$ Service Notification
+\item CRUD plateformes $\to$ Service Auth (registre ma\^itre)
+\item Logique m\'etier / KYC des plateformes
+\end{itemize}
+
+\begin{infobox}
+\textbf{Source de v\'erit\'e :} Auth est la source ma\^itre pour l'identit\'e d'authentification (\texttt{auth\_user\_id}, email, phone, statut d'acc\`es). Users est la source ma\^itre pour le profil, les r\^oles, permissions, adresses, documents et m\'etadonn\'ees.
+\end{infobox}
+
+\subsection{Destinataires}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Destinataire} & \thdr{R\^ole} \\\midrule
+\'Equipe Backend & D\'eveloppement et maintenance \\
+\'Equipe Frontend & Int\'egration APIs \\
+\'Equipes consommatrices & AGT-Market, AGT-Bot, SALMA, Auth \\
+Lead Technique & Validation choix techniques \\
+\bottomrule\end{tabularx}}
+
+\section{Contexte \& Probl\'ematique}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Probl\`eme} & \thdr{Solution} \\\midrule
+Profils dupliqu\'es & Profil unique partag\'e \\
+R\^oles cod\'es en dur & RBAC 100\% dynamique via API \\
+Donn\'ees incoh\'erentes & Source unique de v\'erit\'e \\
+Suppression complexe & Soft + hard delete RGPD configurable \\
+V\'erification droits & Endpoint rapide + cache Redis \\
+\bottomrule\end{tabularx}}
+
+\section{Vision \& Objectifs}
+Le Service Users est \textbf{g\'en\'erique, abstrait et dynamique}. Aucun concept m\'etier cod\'e en dur.
+
+\begin{infobox}
+\textbf{Principe :} Users = registre central de \emph{qui est qui} et \emph{ce qu'il peut faire} --- sans contexte m\'etier.
+\end{infobox}
+
+\subsection{KPIs}
+{\small\begin{tabularx}{\textwidth}{L{5cm}C{3cm}C{3cm}}\toprule
+\hdrrow \thdr{KPI} & \thdr{MVP} & \thdr{Long terme} \\\midrule
+Lecture profil & $<200$ms & $<100$ms \\
+V\'erification permission & $<200$ms & $<50$ms \\
+Recherche & $<500$ms & $<200$ms \\
+Disponibilit\'e & $\geq99\%$ & $\geq99{,}5\%$ \\
+\bottomrule\end{tabularx}}
+
+\section{Parties Prenantes}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Service} & \thdr{Usage} \\\midrule
+AGT-Market & R\^oles client/vendeur/livreur, documents KYC \\
+SALMA & R\^oles \'etudiant/formateur, documents dipl\^omes \\
+AGT-Bot & R\^oles tenant/op\'erateur \\
+Service Auth & POST /users apr\`es inscription (provisioning sync) \\
+Service Notification & Alertes changements r\^oles, validation documents \\
+Service M\'edia & Stockage photos et documents \\
+\bottomrule\end{tabularx}}
+
+\section{Besoins Fonctionnels}
+
+\subsection{Module Profil}
+{\small\begin{tabularx}{\textwidth}{L{2cm}XL{2cm}}\toprule
+\hdrrow \thdr{ID} & \thdr{Fonctionnalit\'e} & \thdr{Priorit\'e} \\\midrule
+F-PRO-01 & Cr\'eation profil li\'e \`a Auth (auth\_user\_id) & Urgent \\
+F-PRO-02 & Consultation profil & Urgent \\
+F-PRO-03 & MAJ nom, pr\'enom, naissance, genre, photo & Urgent \\
+F-PRO-04 & Email/phone read-only sync Auth & Urgent \\
+F-PRO-05 & Quitter une plateforme (retrait r\^oles, m\'etadonn\'ees, documents) & Urgent \\
+F-PRO-06 & Soft delete g\'en\'eral (status=deleted + deactivate Auth) & Urgent \\
+F-PRO-07 & Hard delete RGPD (d\'elai configurable, s\'equence s\'ecuris\'ee) & Urgent \\
+F-PRO-08 & Upload photo via M\'edia & Normal \\
+\bottomrule\end{tabularx}}
+
+\subsection{Module Adresses}
+{\small\begin{tabularx}{\textwidth}{L{2cm}XL{2cm}}\toprule
+\hdrrow \thdr{ID} & \thdr{Fonctionnalit\'e} & \thdr{Priorit\'e} \\\midrule
+F-ADR-01 & CRUD adresses, type libre & Urgent \\
+F-ADR-02 & Adresse par d\'efaut & Normal \\
+\bottomrule\end{tabularx}}
+
+\subsection{Module RBAC Dynamique}
+\begin{infobox}
+\textbf{Aucun r\^ole ni permission cod\'e en dur.} Tout est cr\'e\'e dynamiquement via l'API.
+\end{infobox}
+
+{\small\begin{tabularx}{\textwidth}{L{2cm}XL{2cm}}\toprule
+\hdrrow \thdr{ID} & \thdr{Fonctionnalit\'e} & \thdr{Priorit\'e} \\\midrule
+F-ROL-01 & CRUD r\^oles par plateforme & Urgent \\
+F-ROL-02 & CRUD permissions par plateforme & Urgent \\
+F-ROL-03 & Attacher/d\'etacher permissions \`a un r\^ole & Urgent \\
+F-ROL-04 & Assigner/retirer r\^oles par user par plateforme & Urgent \\
+F-ROL-05 & Multi-r\^oles, multi-plateformes & Urgent \\
+F-ROL-06 & V\'erification permission (rapide, cache Redis) & Urgent \\
+\bottomrule\end{tabularx}}
+
+\subsection{Module Documents}
+{\small\begin{tabularx}{\textwidth}{L{2cm}XL{2cm}}\toprule
+\hdrrow \thdr{ID} & \thdr{Fonctionnalit\'e} & \thdr{Priorit\'e} \\\midrule
+F-DOC-01 & Attacher document, type libre & Urgent \\
+F-DOC-02 & Fichier dans M\'edia, Users garde r\'ef\'erence & Urgent \\
+F-DOC-03 & Workflow pending$\to$validated/rejected & Urgent \\
+F-DOC-04 & Re-soumission (historique conserv\'e) & Normal \\
+F-DOC-05 & Listage filtrable & Normal \\
+\bottomrule\end{tabularx}}
+
+\subsection{Module M\'etadonn\'ees}
+Syst\`eme cl\'e-valeur flexible par plateforme, sans modification du sch\'ema central.
+
+\subsection{Module Recherche \& Statistiques}
+Listage pagin\'e (filtres plateforme, r\^ole, statut), recherche texte, stats par plateforme/r\^ole/statut.
+
+\section{Besoins Non-Fonctionnels}
+{\small\begin{tabularx}{\textwidth}{L{1.5cm}L{2.5cm}XL{3.5cm}}\toprule
+\hdrrow \thdr{ID} & \thdr{Cat\'egorie} & \thdr{Exigence} & \thdr{Cible} \\\midrule
+NF-01 & Performance & Lecture profil & $<200$ms (P95) \\
+NF-02 & Performance & V\'erif. permission & $<200$ms (cache) \\
+NF-03 & Performance & Recherche & $<500$ms \\
+NF-04 & Performance & \'Ecriture & $<300$ms \\
+NF-05 & Disponibilit\'e & Uptime & $\geq99{,}5\%$ \\
+NF-06 & S\'ecurit\'e & Auth obligatoire & Bearer token \\
+NF-07 & S\'ecurit\'e & Isolation donn\'ees & Par plateforme \\
+NF-08 & S\'ecurit\'e & PII prot\'eg\'es & Exclus des logs \\
+NF-09 & S\'ecurit\'e & Audit trail & Toute modification \\
+NF-10 & Scalabilit\'e & Horizontal & Stateless \\
+NF-11 & Scalabilit\'e & Cache & Redis TTL config. \\
+NF-12 & Observabilit\'e & Health check & GET /api/v1/health \\
+NF-13 & Observabilit\'e & Logs & JSON structur\'e \\
+\bottomrule\end{tabularx}}
+
+\section{Architecture Technique}
+
+\subsection{Stack}
+{\small\begin{tabularx}{\textwidth}{L{4.5cm}X}\toprule
+\hdrrow \thdr{Composant} & \thdr{Technologie} \\\midrule
+Langage \& Framework & Python 3.11+ / Django 5.x \\
+API & Django REST Framework \\
+Base de donn\'ees & PostgreSQL 15+ \\
+Cache & Redis 7+ \\
+Conteneurisation & Docker + Docker Compose \\
+CI/CD & GitHub Actions \\
+\bottomrule\end{tabularx}}
+
+\subsection{D\'ependances}
+\begin{warningbox}
+\textbf{R\`egle :} Users d\'epend de Auth. Auth ne d\'epend PAS de Users. Plateformes g\'er\'ees par Auth (registre ma\^itre).
+\end{warningbox}
+
+{\small\begin{tabularx}{\textwidth}{L{3.5cm}L{2cm}X}\toprule
+\hdrrow \thdr{Service} & \thdr{Type} & \thdr{Usage} \\\midrule
+Service Auth & Interne & Validation JWT, source plateformes, source email/phone \\
+Service M\'edia & Interne & Stockage photos et documents \\
+Service Notification & Interne & Alertes r\^oles, validation documents \\
+\bottomrule\end{tabularx}}
+
+\subsection{Mod\`ele d'Autorisation}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{4.5cm}X}\toprule
+\hdrrow \thdr{Niveau} & \thdr{M\'ecanisme} & \thdr{Endpoints} \\\midrule
+Service-to-Service & Token S2S Auth & POST /users, purge RGPD \\
+Admin plateforme & Bearer + RBAC (manage\_roles\ldots) & CRUD r\^oles, permissions, documents \\
+Utilisateur & Bearer token & Son profil, adresses, documents \\
+\bottomrule\end{tabularx}}
+
+Chaque plateforme cr\'ee ses r\^oles admin \`a l'init avec permissions n\'ecessaires. Pas de m\'ecanisme sp\'ecial.
+
+\newpage
+\section{Mod\'elisation --- MLD}
+
+\begin{warningbox}
+\textbf{v2.0 :} Plus de table \texttt{platforms} locale. Tous les \texttt{platform\_id} = UUID Auth.
+\end{warningbox}
+
+\subsection{Table \texttt{users\_profiles}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & Identifiant \\
+auth\_user\_id & UUID & NOT NULL, UNIQUE & FK logique $\to$ Auth \\
+first\_name & VARCHAR(100) & NOT NULL & Pr\'enom \\
+last\_name & VARCHAR(100) & NOT NULL & Nom \\
+email & VARCHAR(255) & NULL & Read-only (Auth) \\
+phone & VARCHAR(20) & NULL & Read-only (Auth) \\
+avatar\_url & VARCHAR(500) & NULL & URL photo \\
+birth\_date & DATE & NULL & Naissance \\
+gender & VARCHAR(20) & NULL & Genre \\
+status & VARCHAR(20) & DEFAULT 'active' & active/inactive/deleted/deletion\_in\_progress \\
+deleted\_at & TIMESTAMPTZ & NULL & Soft delete \\
+hard\_delete\_after & TIMESTAMPTZ & NULL & Hard delete planifi\'e \\
+purge\_auth\_pending & BOOLEAN & DEFAULT false & Purge Auth en attente apr\`es \'echec \\
+deletion\_error\_reason & TEXT & NULL & Dernier motif d'\'echec suppression \\
+created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\
+updated\_at & TIMESTAMPTZ & NOT NULL & MAJ \\
+\bottomrule\end{tabularx}}
+
+\subsection{Table \texttt{addresses}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+user\_id & UUID & FK $\to$ users\_profiles & \\
+type & VARCHAR(50) & NOT NULL & Type libre \\
+street & VARCHAR(255) & NOT NULL & \\
+city & VARCHAR(100) & NOT NULL & \\
+country & VARCHAR(100) & NOT NULL & \\
+postal\_code & VARCHAR(20) & NULL & Code postal \\
+is\_default & BOOLEAN & DEFAULT false & \\
+created\_at & TIMESTAMPTZ & NOT NULL & \\
+updated\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+
+\subsection{Table \texttt{roles}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+platform\_id & UUID & NOT NULL & R\'ef. Auth \\
+name & VARCHAR(100) & NOT NULL & \\
+description & TEXT & NULL & \\
+created\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+\textbf{UNIQUE :} (platform\_id, name)
+
+\subsection{Table \texttt{permissions}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+platform\_id & UUID & NOT NULL & R\'ef. Auth \\
+name & VARCHAR(100) & NOT NULL & \\
+description & TEXT & NULL & \\
+created\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+\textbf{UNIQUE :} (platform\_id, name)
+
+\subsection{Table \texttt{role\_permissions}}
+PK composite (role\_id, permission\_id). FK $\to$ roles, FK $\to$ permissions. + created\_at.
+
+\subsection{Table \texttt{user\_roles}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+user\_id & UUID & FK $\to$ users\_profiles & \\
+role\_id & UUID & FK $\to$ roles & \\
+assigned\_by & UUID & NULL & Admin \\
+assigned\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+\textbf{UNIQUE :} (user\_id, role\_id). Note v2.0 : platform\_id retir\'e (redondant). \textbf{Note v2.1 :} \texttt{assigned\_by} = \texttt{users\_profiles.id} de l'admin qui a assign\'e le r\^ole (coh\'erent avec audit\_logs.actor\_id).
+
+\subsection{Table \texttt{documents}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+user\_id & UUID & FK $\to$ users\_profiles & \\
+platform\_id & UUID & NOT NULL & Plateforme \\
+doc\_type & VARCHAR(100) & NOT NULL & Type libre \\
+media\_id & UUID & NOT NULL & R\'ef. M\'edia \\
+status & VARCHAR(20) & DEFAULT 'pending' & \\
+comment & TEXT & NULL & Review \\
+submitted\_at & TIMESTAMPTZ & NOT NULL & \\
+reviewed\_at & TIMESTAMPTZ & NULL & \\
+created\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+
+\subsection{Table \texttt{document\_history}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+document\_id & UUID & FK $\to$ documents & Parent \\
+media\_id & UUID & NOT NULL & Ancienne r\'ef. \\
+status & VARCHAR(20) & NOT NULL & Archiv\'e \\
+comment & TEXT & NULL & \\
+submitted\_at & TIMESTAMPTZ & NOT NULL & \\
+reviewed\_at & TIMESTAMPTZ & NULL & \\
+archived\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+
+\subsection{Table \texttt{user\_metadata}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+user\_id & UUID & FK $\to$ users\_profiles & \\
+platform\_id & UUID & NOT NULL & \\
+key & VARCHAR(100) & NOT NULL & \\
+value & TEXT & NOT NULL & \\
+updated\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+\textbf{UNIQUE :} (user\_id, platform\_id, key)
+
+\subsection{Table \texttt{audit\_logs}}
+{\small\begin{tabularx}{\textwidth}{L{2.8cm}L{2.5cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+entity\_type & VARCHAR(50) & NOT NULL & Table modifi\'ee \\
+entity\_id & UUID & NOT NULL & \\
+action & VARCHAR(30) & NOT NULL & create, update\ldots \\
+actor\_id & UUID & NULL & NULL=syst\`eme \\
+actor\_type & VARCHAR(20) & DEFAULT 'user' & user/service/system \\
+old\_value & JSONB & NULL & \\
+new\_value & JSONB & NULL & \\
+created\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+\textbf{Index :} (entity\_type, entity\_id), (actor\_id), (created\_at)
+
+\newpage
+\section{Contrats d'API}
+\textbf{Base URL :} \texttt{/api/v1} \quad \textbf{Format :} JSON \quad \textbf{Auth :} Bearer token (sauf mention)
+
+\textbf{Pagination :}
+\begin{lstlisting}
+{"data": [...], "page": 1, "limit": 20, "total": 142}
+\end{lstlisting}
+
+\begin{warningbox}
+\textbf{Convention v2.1 :} dans tous les endpoints \texttt{/users/\{id\}}, \texttt{\{id\}} d\'esigne toujours \texttt{users\_profiles.id} (UUID interne Users). Les services qui ne disposent que du \texttt{auth\_user\_id} doivent d'abord appeler \texttt{GET /api/v1/users/by-auth/\{authUserId\}} pour r\'esoudre l'ID.
+\end{warningbox}
+
+\subsection{GET /api/v1/health}
+Sans auth. V\'erifie DB + Redis.
+\begin{lstlisting}
+{"status":"healthy","database":"ok","redis":"ok","version":"2.1"}
+\end{lstlisting}
+
+\subsection{Profil}
+
+\subsubsection{POST /api/v1/users --- Provisioning}
+Auth : Token S2S (par Auth apr\`es inscription).
+\begin{lstlisting}
+{"auth_user_id":"uuid","first_name":"Jean","last_name":"Dupont",
+ "email":"jean@example.com","phone":"+237600000000"}
+\end{lstlisting}
+\textbf{Note v2.1 :} les champs email/phone sont une \textbf{projection initiale} depuis Auth. Users ne les modifie jamais lui-m\^eme --- seul Auth peut les mettre \`a jour via POST /api/v1/users/sync.\\
+Codes : 201, 400, 409 (existe), 401.
+
+\subsubsection{POST /api/v1/users/sync --- Sync email/phone}
+Auth : Token S2S. Par Auth quand email/phone change.
+\begin{lstlisting}
+{"auth_user_id":"uuid","email":"new@example.com","phone":"+237611111111"}
+\end{lstlisting}
+Codes : 200, 404, 401.
+
+\subsubsection{POST /api/v1/users/status-sync --- Sync status}
+Auth : Token S2S. Utilis\'e par Auth pour propager un changement d'\'etat de compte vers Users (ex: d\'esactivation).
+\begin{lstlisting}
+{"auth_user_id":"uuid","status":"inactive"}
+\end{lstlisting}
+Codes : 200, 404, 401.
+
+\subsubsection{GET /api/v1/users/\{id\}}
+Codes : 200, 401, 403, 404.
+
+\subsubsection{GET /api/v1/users/by-auth/\{authUserId\} --- Lookup}
+Auth : Bearer ou Token S2S. R\'esout un \texttt{auth\_user\_id} vers un profil Users complet. Utile pour les int\'egrations inter-services.\\
+Codes : 200, 401, 404.
+
+\subsubsection{PUT /api/v1/users/\{id\}}
+Auth : propri\'etaire ou manage\_users. Champs : first\_name, last\_name, birth\_date, gender. \textbf{email/phone NON modifiables.}
+
+\subsubsection{DELETE /api/v1/users/\{id\}/platforms/\{platformId\} --- Quitter une plateforme}
+Auth : Bearer (propri\'etaire) ou manage\_users. Retire tous les r\^oles et m\'etadonn\'ees de l'utilisateur sur cette plateforme, et archive logiquement les documents associ\'es sans suppression imm\'ediate des fichiers physiques. Le profil global et le compte Auth restent intacts. L'utilisateur peut revenir.
+\begin{lstlisting}
+{"message":"Platform left","platform_id":"uuid",
+ "roles_removed":2,"metadata_cleared":true,"documents_archived":3}
+\end{lstlisting}
+Codes : 200, 401, 403, 404.
+
+\subsubsection{DELETE /api/v1/users/\{id\} --- Soft delete g\'en\'eral}
+Auth : Bearer (propri\'etaire). Suppression compl\`ete du compte sur \textbf{toutes les plateformes}. Marque status=deleted, calcule hard\_delete\_after. \textbf{D\'eclenche aussi une d\'esactivation Auth via un endpoint S2S d\'edi\'e (sans mot de passe), afin de bloquer imm\'ediatement la connexion utilisateur.}
+\begin{lstlisting}
+{"message":"Account deactivated","status":"deleted",
+ "hard_delete_scheduled":"2026-04-19T10:00:00Z"}
+\end{lstlisting}
+Codes : 200, 401, 403, 404.
+
+\begin{infobox}
+\textbf{Mod\`ele de suppression dual (v2.1) :}\\
+--- \textbf{Quitter une plateforme} = retrait r\^oles/m\'etadonn\'ees/documents de cette plateforme. Profil et Auth intacts.\\
+--- \textbf{Soft delete g\'en\'eral} = profil marqu\'e deleted + Auth d\'esactiv\'e. Hard delete apr\`es d\'elai configurable.\\
+Un utilisateur multi-plateforme peut quitter une plateforme sans perdre son compte global.
+\end{infobox}
+
+\subsubsection{DELETE /api/v1/users/\{id\}/permanent --- Hard delete}
+Auth : manage\_users ou S2S. Irr\'eversible + purge Auth.
+
+\subsubsection{PUT /api/v1/users/\{id\}/photo}
+Body : \texttt{\{"media\_id":"uuid"\}}
+
+\subsubsection{GET /api/v1/users}
+Auth : manage\_users. Query : platform\_id, role, status, page, limit.
+
+\subsubsection{GET /api/v1/users/search}
+Auth : manage\_users. Query : q, page, limit.
+
+\subsubsection{GET /api/v1/users/stats}
+Auth : view\_stats.
+
+\subsection{Adresses}
+Auth : propri\'etaire ou manage\_users.
+
+\subsubsection{POST /api/v1/users/\{id\}/addresses}
+\begin{lstlisting}
+{"type":"livraison","street":"123 Rue","city":"Yaounde",
+ "country":"Cameroun","postal_code":"BP1234","is_default":true}
+\end{lstlisting}
+
+\subsubsection{GET, PUT, DELETE --- standard CRUD}
+
+\subsubsection{PUT /api/v1/users/\{id\}/addresses/\{addressId\}/default}
+
+\subsection{R\^oles}
+Auth : manage\_roles.
+
+\subsubsection{POST /api/v1/platforms/\{platformId\}/roles}
+\begin{lstlisting}
+{"name":"vendeur","description":"Utilisateur vendeur"}
+\end{lstlisting}
+platformId = UUID Auth. Codes : 201, 400, 403, 409.
+
+\subsubsection{GET, PUT, DELETE --- standard CRUD}
+
+\subsection{Permissions}
+Auth : manage\_roles.
+
+\subsubsection{POST /api/v1/platforms/\{platformId\}/permissions}
+\begin{lstlisting}
+{"name":"create_product","description":"Peut creer des produits"}
+\end{lstlisting}
+
+\subsubsection{POST /api/v1/platforms/\{platformId\}/roles/\{roleId\}/permissions}
+Body : \texttt{\{"permission\_id":"uuid"\}}
+
+\subsubsection{DELETE .../permissions/\{permId\}}
+
+\subsection{R\^oles Utilisateur}
+Auth : manage\_roles.
+
+\subsubsection{POST /api/v1/users/\{id\}/roles}
+Body : \texttt{\{"role\_id":"uuid"\}}. Codes : 201, 409 (d\'ej\`a assign\'e).
+
+\subsubsection{GET /api/v1/users/\{id\}/roles}
+Query : ?platform\_id=uuid.
+\begin{lstlisting}
+{"user_id":"uuid","roles":[
+  {"role":{"id":"...","name":"vendeur"},"platform_id":"uuid",
+   "assigned_at":"...","assigned_by":"uuid"}]}
+\end{lstlisting}
+
+\subsubsection{DELETE /api/v1/users/\{id\}/roles/\{roleId\}}
+
+\subsubsection{GET /api/v1/users/\{id\}/permissions/check}
+Auth : Bearer ou S2S. Cache Redis. Query : platform\_id, permission (obligatoires).
+\begin{lstlisting}
+{"user_id":"uuid","platform_id":"uuid","permission":"create_product",
+ "granted":true,"via_role":"vendeur"}
+\end{lstlisting}
+Cache : \texttt{perm:\{userId\}:\{platformId\}:\{permName\}}, TTL config. Invalidation auto.
+
+\subsection{Documents}
+
+\subsubsection{POST /api/v1/users/\{id\}/documents}
+\begin{lstlisting}
+{"platform_id":"uuid","doc_type":"cni","media_id":"uuid"}
+\end{lstlisting}
+Re-soumission : ancien archiv\'e dans document\_history.
+
+\subsubsection{GET /api/v1/users/\{id\}/documents}
+Query : ?type=cni\&status=pending
+
+\subsubsection{PUT /api/v1/users/\{id\}/documents/\{docId\}/status}
+Auth : manage\_documents. Body : \texttt{\{"status":"validated","comment":"OK"\}}
+
+\subsubsection{DELETE, GET .../history --- standard}
+
+\subsection{M\'etadonn\'ees}
+
+\subsubsection{PUT /api/v1/users/\{id\}/metadata/\{platformId\}}
+\begin{lstlisting}
+{"nom_boutique":"Tech Shop","siret":"123456789"}
+\end{lstlisting}
+Upsert.
+
+\subsubsection{GET, DELETE .../\{key\} --- standard}
+
+\newpage
+\section{Contrats Inter-Services}
+
+\subsection{Auth $\to$ Users (Provisioning)}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Param.} & \thdr{Valeur} \\\midrule
+D\'eclencheur & Register r\'eussi (email, phone, OAuth) \\
+Transport & HTTP POST sync \\
+Endpoint & POST /api/v1/users \\
+Auth & Token S2S \\
+Timeout/Retry & 5s / 3x backoff (1s,2s,4s) \\
+\'Echec & Auth cr\'ee compte + warning, cron retente \\
+\bottomrule\end{tabularx}}
+
+\subsection{Auth $\to$ Users (Sync email/phone)}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Param.} & \thdr{Valeur} \\\midrule
+D\'eclencheur & Changement email/phone dans Auth \\
+Transport & HTTP POST sync \\
+Endpoint & POST /api/v1/users/sync \\
+\'Echec & Auth logge, op\'eration valid\'ee \\
+\bottomrule\end{tabularx}}
+
+\subsection{Auth $\to$ Users (Sync status)}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Param.} & \thdr{Valeur} \\\midrule
+D\'eclencheur & Changement d'\'etat du compte dans Auth (\texttt{is\_deactivated}) \\
+Transport & HTTP POST sync \\
+Endpoint & POST /api/v1/users/status-sync \\
+Auth & Token S2S \\
+Payload & \texttt{\{"auth\_user\_id":"uuid","status":"inactive"\}} \\
+\'Echec & Auth logge, op\'eration Auth reste valide \\
+\bottomrule\end{tabularx}}
+
+\subsection{Users $\to$ Auth (Purge RGPD)}
+
+\begin{warningbox}
+\textbf{Contrat additionnel v2.1 --- Soft delete g\'en\'eral :} quand un utilisateur soft-delete son compte global, Users appelle un endpoint Auth \textbf{S2S d\'edi\'e} de d\'esactivation propag\'ee. \textbf{L'endpoint utilisateur} \texttt{POST /auth/account/deactivate} reste r\'eserv\'e aux appels frontend avec mot de passe. Une extension Auth v1.4 est requise pour la propagation inter-service.
+\end{warningbox}
+
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Param.} & \thdr{Valeur} \\\midrule
+D\'eclencheur & DELETE /api/v1/users/\{id\} (soft delete global) \\
+Transport & HTTP POST sync \\
+Endpoint Auth & POST /auth/admin/deactivate/\{authUserId\} (Auth v1.4) \\
+Auth & Token S2S ou X-Admin-API-Key \\
+Effet & Positionne \texttt{is\_deactivated=true}, r\'evoque sessions et refresh tokens \\
+\'Echec & Users annule ou journalise pour retry \\
+\bottomrule\end{tabularx}}
+
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Param.} & \thdr{Valeur} \\\midrule
+D\'eclencheur & Cron: hard\_delete\_after d\'epass\'e, ou admin \\
+Transport & HTTP DELETE sync \\
+Endpoint Auth & DELETE /auth/admin/purge/\{userId\} (Auth v1.4) \\
+S\'equence & 1) Marquer status=deletion\_in\_progress 2) Appel Auth purge 3) Si succ\`es: purge Users 4) Si \'echec: purge\_auth\_pending=true, retry cron \\
+\'Echec & Donn\'ees Users intactes tant qu'Auth n'a pas confirm\'e \\
+\bottomrule\end{tabularx}}
+
+\begin{warningbox}
+\textbf{Auth v1.4 requis :} DELETE /auth/admin/purge/\{userId\} --- supprime users\_auth, sessions, refresh\_tokens, oauth\_providers, login\_history, verification\_tokens.
+\end{warningbox}
+
+\subsection{Users $\to$ Notification}
+Transport : HTTP POST sync (MVP). Token S2S. Timeout 5s, 3x retry.
+
+Types : role\_assigned, role\_removed, document\_validated, document\_rejected, account\_deleted.
+
+\subsection{Users $\to$ M\'edia}
+Frontend upload direct vers M\'edia, Users re\c{c}oit media\_id. Users supprime via M\'edia au hard delete. Auth : S2S.
+
+\section{Rate Limiting}
+{\small\begin{tabularx}{\textwidth}{L{5.5cm}L{2cm}L{2cm}X}\toprule
+\hdrrow \thdr{Endpoint} & \thdr{Fen.} & \thdr{Limite} & \thdr{Strat.} \\\midrule
+/users/search & 1 min & 20 & IP+user \\
+/users/\{id\}/permissions/check & 1 min & 100 & IP \\
+POST .../documents & 1h & 10 & user \\
+Global & 1 min & 200 & IP \\
+\bottomrule\end{tabularx}}
+Redis sliding window.
+
+\section{Infrastructure}
+{\small\begin{tabularx}{\textwidth}{L{6.5cm}X}\toprule
+\hdrrow \thdr{Variable} & \thdr{Description} \\\midrule
+DATABASE\_URL & PostgreSQL \\
+REDIS\_URL & Redis \\
+AUTH\_SERVICE\_URL & Service Auth \\
+MEDIA\_SERVICE\_URL & Service M\'edia \\
+NOTIFICATION\_SERVICE\_URL & Service Notification \\
+PERMISSION\_CACHE\_TTL & Cache permissions (300s) \\
+PROFILE\_CACHE\_TTL & Cache profils (600s) \\
+SECRET\_KEY & Django secret \\
+DEFAULT\_HARD\_DELETE\_DELAY\_DAYS & D\'elai RGPD (30j) \\
+PURGE\_CRON\_SCHEDULE & Cron purge (0 2 * * *) \\
+\bottomrule\end{tabularx}}
+
+\section{Mapping Statuts Auth $\leftrightarrow$ Users}
+{\small\begin{tabularx}{\textwidth}{L{2.5cm}L{3cm}L{3cm}X}\toprule
+\hdrrow \thdr{\'Ev\'en.} & \thdr{Auth} & \thdr{Users} & \thdr{Propagation} \\\midrule
+Inscription & Compte & Profil active & Auth$\to$POST /users \\
+Blocage & is\_blocked & Pas d'impact & Aucune \\
+D\'esactivation Auth & is\_deactivated & status=inactive & Auth$\to$POST /users/status-sync \\
+Quitter plateforme & --- & R\^oles/m\'eta/docs retir\'es & Users seul \\
+Soft delete global & is\_deactivated & status=deleted & Users$\to$Auth S2S deactivate \\
+Hard delete & Purge creds & Purge profil & Users$\to$Auth purge \\
+\bottomrule\end{tabularx}}
+
+Auth g\`ere l'acc\`es et l'\'etat d'authentification. Users g\`ere le cycle de vie du profil et l'appartenance aux plateformes. Toute propagation de statut passe par un contrat inter-service explicite. Pas de mapping automatique \texttt{is\_blocked} $\leftrightarrow$ \texttt{status}.
+
+\section{Recommandations}
+\begin{itemize}[nosep]
+\item Migration SALMA : export $\to$ transform $\to$ POST /api/v1/users + r\^oles
+\item Cache permissions : invalidation auto sur modif r\^ole/assignation
+\item PII exclus des logs et r\'eponses d'erreur
+\item Migration future vers event bus (RabbitMQ/Redis Streams)
+\item Monitoring Prometheus (requ\^etes, latence P95, cache hit ratio)
+\item Versioning : /api/v1, cohabitation /api/v2 si breaking changes
+\end{itemize}
+
+\newpage
+\section*{Glossaire}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Terme} & \thdr{D\'efinition} \\\midrule
+RBAC & Role-Based Access Control \\
+Soft Delete & Suppression logique \\
+Hard Delete & Suppression physique (RGPD) \\
+PII & Personally Identifiable Information \\
+JWT & JSON Web Token \\
+S2S & Service-to-Service \\
+Token S2S & Via POST /auth/s2s/token \\
+TTL & Time To Live (cache) \\
+Audit Trail & Historique des modifications \\
+\bottomrule\end{tabularx}}
+
+\vfill
+\begin{center}\small\color{muted}
+AG Technologies --- Confidentiel --- User Service CDC v2.1 --- Mars 2026
+\end{center}
+
+\end{document}

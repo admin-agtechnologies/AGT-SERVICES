@@ -1,0 +1,14 @@
+services:
+  chat:
+    build: .
+    container_name: agt_chat_simulator
+    restart: unless-stopped
+    ports:
+      - "7008:7008"
+    networks:
+      - agt_network
+
+networks:
+  agt_network:
+    external: true
+    name: agt_network

@@ -1,0 +1,1604 @@
+\documentclass[11pt,a4paper]{article}
+
+% ─── Encodage & Langue ───
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% ─── Mise en page ───
+\usepackage[top=1.8cm,bottom=1.8cm,left=2cm,right=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+% ─── Couleurs ───
+\usepackage[table,dvipsnames]{xcolor}
+\definecolor{primary}{HTML}{0D47A1}
+\definecolor{secondary}{HTML}{1565C0}
+\definecolor{accent}{HTML}{42A5F5}
+\definecolor{lightbg}{HTML}{E3F2FD}
+\definecolor{darktext}{HTML}{1A237E}
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{success}{HTML}{2E7D32}
+\definecolor{warning}{HTML}{E65100}
+\definecolor{tabhead}{HTML}{0D47A1}
+\definecolor{tabrow}{HTML}{E3F2FD}
+
+% ─── Typographie & sections ───
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries\color{primary}}{{\thesection}}{0.8em}{}[\color{accent}\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{secondary}}{{\thesubsection}}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{darktext}}{{\thesubsubsection}}{0.5em}{}
+\titlespacing*{\section}{0pt}{10pt}{5pt}
+\titlespacing*{\subsection}{0pt}{8pt}{3pt}
+\titlespacing*{\subsubsection}{0pt}{6pt}{2pt}
+
+% ─── Tableaux ───
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ─── Listes ───
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.5em,itemsep=2pt}
+
+% ─── Code / JSON ───
+\usepackage{listings}
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  stringstyle=\color{primary},
+  numbers=none,
+  showstringspaces=false,
+  breaklines=true,
+  literate=
+    *{:}{{{\color{darktext}{:}}}}{1}
+    {,}{{{\color{darktext}{,}}}}{1}
+    {\{}{{{\color{secondary}{\{}}}}{1}
+    {\}}{{{\color{secondary}{\}}}}}{1}
+    {[}{{{\color{secondary}{[}}}}{1}
+    {]}{{{\color{secondary}{]}}}}{1},
+}
+\lstdefinelanguage{plantuml}{
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{primary}\bfseries,
+  commentstyle=\color{gray},
+  stringstyle=\color{secondary},
+  numbers=none,
+  showstringspaces=false,
+  breaklines=true,
+  morekeywords={@startuml,@enduml,entity,class,enum,abstract,interface,skinparam,hide,show,package,note,as,left,right,of,on},
+}
+\lstset{
+  language=json,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{accent},
+  framesep=4pt,
+  xleftmargin=6pt,
+  xrightmargin=6pt,
+  aboveskip=5pt,
+  belowskip=5pt,
+}
+
+% ─── Boîtes ───
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\newtcolorbox{infobox}[1][]{
+  colback=lightbg,colframe=primary,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=primary,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=orange!5,colframe=warning,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=warning,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+
+% ─── Liens ───
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,linkcolor=primary,
+  urlcolor=secondary,citecolor=primary,
+  bookmarks=true,pdfstartview=FitH,
+  pdftitle={Cahier des Charges -- Service Notification Centralisé},
+  pdfauthor={Équipe Architecture AGT},
+}
+
+% ─── En-tête / Pied ───
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{primary}\textbf{AGT --- Service Notification}}
+\fancyhead[R]{\small\color{primary}v1.2 --- Confidentiel}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Divers ───
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc,fit}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+% ══════════════════════════════════════════
+\begin{document}
+
+% ──── PAGE DE GARDE ────
+\begin{titlepage}
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[primary] (current page.north west) rectangle ([yshift=-6cm]current page.north east);
+  \fill[secondary] ([yshift=-6cm]current page.north west) rectangle ([yshift=-6.4cm]current page.north east);
+  \fill[accent] ([yshift=-6.4cm]current page.north west) rectangle ([yshift=-6.6cm]current page.north east);
+  \node[anchor=north west,white,font=\fontsize{12}{14}\selectfont] at ([xshift=2.2cm,yshift=-1.5cm]current page.north west) {AGT --- Shared Services Architecture};
+  \node[anchor=north west,white,font=\fontsize{28}{34}\selectfont\bfseries,text width=16cm] at ([xshift=2.2cm,yshift=-2.8cm]current page.north west) {Cahier des Charges\\Service de Notification Centralisé};
+  \fill[lightbg] ([yshift=3cm]current page.south west) rectangle (current page.south east);
+\end{tikzpicture}
+
+\vspace*{8cm}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{@{}l@{\hspace{1.5cm}}l@{}}
+\textbf{\color{primary}Version} & 1.2 \\
+\textbf{\color{primary}Date} & Mars 2026 \\
+\textbf{\color{primary}Statut} & Post-audit --- Aligné Auth v2.1 + Users v1.0 \\
+\textbf{\color{primary}Classification} & Confidentiel \\
+\end{tabular}
+\end{center}
+
+\vfill
+\begin{center}
+\color{primary}\rule{8cm}{0.4pt}\\[4pt]
+{\small\color{secondary} AGT Engineering --- Architecture des Services Partagés}
+\end{center}
+\end{titlepage}
+
+% ──── HISTORIQUE ────
+\thispagestyle{fancy}
+\section*{Historique des Révisions}
+\begin{tabularx}{\textwidth}{@{}c c l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Ver.} & \color{white}\textbf{Date} & \color{white}\textbf{Auteur} & \color{white}\textbf{Description} \\
+\midrule
+1.0 & 2026-03-20 & Équipe Architecture & Création initiale du cahier des charges \\
+\rowcolor{tabrow}
+1.1 & 2026-03-20 & Équipe Architecture & Post-audit : alignement Auth v2.1 + Users v1.0. Identité \texttt{user\_id} clarifiée. \texttt{platform\_id} aligné UUID. Contrats inter-services formalisés. Table \texttt{device\_tokens} ajoutée. MLD corrigé. Préférences : Notification source de vérité. \\
+1.2 & 2026-03-20 & Équipe Architecture & Multi-canal orchestré par Notification (\texttt{channels:[]}). \texttt{send-bulk} limité à 100. Templates UNIQUE(name, platform\_id). Cache coordonnées Users. Vérification user actif. Préférences par défaut. Sécurité device tokens / préférences. Idempotency scoped + TTL. Ordre retry/provider/fallback clarifié. Diagramme PlantUML en annexe. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{1cm}
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════
+% 1. INTRODUCTION
+% ══════════════════════════════════════════
+\section{Introduction}
+
+Ce document constitue le cahier des charges du \textbf{Service de Notification Centralisé} destiné à l'écosystème de plateformes AGT. Il sert de référence unique pour la conception, le développement et l'intégration avec les autres services de l'architecture partagée.
+
+\textbf{Périmètre.} Le service couvre l'ensemble du cycle de vie des notifications : envoi multi-canal (email, SMS, push, in-app, WhatsApp), gestion de templates dynamiques, préférences utilisateur, planification, campagnes, historique et statistiques. Il est conçu comme un service centralisé réutilisable par toute plateforme de l'écosystème.
+
+\begin{warnbox}[Convention d'identité (v1.1+)]
+Dans tout ce document :
+\begin{itemize}
+  \item \textbf{\texttt{user\_id}} désigne \texttt{users\_profiles.id} du Service Users. C'est l'identifiant du profil utilisateur, distinct de l'identifiant d'authentification.
+  \item \textbf{\texttt{platform\_id}} désigne un UUID provenant du registre des plateformes du Service Auth (\texttt{platforms.id}).
+  \item Notification ne stocke aucune table locale de plateformes ni d'utilisateurs. Il consomme les services Auth et Users pour la validation et la résolution des données.
+\end{itemize}
+\end{warnbox}
+
+% ══════════════════════════════════════════
+% 2. CONTEXTE & PROBLÉMATIQUE
+% ══════════════════════════════════════════
+\section{Contexte \& Problématique}
+
+\subsection{Contexte}
+
+L'organisation développe plusieurs plateformes indépendantes :
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Plateforme} & \color{white}\textbf{Statut} & \color{white}\textbf{Description} \\
+\midrule
+AGT-Bot & En développement & Plateforme de bots automatisés \\
+\rowcolor{tabrow} AGT-Market & En développement & Marketplace de services \\
+SALMA & Migration prévue & Plateforme existante à intégrer \\
+\rowcolor{tabrow} Futures & Planifié & Nouvelles plateformes à venir \\
+\bottomrule
+\end{tabularx}
+
+Chaque service partagé (Auth, Users, Notification, Média\ldots) est indépendant et accessible via API REST.
+
+\subsection{Problématique}
+
+Sans service centralisé, chaque plateforme implémente ses propres intégrations d'envoi de notifications, ce qui entraîne : duplication des intégrations avec les providers (SendGrid, Twilio, FCM\ldots), impossibilité de gérer les préférences utilisateur de manière unifiée, absence de traçabilité centralisée, coûts de maintenance élevés et risques d'incohérences.
+
+% ══════════════════════════════════════════
+% 3. VISION & OBJECTIFS
+% ══════════════════════════════════════════
+\section{Vision \& Objectifs}
+
+\subsection{Vision}
+
+Un point d'entrée unique pour l'envoi de toute notification dans l'écosystème. Aucune plateforme n'envoie directement un email, SMS, push ou WhatsApp. \textbf{Tout passe par le Service Notification.}
+
+\subsection{Objectifs}
+
+\begin{tabularx}{\textwidth}{@{}c X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{\#} & \color{white}\textbf{Objectif} & \color{white}\textbf{Indicateur} \\
+\midrule
+O1 & Envoi unifié multi-canal & 5 canaux supportés \\
+\rowcolor{tabrow} O2 & Templates dynamiques multilingues & CRUD + versionning \\
+O3 & Préférences utilisateur respectées & Par canal, catégorie, plateforme \\
+\rowcolor{tabrow} O4 & Traçabilité complète & Logs + statuts par notification \\
+O5 & Envoi asynchrone performant & Mise en queue < 100ms \\
+\rowcolor{tabrow} O6 & Planification et campagnes & Envois différés + masse \\
+O7 & Réutilisabilité & Intégration nouvelle plateforme < 1 jour \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════
+% 4. PARTIES PRENANTES
+% ══════════════════════════════════════════
+\section{Parties Prenantes \& Utilisateurs}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Rôle} & \color{white}\textbf{Type} & \color{white}\textbf{Responsabilité} \\
+\midrule
+Product Owner & Interne & Priorisation des fonctionnalités \\
+\rowcolor{tabrow} Équipe Backend & Interne & Développement et maintenance du service \\
+Équipe Frontend & Interne & Intégration notifications in-app \\
+\rowcolor{tabrow} DevOps & Interne & Infrastructure, CI/CD, monitoring \\
+Services internes & Interne & Consommateurs de l'API (Auth, plateformes) \\
+\rowcolor{tabrow} Utilisateurs finaux & Externe & Réception des notifications, gestion préférences \\
+Administrateurs & Interne & Gestion templates, campagnes, supervision \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════
+% 5. BESOINS FONCTIONNELS
+% ══════════════════════════════════════════
+\section{Besoins Fonctionnels}
+
+\subsection{Envoi de notifications}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{Fonctionnalité} & \color{white}\textbf{Priorité} \\
+\midrule
+F-SEND-01 & Envoi immédiat mono-canal ou multi-canal & Urgent \\
+\rowcolor{tabrow} F-SEND-02 & Envoi multi-canal orchestré par Notification avec fallback automatique configurable & Urgent \\
+F-SEND-03 & Fallback automatique entre canaux (sauf catégorie \texttt{security}) & Urgent \\
+\rowcolor{tabrow} F-SEND-04 & Envoi planifié (date/heure future) & Normale \\
+F-SEND-05 & Envoi en masse (campagnes) avec throttling & Normale \\
+\rowcolor{tabrow} F-SEND-06 & Retry automatique (3 tentatives + backoff exponentiel) & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Orchestration multi-canal (v1.2)]
+Le service appelant envoie \textbf{un seul appel} avec un champ \texttt{channels: ["email", "push"]}. Notification orchestre l'envoi sur chaque canal demandé, applique les préférences utilisateur, et gère le fallback automatique selon la configuration de la plateforme. Le service appelant n'a plus besoin de faire N appels séparés.
+
+Si un seul canal est fourni (\texttt{channels: ["sms"]}), le comportement est identique à un envoi mono-canal.
+\end{infobox}
+
+\subsection{Gestion des templates}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{Fonctionnalité} & \color{white}\textbf{Priorité} \\
+\midrule
+F-TPL-01 & CRUD complet des templates & Urgent \\
+\rowcolor{tabrow} F-TPL-02 & Variables dynamiques (\texttt{\{\{variable\}\}}) & Urgent \\
+F-TPL-03 & Support multilingue (FR, EN minimum) & Urgent \\
+\rowcolor{tabrow} F-TPL-04 & Templates par canal et par plateforme & Urgent \\
+F-TPL-05 & Versionning des templates & Normale \\
+\rowcolor{tabrow} F-TPL-06 & Preview avec variables de test & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Préférences utilisateur}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{Fonctionnalité} & \color{white}\textbf{Priorité} \\
+\midrule
+F-PREF-01 & Activer/désactiver canaux par utilisateur & Urgent \\
+\rowcolor{tabrow} F-PREF-02 & Activer/désactiver catégories (marketing, transactionnel\ldots) & Urgent \\
+F-PREF-03 & Préférences par plateforme & Normale \\
+\rowcolor{tabrow} F-PREF-04 & Les notifications critiques (OTP, sécurité) ignorent les préférences & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Source de vérité et valeurs par défaut (v1.2)]
+Le \textbf{Service Notification est la source de vérité} pour les préférences de notification. Si aucune préférence n'existe pour un utilisateur sur une plateforme donnée, les \textbf{valeurs par défaut} sont appliquées : tous les canaux activés, catégories \texttt{transactional} et \texttt{security} activées, catégorie \texttt{marketing} désactivée. La catégorie \texttt{security} est toujours forcée à \texttt{true}.
+\end{infobox}
+
+\subsection{Notifications in-app}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{Fonctionnalité} & \color{white}\textbf{Priorité} \\
+\midrule
+F-INAPP-01 & Stockage des notifications in-app & Urgent \\
+\rowcolor{tabrow} F-INAPP-02 & Marquer lu / non lu & Urgent \\
+F-INAPP-03 & Compteur de non lues (badge) & Urgent \\
+\rowcolor{tabrow} F-INAPP-04 & Suppression logique par l'utilisateur & Normale \\
+F-INAPP-05 & Marquer toutes comme lues & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Historique \& Statistiques}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{Fonctionnalité} & \color{white}\textbf{Priorité} \\
+\midrule
+F-LOG-01 & Logs complets par notification & Urgent \\
+\rowcolor{tabrow} F-LOG-02 & Statuts : pending, sent, delivered, read, failed & Urgent \\
+F-LOG-03 & Statistiques agrégées par canal, plateforme, période & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Planification}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{Fonctionnalité} & \color{white}\textbf{Priorité} \\
+\midrule
+F-SCHED-01 & Créer une notification planifiée & Normale \\
+\rowcolor{tabrow} F-SCHED-02 & Modifier / supprimer une planification & Normale \\
+F-SCHED-03 & Lister les notifications planifiées & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Campagnes}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{Fonctionnalité} & \color{white}\textbf{Priorité} \\
+\midrule
+F-CAMP-01 & Création de campagne avec liste de destinataires & Normale \\
+\rowcolor{tabrow} F-CAMP-02 & Throttling configurable (N messages/seconde) & Normale \\
+F-CAMP-03 & Suivi de progression en temps réel & Normale \\
+\rowcolor{tabrow} F-CAMP-04 & Annulation d'une campagne en cours & Normale \\
+F-CAMP-05 & Statistiques par campagne & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Device Tokens (v1.1)}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{Fonctionnalité} & \color{white}\textbf{Priorité} \\
+\midrule
+F-DEV-01 & Enregistrement d'un device token (FCM/APNs) pour un utilisateur & Urgent \\
+\rowcolor{tabrow} F-DEV-02 & Suppression d'un device token (déconnexion, désinstallation) & Urgent \\
+F-DEV-03 & Liste des device tokens d'un utilisateur & Normale \\
+\rowcolor{tabrow} F-DEV-04 & Invalidation de tous les device tokens lors d'une révocation globale de sessions (v1.2) & Urgent \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════
+% 6. BESOINS NON-FONCTIONNELS
+% ══════════════════════════════════════════
+\section{Besoins Non-Fonctionnels}
+
+\begin{tabularx}{\textwidth}{@{}l l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{Catégorie} & \color{white}\textbf{Exigence} & \color{white}\textbf{Cible} \\
+\midrule
+NF-01 & Performance & Mise en queue d'une notification & < 100ms \\
+\rowcolor{tabrow} NF-02 & Performance & Throughput d'envoi & 500 msg/s \\
+NF-03 & Disponibilité & Uptime du service & 99.9\% \\
+\rowcolor{tabrow} NF-04 & Fiabilité & Retry automatique avec backoff & 3 tentatives \\
+NF-05 & Sécurité & Authentification par Bearer token (validé via Auth) & Obligatoire \\
+\rowcolor{tabrow} NF-06 & Sécurité & Masquage données sensibles dans les logs & Obligatoire \\
+NF-07 & Sécurité & Rate limiting par provider & Configurable \\
+\rowcolor{tabrow} NF-08 & Scalabilité & Architecture stateless, multi-instance & Horizontal \\
+NF-09 & Observabilité & Logs structurés JSON, corrélation par request ID & Obligatoire \\
+\rowcolor{tabrow} NF-10 & Traitement & Envoi asynchrone via message broker & Obligatoire \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════
+% 7. ARCHITECTURE TECHNIQUE
+% ══════════════════════════════════════════
+\section{Architecture Technique}
+
+\subsection{Vue d'ensemble}
+
+Le Service Notification est un microservice REST stateless, déployé en conteneur Docker. Il reçoit les demandes d'envoi via API, les place en file d'attente (message broker), et des workers asynchrones traitent l'envoi effectif via les providers externes.
+
+\subsection{Stack technique}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Composant} & \color{white}\textbf{Technologie} & \color{white}\textbf{Justification} \\
+\midrule
+Langage \& Framework & Python 3.11+ / Django REST Framework & Cohérence avec l'écosystème \\
+\rowcolor{tabrow} Base de données & PostgreSQL 15+ & Stockage principal \\
+Cache & Redis 7+ & Cache coordonnées Users, rate limiting, compteurs badge \\
+\rowcolor{tabrow} Message Broker & RabbitMQ (ou Redis Queue) & File d'attente asynchrone \\
+ORM & Django ORM & Modèles et migrations \\
+\rowcolor{tabrow} Scheduler & Celery + Celery Beat & Tâches planifiées et périodiques \\
+Conteneurisation & Docker + Docker Compose & Déploiement isolé \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Canaux supportés \& Priorités}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Canal} & \color{white}\textbf{Priorité par défaut} & \color{white}\textbf{Provider} & \color{white}\textbf{Notes} \\
+\midrule
+Email & Haute & SendGrid / Mailgun / SES & Fallback entre providers \\
+\rowcolor{tabrow} Push & Haute & FCM / APNs & Nécessite device tokens (table locale) \\
+In-app & Moyenne & Interne (PostgreSQL) & Stockage en base \\
+\rowcolor{tabrow} WhatsApp & Basse & Meta Cloud API & Templates validés par Meta uniquement \\
+SMS & Basse & Twilio / Vonage / Infobip & Critique uniquement (OTP) \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Règles de fallback (v1.2)]
+\textbf{Ordre de traitement en cas d'échec :}
+\begin{enumerate}[itemsep=1pt]
+  \item \textbf{Retry sur le même provider} (3 tentatives, backoff exponentiel : 1s, 2s, 4s).
+  \item \textbf{Changement de provider} sur le même canal (ex: SendGrid $\rightarrow$ Mailgun $\rightarrow$ SES).
+  \item \textbf{Fallback inter-canal} vers le canal suivant dans l'ordre de priorité configuré par la plateforme.
+\end{enumerate}
+
+\textbf{Exception :} les notifications de catégorie \texttt{security} (OTP, 2FA, alertes) \textbf{n'autorisent jamais le fallback inter-canal}. Elles sont envoyées exclusivement sur le canal demandé. En cas d'échec définitif sur tous les providers du canal, elles passent en statut \texttt{failed}.
+\end{warnbox}
+
+\subsection{Dépendances}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Service} & \color{white}\textbf{Type} & \color{white}\textbf{Usage} \\
+\midrule
+Service Auth & Interne & Validation des tokens Bearer via \texttt{GET /auth/verify-token}. Registre maître des plateformes (\texttt{platform\_id} = UUID Auth). \\
+\rowcolor{tabrow} Service Users & Interne & Résolution des coordonnées destinataire : email, téléphone (via \texttt{GET /users/\{id\}}). Résultat mis en cache Redis (TTL court). \\
+Email providers & Externe & SendGrid, Mailgun, AWS SES \\
+\rowcolor{tabrow} SMS providers & Externe & Twilio, Vonage, Infobip \\
+Push & Externe & FCM (Android), APNs (iOS) \\
+\rowcolor{tabrow} WhatsApp & Externe & Meta Cloud API \\
+Message broker & Interne & RabbitMQ / Redis Queue \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Clarification des dépendances (v1.2)]
+\begin{itemize}
+  \item \textbf{Auth} : validation du Bearer token, vérification que la plateforme est active et que l'utilisateur n'est pas bloqué/désactivé. Notification appelle systématiquement \texttt{GET /auth/verify-token}.
+  \item \textbf{Users} : résolution de l'email et du téléphone à partir du \texttt{user\_id}. Les coordonnées sont mises en cache dans Redis (TTL 5 minutes) pour réduire la latence et la charge sur Users.
+  \item \textbf{Vérification user actif (v1.2)} : avant tout envoi, le worker vérifie que l'utilisateur est actif (non supprimé, non désactivé). Cette vérification est effectuée soit via le cache des coordonnées Users (champ \texttt{status}), soit via \texttt{GET /auth/verify-token} si le token est disponible.
+  \item \textbf{Préférences de notification} : gérées localement par Notification (table \texttt{user\_preferences}). Users n'est pas source des préférences.
+  \item \textbf{Device tokens push} : gérés localement par Notification (table \texttt{device\_tokens}). Invalidés en cas de déconnexion globale ou révocation de sessions Auth.
+\end{itemize}
+\end{infobox}
+
+\subsection{Source des coordonnées par canal}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Canal} & \color{white}\textbf{Source de la donnée} & \color{white}\textbf{Champ / Cache} \\
+\midrule
+Email & Service Users (cache Redis TTL 5min) & \texttt{users\_profiles.email} \\
+\rowcolor{tabrow} SMS & Service Users (cache Redis TTL 5min) & \texttt{users\_profiles.phone} \\
+Push & Notification (local) & \texttt{device\_tokens.token} \\
+\rowcolor{tabrow} WhatsApp & Service Users (cache Redis TTL 5min) & \texttt{users\_profiles.phone} \\
+In-app & Aucun provider externe & Stockage local en base \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Flux d'envoi}
+
+\begin{infobox}[Flux type : envoi d'une notification (v1.2)]
+\begin{enumerate}[itemsep=2pt]
+  \item Le service appelant envoie \texttt{POST /notifications/send} avec Bearer token et \texttt{channels: ["email", "push"]}.
+  \item Notification valide le token via \texttt{GET /auth/verify-token} (vérifie signature, expiration, user non bloqué/désactivé, plateforme active, session active).
+  \item Vérification d'idempotence : si \texttt{idempotency\_key} est fourni et existe déjà pour cette plateforme (non expiré), retourne 409. Sinon, enregistrement de la clé (TTL 24h).
+  \item Le \texttt{user\_id} est résolu : récupération des coordonnées depuis le cache Redis, ou appel \texttt{GET /users/\{id\}} si cache expiré. Vérification que le \texttt{status} utilisateur est \texttt{active}.
+  \item Les préférences utilisateur sont vérifiées localement. Si aucune préférence n'existe, les valeurs par défaut sont appliquées. Si la catégorie est \texttt{security}, les préférences sont ignorées.
+  \item Pour chaque canal demandé : le template est résolu par \texttt{(name, platform\_id)}, la version courante pour la locale est récupérée, le contenu est rendu avec les variables.
+  \item Une notification est enregistrée en base par canal (statut \texttt{pending}) et placée en queue.
+  \item Un worker asynchrone consomme le message et envoie via le provider approprié.
+  \item En cas d'échec : (1) retry même provider, (2) changement de provider même canal, (3) fallback inter-canal si autorisé.
+  \item Le statut est mis à jour : \texttt{sent}, \texttt{delivered}, \texttt{failed}.
+\end{enumerate}
+\end{infobox}
+
+\subsection{Stratégie de fallback providers}
+
+Pour chaque canal, plusieurs providers sont configurés par ordre de priorité :
+
+\begin{tabularx}{\textwidth}{@{}l l l l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Canal} & \color{white}\textbf{Provider 1} & \color{white}\textbf{Provider 2} & \color{white}\textbf{Provider 3} \\
+\midrule
+Email & SendGrid & Mailgun & AWS SES \\
+\rowcolor{tabrow} SMS & Twilio & Vonage & Infobip \\
+Push & FCM & APNs & --- \\
+\rowcolor{tabrow} WhatsApp & Meta Cloud API & --- & --- \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════
+% 8. MODÉLISATION
+% ══════════════════════════════════════════
+\section{Modélisation}
+
+\subsection{Diagramme de classes}
+
+Le diagramme de classes complet est fourni en annexe au format PlantUML (voir Annexe C). Il couvre les entités : Notification, Template, TemplateVersion, TemplateVariable, UserPreference, NotificationLog, Campaign, CampaignRecipient, ScheduledNotification, DeviceToken, PlatformChannelConfig.
+
+\subsection{MLD --- Modèle Logique de Données}
+
+\subsubsection{Table \texttt{notifications}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} user\_id & UUID & NOT NULL & Destinataire (\texttt{users\_profiles.id}) \\
+platform\_id & UUID & NOT NULL & Plateforme source (UUID Auth) \\
+\rowcolor{tabrow} template\_id & UUID & FK $\rightarrow$ templates, NULL & Template utilisé \\
+channel & VARCHAR(20) & NOT NULL & email, sms, push, in\_app, whatsapp \\
+\rowcolor{tabrow} category & VARCHAR(30) & NOT NULL & transactional, marketing, security \\
+subject & VARCHAR(255) & NULL & Sujet (email) \\
+\rowcolor{tabrow} body & TEXT & NOT NULL & Contenu rendu \\
+status & VARCHAR(20) & NOT NULL & pending, sent, delivered, read, failed \\
+\rowcolor{tabrow} priority & VARCHAR(10) & DEFAULT 'normal' & low, normal, high, critical \\
+metadata & JSONB & NULL & Données additionnelles \\
+\rowcolor{tabrow} idempotency\_key & VARCHAR(100) & NULL & Clé d'idempotence \\
+read\_at & TIMESTAMPTZ & NULL & Date de lecture (in-app) \\
+\rowcolor{tabrow} deleted\_at & TIMESTAMPTZ & NULL & Suppression logique (in-app) \\
+sent\_at & TIMESTAMPTZ & NULL & Date d'envoi effectif \\
+\rowcolor{tabrow} created\_at & TIMESTAMPTZ & NOT NULL & Date de création \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique : \texttt{(platform\_id, idempotency\_key)} --- scoped par plateforme (v1.2). Les clés d'idempotence sont expirées et purgées après 24h via un cron job.
+
+\begin{infobox}[Champs in-app (v1.1+)]
+Pour les notifications de canal \texttt{in\_app} :
+\begin{itemize}
+  \item \texttt{is\_read} dans l'API est dérivé de \texttt{read\_at IS NOT NULL}.
+  \item La suppression par l'utilisateur est un soft delete via \texttt{deleted\_at}.
+  \item Le statut \texttt{read} est mis à jour en parallèle de \texttt{read\_at} pour cohérence des statistiques.
+\end{itemize}
+\end{infobox}
+
+\subsubsection{Table \texttt{templates}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} name & VARCHAR(100) & NOT NULL & Nom du template \\
+channel & VARCHAR(20) & NOT NULL & Canal cible \\
+\rowcolor{tabrow} platform\_id & UUID & NULL & Plateforme (NULL = global) \\
+category & VARCHAR(30) & NOT NULL & Catégorie de notification \\
+\rowcolor{tabrow} is\_active & BOOLEAN & DEFAULT true & Template actif \\
+created\_by & UUID & NULL & Créateur \\
+\rowcolor{tabrow} created\_at & TIMESTAMPTZ & NOT NULL & Date de création \\
+updated\_at & TIMESTAMPTZ & NOT NULL & Dernière modification \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique : \texttt{(name, platform\_id)} (v1.2). Deux plateformes peuvent avoir un template du même nom.
+
+\begin{infobox}[Résolution template\_name $\rightarrow$ template\_id (v1.2)]
+Lorsque l'API reçoit un \texttt{template\_name} :
+\begin{enumerate}[itemsep=1pt]
+  \item Lookup par \texttt{(name, platform\_id)} fourni dans la requête.
+  \item Si non trouvé avec le \texttt{platform\_id}, fallback vers \texttt{platform\_id = NULL} (template global).
+  \item Vérification \texttt{is\_active = true}.
+  \item Récupération de la version courante (\texttt{is\_current = true}) pour la locale demandée, avec fallback vers locale \texttt{fr}.
+\end{enumerate}
+\end{infobox}
+
+\subsubsection{Table \texttt{template\_versions}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} template\_id & UUID & FK $\rightarrow$ templates & Template parent \\
+version & INT & NOT NULL & Numéro de version \\
+\rowcolor{tabrow} locale & VARCHAR(5) & NOT NULL & Langue (fr, en) \\
+subject & VARCHAR(255) & NULL & Sujet (email) \\
+\rowcolor{tabrow} body & TEXT & NOT NULL & Corps avec variables \{\{var\}\} \\
+is\_current & BOOLEAN & DEFAULT false & Version active \\
+\rowcolor{tabrow} created\_at & TIMESTAMPTZ & NOT NULL & Date de création \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique : \texttt{(template\_id, version, locale)}.
+
+\subsubsection{Table \texttt{template\_variables}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} template\_version\_id & UUID & FK $\rightarrow$ template\_versions & Version du template \\
+key & VARCHAR(50) & NOT NULL & Nom de la variable \\
+\rowcolor{tabrow} description & VARCHAR(255) & NULL & Description \\
+required & BOOLEAN & DEFAULT true & Variable obligatoire \\
+\rowcolor{tabrow} default\_value & VARCHAR(255) & NULL & Valeur par défaut \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{user\_preferences}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} user\_id & UUID & NOT NULL & Utilisateur (\texttt{users\_profiles.id}) \\
+platform\_id & UUID & NOT NULL & Plateforme (UUID Auth) \\
+\rowcolor{tabrow} channel\_email & BOOLEAN & DEFAULT true & Email activé \\
+channel\_sms & BOOLEAN & DEFAULT true & SMS activé \\
+\rowcolor{tabrow} channel\_push & BOOLEAN & DEFAULT true & Push activé \\
+channel\_whatsapp & BOOLEAN & DEFAULT true & WhatsApp activé \\
+\rowcolor{tabrow} channel\_in\_app & BOOLEAN & DEFAULT true & In-app activé \\
+cat\_transactional & BOOLEAN & DEFAULT true & Catégorie transactionnelle \\
+\rowcolor{tabrow} cat\_marketing & BOOLEAN & DEFAULT false & Catégorie marketing \\
+cat\_security & BOOLEAN & DEFAULT true & Catégorie sécurité (toujours forcé à true) \\
+\rowcolor{tabrow} updated\_at & TIMESTAMPTZ & NOT NULL & Dernière modification \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique : \texttt{(user\_id, platform\_id)}.
+
+\subsubsection{Table \texttt{notification\_logs}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} notification\_id & UUID & FK $\rightarrow$ notifications & Notification associée \\
+channel & VARCHAR(20) & NOT NULL & Canal tenté \\
+\rowcolor{tabrow} provider & VARCHAR(30) & NOT NULL & Provider utilisé \\
+status & VARCHAR(20) & NOT NULL & sent, delivered, failed \\
+\rowcolor{tabrow} attempt & INT & NOT NULL & Numéro de tentative \\
+error\_message & TEXT & NULL & Message d'erreur (données sensibles masquées) \\
+\rowcolor{tabrow} provider\_message\_id & VARCHAR(255) & NULL & ID provider externe \\
+created\_at & TIMESTAMPTZ & NOT NULL & Date de tentative \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{campaigns}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} name & VARCHAR(100) & NOT NULL & Nom de la campagne \\
+platform\_id & UUID & NOT NULL & Plateforme source (UUID Auth) \\
+\rowcolor{tabrow} template\_id & UUID & FK $\rightarrow$ templates & Template utilisé \\
+channel & VARCHAR(20) & NOT NULL & Canal d'envoi \\
+\rowcolor{tabrow} status & VARCHAR(20) & NOT NULL & draft, running, completed, cancelled \\
+total\_recipients & INT & DEFAULT 0 & Nombre total de destinataires \\
+\rowcolor{tabrow} sent\_count & INT & DEFAULT 0 & Nombre envoyé \\
+failed\_count & INT & DEFAULT 0 & Nombre en échec \\
+\rowcolor{tabrow} throttle\_per\_second & INT & DEFAULT 10 & Rate limiting \\
+scheduled\_at & TIMESTAMPTZ & NULL & Date d'envoi planifiée \\
+\rowcolor{tabrow} started\_at & TIMESTAMPTZ & NULL & Début effectif \\
+completed\_at & TIMESTAMPTZ & NULL & Fin de campagne \\
+\rowcolor{tabrow} created\_by & UUID & NULL & Créateur \\
+created\_at & TIMESTAMPTZ & NOT NULL & Date de création \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{campaign\_recipients}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} campaign\_id & UUID & FK $\rightarrow$ campaigns & Campagne associée \\
+user\_id & UUID & NOT NULL & Destinataire (\texttt{users\_profiles.id}) \\
+\rowcolor{tabrow} notification\_id & UUID & FK $\rightarrow$ notifications, NULL & Notification générée \\
+status & VARCHAR(20) & DEFAULT 'pending' & pending, sent, failed, skipped \\
+\rowcolor{tabrow} variables & JSONB & NULL & Variables spécifiques au destinataire \\
+created\_at & TIMESTAMPTZ & NOT NULL & Date de création \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{scheduled\_notifications}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} user\_id & UUID & NOT NULL & Destinataire (\texttt{users\_profiles.id}) \\
+platform\_id & UUID & NOT NULL & Plateforme source (UUID Auth) \\
+\rowcolor{tabrow} template\_id & UUID & FK $\rightarrow$ templates & Template à utiliser \\
+channel & VARCHAR(20) & NOT NULL & Canal d'envoi \\
+\rowcolor{tabrow} variables & JSONB & NULL & Variables du template \\
+scheduled\_at & TIMESTAMPTZ & NOT NULL & Date/heure d'envoi \\
+\rowcolor{tabrow} status & VARCHAR(20) & DEFAULT 'pending' & pending, sent, cancelled \\
+notification\_id & UUID & FK $\rightarrow$ notifications, NULL & Notification créée après envoi \\
+\rowcolor{tabrow} created\_at & TIMESTAMPTZ & NOT NULL & Date de création \\
+updated\_at & TIMESTAMPTZ & NOT NULL & Dernière modification \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{device\_tokens} (v1.1)}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} user\_id & UUID & NOT NULL & Utilisateur (\texttt{users\_profiles.id}) \\
+platform\_id & UUID & NOT NULL & Plateforme (UUID Auth) \\
+\rowcolor{tabrow} token & TEXT & NOT NULL & Token FCM ou APNs \\
+device\_type & VARCHAR(20) & NOT NULL & android, ios, web \\
+\rowcolor{tabrow} device\_name & VARCHAR(100) & NULL & Nom de l'appareil \\
+is\_active & BOOLEAN & DEFAULT true & Token actif \\
+\rowcolor{tabrow} created\_at & TIMESTAMPTZ & NOT NULL & Date d'enregistrement \\
+updated\_at & TIMESTAMPTZ & NOT NULL & Dernière mise à jour \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique : \texttt{(user\_id, token)}.
+
+\begin{infobox}[Sécurité device tokens (v1.2)]
+Les device tokens peuvent être invalidés (\texttt{is\_active = false}) lors d'une déconnexion globale ou d'une révocation de toutes les sessions côté Auth. Lorsque Notification reçoit un signal de blocage ou désactivation d'un utilisateur (via le statut retourné par \texttt{verify-token} ou le cache Users), il désactive automatiquement tous les device tokens de cet utilisateur.
+\end{infobox}
+
+\subsubsection{Table \texttt{platform\_channel\_config} (v1.1)}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} platform\_id & UUID & UNIQUE, NOT NULL & Plateforme (UUID Auth) \\
+priority\_order & JSONB & NOT NULL & Ordre des canaux \\
+\rowcolor{tabrow} fallback\_enabled & BOOLEAN & DEFAULT true & Fallback inter-canal activé \\
+created\_at & TIMESTAMPTZ & NOT NULL & Date de création \\
+\rowcolor{tabrow} updated\_at & TIMESTAMPTZ & NOT NULL & Dernière modification \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════
+% 9. CONTRATS D'API
+% ══════════════════════════════════════════
+\section{Contrats d'API}
+
+Base URL : \texttt{/api/v1}. Tous les endpoints retournent du JSON. Tous les endpoints requièrent le header \texttt{Authorization: Bearer <token>}, validé via \texttt{GET /auth/verify-token}.
+
+% ── 9.1 ENVOI ──
+\subsection{Envoi}
+
+\subsubsection{POST /notifications/send}
+
+\textbf{Description :} Envoi d'une notification mono ou multi-canal à un utilisateur. Notification orchestre l'envoi sur chaque canal demandé.
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "user_id": "uuid (users_profiles.id)",
+  "channels": ["email", "push"],
+  "template_name": "agt_market_order_confirmed",
+  "locale": "fr",
+  "variables": {
+    "user_name": "Jean Dupont",
+    "order_id": "CMD-001",
+    "total": "15000 FCFA"
+  },
+  "priority": "high",
+  "category": "transactional",
+  "idempotency_key": "uuid-unique (optionnel)"
+}
+\end{lstlisting}
+
+\textbf{Response 202 :}
+\begin{lstlisting}
+{
+  "notifications": [
+    { "id": "notif-uuid-1", "channel": "email", "status": "pending" },
+    { "id": "notif-uuid-2", "channel": "push", "status": "pending" }
+  ],
+  "message": "Notifications queued"
+}
+\end{lstlisting}
+
+\textbf{Codes :} 202 Accepted, 400 Validation error, 401 Unauthorized, 404 Template not found, 409 Idempotency conflict, 429 Rate limited.
+
+\begin{infobox}[Compatibilité mono-canal]
+Si un seul canal est fourni (\texttt{channels: ["sms"]}), le comportement est identique à un envoi mono-canal classique. Le champ \texttt{channels} remplace l'ancien champ \texttt{channel} (v1.0).
+\end{infobox}
+
+\subsubsection{POST /notifications/send-bulk}
+
+\textbf{Description :} Envoi en masse à plusieurs utilisateurs. Limité à \textbf{100 \texttt{user\_ids}} maximum par appel. Pour des volumes plus importants, utiliser les campagnes.
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "user_ids": ["uuid-1", "uuid-2", "uuid-3"],
+  "channels": ["push"],
+  "template_name": "promo_weekend",
+  "locale": "fr",
+  "variables": { "discount": "20%" },
+  "category": "marketing"
+}
+\end{lstlisting}
+
+\textbf{Response 202 :}
+\begin{lstlisting}
+{
+  "queued_count": 3,
+  "message": "Bulk notifications queued"
+}
+\end{lstlisting}
+
+\textbf{Codes :} 202 Accepted, 400 Validation error (dont \texttt{user\_ids} > 100), 401 Unauthorized.
+
+% ── 9.2 TEMPLATES ──
+\subsection{Templates}
+
+\subsubsection{POST /templates}
+
+\textbf{Description :} Création d'un template. Contrainte UNIQUE sur \texttt{(name, platform\_id)}.
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "name": "order_confirmed",
+  "channel": "email",
+  "platform_id": "uuid-or-null",
+  "category": "transactional",
+  "locale": "fr",
+  "subject": "Commande {{order_id}} confirmee",
+  "body": "Bonjour {{user_name}}, votre commande..."
+}
+\end{lstlisting}
+
+\textbf{Response 201 :}
+\begin{lstlisting}
+{
+  "id": "tpl-uuid",
+  "name": "order_confirmed",
+  "platform_id": "uuid",
+  "version": 1,
+  "message": "Template created"
+}
+\end{lstlisting}
+
+\textbf{Codes :} 201 Created, 400 Validation error, 409 Name already exists for this platform.
+
+\subsubsection{GET /templates}
+
+\textbf{Description :} Liste des templates. \textbf{Query params :} \texttt{?channel=email\&platform\_id=uuid\&page=1\&limit=20}
+
+\subsubsection{GET /templates/\{id\}}
+
+\textbf{Description :} Détail d'un template avec sa version courante.
+
+\subsubsection{PUT /templates/\{id\}}
+
+\textbf{Description :} Mise à jour d'un template. Crée automatiquement une nouvelle version.
+
+\subsubsection{DELETE /templates/\{id\}}
+
+\textbf{Description :} Suppression logique (désactivation). \textbf{Response 200 :} \texttt{\{"message": "Template deactivated"\}}
+
+\subsubsection{POST /templates/\{id\}/preview}
+
+\textbf{Description :} Preview du template avec des variables de test.
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "locale": "fr",
+  "variables": {
+    "user_name": "Test User",
+    "order_id": "CMD-001"
+  }
+}
+\end{lstlisting}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "subject": "Commande CMD-001 confirmee",
+  "body": "Bonjour Test User, votre commande..."
+}
+\end{lstlisting}
+
+\subsubsection{GET /templates/\{id\}/versions}
+
+\textbf{Description :} Historique des versions d'un template.
+
+% ── 9.3 PRÉFÉRENCES ──
+\subsection{Préférences}
+
+\subsubsection{GET /users/\{userId\}/notification-preferences}
+
+\textbf{Description :} Lecture des préférences (source de vérité locale). Si aucune préférence n'existe, retourne les valeurs par défaut. \textbf{Query params :} \texttt{?platform\_id=uuid}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "user_id": "uuid (users_profiles.id)",
+  "platform_id": "uuid",
+  "channels": {
+    "email": true, "sms": true,
+    "push": true, "whatsapp": false,
+    "in_app": true
+  },
+  "categories": {
+    "transactional": true,
+    "marketing": false,
+    "security": true
+  }
+}
+\end{lstlisting}
+
+\subsubsection{PUT /users/\{userId\}/notification-preferences}
+
+\textbf{Description :} Modification des préférences. \textbf{L'utilisateur ne peut modifier que ses propres préférences}, sauf via un token S2S autorisé. La catégorie \texttt{security} est ignorée si passée à \texttt{false}. \textbf{Response 200 :} \texttt{\{"message": "Preferences updated"\}}
+
+% ── 9.4 IN-APP ──
+\subsection{Notifications In-App}
+
+\subsubsection{GET /users/\{userId\}/notifications}
+
+\textbf{Description :} Liste des notifications in-app (exclut \texttt{deleted\_at IS NOT NULL}). \textbf{Query params :} \texttt{?status=unread\&page=1\&limit=20}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "id": "notif-uuid",
+      "subject": "Commande confirmee",
+      "body": "Votre commande CMD-001...",
+      "is_read": false,
+      "category": "transactional",
+      "created_at": "2026-03-20T10:00:00Z"
+    }
+  ],
+  "total": 5, "unread_count": 3
+}
+\end{lstlisting}
+
+\subsubsection{GET /users/\{userId\}/notifications/unread-count}
+
+\textbf{Response 200 :} \texttt{\{"unread\_count": 3\}}
+
+\subsubsection{PUT /users/\{userId\}/notifications/\{notifId\}/read}
+
+\textbf{Response 200 :} \texttt{\{"message": "Notification marked as read"\}}
+
+\subsubsection{PUT /users/\{userId\}/notifications/read-all}
+
+\textbf{Response 200 :} \texttt{\{"message": "All notifications marked as read", "updated\_count": 3\}}
+
+\subsubsection{DELETE /users/\{userId\}/notifications/\{notifId\}}
+
+\textbf{Description :} Suppression logique. \textbf{Response 200 :} \texttt{\{"message": "Notification deleted"\}}
+
+% ── 9.5 PLANIFICATION ──
+\subsection{Planification}
+
+\subsubsection{POST /notifications/schedule}
+
+\textbf{Description :} Planifier une notification pour envoi futur.
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "user_id": "uuid (users_profiles.id)",
+  "channels": ["email"],
+  "template_name": "weekly_digest",
+  "locale": "fr",
+  "variables": { "week": "12" },
+  "scheduled_at": "2026-03-25T08:00:00Z"
+}
+\end{lstlisting}
+
+\textbf{Response 201 :}
+\begin{lstlisting}
+{
+  "id": "sched-uuid",
+  "status": "pending",
+  "scheduled_at": "2026-03-25T08:00:00Z",
+  "message": "Notification scheduled"
+}
+\end{lstlisting}
+
+\subsubsection{GET /notifications/scheduled}
+
+\textbf{Query params :} \texttt{?status=pending\&page=1}
+
+\subsubsection{PUT /notifications/scheduled/\{id\}}
+
+\textbf{Description :} Modifier la date ou les paramètres.
+
+\subsubsection{DELETE /notifications/scheduled/\{id\}}
+
+\textbf{Response 200 :} \texttt{\{"message": "Scheduled notification cancelled"\}}
+
+% ── 9.6 CAMPAGNES ──
+\subsection{Campagnes}
+
+\subsubsection{POST /campaigns}
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "name": "Promo Ete 2026",
+  "platform_id": "uuid",
+  "template_name": "promo_summer",
+  "channel": "email",
+  "locale": "fr",
+  "user_ids": ["uuid-1", "uuid-2"],
+  "throttle_per_second": 50,
+  "scheduled_at": "2026-06-01T09:00:00Z"
+}
+\end{lstlisting}
+
+\textbf{Response 201 :}
+\begin{lstlisting}
+{
+  "id": "camp-uuid",
+  "name": "Promo Ete 2026",
+  "status": "draft",
+  "total_recipients": 2,
+  "message": "Campaign created"
+}
+\end{lstlisting}
+
+\subsubsection{GET /campaigns}
+
+\textbf{Query params :} \texttt{?status=running\&page=1\&limit=20}
+
+\subsubsection{GET /campaigns/\{id\}}
+
+\textbf{Description :} Détail d'une campagne.
+
+\subsubsection{GET /campaigns/\{id\}/progress}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "total": 5000,
+  "sent": 3200,
+  "failed": 15,
+  "pending": 1785,
+  "progress_percent": 64.3
+}
+\end{lstlisting}
+
+\subsubsection{POST /campaigns/\{id\}/cancel}
+
+\textbf{Response 200 :} \texttt{\{"message": "Campaign cancelled", "sent\_before\_cancel": 3200\}}
+
+\subsubsection{GET /campaigns/\{id\}/stats}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "total_recipients": 5000,
+  "sent": 4985,
+  "delivered": 4900,
+  "failed": 15,
+  "read": 2100,
+  "delivery_rate": 98.3,
+  "read_rate": 42.0
+}
+\end{lstlisting}
+
+% ── 9.7 DEVICE TOKENS ──
+\subsection{Device Tokens}
+
+\subsubsection{POST /users/\{userId\}/device-tokens}
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "token": "fcm-token-xxx...",
+  "device_type": "android",
+  "device_name": "Samsung Galaxy S24",
+  "platform_id": "uuid"
+}
+\end{lstlisting}
+
+\textbf{Response 201 :} \texttt{\{"id": "dt-uuid", "message": "Device token registered"\}}
+
+\subsubsection{GET /users/\{userId\}/device-tokens}
+
+\textbf{Description :} Liste des device tokens.
+
+\subsubsection{DELETE /users/\{userId\}/device-tokens/\{tokenId\}}
+
+\textbf{Response 200 :} \texttt{\{"message": "Device token removed"\}}
+
+% ── 9.8 LOGS & STATS ──
+\subsection{Logs \& Statistiques}
+
+\subsubsection{GET /notifications/logs}
+
+\textbf{Query params :} \texttt{?channel=email\&status=failed\&from=2026-03-01\&to=2026-03-20\&page=1}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "id": "log-uuid",
+      "notification_id": "notif-uuid",
+      "channel": "email",
+      "provider": "sendgrid",
+      "status": "delivered",
+      "attempt": 1,
+      "created_at": "2026-03-20T10:00:05Z"
+    }
+  ],
+  "total": 150, "page": 1
+}
+\end{lstlisting}
+
+\subsubsection{GET /notifications/stats}
+
+\textbf{Query params :} \texttt{?platform\_id=uuid\&period=last\_30d}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "total_sent": 125000,
+  "by_channel": {
+    "email": 80000, "push": 30000,
+    "sms": 5000, "in_app": 8000,
+    "whatsapp": 2000
+  },
+  "by_status": {
+    "delivered": 120000, "failed": 3000,
+    "pending": 2000
+  },
+  "delivery_rate": 96.0
+}
+\end{lstlisting}
+
+% ── 9.9 CONFIGURATION ──
+\subsection{Configuration}
+
+\subsubsection{GET /platforms/\{platformId\}/channels-priority}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "priority_order": ["email","push","in_app","whatsapp","sms"],
+  "fallback_enabled": true
+}
+\end{lstlisting}
+
+\subsubsection{PUT /platforms/\{platformId\}/channels-priority}
+
+\textbf{Request body :} Même structure. \textbf{Response 200 :} \texttt{\{"message": "Channel priority updated"\}}
+
+% ══════════════════════════════════════════
+% 10. CONTRATS INTER-SERVICES
+% ══════════════════════════════════════════
+\section{Contrats Inter-Services}
+
+\subsection{Auth $\rightarrow$ Notification}
+
+Le Service Auth appelle Notification pour l'envoi de notifications de sécurité (OTP, vérification, reset, magic link).
+
+\subsubsection{Mode de communication}
+
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Paramètre} & \color{white}\textbf{Valeur} \\
+\midrule
+Transport & HTTP POST synchrone via \texttt{POST /api/v1/notifications/send} \\
+\rowcolor{tabrow} Auth & Token S2S (Auth s'authentifie via \texttt{POST /auth/s2s/token}) \\
+Catégorie & Toujours \texttt{security} \\
+\rowcolor{tabrow} Priorité & Toujours \texttt{high} ou \texttt{critical} \\
+Fallback inter-canal & Interdit (catégorie \texttt{security}) \\
+\rowcolor{tabrow} Idempotency & Champ \texttt{idempotency\_key} fourni par Auth (scoped par platform\_id, TTL 24h) \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Templates pré-requis Auth}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Template name} & \color{white}\textbf{Canal} & \color{white}\textbf{Déclencheur Auth} & \color{white}\textbf{Variables attendues} \\
+\midrule
+auth\_verify\_email & email & POST /auth/register (email) & verification\_url, expires\_in\_minutes, platform\_name \\
+\rowcolor{tabrow} auth\_otp\_sms & sms & register (phone), login/phone & otp\_code, expires\_in\_minutes, platform\_name \\
+auth\_reset\_password & email & POST /auth/forgot-password & reset\_url, expires\_in\_minutes, platform\_name \\
+\rowcolor{tabrow} auth\_magic\_link & email & POST /auth/login/magic-link & magic\_link\_url, expires\_in\_minutes, platform\_name \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Comportement en cas d'échec}
+
+L'échec de Notification ne bloque \textbf{jamais} une opération Auth. Auth crée l'utilisateur/le token quand même et l'utilisateur peut redemander l'envoi.
+
+\subsection{Users $\rightarrow$ Notification}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Événement} & \color{white}\textbf{Canal} & \color{white}\textbf{Catégorie} & \color{white}\textbf{Déclencheur Users} \\
+\midrule
+role\_assigned & email + in\_app & transactional & POST /users/\{id\}/roles \\
+\rowcolor{tabrow} role\_removed & email + in\_app & transactional & DELETE /users/\{id\}/roles/\{roleId\} \\
+document\_validated & email + in\_app & transactional & PUT .../status (validated) \\
+\rowcolor{tabrow} document\_rejected & email + in\_app & transactional & PUT .../status (rejected) \\
+\bottomrule
+\end{tabularx}
+
+Templates pré-requis : \texttt{users\_role\_assigned}, \texttt{users\_role\_removed}, \texttt{users\_document\_validated}, \texttt{users\_document\_rejected} (avec \texttt{platform\_id = NULL} pour templates globaux).
+
+\subsection{Notification $\rightarrow$ Auth}
+
+Validation Bearer token via \texttt{GET /auth/verify-token} à chaque requête API entrante. Vérifie : signature JWT, expiration, user non bloqué/désactivé, plateforme active, session active.
+
+\subsection{Notification $\rightarrow$ Users}
+
+Résolution des coordonnées destinataire via \texttt{GET /users/\{id\}}. Résultat mis en cache Redis (TTL 5 min). Vérification que le statut utilisateur est \texttt{active} avant envoi.
+
+% ══════════════════════════════════════════
+% 11. INFRASTRUCTURE
+% ══════════════════════════════════════════
+\section{Infrastructure}
+
+\subsection{Composants d'infrastructure}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Service} & \color{white}\textbf{Technologie} & \color{white}\textbf{Rôle} \\
+\midrule
+Backend API & Python 3.11+ / Django REST Framework & API REST principale \\
+\rowcolor{tabrow} Workers asynchrones & Celery + RabbitMQ & Traitement des envois \\
+Scheduler & Celery Beat & Envois planifiés, purge idempotency keys, purge device tokens inactifs \\
+\rowcolor{tabrow} Base de données & PostgreSQL 15+ & Stockage principal \\
+Cache & Redis 7+ & Cache coordonnées Users, rate limiting, compteurs badge, idempotency \\
+\rowcolor{tabrow} Conteneur & Docker + Docker Compose & Déploiement isolé \\
+Reverse Proxy & Nginx / Traefik & TLS termination, load balancing \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Services externes à payer}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Catégorie} & \color{white}\textbf{Fournisseurs} & \color{white}\textbf{Facturation} \\
+\midrule
+Email & SendGrid, Mailgun, AWS SES & Par volume \\
+\rowcolor{tabrow} SMS & Twilio, Vonage, Infobip & Par SMS \\
+Push & FCM (gratuit), APNs (gratuit) & Gratuit \\
+\rowcolor{tabrow} WhatsApp & Meta Cloud API & Par message \\
+Hébergement & AWS, GCP, DigitalOcean & Conteneurs, BDD, Redis \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Variables d'environnement}
+
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Variable} & \color{white}\textbf{Description} \\
+\midrule
+DATABASE\_URL & URL de connexion PostgreSQL \\
+\rowcolor{tabrow} REDIS\_URL & URL de connexion Redis \\
+AUTH\_SERVICE\_URL & URL du Service Auth \\
+\rowcolor{tabrow} USERS\_SERVICE\_URL & URL du Service Users \\
+RABBITMQ\_URL & URL du message broker \\
+\rowcolor{tabrow} SENDGRID\_API\_KEY & Clé API SendGrid \\
+TWILIO\_ACCOUNT\_SID & Identifiant Twilio \\
+\rowcolor{tabrow} TWILIO\_AUTH\_TOKEN & Token Twilio \\
+FCM\_SERVER\_KEY & Clé serveur Firebase \\
+\rowcolor{tabrow} APNS\_KEY\_ID & Identifiant clé APNs \\
+META\_WHATSAPP\_TOKEN & Token Meta Cloud API \\
+\rowcolor{tabrow} SECRET\_KEY & Clé secrète Django \\
+USER\_CACHE\_TTL & TTL cache coordonnées Users en secondes (défaut : 300) \\
+\rowcolor{tabrow} IDEMPOTENCY\_TTL & TTL des clés d'idempotence en secondes (défaut : 86400) \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Stratégie d'archivage des logs}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Période} & \color{white}\textbf{Stockage} & \color{white}\textbf{Action} \\
+\midrule
+0--90 jours & PostgreSQL (\texttt{notification\_logs}) & Accès temps réel \\
+\rowcolor{tabrow} 90--365 jours & Table partitionnée / archivée & Requêtes analytiques \\
+> 365 jours & Stockage froid (S3 / GCS) & Conservation légale, suppression PII \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Monitoring temps réel}
+
+\begin{infobox}[Dashboard de monitoring]
+Métriques clés :
+\begin{itemize}
+  \item Taux de livraison par canal et par provider (cible > 96\%)
+  \item Latence de mise en queue (cible < 100ms P95)
+  \item File d'attente : taille et temps de traitement moyen
+  \item Taux d'erreur par provider (alertes si > 5\%)
+  \item Campagnes actives : progression temps réel
+  \item Rate limiting : consommation par provider
+  \item Cache hit ratio coordonnées Users (v1.2)
+\end{itemize}
+\end{infobox}
+
+% ══════════════════════════════════════════
+% ANNEXES
+% ══════════════════════════════════════════
+\section*{Annexes}
+\addcontentsline{toc}{section}{Annexes}
+
+\subsection*{A. Cas d'usage}
+\addcontentsline{toc}{subsection}{A. Cas d'usage}
+
+\textbf{CU-01 : OTP via Service Auth.}
+Le Service Auth appelle \texttt{POST /notifications/send} avec \texttt{user\_id} (\texttt{users\_profiles.id}), \texttt{channels: ["sms"]}, \texttt{template\_name: "auth\_otp\_sms"}, \texttt{category: "security"}, \texttt{priority: "critical"}, \texttt{idempotency\_key: "uuid-unique"}. Notification ignore les préférences (catégorie security), résout le numéro via Users (ou cache), et envoie. Aucun fallback inter-canal.
+
+\textbf{CU-02 : Confirmation de commande (AGT-Market).}
+AGT-Market envoie \textbf{un seul appel} \texttt{POST /notifications/send} avec \texttt{channels: ["email", "push"]}, \texttt{template\_name: "order\_confirmed"}, \texttt{category: "transactional"}. Notification orchestre l'envoi sur les deux canaux, résout les templates par \texttt{(name, platform\_id)}, et applique les préférences utilisateur.
+
+\textbf{CU-03 : Campagne marketing.}
+Un administrateur crée une campagne via \texttt{POST /campaigns} avec 10\,000 destinataires et un throttle de 50 msg/s. L'admin suit la progression via \texttt{GET /campaigns/\{id\}/progress}.
+
+\textbf{CU-04 : Désactivation des préférences.}
+Un utilisateur désactive les notifications marketing sur AGT-Bot via \texttt{PUT /users/\{userId\}/notification-preferences}. Seul l'utilisateur propriétaire (ou un token S2S) peut modifier ses préférences.
+
+\textbf{CU-05 : Dashboard admin.}
+Un administrateur consulte \texttt{GET /notifications/stats} pour les taux de livraison et erreurs par canal.
+
+\textbf{CU-06 : Enregistrement device token push.}
+L'app mobile appelle \texttt{POST /users/\{userId\}/device-tokens} avec le token FCM. Lors d'un envoi push, le worker récupère tous les device tokens actifs.
+
+\textbf{CU-07 : Notification de changement de rôle.}
+Users appelle \texttt{POST /notifications/send} avec \texttt{channels: ["email", "in\_app"]}, \texttt{template\_name: "users\_role\_assigned"}, \texttt{category: "transactional"}.
+
+\textbf{CU-08 : Utilisateur désactivé (v1.2).}
+Un utilisateur est désactivé côté Auth. Au prochain envoi, le worker détecte via le cache Users ou \texttt{verify-token} que l'utilisateur est inactif. L'envoi est annulé (statut \texttt{failed}, raison \texttt{user\_inactive}). Les device tokens sont désactivés.
+
+\subsection*{B. Glossaire}
+\addcontentsline{toc}{subsection}{B. Glossaire}
+
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Terme} & \color{white}\textbf{Définition} \\
+\midrule
+Fallback & Mécanisme de repli automatique vers un canal ou provider alternatif. Interdit pour \texttt{security}. \\
+\rowcolor{tabrow} Throttling & Limitation du débit d'envoi pour respecter les quotas des providers. \\
+Backoff exponentiel & Stratégie de retry où le délai augmente exponentiellement (1s, 2s, 4s). \\
+\rowcolor{tabrow} Template & Modèle de notification avec des variables dynamiques (\texttt{\{\{var\}\}}). \\
+In-app & Notification affichée dans l'interface de la plateforme. \\
+\rowcolor{tabrow} Worker & Processus asynchrone consommant les messages de la file d'attente. \\
+Rate limiting & Limitation du nombre de requêtes par unité de temps. \\
+\rowcolor{tabrow} Provider & Service tiers d'envoi (SendGrid, Twilio, FCM, Meta Cloud API\ldots). \\
+Celery & Framework Python de traitement de tâches asynchrones distribuées. \\
+\rowcolor{tabrow} Bearer token & Jeton d'authentification validé via \texttt{GET /auth/verify-token}. \\
+Device token & Identifiant unique attribué par FCM/APNs à un appareil pour les notifications push. \\
+\rowcolor{tabrow} Idempotency key & Clé unique scoped par \texttt{(platform\_id, key)} avec TTL 24h pour éviter les doublons. \\
+\texttt{user\_id} & \texttt{users\_profiles.id} du Service Users. \\
+\rowcolor{tabrow} \texttt{platform\_id} & UUID de la plateforme, registre Auth. \\
+S2S & Service-to-Service --- communication authentifiée via \texttt{POST /auth/s2s/token}. \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{C. Code PlantUML --- Diagramme de Classes}
+\addcontentsline{toc}{subsection}{C. Code PlantUML --- Diagramme de Classes}
+
+Le code PlantUML ci-dessous correspond au diagramme de classes complet du Service Notification v1.2. Il peut être rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language=plantuml,basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+@startuml Notification Service - Class Diagram v1.2
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "notifications" as notif {
+  * id : UUID <<PK>>
+  --
+  * user_id : UUID
+  * platform_id : UUID
+  template_id : UUID <<FK>>
+  * channel : VARCHAR(20)
+  * category : VARCHAR(30)
+  subject : VARCHAR(255)
+  * body : TEXT
+  * status : VARCHAR(20)
+  priority : VARCHAR(10) = 'normal'
+  metadata : JSONB
+  idempotency_key : VARCHAR(100)
+  read_at : TIMESTAMPTZ
+  deleted_at : TIMESTAMPTZ
+  sent_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, idempotency_key)
+}
+
+entity "templates" as tpl {
+  * id : UUID <<PK>>
+  --
+  * name : VARCHAR(100)
+  * channel : VARCHAR(20)
+  platform_id : UUID
+  * category : VARCHAR(30)
+  is_active : BOOLEAN = true
+  created_by : UUID
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (name, platform_id)
+}
+
+entity "template_versions" as tplv {
+  * id : UUID <<PK>>
+  --
+  * template_id : UUID <<FK>>
+  * version : INT
+  * locale : VARCHAR(5)
+  subject : VARCHAR(255)
+  * body : TEXT
+  is_current : BOOLEAN = false
+  * created_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (template_id, version, locale)
+}
+
+entity "template_variables" as tplvar {
+  * id : UUID <<PK>>
+  --
+  * template_version_id : UUID <<FK>>
+  * key : VARCHAR(50)
+  description : VARCHAR(255)
+  required : BOOLEAN = true
+  default_value : VARCHAR(255)
+}
+
+entity "user_preferences" as pref {
+  * id : UUID <<PK>>
+  --
+  * user_id : UUID
+  * platform_id : UUID
+  channel_email : BOOLEAN = true
+  channel_sms : BOOLEAN = true
+  channel_push : BOOLEAN = true
+  channel_whatsapp : BOOLEAN = true
+  channel_in_app : BOOLEAN = true
+  cat_transactional : BOOLEAN = true
+  cat_marketing : BOOLEAN = false
+  cat_security : BOOLEAN = true
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (user_id, platform_id)
+}
+
+entity "notification_logs" as logs {
+  * id : UUID <<PK>>
+  --
+  * notification_id : UUID <<FK>>
+  * channel : VARCHAR(20)
+  * provider : VARCHAR(30)
+  * status : VARCHAR(20)
+  * attempt : INT
+  error_message : TEXT
+  provider_message_id : VARCHAR(255)
+  * created_at : TIMESTAMPTZ
+}
+
+entity "campaigns" as camp {
+  * id : UUID <<PK>>
+  --
+  * name : VARCHAR(100)
+  * platform_id : UUID
+  * template_id : UUID <<FK>>
+  * channel : VARCHAR(20)
+  * status : VARCHAR(20)
+  total_recipients : INT = 0
+  sent_count : INT = 0
+  failed_count : INT = 0
+  throttle_per_second : INT = 10
+  scheduled_at : TIMESTAMPTZ
+  started_at : TIMESTAMPTZ
+  completed_at : TIMESTAMPTZ
+  created_by : UUID
+  * created_at : TIMESTAMPTZ
+}
+
+entity "campaign_recipients" as camprec {
+  * id : UUID <<PK>>
+  --
+  * campaign_id : UUID <<FK>>
+  * user_id : UUID
+  notification_id : UUID <<FK>>
+  status : VARCHAR(20) = 'pending'
+  variables : JSONB
+  * created_at : TIMESTAMPTZ
+}
+
+entity "scheduled_notifications" as sched {
+  * id : UUID <<PK>>
+  --
+  * user_id : UUID
+  * platform_id : UUID
+  * template_id : UUID <<FK>>
+  * channel : VARCHAR(20)
+  variables : JSONB
+  * scheduled_at : TIMESTAMPTZ
+  status : VARCHAR(20) = 'pending'
+  notification_id : UUID <<FK>>
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "device_tokens" as devtok {
+  * id : UUID <<PK>>
+  --
+  * user_id : UUID
+  * platform_id : UUID
+  * token : TEXT
+  * device_type : VARCHAR(20)
+  device_name : VARCHAR(100)
+  is_active : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (user_id, token)
+}
+
+entity "platform_channel_config" as pcc {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID <<UQ>>
+  * priority_order : JSONB
+  fallback_enabled : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+tpl ||--o{ tplv : "1..* versions"
+tplv ||--o{ tplvar : "0..* variables"
+tpl ||--o{ notif : "0..* notifications"
+tpl ||--o{ camp : "0..* campaigns"
+tpl ||--o{ sched : "0..* scheduled"
+notif ||--o{ logs : "1..* logs"
+camp ||--o{ camprec : "1..* recipients"
+camprec }o--|| notif : "0..1 notification"
+sched }o--o| notif : "0..1 notification"
+
+@enduml
+\end{lstlisting}
+
+\vfill
+\begin{center}
+\color{primary}\rule{8cm}{0.4pt}\\[6pt]
+{\small\color{secondary}\textbf{Fin du document} --- AGT Engineering --- v1.2}
+\end{center}
+
+\end{document}
