@@ -2,10 +2,10 @@ services:
   # ── PostgreSQL ─────────────────────────────────────────────────────────────
   db:
     image: postgres:15-alpine
-    container_name: agt_users_db
+    container_name: agt-users-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: agt_users_db
+      POSTGRES_DB: agt-users-db
       POSTGRES_USER: users_user
       POSTGRES_PASSWORD: users_password
     volumes:
@@ -13,7 +13,7 @@ services:
     ports:
       - "5433:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U users_user -d agt_users_db"]
+      test: ["CMD-SHELL", "pg_isready -U users_user -d agt-users-db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -23,7 +23,7 @@ services:
   # ── Redis ──────────────────────────────────────────────────────────────────
   redis:
     image: redis:7-alpine
-    container_name: agt_users_redis
+    container_name: agt-users-redis
     restart: unless-stopped
     command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     volumes:
@@ -43,13 +43,13 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_users_service
+    container_name: agt-users-service
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
-      REDIS_URL: redis://agt_users_redis:6379/1
+      DATABASE_URL: postgresql://users_user:users_password@agt-users-db:5432/agt-users-db
+      REDIS_URL: redis://agt-users-redis:6379/1
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
       - ./keys:/app/keys:ro
@@ -74,7 +74,7 @@ services:
     build:
       context: .
       target: builder
-    container_name: agt_users_dev
+    container_name: agt-users-dev
     restart: unless-stopped
     command: >
       sh -c "python manage.py migrate --noinput &&
@@ -82,8 +82,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
-      REDIS_URL: redis://agt_users_redis:6379/1
+      DATABASE_URL: postgresql://users_user:users_password@agt-users-db:5432/agt-users-db
+      REDIS_URL: redis://agt-users-redis:6379/1
       DEBUG: "True"
       DJANGO_SETTINGS_MODULE: config.settings
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem

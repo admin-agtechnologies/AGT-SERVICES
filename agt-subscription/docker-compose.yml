@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:15-alpine
-    container_name: agt_sub_db
+    container_name: agt-sub-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: agt_subscription_db
@@ -18,7 +18,7 @@ services:
       retries: 5
   redis:
     image: redis:7-alpine
-    container_name: agt_sub_redis
+    container_name: agt-sub-redis
     restart: unless-stopped
     volumes:
       - redis_data:/data
@@ -33,7 +33,7 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_sub_service
+    container_name: agt-sub-service
     restart: unless-stopped
     env_file:
       - .env
@@ -60,7 +60,7 @@ services:
     build:
       context: .
       target: builder
-    container_name: agt_sub_dev
+    container_name: agt-sub-dev
     restart: unless-stopped
     command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:7004"
     env_file:

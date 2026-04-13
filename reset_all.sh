@@ -18,7 +18,7 @@ fi
 echo -e "\e[36m=========================================\e[0m"
 
 # --- Tous les conteneurs AGT (11 services + infra) ---
-ALL_PATTERNS=("agt_auth_" "agt_users_" "agt_notif_" "agt_sub_" "agt_pay_" "agt_wallet_" "agt_search_" "agt_chatbot_" "agt_media_" "agt_chat_" "agt_geoloc_" "agt_gateway" "agt_rabbitmq" "agt_mailpit" "agt_elasticsearch")
+ALL_PATTERNS=("agt_auth_" "agt_users_" "agt_notif_" "agt_sub_" "agt_pay_" "agt_wallet_" "agt_search_" "agt_chatbot_" "agt_media_" "agt_chat_" "agt_geoloc_" "agt-gateway" "agt-rabbitmq" "agt-mailpit" "agt-elasticsearch")
 
 # --- Étape 1 : Arrêt et suppression des conteneurs AGT ---
 echo -e "\n\e[33m[1/5] Arrêt de tous les conteneurs AGT...\e[0m"

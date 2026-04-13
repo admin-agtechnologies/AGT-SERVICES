@@ -117,3 +117,9 @@ class UserAuthResponseSerializer(serializers.ModelSerializer):
             "two_fa_enabled", "registration_method", "is_blocked",
             "is_deactivated", "created_at",
         ]
+class S2STokenRequestSerializer(serializers.Serializer):
+    client_id = serializers.UUIDField(help_text="UUID de la plateforme (= Platform.id)")
+    client_secret = serializers.CharField(help_text="Secret de la plateforme")
+
+class S2SIntrospectRequestSerializer(serializers.Serializer):
+    token = serializers.CharField(help_text="Token S2S a valider")

@@ -22,7 +22,7 @@ Write-Host "=========================================" -ForegroundColor Cyan
 
 # --- Conteneurs ciblés MVP ---
 # Auth, Users, Notification + Infra (gateway, rabbitmq, mailpit, elasticsearch)
-$mvpPatterns = @("agt_auth_", "agt_users_", "agt_notif_", "agt_gateway", "agt_rabbitmq", "agt_mailpit", "agt_elasticsearch")
+$mvpPatterns = @("agt_auth_", "agt_users_", "agt_notif_", "agt-gateway", "agt-rabbitmq", "agt-mailpit", "agt-elasticsearch")
 
 # --- Étape 1 : Arrêt et suppression des conteneurs AGT MVP ---
 Write-Host "`n[1/5] Arrêt des conteneurs AGT MVP..." -ForegroundColor Yellow

@@ -12,7 +12,7 @@ from apps.authentication.serializers import (
     ForgotPasswordSerializer, ResetPasswordSerializer, ChangePasswordSerializer,
     DeactivateAccountSerializer, TwoFAConfirmSerializer, TwoFAVerifySerializer,
     TwoFADisableSerializer, SessionResponseSerializer, LoginHistoryResponseSerializer,
-    UserAuthResponseSerializer
+    UserAuthResponseSerializer, S2STokenRequestSerializer, S2SIntrospectRequestSerializer,
 )
 from apps.platforms.serializers import PlatformCreateSerializer, PlatformUpdateSerializer, PlatformResponseSerializer
 # ------------------------
@@ -181,11 +181,11 @@ s2s_token_schema = extend_schema(
     tags=["S2S"], 
     summary="Generer token S2S", 
     description="Flux Client Credentials. Retourne un JWT S2S valide 1h.",
-    request={"type": "object", "properties": {"client_id": {"type": "string"}, "client_secret": {"type": "string"}}}
+    request=S2STokenRequestSerializer,
 )
 s2s_introspect_schema = extend_schema(
     tags=["S2S"], 
     summary="Valider token S2S", 
     description="Permet a un service de verifier la validite d'un token S2S plateforme.",
-    request={"type": "object", "properties": {"token": {"type": "string"}}}
+    request=S2SIntrospectRequestSerializer,
 )

@@ -1,42 +1,110 @@
 plateforme:
 request:
 {
-  "name": "Platform Test",
-  "slug": "platform-test",
-  "allowed_auth_methods": ["email", "phone", "magic_link"],
-  "allowed_redirect_urls": ["http://localhost:3000/callback"]
+  "name": "AGT Market",
+  "slug": "agt-market",
+  "allowed_auth_methods": ["email"]
 }
-response:{
-  "id": "7a81bc81-e434-4f34-a8eb-9e849bca20de",
-  "name": "Platform Test",
-  "slug": "platform-test",
+response:
+{
+  "id": "a41810df-08db-4fb5-b3f5-2c892bb7ca1b",
+  "name": "AGT Market",
+  "slug": "agt-market",
   "allowed_auth_methods": [
-    "email",
-    "phone",
-    "magic_link"
+    "email"
   ],
-  "allowed_redirect_urls": [
-    "http://localhost:3000/callback"
-  ],
+  "allowed_redirect_urls": [],
   "is_active": true,
-  "created_at": "2026-04-13T04:16:37.831026-05:00",
-  "updated_at": "2026-04-13T04:16:37.831489-05:00",
-  "client_secret": "_mbVqFjsZvm5PpfG4Klc5aGd8L_SvFQCAPiuA04_bZDB3VooRNUYXer_O1_LI-Of"
+  "created_at": "2026-04-13T11:02:40.129725-05:00",
+  "updated_at": "2026-04-13T11:02:40.131361-05:00",
+  "client_secret": "7go2IZWIoFOMqiiTnWOgMor65CaNHaLzLS95DWtW-N_fAYz5Lk6Zua5UOkJS42hP"
 }
+
+obtain s2s token:
+request:
+{
+  "client_id": "a41810df-08db-4fb5-b3f5-2c892bb7ca1b",
+  "client_secret": "7go2IZWIoFOMqiiTnWOgMor65CaNHaLzLS95DWtW-N_fAYz5Lk6Zua5UOkJS42hP"
+}
+response:
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhNDE4MTBkZi0wOGRiLTRmYjUtYjNmNS0yYzg5MmJiN2NhMWIiLCJ0eXBlIjoiczJzIiwic2VydmljZV9uYW1lIjoiQUdUIE1hcmtldCIsImlzcyI6ImFndC1hdXRoIiwiYXVkIjoiYWd0LWVjb3N5c3RlbSIsImlhdCI6MTc3NjA5Njg2MiwiZXhwIjoxNzc2MTAwNDYyLCJqdGkiOiIyMmM0NTIwYi0xMjhlLTRmNmEtODZmZC04OTg0MThiNTIyNDUifQ.gdfDwBq5cm_WdS_xELckn8lLO7hQY2VomZCdfVK-X4dOGilWzt1Ibvsv7r1l59D2Pw2MDpzgrAqommILtYgrWAw6BZP7qsuCIHhsfuV_1tFeIT0LXjfCxa1pmjrOdQkpBNiiyi9DdIIPzfhhxhZRhYgaQuATTDAjAksmoA1Wejiagl9l25oPxDbzkqEVsPtuKnAq390MCH2qTOpj_MpvSCDseQovSBnnqzu_F5FW9NwzdakBuOTtkAx6CCGTU7u9wGqG85I6IY8IazrNOEv8TAuGS6CCvyG2ThcDkPZPW0phaAA7p4rAbflTuyCJezaYL218BZ3gl6eSkPI5Gj2x1w",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "service_name": "AGT Market"
+}
+
+create a template:
+request1:
+{
+  "name": "auth_verify_email",
+  "channel": "email",
+  "category": "security",
+  "subject": "Vérifiez votre email - {{ platform_name }}",
+  "body": "<h1>Bienvenue sur {{ platform_name }}</h1><p>Cliquez sur le lien ci-dessous pour vérifier votre adresse email :</p><p><a href='{{ verification_url }}'>Vérifier mon email</a></p><p>Ce lien expire dans {{ expires_in_minutes }} minutes.</p>"
+}
+response1:
+{
+  "id": "c12de592-77ab-4c4e-b38a-34280b1407a0",
+  "name": "auth_verify_email",
+  "channel": "email"
+}
+request2:
+{
+  "name": "auth_reset_password",
+  "channel": "email",
+  "category": "security",
+  "subject": "Réinitialisez votre mot de passe - {{ platform_name }}",
+  "body": "<h1>Réinitialisation de mot de passe</h1><p>Cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe :</p><p><a href='{{ reset_url }}'>Réinitialiser</a></p><p>Ce lien expire dans {{ expires_in_minutes }} minutes.</p><p>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.</p>"
+}
+response2:
+{
+  "id": "380d149b-75c2-49a5-adfe-adc3b81a51b0",
+  "name": "auth_reset_password",
+  "channel": "email"
+}
+request3:
+{
+  "name": "auth_magic_link",
+  "channel": "email",
+  "category": "security",
+  "subject": "Votre lien de connexion - {{ platform_name }}",
+  "body": "<h1>Connexion à {{ platform_name }}</h1><p>Cliquez sur le lien ci-dessous pour vous connecter :</p><p><a href='{{ magic_link_url }}'>Me connecter</a></p><p>Ce lien expire dans {{ expires_in_minutes }} minutes.</p><p>Si vous n'avez pas demandé ce lien, ignorez cet email.</p>"
+}
+response3:
+{
+  "id": "7d010080-eae9-468d-ba44-9da91a74610a",
+  "name": "auth_magic_link",
+  "channel": "email"
+}
+request4:
+{
+  "name": "auth_otp_sms",
+  "channel": "sms",
+  "category": "security",
+  "body": "Votre code AGT {{ platform_name }} : {{ otp_code }}. Expire dans {{ expires_in_minutes }} min. Ne partagez jamais ce code."
+}
+response4:
+{
+  "id": "e909502b-49c7-4740-bb75-5603fdae17e7",
+  "name": "auth_otp_sms",
+  "channel": "sms"
+}
+
 
 register user:
 request:
 {
-  "email": "gabriel@agt.com",
-  "password": "Password123!",
+  "email": "gabriel@agt-test.com",
+  "password": "Test1234!",
   "method": "email"
 }
 response:
 {
-  "id": "d544ab7d-5abd-4bcd-a0ff-d66c1229c970",
-  "email": "gabriel@agt.com",
+  "id": "daadff7b-c368-4f89-95fe-e7a9105fa30f",
+  "email": "gabriel@agt-test.com",
   "email_verified": false,
   "registration_method": "email",
-  "registration_platform_id": "7a81bc81-e434-4f34-a8eb-9e849bca20de",
+  "registration_platform_id": "a41810df-08db-4fb5-b3f5-2c892bb7ca1b",
   "message": "Verification email sent"
 }

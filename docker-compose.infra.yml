@@ -10,7 +10,7 @@ services:
   # ── API Gateway (Nginx reverse proxy) ────────────────────────────────────
   gateway:
     image: nginx:alpine
-    container_name: agt_gateway
+    container_name: agt-gateway
     restart: unless-stopped
     ports:
       - "80:80"
@@ -24,7 +24,7 @@ services:
   # ── RabbitMQ (Message Broker partagé) ────────────────────────────────────
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
-    container_name: agt_rabbitmq
+    container_name: agt-rabbitmq
     restart: unless-stopped
     environment:
       RABBITMQ_DEFAULT_USER: agt_rabbit
@@ -45,7 +45,7 @@ services:
   # ── Elasticsearch (Search Service) ───────────────────────────────────────
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
-    container_name: agt_elasticsearch
+    container_name: agt-elasticsearch
     restart: unless-stopped
     environment:
       - discovery.type=single-node
@@ -66,7 +66,7 @@ services:
   # ── Mailpit (SMTP local pour dev) ───────────────────────────────────────
   mailpit:
     image: axllent/mailpit
-    container_name: agt_mailpit
+    container_name: agt-mailpit
     restart: unless-stopped
     ports:
       - "8025:8025"

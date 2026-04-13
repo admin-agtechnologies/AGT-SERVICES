@@ -228,7 +228,7 @@ fi
 echo -e "\e[36m=========================================\e[0m"
 
 # --- Patterns des conteneurs MVP ---
-MVP_PATTERNS=("agt_auth_" "agt_users_" "agt_notif_" "agt_gateway" "agt_rabbitmq" "agt_mailpit" "agt_elasticsearch")
+MVP_PATTERNS=("agt_auth_" "agt_users_" "agt_notif_" "agt-gateway" "agt-rabbitmq" "agt-mailpit" "agt-elasticsearch")
 
 # --- Étape 1 : Arrêt et suppression des conteneurs AGT MVP ---
 echo -e "\n\e[33m[1/5] Arrêt des conteneurs AGT MVP...\e[0m"

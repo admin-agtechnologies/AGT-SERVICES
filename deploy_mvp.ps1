@@ -35,10 +35,11 @@ function Wait-ForHealthCheck {
 Write-Host "`n[1/4] Lancement de l'infrastructure partagée..." -ForegroundColor Yellow
 
 # Créer le réseau s'il n'existe pas
-$networkExists = docker network ls --filter name=^agt_network$ --format "{{.Name}}" 2>$null
-if (-not $networkExists) {
-    docker network create agt_network | Out-Null
-    Write-Host " -> Réseau agt_network créé." -ForegroundColor DarkGray
+if (-not (docker network ls -q -f name=agt_network)) {
+    Write-Host " -> Création du réseau agt_network..." -ForegroundColor Cyan
+    docker network create agt_network
+} else {
+    Write-Host " -> Le réseau agt_network existe déjà." -ForegroundColor Gray
 }
 
 docker compose -f docker-compose.infra.yml up -d

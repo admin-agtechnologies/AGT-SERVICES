@@ -26,7 +26,7 @@ $allPatterns = @(
     "agt_sub_", "agt_pay_", "agt_wallet_",
     "agt_search_", "agt_chatbot_",
     "agt_media_", "agt_chat_", "agt_geoloc_",
-    "agt_gateway", "agt_rabbitmq", "agt_mailpit", "agt_elasticsearch"
+    "agt-gateway", "agt-rabbitmq", "agt-mailpit", "agt-elasticsearch"
 )
 
 # --- Étape 1 : Arrêt et suppression des conteneurs AGT ---

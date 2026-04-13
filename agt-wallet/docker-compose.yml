@@ -1,10 +1,10 @@
 services:
   db:
     image: postgres:15-alpine
-    container_name: agt_wallet_db
+    container_name: agt-wallet-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: agt_wallet_db
+      POSTGRES_DB: agt-wallet-db
       POSTGRES_USER: wallet_user
       POSTGRES_PASSWORD: wallet_password
     volumes:
@@ -12,13 +12,13 @@ services:
     ports:
       - "5437:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U wallet_user -d agt_wallet_db"]
+      test: ["CMD-SHELL", "pg_isready -U wallet_user -d agt-wallet-db"]
       interval: 10s
       timeout: 5s
       retries: 5
   redis:
     image: redis:7-alpine
-    container_name: agt_wallet_redis
+    container_name: agt-wallet-redis
     restart: unless-stopped
     volumes:
       - redis_data:/data
@@ -33,12 +33,12 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_wallet_service
+    container_name: agt-wallet-service
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://wallet_user:wallet_password@db:5432/agt_wallet_db
+      DATABASE_URL: postgresql://wallet_user:wallet_password@db:5432/agt-wallet-db
       REDIS_URL: redis://redis:6379/6
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
@@ -60,12 +60,12 @@ services:
     build:
       context: .
       target: builder
-    container_name: agt_wallet_dev
+    container_name: agt-wallet-dev
     command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:7006"
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://wallet_user:wallet_password@db:5432/agt_wallet_db
+      DATABASE_URL: postgresql://wallet_user:wallet_password@db:5432/agt-wallet-db
       REDIS_URL: redis://redis:6379/6
       DEBUG: "True"
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
