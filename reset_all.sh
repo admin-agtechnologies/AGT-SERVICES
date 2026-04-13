@@ -1,15 +1,15 @@
 #!/bin/bash
 # =============================================================================
-# AG TECHNOLOGIES — RESET MVP (Linux / macOS)
-# Usage : bash reset_mvp.sh           → reset sans perte de données
-#         bash reset_mvp.sh --clean   → reset + suppression des volumes (données)
+# AG TECHNOLOGIES — RESET ALL (Linux / macOS)
+# Usage : bash reset_all.sh           → reset sans perte de données
+#         bash reset_all.sh --clean   → reset + suppression des volumes (données)
 # =============================================================================
 
 CLEAN=false
 if [[ "$1" == "--clean" ]]; then CLEAN=true; fi
 
 echo -e "\e[36m=========================================\e[0m"
-echo -e "\e[36m RESET MVP - AG TECHNOLOGIES             \e[0m"
+echo -e "\e[36m RESET ALL - AG TECHNOLOGIES             \e[0m"
 if $CLEAN; then
     echo -e "\e[31m MODE: CLEAN (volumes seront supprimés)  \e[0m"
 else
@@ -17,14 +17,14 @@ else
 fi
 echo -e "\e[36m=========================================\e[0m"
 
-# --- Patterns des conteneurs MVP ---
-MVP_PATTERNS=("agt_auth_" "agt_users_" "agt_notif_" "agt_gateway" "agt_rabbitmq" "agt_mailpit" "agt_elasticsearch")
+# --- Tous les conteneurs AGT (11 services + infra) ---
+ALL_PATTERNS=("agt_auth_" "agt_users_" "agt_notif_" "agt_sub_" "agt_pay_" "agt_wallet_" "agt_search_" "agt_chatbot_" "agt_media_" "agt_chat_" "agt_geoloc_" "agt_gateway" "agt_rabbitmq" "agt_mailpit" "agt_elasticsearch")
 
-# --- Étape 1 : Arrêt et suppression des conteneurs AGT MVP ---
-echo -e "\n\e[33m[1/5] Arrêt des conteneurs AGT MVP...\e[0m"
+# --- Étape 1 : Arrêt et suppression des conteneurs AGT ---
+echo -e "\n\e[33m[1/5] Arrêt de tous les conteneurs AGT...\e[0m"
 STOPPED=0
 for container in $(docker ps -a --format "{{.Names}}"); do
-    for pattern in "${MVP_PATTERNS[@]}"; do
+    for pattern in "${ALL_PATTERNS[@]}"; do
         if [[ "$container" == ${pattern}* ]]; then
             echo -e "\e[90m -> Arrêt de $container...\e[0m"
             docker stop "$container" > /dev/null 2>&1
@@ -45,16 +45,19 @@ else
     echo -e "\e[90m -> Réseau inexistant, rien à faire.\e[0m"
 fi
 
-# --- Étape 3 : Suppression des fichiers .env MVP ---
-echo -e "\n\e[33m[3/5] Suppression des fichiers .env MVP...\e[0m"
-rm -f agt-auth/.env agt-users/.env agt-notification/.env
+# --- Étape 3 : Suppression des fichiers .env (tous les services) ---
+echo -e "\n\e[33m[3/5] Suppression des fichiers .env...\e[0m"
+SERVICES=("agt-auth" "agt-users" "agt-notification" "agt-subscription" "agt-payment" "agt-wallet" "agt-search" "agt-chatbot" "agt-media" "agt-chat" "agt-geoloc")
+for service in "${SERVICES[@]}"; do
+    rm -f "$service/.env"
+done
 echo -e "\e[32m -> Fichiers .env nettoyés.\e[0m"
 
 # --- Étape 4 : Suppression des volumes (uniquement si --clean) ---
 echo -e "\n\e[33m[4/5] Gestion des volumes...\e[0m"
 if $CLEAN; then
-    echo -e "\e[31m -> Mode --clean : suppression des volumes AGT MVP...\e[0m"
-    VOLUME_PATTERNS=("agt-auth_" "agt-users_" "agt-notification_")
+    echo -e "\e[31m -> Mode --clean : suppression de tous les volumes AGT...\e[0m"
+    VOLUME_PATTERNS=("agt-auth_" "agt-users_" "agt-notification_" "agt-subscription_" "agt-payment_" "agt-wallet_" "agt-search_" "agt-chatbot_" "agt-media_" "agt-chat_" "agt-geoloc_")
     DELETED=0
     for vol in $(docker volume ls --format "{{.Name}}"); do
         for pattern in "${VOLUME_PATTERNS[@]}"; do
@@ -77,6 +80,6 @@ else
     echo -e "\e[32m -> Mode soft : volumes conservés (données intactes).\e[0m"
 fi
 
-# --- Étape 5 : Relancement du MVP ---
-echo -e "\n\e[33m[5/5] Relancement du déploiement MVP...\e[0m"
-bash deploy_mvp.sh
+# --- Étape 5 : Relancement complet ---
+echo -e "\n\e[33m[5/5] Relancement du déploiement complet...\e[0m"
+bash deploy_all.sh

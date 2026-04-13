@@ -62,13 +62,15 @@ services:
       retries: 5
     networks:
       - agt_network
+
+  # ── Mailpit (SMTP local pour dev) ───────────────────────────────────────
   mailpit:
     image: axllent/mailpit
     container_name: agt_mailpit
     restart: unless-stopped
     ports:
-      - "8025:8025" # Interface Web
-      - "1025:1025" # Port SMTP
+      - "8025:8025"
+      - "1025:1025"
     networks:
       - agt_network
 
