@@ -21,7 +21,7 @@ Pour chaque tâche ou sous-tâche technique, nous appliquerons strictement ce cy
 - [x] Implémenter les simulateurs en Node.js/Express pour un déploiement léger et rapide
 - [x] Vérifier la configuration du Gateway (Nginx) pour s'assurer du bon routage
 - [x] Tester localement le déploiement Docker et les réponses (health checks) des simulateurs
-- [ ] **Commit : `feat(simulators): add media, chat, geoloc simulators`**
+- [x] **Commit : `feat(simulators): add media, chat, geoloc simulators`**
 
 ## 2. Prise en main et Documentation de l'Écosystème (Service par Service)
 *Objectif : Maîtriser chaque service individuellement avant d'analyser les flux globaux.*

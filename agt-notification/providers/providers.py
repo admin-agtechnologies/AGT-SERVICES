@@ -2,6 +2,7 @@
 import logging
 from dataclasses import dataclass
 from typing import List
+from django.core.mail import send_mail
 
 logger = logging.getLogger(__name__)
 
@@ -120,6 +121,44 @@ class WhatsAppProvider(BaseProvider):
         logger.info(f"[MOCK] WhatsApp send to {(user_data or {}).get('phone')}")
         return False
 
+class SMTPProvider(BaseProvider):
+    """Envoie des emails via le serveur SMTP local (Mailpit)."""
+    name = "smtp_local"
+
+    def send(self, notification, user_data):
+        email = (user_data or {}).get("email")
+        if not email: return False
+        try:
+            send_mail(
+                subject=notification.subject or "Notification",
+                message=notification.body, # Version texte brut
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                html_message=notification.body, # Version HTML
+                fail_silently=False,
+            )
+            return True
+        except Exception as e:
+            logger.error(f"SMTP Error: {e}")
+            return False
+
+class ConsoleSMSProvider(BaseProvider):
+    """Affiche le SMS dans les logs (Console) pour le dev."""
+    name = "console_sms"
+
+    def send(self, notification, user_data):
+        phone = (user_data or {}).get("phone")
+        print(f"\n--- [SMS CONSOLE] To: {phone} ---\n{notification.body}\n---------------------------\n")
+        return True
+
+# --- MODIFIE LA PROVIDER_MAP ---
+PROVIDER_MAP = {
+    "email": [SMTPProvider(), SendGridProvider()], # SMTP en premier pour le dev
+    "sms": [ConsoleSMSProvider(), TwilioProvider()], # Console en premier
+    "push": [FCMProvider()],
+    "whatsapp": [WhatsAppProvider()],
+    "in_app": [],
+}
 
 PROVIDER_MAP = {
     "email": [SendGridProvider(), MailgunProvider()],

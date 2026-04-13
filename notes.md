@@ -20,19 +20,7 @@ celà m'a poussé à me poser les questions suivantes pour les services à venir
 
 ## Service users
 
-En plus de me poser les mêmes questions que pour le service auth, après avoir démarré le service users, j'ai remarqué plusieurs manquements sur le swagger :
-
-les groupes de routes
-- Health
-Etat du service
-- Profile
-CRUD profil utilisateur
-- Sync
-Synchronisation depuis Auth
-- Addresses
-CRUD adresses
-
-ne sont pas testables ur le swagger car ces derniers n'exposent aucune route, juste le dropwon vide avec la description de cahque groupe comme mentionné çi haut
+Je me pose les mêmes questions que pour le service auth
 
 # Services notifications
 Après avoir lancé ce service, je me suis posé les mêmes questions que pour le service auth, mais j'ai trouvé que ici le swagger semble complet. Par ailleurs; j'ai aussi vu le lien vers rabitmq, mais on me demande un mot de passe et un username pour y accéder, ça relance la question de guiude d'utilisation  persiste donc à ce niveau                     

@@ -1,4 +1,5 @@
 services:
+  # ── PostgreSQL ─────────────────────────────────────────────────────────────
   db:
     image: postgres:15-alpine
     container_name: agt_users_db
@@ -16,7 +17,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
 
+  # ── Redis ──────────────────────────────────────────────────────────────────
   redis:
     image: redis:7-alpine
     container_name: agt_users_redis
@@ -31,7 +35,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
 
+  # ── Users Service (production) ─────────────────────────────────────────────
   users:
     build:
       context: .
@@ -41,8 +48,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://users_user:users_password@db:5432/agt_users_db
-      REDIS_URL: redis://redis:6379/1
+      DATABASE_URL: postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
+      REDIS_URL: redis://agt_users_redis:6379/1
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
       - ./keys:/app/keys:ro
@@ -59,7 +66,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - agt_network
 
+  # ── Users Service (dev — hot reload) ───────────────────────────────────────
   users-dev:
     build:
       context: .
@@ -72,8 +82,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://users_user:users_password@db:5432/agt_users_db
-      REDIS_URL: redis://redis:6379/1
+      DATABASE_URL: postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
+      REDIS_URL: redis://agt_users_redis:6379/1
       DEBUG: "True"
       DJANGO_SETTINGS_MODULE: config.settings
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
@@ -89,9 +99,16 @@ services:
         condition: service_healthy
     profiles:
       - dev
+    networks:
+      - agt_network
 
 volumes:
   postgres_data:
     driver: local
   redis_data:
     driver: local
+
+networks:
+  agt_network:
+    external: true
+    name: agt_network

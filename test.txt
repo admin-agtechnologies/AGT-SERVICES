@@ -1,0 +1,42 @@
+plateforme:
+request:
+{
+  "name": "Platform Test",
+  "slug": "platform-test",
+  "allowed_auth_methods": ["email", "phone", "magic_link"],
+  "allowed_redirect_urls": ["http://localhost:3000/callback"]
+}
+response:{
+  "id": "7a81bc81-e434-4f34-a8eb-9e849bca20de",
+  "name": "Platform Test",
+  "slug": "platform-test",
+  "allowed_auth_methods": [
+    "email",
+    "phone",
+    "magic_link"
+  ],
+  "allowed_redirect_urls": [
+    "http://localhost:3000/callback"
+  ],
+  "is_active": true,
+  "created_at": "2026-04-13T04:16:37.831026-05:00",
+  "updated_at": "2026-04-13T04:16:37.831489-05:00",
+  "client_secret": "_mbVqFjsZvm5PpfG4Klc5aGd8L_SvFQCAPiuA04_bZDB3VooRNUYXer_O1_LI-Of"
+}
+
+register user:
+request:
+{
+  "email": "gabriel@agt.com",
+  "password": "Password123!",
+  "method": "email"
+}
+response:
+{
+  "id": "d544ab7d-5abd-4bcd-a0ff-d66c1229c970",
+  "email": "gabriel@agt.com",
+  "email_verified": false,
+  "registration_method": "email",
+  "registration_platform_id": "7a81bc81-e434-4f34-a8eb-9e849bca20de",
+  "message": "Verification email sent"
+}

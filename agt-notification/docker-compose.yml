@@ -1,4 +1,5 @@
 services:
+  # ── PostgreSQL ─────────────────────────────────────────────────────────────
   db:
     image: postgres:15-alpine
     container_name: agt_notif_db
@@ -16,7 +17,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
 
+  # ── Redis ──────────────────────────────────────────────────────────────────
   redis:
     image: redis:7-alpine
     container_name: agt_notif_redis
@@ -31,25 +35,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
 
-  rabbitmq:
-    image: rabbitmq:3.13-management-alpine
-    container_name: agt_notif_rabbitmq
-    restart: unless-stopped
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 15s
-      timeout: 10s
-      retries: 5
-
+  # ── Notification Service (API Production) ──────────────────────────────────
   notification:
     build:
       context: .
@@ -59,10 +48,10 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
-      REDIS_URL: redis://redis:6379/2
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
-      CELERY_RESULT_BACKEND: redis://redis:6379/3
+      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
+      REDIS_URL: redis://agt_notif_redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
+      CELERY_RESULT_BACKEND: redis://agt_notif_redis:6379/3
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
       - ./keys:/app/keys:ro
@@ -73,59 +62,16 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:7002/api/v1/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - agt_network
 
-  celery-worker:
-    build:
-      context: .
-      target: production
-    container_name: agt_notif_worker
-    restart: unless-stopped
-    command: celery -A config.celery worker -l info -c 4
-    env_file:
-      - .env
-    environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
-      REDIS_URL: redis://redis:6379/2
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
-      CELERY_RESULT_BACKEND: redis://redis:6379/3
-      AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
-    volumes:
-      - ./keys:/app/keys:ro
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-
-  celery-beat:
-    build:
-      context: .
-      target: production
-    container_name: agt_notif_beat
-    restart: unless-stopped
-    command: celery -A config.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    env_file:
-      - .env
-    environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
-      REDIS_URL: redis://redis:6379/2
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
-    depends_on:
-      db:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-
+  # ── Notification Service (API Dev — hot reload) ────────────────────────────
   notification-dev:
     build:
       context: .
@@ -138,9 +84,9 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
-      REDIS_URL: redis://redis:6379/2
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
+      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
+      REDIS_URL: redis://agt_notif_redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
       DEBUG: "True"
       DJANGO_SETTINGS_MODULE: config.settings
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
@@ -154,12 +100,62 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
     profiles:
       - dev
+    networks:
+      - agt_network
+
+  # ── Celery Worker (Traitement asynchrone) ──────────────────────────────────
+  celery-worker:
+    build:
+      context: .
+      target: production
+    container_name: agt_notif_worker
+    restart: unless-stopped
+    command: celery -A config.celery worker -l info -c 4
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
+      REDIS_URL: redis://agt_notif_redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
+      CELERY_RESULT_BACKEND: redis://agt_notif_redis:6379/3
+      AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
+    volumes:
+      - ./keys:/app/keys:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - agt_network
+
+  # ── Celery Beat (Planification) ───────────────────────────────────────────
+  celery-beat:
+    build:
+      context: .
+      target: production
+    container_name: agt_notif_beat
+    restart: unless-stopped
+    command: celery -A config.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
+      REDIS_URL: redis://agt_notif_redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - agt_network
 
 volumes:
   postgres_data:
   redis_data:
-  rabbitmq_data:
+
+networks:
+  agt_network:
+    external: true
+    name: agt_network

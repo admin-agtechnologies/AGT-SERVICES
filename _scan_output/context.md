@@ -3,7 +3,10 @@
 ## PROJECT TREE
 `	ext
 \agt-auth
+\agt-chat
 \agt-chatbot
+\agt-geoloc
+\agt-media
 \agt-notification
 \agt-payment
 \agt-search
@@ -11,12 +14,13 @@
 \agt-users
 \agt-wallet
 \docs
-\next
+\prompt
 \_scan_output
 \Docker compose.infra.yml
 \nginx.conf
 \notes.md
 \README.md
+\roadmap.md
 \scanner.ps1
 \standards.md
 \todo.md
@@ -75,6 +79,12 @@
 \agt-auth\keys\public.pem
 \agt-auth\scripts\setup.ps1
 \agt-auth\scripts\setup.sh
+\agt-chat\.env.example
+\agt-chat\docker-compose.yml
+\agt-chat\Dockerfile
+\agt-chat\package.json
+\agt-chat\README.md
+\agt-chat\server.js
 \agt-chatbot\apps
 \agt-chatbot\common
 \agt-chatbot\config
@@ -113,6 +123,19 @@
 \agt-chatbot\config\__init__.py
 \agt-chatbot\scripts\setup.ps1
 \agt-chatbot\scripts\setup.sh
+\agt-geoloc\.env.example
+\agt-geoloc\docker-compose.yml
+\agt-geoloc\Dockerfile
+\agt-geoloc\package.json
+\agt-geoloc\README.md
+\agt-geoloc\server.js
+\agt-media\uploads
+\agt-media\.env.example
+\agt-media\docker-compose.yml
+\agt-media\Dockerfile
+\agt-media\package.json
+\agt-media\README.md
+\agt-media\server.js
 \agt-notification\apps
 \agt-notification\common
 \agt-notification\config
@@ -377,14 +400,42 @@
 \agt-wallet\keys\auth_public.pem
 \agt-wallet\scripts\setup.ps1
 \agt-wallet\scripts\setup.sh
+\docs\cdc
 \docs\GETTING_STARTED.md
 \docs\GUIDE_AUTH.md
 \docs\GUIDE_NOTIFICATION.md
 \docs\GUIDE_SUBSCRIPTION.md
 \docs\GUIDE_USERS.md
-\next\prompt_fisrt_task.md
-\next\prompt_initialisation.md
-\next\prompt_todo.md
+\docs\cdc\1.auth.pdf
+\docs\cdc\1.auth.txt
+\docs\cdc\10.wallet.pdf
+\docs\cdc\10.wallet.txt
+\docs\cdc\11.geoloc.pdf
+\docs\cdc\11.geoloc.txt
+\docs\cdc\2.users.pdf
+\docs\cdc\2.users.txt
+\docs\cdc\3.notifs.pdf
+\docs\cdc\3.notifs.txt
+\docs\cdc\4.medias.pdf
+\docs\cdc\4.medias.txt
+\docs\cdc\5.search.pdf
+\docs\cdc\5.search.txt
+\docs\cdc\6.chat.pdf
+\docs\cdc\6.chat.txt
+\docs\cdc\7.chatbot.pdf
+\docs\cdc\7.chatbot.txt
+\docs\cdc\8.subscription.pdf
+\docs\cdc\8.subscription.txt
+\docs\cdc\9.payment.pdf
+\docs\cdc\9.payment.txt
+\prompt\save_context
+\prompt\instructions.md
+\prompt\prompt_task.md
+\prompt\save_context\end_session.md
+\prompt\save_context\init_session.md
+\prompt\save_context\sync.md
+\prompt\save_context\t.md
+\_scan_output\context.md
 
 `
 
@@ -393,6 +444,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\nginx.conf (10.55 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\notes.md (2.47 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\README.md (10.49 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\roadmap.md (4.38 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\standards.md (11.65 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\todo.md (15.57 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\.env (3.52 KB)
@@ -435,6 +487,12 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\config\urls.py (0.54 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\config\wsgi.py (0.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\config\__init__.py (0 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\.env.example (0.01 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\docker-compose.yml (0.24 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\Dockerfile (0.12 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\package.json (0.29 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\README.md (1.15 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\server.js (3.49 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\.env.example (0.28 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\CDC_v1.0.md (0.62 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\docker-compose.yml (2.07 KB)
@@ -460,6 +518,18 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\config\urls.py (0.46 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\config\wsgi.py (0.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\config\__init__.py (0 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\.env.example (0 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\docker-compose.yml (0.24 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\Dockerfile (0.12 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\package.json (0.3 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\README.md (0.97 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\server.js (2.63 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\.env.example (0.01 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\docker-compose.yml (0.28 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\Dockerfile (0.12 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\package.json (0.29 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\README.md (1.94 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\server.js (2.48 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env (1.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env.example (1.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\CDC_v1.0.md (2.6 KB)
@@ -647,9 +717,24 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_NOTIFICATION.md (8.46 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_SUBSCRIPTION.md (6.73 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_USERS.md (5.83 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\next\prompt_fisrt_task.md (0.5 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\next\prompt_initialisation.md (2.22 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\next\prompt_todo.md (2.67 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\1.auth.txt (80.56 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\10.wallet.txt (54.84 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\11.geoloc.txt (58.91 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\2.users.txt (31.44 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\3.notifs.txt (67.92 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\4.medias.txt (45.75 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\5.search.txt (62.75 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\6.chat.txt (51.48 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\7.chatbot.txt (83.91 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\8.subscription.txt (63.1 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\9.payment.txt (57.34 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\instructions.md (2.22 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\prompt_task.md (0.47 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\end_session.md (0.44 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\init_session.md (0.63 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\sync.md (0.76 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\t.md (3.24 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\_scan_output\context.md (724.17 KB)
 
 ## CODE CONTEXT
 
@@ -1185,6 +1270,87 @@ service-name/
 ---
 
 *AG Technologies — Confidentiel — Usage interne*
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\roadmap.md =====
+`
+# ROADMAP â€” AGT Microservices Suite
+
+## Objectif gÃ©nÃ©ral
+Avancer sur les prochaines Ã©tapes de lâ€™architecture AG Technologies en travaillant une tÃ¢che Ã  la fois, avec une dÃ©marche rigoureuse, documentÃ©e et rÃ©utilisable.
+
+## Workflow obligatoire
+Pour chaque tÃ¢che ou sous-tÃ¢che technique, nous appliquerons strictement ce cycle :
+- [ ] 1. Analyse de lâ€™existant
+- [ ] 2. Conception fonctionnelle
+- [ ] 3. Conception technique
+- [ ] 4. Mise en place / implÃ©mentation
+- [ ] 5. Tests
+
+Ã€ la fin de chaque grande tÃ¢che (ex: TÃ¢che 1, TÃ¢che 2...), un commit sera effectuÃ© pour sauvegarder la progression.
+
+---
+
+## 1. Simuler les microservices restants et le gateway
+- [x] Identifier les 3 services restants (MÃ©dia, Chat, GÃ©olocalisation) et leurs contrats d'API (CDC)
+- [x] Concevoir le comportement fonctionnel MVP (bouchons stateful en RAM) pour ces services
+- [x] ImplÃ©menter les simulateurs en Node.js/Express pour un dÃ©ploiement lÃ©ger et rapide
+- [x] VÃ©rifier la configuration du Gateway (Nginx) pour s'assurer du bon routage
+- [x] Tester localement le dÃ©ploiement Docker et les rÃ©ponses (health checks) des simulateurs
+- [x] **Commit : `feat(simulators): add media, chat, geoloc simulators`**
+
+## 2. Prise en main et Documentation de l'Ã‰cosystÃ¨me (Service par Service)
+*Objectif : MaÃ®triser chaque service individuellement avant d'analyser les flux globaux.*
+
+#### 2.1 Service Auth
+- [ ] Analyser le CDC, le code et le `README.md` du service Auth
+- [ ] Configurer et lancer le service en isolation
+- [ ] Tester les endpoints clÃ©s (register, login, refresh, /me) via Swagger/Postman
+- [ ] RÃ©diger un guide d'utilisation simple `GUIDE_AUTH.md`
+
+#### 2.2 Service Users
+- [ ] Analyser le CDC, le code et le `README.md` du service Users
+- [ ] Configurer et lancer le service en isolation avec sa dÃ©pendance (Auth)
+- [ ] Tester les endpoints clÃ©s (profil, by-auth, rÃ´les, permissions)
+- [ ] RÃ©diger un guide d'utilisation simple `GUIDE_USERS.md`
+
+#### 2.3 Service Notification
+- [ ] Analyser le CDC, le code et le `README.md` du service Notification
+- [ ] Configurer et lancer le service avec ses dÃ©pendances (Auth, RabbitMQ)
+- [ ] Tester les endpoints clÃ©s (crÃ©ation de template, envoi de notification in-app)
+- [ ] RÃ©diger un guide d'utilisation simple `GUIDE_NOTIFICATION.md`
+
+#### 2.4 Services restants (Subscription, Payment, Wallet, Search, Chatbot)
+- [ ] Appliquer la mÃªme mÃ©thode (Analyser, Configurer, Tester, Documenter) pour chaque service restant, en respectant l'ordre des dÃ©pendances.
+
+#### 2.5 Validation des Flux Transverses
+- [ ] Analyser et tester le flux complet "Inscription -> Paiement d'un abonnement -> VÃ©rification de quota"
+- [ ] Valider la gestion de l'authentification (JWT utilisateur vs Tokens S2S) sur un cas rÃ©el
+- [ ] **Commit : `feat(docs): add user guides and master ecosystem usage`**
+
+## 3. Finalisation de la Documentation
+- [ ] Relire et harmoniser tous les guides (`GUIDE_*.md`) pour assurer la cohÃ©rence
+- [ ] CrÃ©er un document de synthÃ¨se de l'architecture (diagramme global, flux principaux)
+- [ ] Mettre Ã  jour le `GETTING_STARTED.md` pour reflÃ©ter la mÃ©thode de dÃ©ploiement complÃ¨te
+- [ ] **Commit : `docs(global): finalize and harmonize all documentation`**
+
+## 4. DÃ©ployer l'Infra microservices
+- [ ] Analyser l'infrastructure partagÃ©e actuelle (`docker-compose.infra.yml`)
+- [ ] VÃ©rifier la configuration des rÃ©seaux, volumes et healthchecks
+- [ ] Lancer et orchestrer le dÃ©ploiement local de toute l'infrastructure (11 services + infra partagÃ©e)
+- [ ] Valider la bonne communication de bout en bout via le Gateway
+- [ ] **Commit : `chore(infra): validate full local deployment`**
+
+## 5. CrÃ©er le GÃ©nÃ©rateur de Code (Backend Template/Framework)
+- [ ] Analyser les briques communes des services Django/DRF (Auth, exceptions, pagination, Docker, etc.)
+- [ ] Concevoir l'architecture du gÃ©nÃ©rateur (CLI, templates de fichiers `*.tpl`)
+- [ ] ImplÃ©menter la commande de base : `create-service <nom-du-service>`
+- [ ] ImplÃ©menter la commande de scaffolding : `generate-crud <nom-table> --fields="nom:str,prix:int"`
+- [ ] ImplÃ©menter la commande `create-business-backend <nom-backend>`
+- [ ] RÃ©diger la documentation du gÃ©nÃ©rateur (`README.md` du template)
+- [ ] Tester en gÃ©nÃ©rant un nouveau service de test Ã  partir de zÃ©ro
+- [ ] **Commit : `feat(template): create backend scaffolding generator`**
 `
 ===== FILE END =====
 
@@ -5985,6 +6151,231 @@ application = get_wsgi_application()
 `
 ===== FILE END =====
 
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\.env.example =====
+`
+PORT=7008
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\docker-compose.yml =====
+`
+services:
+  chat:
+    build: .
+    container_name: agt_chat_simulator
+    restart: unless-stopped
+    ports:
+      - "7008:7008"
+    networks:
+      - agt_network
+
+networks:
+  agt_network:
+    external: true
+    name: agt_network
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\Dockerfile =====
+`
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 7008
+CMD ["npm", "start"]
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\package.json =====
+`
+{
+  "name": "agt-chat-simulator",
+  "version": "1.0.0",
+  "description": "Simulateur MVP du Service Chat AGT",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\README.md =====
+`
+# AGT Chat Service - Simulateur MVP (v1.0)
+
+> **Attention :** Ceci est un simulateur stateful en mÃ©moire vive (RAM). Les conversations et messages sont perdus au redÃ©marrage.
+
+Ce simulateur permet de tester les flux de messagerie temps rÃ©el (WebSocket) et de rÃ©pondre aux appels S2S du service Chatbot (transfert humain).
+
+## DÃ©marrage rapide
+
+```bash
+docker compose up -d --build
+curl http://localhost:7008/api/v1/chat/health
+```
+
+## Endpoints REST simulÃ©s
+
+Base URL : `http://localhost:7008/api/v1/chat`
+
+| MÃ©thode | Endpoint | Description |
+|---------|----------|-------------|
+| `GET` | `/health` | Ã‰tat du simulateur |
+| `POST` | `/conversations/transfer` | Simule la rÃ©ception d'un transfert depuis le Chatbot |
+| `GET` | `/conversations` | Liste les conversations en mÃ©moire |
+| `POST` | `/conversations/{id}/messages` | Ajoute un message (fallback REST) |
+| `GET` | `/conversations/{id}/messages` | Historique des messages |
+
+## WebSocket (Socket.io)
+
+Path : `/socket.io/`
+
+- **Ã‰couter :** `message:new`
+- **Ã‰mettre :** `join_conversation` (payload: `convId`), `message:send` (payload: `{conversation_id, content, sender_id}`)
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\server.js =====
+`
+const express = require('express');
+const http = require('http');
+const cors = require('cors');
+const { Server } = require('socket.io');
+const crypto = require('crypto');
+
+const app = express();
+const server = http.createServer(app);
+const PORT = process.env.PORT || 7008;
+
+app.use(cors());
+app.use(express.json());
+
+// Base de donnÃ©es en mÃ©moire (RAM)
+const conversationsDB = new Map();
+const messagesDB = new Map();
+
+// --- API REST ---
+const router = express.Router();
+
+// 1. Health Check
+router.get('/health', (req, res) => {
+  res.json({ status: 'healthy', service: 'chat-simulator', version: '1.0.0' });
+});
+
+// 2. Transfert Bot -> Humain (Contrat S2S avec Chatbot)
+router.post('/conversations/transfer', (req, res) => {
+  const { user_id, platform_id, bot_history } = req.body;
+  const transferId = crypto.randomUUID();
+  const convId = crypto.randomUUID();
+
+  conversationsDB.set(convId, {
+    id: convId,
+    type: 'transfert',
+    status: 'en_attente',
+    user_id,
+    platform_id,
+    created_at: new Date().toISOString()
+  });
+
+  // On sauvegarde l'historique du bot comme premiers messages
+  messagesDB.set(convId, bot_history ||[]);
+
+  res.status(201).json({
+    transfer_id: transferId,
+    conversation_id: convId,
+    status: 'en_attente',
+    message: 'Transfert pris en charge par le simulateur'
+  });
+});
+
+// 3. Lister les conversations
+router.get('/conversations', (req, res) => {
+  res.json({ data: Array.from(conversationsDB.values()) });
+});
+
+// 4. Ajouter un message (Fallback REST)
+router.post('/conversations/:id/messages', (req, res) => {
+  const convId = req.params.id;
+  if (!conversationsDB.has(convId)) return res.status(404).json({ detail: 'Conversation introuvable' });
+
+  const msg = {
+    id: crypto.randomUUID(),
+    sender_id: req.body.sender_id || 'anonymous',
+    content: req.body.content,
+    created_at: new Date().toISOString()
+  };
+
+  if (!messagesDB.has(convId)) messagesDB.set(convId,[]);
+  messagesDB.get(convId).push(msg);
+
+  // Diffuser via WebSocket si possible
+  io.to(convId).emit('message:new', msg);
+
+  res.status(201).json(msg);
+});
+
+// 5. Lire l'historique
+router.get('/conversations/:id/messages', (req, res) => {
+  const msgs = messagesDB.get(req.params.id) ||[];
+  res.json({ data: msgs });
+});
+
+app.use('/api/v1/chat', router);
+
+// --- WEBSOCKET (Socket.io) ---
+const io = new Server(server, {
+  cors: { origin: '*' },
+  path: '/socket.io/'
+});
+
+io.on('connection', (socket) => {
+  console.log(`[WS] Client connectÃ©: ${socket.id}`);
+
+  // Rejoindre une conversation (room)
+  socket.on('join_conversation', (convId) => {
+    socket.join(convId);
+    console.log(`[WS] Client ${socket.id} a rejoint la conv ${convId}`);
+  });
+
+  // Echo: quand on reÃ§oit un message, on le renvoie Ã  la room
+  socket.on('message:send', (data) => {
+    const { conversation_id, content, sender_id } = data;
+    const msg = {
+      id: crypto.randomUUID(),
+      conversation_id,
+      sender_id,
+      content,
+      created_at: new Date().toISOString()
+    };
+    
+    // Sauvegarde en RAM
+    if (!messagesDB.has(conversation_id)) messagesDB.set(conversation_id,[]);
+    messagesDB.get(conversation_id).push(msg);
+
+    // Diffusion
+    io.to(conversation_id).emit('message:new', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`[WS] Client dÃ©connectÃ©: ${socket.id}`);
+  });
+});
+
+server.listen(PORT, () => {
+  console.log(`[Chat Simulator] DÃ©marrÃ© sur le port ${PORT} (REST + WS)`);
+});
+`
+===== FILE END =====
+
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\.env.example =====
 `
 SECRET_KEY=change-me
@@ -7102,6 +7493,400 @@ application = get_wsgi_application()
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\config\__init__.py =====
 `
 
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\.env.example =====
+`
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\docker-compose.yml =====
+`
+services:
+  geoloc:
+    build: .
+    container_name: agt_geoloc_simulator
+    restart: unless-stopped
+    ports:
+      - "7009:7009"
+    networks:
+      - agt_network
+
+networks:
+  agt_network:
+    external: true
+    name: agt_network
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\Dockerfile =====
+`
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 7009
+CMD ["npm", "start"]
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\package.json =====
+`
+{
+  "name": "agt-geoloc-simulator",
+  "version": "1.0.0",
+  "description": "Simulateur MVP du Service Geolocalisation AGT",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\README.md =====
+`
+# AGT Geoloc Service - Simulateur MVP (v1.0)
+
+> **Attention :** Ceci est un simulateur stateful en mÃ©moire vive (RAM). Les positions sont perdues au redÃ©marrage.
+
+Ce simulateur permet de tester le tracking GPS (REST et WebSocket) et de rÃ©pondre aux appels S2S (purge RGPD).
+
+## DÃ©marrage rapide
+
+```bash
+docker compose up -d --build
+curl http://localhost:7009/api/v1/geoloc/health
+```
+
+## Endpoints REST simulÃ©s
+
+Base URL : `http://localhost:7009/api/v1/geoloc` (ou `/api/v1/geo`)
+
+| MÃ©thode | Endpoint | Description |
+|---------|----------|-------------|
+| `GET` | `/health` | Ã‰tat du simulateur |
+| `POST` | `/positions` | Met Ã  jour la position d'une entitÃ© |
+| `GET` | `/proximity` | Retourne de fausses entitÃ©s proches |
+| `DELETE`| `/by-user/{userId}` | Simule la purge RGPD |
+
+## WebSocket (Socket.io)
+
+Path : `/geoloc/socket.io/`
+
+- **Ã‰couter :** `position:updated`
+- **Ã‰mettre :** `position:update` (payload: `{entity_id, latitude, longitude}`)
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-geoloc\server.js =====
+`
+const express = require('express');
+const http = require('http');
+const cors = require('cors');
+const { Server } = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const PORT = process.env.PORT || 7009;
+
+app.use(cors());
+app.use(express.json());
+
+// Base de donnÃ©es en mÃ©moire (RAM)
+const positionsDB = new Map();
+
+const router = express.Router();
+
+// 1. Health Check
+router.get('/health', (req, res) => {
+  res.json({ status: 'healthy', service: 'geoloc-simulator', version: '1.0.0' });
+});
+
+// 2. Mettre Ã  jour une position (REST)
+router.post('/positions', (req, res) => {
+  const { entity_id, latitude, longitude } = req.body;
+  if (!entity_id) return res.status(400).json({ detail: 'entity_id requis' });
+  
+  const pos = { 
+    entity_id, 
+    latitude, 
+    longitude, 
+    recorded_at: new Date().toISOString() 
+  };
+  positionsDB.set(entity_id, pos);
+  
+  // Diffuser via WebSocket
+  io.emit('position:updated', pos);
+  
+  res.status(200).json({ entity_id, status: 'updated' });
+});
+
+// 3. Recherche de proximitÃ© (Mock)
+router.get('/proximity', (req, res) => {
+  const lat = parseFloat(req.query.latitude) || 3.8480;
+  const lng = parseFloat(req.query.longitude) || 11.5021;
+  
+  // GÃ©nÃ¨re de fausses donnÃ©es autour du point demandÃ©
+  const results =[
+    { entity_id: 'mock-driver-1', latitude: lat + 0.001, longitude: lng + 0.001, distance_meters: 150 },
+    { entity_id: 'mock-driver-2', latitude: lat - 0.002, longitude: lng - 0.001, distance_meters: 320 }
+  ];
+  
+  res.json({ results, total: 2 });
+});
+
+// 4. Purge RGPD (Contrat S2S avec Users)
+router.delete('/by-user/:userId', (req, res) => {
+  positionsDB.delete(req.params.userId);
+  res.json({ message: 'DonnÃ©es purgÃ©es', user_id: req.params.userId });
+});
+
+// Nginx route vers /api/v1/geoloc/
+app.use('/api/v1/geoloc', router);
+// Alias au cas oÃ¹ certains services utilisent /api/v1/geo/ (selon le CDC)
+app.use('/api/v1/geo', router);
+
+// --- WEBSOCKET (Socket.io) ---
+const io = new Server(server, {
+  cors: { origin: '*' },
+  path: '/geoloc/socket.io/' // Correspond Ã  la config Nginx
+});
+
+io.on('connection', (socket) => {
+  console.log(`[WS] Client Geo connectÃ©: ${socket.id}`);
+  
+  socket.on('position:update', (data) => {
+    if(data.entity_id) {
+      positionsDB.set(data.entity_id, data);
+      socket.broadcast.emit('position:updated', data);
+    }
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`[WS] Client Geo dÃ©connectÃ©: ${socket.id}`);
+  });
+});
+
+server.listen(PORT, () => {
+  console.log(`[Geoloc Simulator] DÃ©marrÃ© sur le port ${PORT} (REST + WS)`);
+});
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\.env.example =====
+`
+PORT=7003
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\docker-compose.yml =====
+`
+services:
+  media:
+    build: .
+    container_name: agt_media_simulator
+    restart: unless-stopped
+    ports:
+      - "7003:7003"
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - agt_network
+
+networks:
+  agt_network:
+    external: true
+    name: agt_network
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\Dockerfile =====
+`
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 7003
+CMD ["npm", "start"]
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\package.json =====
+`
+{
+  "name": "agt-media-simulator",
+  "version": "1.0.0",
+  "description": "Simulateur MVP du Service Media AGT",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\README.md =====
+`
+# AGT Media Service - Simulateur MVP (v1.0)
+
+> **Attention :** Ceci est un simulateur (bouchon stateful) conÃ§u pour le dÃ©veloppement local. Il stocke les mÃ©tadonnÃ©es en mÃ©moire vive (RAM) et les fichiers sur le disque local. Les donnÃ©es sont perdues au redÃ©marrage du conteneur.
+
+Ce simulateur permet aux autres services (comme `Users` ou `Chat`) de fonctionner sans erreur 502 en simulant un vÃ©ritable service d'upload de fichiers.
+
+## PrÃ©requis
+- Docker et Docker Compose
+- Le rÃ©seau Docker `agt_network` doit exister (`docker network create agt_network`)
+
+## DÃ©marrage rapide
+
+```bash
+# DÃ©marrer le simulateur en arriÃ¨re-plan
+docker compose up -d --build
+
+# VÃ©rifier que le service tourne
+curl http://localhost:7003/api/v1/media/health
+```
+
+## Endpoints simulÃ©s
+
+Base URL : `http://localhost:7003/api/v1/media`
+
+| MÃ©thode | Endpoint | Description |
+|---------|----------|-------------|
+| `GET` | `/health` | VÃ©rifie l'Ã©tat du simulateur |
+| `POST` | `/` | Upload un fichier (multipart/form-data, champ `file`) |
+| `GET` | `/{id}/info` | RÃ©cupÃ¨re les mÃ©tadonnÃ©es mockÃ©es du fichier |
+| `GET` | `/{filename}` | TÃ©lÃ©charge ou affiche le fichier brut |
+| `DELETE`| `/by-user/{userId}` | Simule la purge RGPD (Contrat S2S avec Users) |
+
+## Exemples d'utilisation
+
+### 1. Uploader un fichier
+```bash
+curl -X POST http://localhost:7003/api/v1/media \
+  -F "file=@chemin/vers/ton/image.jpg"
+```
+*RÃ©ponse attendue :*
+```json
+{
+  "id": "uuid-genere",
+  "original_name": "image.jpg",
+  "mime_type": "image/jpeg",
+  "size_bytes": 12345,
+  "url": "/api/v1/media/uuid-genere.jpg",
+  "created_at": "2026-04-09T12:00:00.000Z"
+}
+```
+
+### 2. Voir les infos du fichier
+```bash
+curl http://localhost:7003/api/v1/media/<id-du-fichier>/info
+```
+
+### 3. Afficher l'image dans le navigateur
+Ouvre simplement l'URL retournÃ©e lors de l'upload dans ton navigateur :
+`http://localhost:7003/api/v1/media/<uuid-genere.jpg>`
+```
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\server.js =====
+`
+const express = require('express');
+const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
+
+const app = express();
+const PORT = process.env.PORT || 7003;
+
+app.use(cors());
+app.use(express.json());
+
+// Configuration Multer pour stocker les fichiers localement
+const uploadDir = path.join(__dirname, 'uploads');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadDir),
+  filename: (req, file, cb) => {
+    const uniqueId = crypto.randomUUID();
+    cb(null, uniqueId + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
+
+// Base de donnÃ©es en mÃ©moire (RAM)
+const mediaDB = new Map();
+
+const router = express.Router();
+
+// 1. Health Check
+router.get('/health', (req, res) => {
+  res.json({ status: 'healthy', service: 'media-simulator', version: '1.0.0' });
+});
+
+// 2. Upload d'un fichier
+router.post('/', upload.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ detail: 'Fichier requis (champ "file")' });
+  
+  const mediaId = req.file.filename.split('.')[0]; // L'UUID gÃ©nÃ©rÃ©
+  const mediaInfo = {
+    id: mediaId,
+    original_name: req.file.originalname,
+    mime_type: req.file.mimetype,
+    size_bytes: req.file.size,
+    url: `/api/v1/media/${req.file.filename}`,
+    created_at: new Date().toISOString()
+  };
+  
+  mediaDB.set(mediaId, mediaInfo);
+  res.status(201).json(mediaInfo);
+});
+
+// 3. RÃ©cupÃ©rer les mÃ©tadonnÃ©es d'un fichier
+router.get('/:id/info', (req, res) => {
+  const mediaInfo = mediaDB.get(req.params.id);
+  if (!mediaInfo) return res.status(404).json({ detail: 'MÃ©dia introuvable' });
+  res.json(mediaInfo);
+});
+
+// 4. TÃ©lÃ©charger/Voir le fichier brut
+router.get('/:filename', (req, res) => {
+  const filePath = path.join(uploadDir, req.params.filename);
+  if (!fs.existsSync(filePath)) return res.status(404).json({ detail: 'Fichier introuvable sur le disque' });
+  res.sendFile(filePath);
+});
+
+// 5. Purge RGPD (AppelÃ© par le Service Users en S2S)
+router.delete('/by-user/:userId', (req, res) => {
+  // Simulation de la suppression
+  res.json({ message: 'Fichiers purgÃ©s pour cet utilisateur', user_id: req.params.userId, files_deleted: 0 });
+});
+
+// Montage du routeur sur le prÃ©fixe attendu par Nginx
+app.use('/api/v1/media', router);
+
+app.listen(PORT, () => {
+  console.log(`[Media Simulator] DÃ©marrÃ© sur le port ${PORT}`);
+});
 `
 ===== FILE END =====
 
@@ -18419,32 +19204,15808 @@ docker compose exec users python -m pytest -v
 `
 ===== FILE END =====
 
-===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\next\prompt_fisrt_task.md =====
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\1.auth.txt =====
 `
-Nous commenÃ§ons maintenant la tÃ¢che 1 : prÃ©parer les simulateurs des services restants.
-
-Travaille uniquement sur cette tÃ¢che.
-
-Je veux que tu suives exactement cette mÃ©thode :
-
-1. analyse de lâ€™existant
-2. conception fonctionnelle
-3. conception technique
-4. mise en place / implÃ©mentation
-5. tests
-
-Pour lâ€™instant, fais seulement :
-
-* lâ€™analyse de lâ€™existant
-* puis la conception fonctionnelle
-
-Ne code rien encore.
-Sois concret et respecte strictement lâ€™architecture actuelle.
-
+    \documentclass[11pt,a4paper]{article}
+    
+    % === Encodage & Langue ===
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    \usepackage{babel}
+    
+    % === Mise en page ===
+    \usepackage[margin=2.5cm]{geometry}
+    \usepackage{fancyhdr}
+    \usepackage{titlesec}
+    \usepackage{parskip}
+    
+    % === Tableaux ===
+    \usepackage{longtable}
+    \usepackage{tabularx}
+    \usepackage{booktabs}
+    \usepackage{multirow}
+    \usepackage{array}
+    \usepackage{float}
+    
+    % === Code & couleurs ===
+    \usepackage{listings}
+    \usepackage[table,dvipsnames]{xcolor}
+    \usepackage{enumitem}
+    \usepackage{hyperref}
+    \usepackage{lastpage}
+    
+    % === Couleurs AGT ===
+    \definecolor{agtblue}{HTML}{1A3A5C}
+    \definecolor{agtgray}{HTML}{4A4A4A}
+    \definecolor{agtgreen}{HTML}{2E7D32}
+    \definecolor{agtred}{HTML}{C62828}
+    \definecolor{agtorange}{HTML}{E65100}
+    \definecolor{codebg}{HTML}{F5F5F5}
+    
+    \hypersetup{
+      colorlinks=true,
+      linkcolor=agtblue,
+      urlcolor=agtblue,
+      pdfauthor={AG Technologies},
+      pdftitle={Service Auth - CDC v2.1},
+    }
+    
+    % === Listings JSON ===
+    \lstdefinelanguage{json}{
+      basicstyle=\ttfamily\small,
+      string=[s]{"}{"},
+      stringstyle=\color{agtgreen},
+      numbers=left,
+      numberstyle=\tiny\color{gray},
+      numbersep=8pt,
+      breaklines=true,
+      frame=single,
+      backgroundcolor=\color{codebg},
+      rulecolor=\color{gray!30},
+      showstringspaces=false,
+      literate=
+        *{:}{{{\color{agtblue}:}}}{1}
+         {,}{{{\color{agtblue},}}}{1}
+         {\{}{{{\color{agtblue}\{}}}{1}
+         {\}}{{{\color{agtblue}\}}}}{1}
+         {[}{{{\color{agtblue}[}}}{1}
+         {]}{{{\color{agtblue}]}}}{1},
+    }
+    \lstset{language=json}
+    
+    % === Header/Footer ===
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyhead[L]{\small\textcolor{agtgray}{AGT --- Service Auth}}
+    \fancyhead[R]{\small\textcolor{agtgray}{v2.1 --- Confidentiel}}
+    \fancyfoot[C]{\small\thepage\ / \pageref{LastPage}}
+    \fancyfoot[R]{\small\textcolor{agtgray}{Mars 2026}}
+    \renewcommand{\headrulewidth}{0.4pt}
+    \renewcommand{\footrulewidth}{0.2pt}
+    
+    % === Titres ===
+    \titleformat{\section}{\Large\bfseries\color{agtblue}}{\thesection}{1em}{}
+    \titleformat{\subsection}{\large\bfseries\color{agtblue!80}}{\thesubsection}{1em}{}
+    \titleformat{\subsubsection}{\normalsize\bfseries\color{agtblue!60}}{\thesubsubsection}{1em}{}
+    
+    % === Commandes ===
+    \newcommand{\urgent}{\textcolor{agtred}{\textbf{Urgent}}}
+    \newcommand{\normale}{\textcolor{agtorange}{Normale}}
+    \newcolumntype{L}{>{\raggedright\arraybackslash}X}
+    
+    \begin{document}
+    
+    % ============================================================
+    %  PAGE DE TITRE
+    % ============================================================
+    \begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge\bfseries\textcolor{agtblue}{AG TECHNOLOGIES}\\[0.3cm]}
+    {\large\textcolor{agtgray}{Architecture de Services Partag\'es}\\[2cm]}
+    \rule{\textwidth}{1.5pt}\\[0.5cm]
+    {\LARGE\bfseries Cahier des Charges Technique\\[0.3cm]}
+    {\Large Service d'Authentification Centralis\'e\\[0.3cm]}
+    {\large\textit{Auth Service --- AGT-Auth}\\[0.5cm]}
+    \rule{\textwidth}{1.5pt}\\[2cm]
+    \begin{tabular}{ll}
+    \textbf{Version}        & 2.1 (final --- aligned with Users v2.1) \\
+    \textbf{Date}           & Mars 2026 \\
+    \textbf{Statut}         & Implementation-ready \\
+    \textbf{Classification} & Confidentiel \\
+    \textbf{Auteur}         & \'Equipe Architecture \\
+    \end{tabular}
+    \vfill
+    {\small\textcolor{agtgray}{Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies}}
+    \end{titlepage}
+    
+    % ============================================================
+    %  HISTORIQUE
+    % ============================================================
+    \section*{Historique des R\'evisions}
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Ver.} & \textbf{Date} & \textbf{Auteur} & \textbf{Description} \\
+    \midrule
+    1.0 & 2026-03-19 & \'Equipe Archi. & Cr\'eation initiale \\
+    1.1 & 2026-03-20 & \'Equipe Archi. & Post-audit~: stack unifi\'ee Django+DRF+Django ORM~; r\^oles supprim\'es (d\'el\'egu\'es au Service Users)~; endpoints ajout\'es (plateformes CRUD, verify-otp, magic-link callback, admin block/unblock, health)~; MLD compl\'et\'e (verification\_tokens, registration\_platform\_id, is\_deactivated)~; clarification verify-token vs introspect~; JWT document\'e \\
+    1.2 & 2026-03-20 & \'Equipe Archi. & Bloquants r\'esolus~: mod\`ele admin (API key statique)~; r\`egles register (phone sans mdp, un identifiant \`a la fois, OAuth flux s\'epar\'e)~; verify-token v\'erification compl\`ete (blocked, deactivated, platform, session)~; r\`egles de r\'evocation sessions formalis\'ees~; callbacks OAuth/magic-link s\'ecuris\'es (cookie HttpOnly)~; max 5 refresh tokens par user \\
+    1.3 & 2026-03-20 & \'Equipe Archi. & Production-ready~: client\_secret hash\'e (bcrypt)~; contrainte unique (provider, provider\_user\_id) sur oauth\_providers~; session\_id ajout\'e au JWT payload~; refresh token via cookie HttpOnly uniquement~; SameSite=Lax~; corrections coh\'erence documentaire \\
+    1.3.1 & 2026-03-20 & \'Equipe Archi. & Alignement final~: refresh\_token retir\'e de toutes les r\'eponses JSON (cookie-only)~; effet du logout sur l'access token pr\'ecis\'e~; mini-contrat Auth $\to$ Notification ajout\'e \\
+    1.3.2 & 2026-03-20 & \'Equipe Archi. & Endpoint POST /auth/token/exchange ajout\'e (cookie $\to$ bearer apr\`es OAuth/magic link)~; strat\'egie CSRF document\'ee~; coquilles de version corrig\'ees \\
+    2.0 & 2026-03-20 & \'Equipe Archi. & Alignement Users v2.1~: endpoints admin/deactivate et admin/purge ajout\'es~; contrat Auth $\to$ Users (status-sync) formalis\'e~; besoins F-USR-03/F-USR-04 ajout\'es~; r\`egles r\'evocation compl\'et\'ees~; mapping statuts Auth $\leftrightarrow$ Users~; clarification identit\'e userId~; terminologie block/deactivate/purge harmonis\'ee \\
+    2.1 & 2026-03-20 & \'Equipe Archi. & Version finale~: contrat sync email/phone ajout\'e~; propagation status-sync sur account/deactivate~; comportement transactionnel admin/purge~; r\'eactivation clarifi\'ee (aucun flux en v2.1)~; statut document pass\'e \`a Implementation-ready \\
+    \bottomrule
+    \end{tabularx}
+    
+    \newpage
+    \tableofcontents
+    \newpage
+    
+    % ============================================================
+    \section{Introduction}
+    % ============================================================
+    
+    Ce document constitue le cahier des charges du \textbf{Service d'Authentification Centralis\'e} (ci-apr\`es Â«~Auth Service ~Â») destin\'e \`a l'\'ecosyst\`eme AGT. Il sert de r\'ef\'erence unique pour la conception, le d\'eveloppement et les d\'ecisions techniques.
+    
+    \subsection{P\'erim\`etre}
+    
+    Le service Auth couvre le cycle de vie de l'\textbf{identit\'e pure}~: inscription, connexion, gestion de sessions, s\'ecurit\'e (2FA, rate limiting), administration des plateformes clientes et tra\c{c}abilit\'e.
+    
+    \subsection{Hors p\'erim\`etre}
+    
+    \begin{itemize}[nosep]
+      \item Gestion du profil \'etendu (d\'el\'egu\'ee au Service Users)
+      \item Gestion des r\^oles et permissions (d\'el\'egu\'ee au Service Users)
+      \item Logique m\'etier propre aux plateformes consommatrices
+      \item Envoi effectif d'emails/SMS (d\'el\'egu\'e au Service Notification)
+      \item Le cycle de vie du profil utilisateur, les \'etats \texttt{deleted} et \texttt{deletion\_in\_progress}, ainsi que la logique de sortie d'une plateforme, sont g\'er\'es par le Service Users
+    \end{itemize}
+    
+    % ============================================================
+    \section{Contexte \& Probl\'ematique}
+    % ============================================================
+    
+    \subsection{Contexte}
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{Plateforme} & \textbf{Statut} & \textbf{Description} \\
+    \midrule
+    AGT-Bot    & En d\'eveloppement & Plateforme de bots automatis\'es \\
+    AGT-Market & En d\'eveloppement & Marketplace de services \\
+    SALMA      & Migration pr\'evue & Plateforme existante \`a int\'egrer \\
+    Futures    & Planifi\'e         & Nouvelles plateformes \`a venir \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Probl\'ematique}
+    
+    Sans service centralis\'e, chaque plateforme impl\'emente sa propre authentification, entra\^inant~: duplication du code de s\'ecurit\'e, exp\'erience utilisateur fragment\'ee, maintenance co\^uteuse et risques de failles incoh\'erentes.
+    
+    % ============================================================
+    \section{Vision \& Objectifs}
+    % ============================================================
+    
+    \subsection{Vision}
+    
+    Un utilisateur s'authentifie une seule fois et acc\`ede \`a toutes les plateformes de l'\'ecosyst\`eme. Les r\^oles et permissions sont g\'er\'es par le Service Users.
+    
+    \subsection{Objectifs}
+    
+    \begin{tabularx}{\textwidth}{clL}
+    \toprule
+    \textbf{\#} & \textbf{Objectif} & \textbf{Indicateur} \\
+    \midrule
+    O1 & Authentification unique & Un seul compte par utilisateur, multi-plateforme \\
+    O2 & S\'ecurit\'e renforc\'ee & 2FA, rate limiting, audit log complet \\
+    O3 & Multi-m\'ethodes        & Email, phone, OAuth, magic link \\
+    O4 & Tra\c{c}abilit\'e       & Chaque action d'auth enregistr\'ee \\
+    O5 & Scalabilit\'e           & +10M utilisateurs, < 200ms latence \\
+    O6 & R\'eutilisabilit\'e     & Int\'egration nouvelle plateforme < 1 jour \\
+    \bottomrule
+    \end{tabularx}
+    
+    % ============================================================
+    \section{Parties Prenantes \& Utilisateurs}
+    % ============================================================
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{R\^ole} & \textbf{Type} & \textbf{Responsabilit\'e} \\
+    \midrule
+    Product Owner       & Interne & Priorisation des fonctionnalit\'es \\
+    \'Equipe Backend    & Interne & D\'eveloppement et maintenance \\
+    \'Equipe Frontend   & Interne & Int\'egration des flux d'authentification \\
+    DevOps              & Interne & Infrastructure, CI/CD, monitoring \\
+    Utilisateurs finaux & Externe & Inscription, connexion, gestion de compte \\
+    Administrateurs     & Interne & Gestion des plateformes, audit, supervision \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textbf{Scalabilit\'e attendue~:} +10 millions d'utilisateurs inscrits \`a travers l'\'ecosyst\`eme.
+    
+    % ============================================================
+    \section{Besoins Fonctionnels}
+    % ============================================================
+    
+    \subsection{Inscription (Register)}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-REG-01 & Inscription email     & Cr\'eation de compte avec email + mot de passe & \urgent \\
+    F-REG-02 & Inscription t\'el\'ephone & Cr\'eation de compte avec num\'ero + OTP SMS & \normale \\
+    F-REG-03 & Inscription OAuth     & Cr\'eation via Google ou Facebook & \urgent \\
+    F-REG-04 & V\'erification email  & Envoi d'un lien de v\'erification post-inscription & \urgent \\
+    F-REG-05 & V\'erification t\'el\'ephone & Envoi OTP pour validation du num\'ero & \normale \\
+    F-REG-06 & Liaison plateforme    & Association automatique \`a la plateforme source & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Connexion (Login)}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-LOG-01 & Login email/password & Authentification classique & \urgent \\
+    F-LOG-02 & Login phone/OTP      & Connexion via OTP SMS & \normale \\
+    F-LOG-03 & Login OAuth           & Connexion via Google / Facebook & \urgent \\
+    F-LOG-04 & Magic link            & Envoi d'un lien de connexion par email & \urgent \\
+    F-LOG-05 & 2FA challenge         & V\'erification du second facteur si activ\'e & \normale \\
+    F-LOG-06 & \'Emission tokens     & JWT access token + refresh token & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Gestion de session \& tokens}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-SES-01 & Refresh token      & Renouvellement du JWT via refresh token & \urgent \\
+    F-SES-02 & Rotation refresh   & Invalidation de l'ancien refresh token \`a chaque usage & \urgent \\
+    F-SES-03 & Liste sessions     & Visualisation des sessions actives & \normale \\
+    F-SES-04 & R\'evocation session & Suppression d'une session sp\'ecifique & \normale \\
+    F-SES-05 & Logout             & Invalidation du refresh token et de la session & \urgent \\
+    F-SES-06 & Verify token       & Endpoint interne~: validation d'un JWT utilisateur & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{S\'ecurit\'e \& 2FA}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-SEC-01 & Activation 2FA     & G\'en\'eration secret TOTP + QR code & \normale \\
+    F-SEC-02 & D\'esactivation 2FA & Avec v\'erification du code actuel & \normale \\
+    F-SEC-03 & V\'erification 2FA  & Validation code TOTP lors du login & \normale \\
+    F-SEC-04 & Forgot password     & Envoi d'un lien de r\'einitialisation & \urgent \\
+    F-SEC-05 & Reset password      & R\'einitialisation via token temporaire & \urgent \\
+    F-SEC-06 & Change password     & Modification avec ancien mot de passe requis & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Tra\c{c}abilit\'e \& Audit}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-AUD-01 & Login history      & Historique complet des connexions & \urgent \\
+    F-AUD-02 & M\'ethode tracking & Enregistrement de la m\'ethode utilis\'ee & \urgent \\
+    F-AUD-03 & Stats utilisateur  & Fr\'equence par m\'ethode et plateforme & \normale \\
+    F-AUD-04 & Profil identit\'e  & Endpoint /auth/me (identit\'e pure, sans r\^oles) & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Gestion des Plateformes (Admin)}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-PLAT-01 & Cr\'eation plateforme  & Enregistrer une nouvelle plateforme cliente & \urgent \\
+    F-PLAT-02 & Lister plateformes    & Liste de toutes les plateformes et leur statut & \urgent \\
+    F-PLAT-03 & Modifier plateforme   & Mise \`a jour nom, m\'ethodes d'auth autoris\'ees & \urgent \\
+    F-PLAT-04 & Supprimer plateforme  & D\'esactivation d'une plateforme & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Gestion du Compte Utilisateur}
+    
+    \begin{tabularx}{\textwidth}{llLc}
+    \toprule
+    \textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+    \midrule
+    F-USR-01 & D\'esactivation de compte & Soft delete c\^ot\'e Auth (is\_deactivated) & \normale \\
+    F-USR-02 & Blocage admin           & Blocage / d\'eblocage d'un utilisateur & \urgent \\
+    F-USR-03 & Purge RGPD              & Suppression physique compl\`ete d'un compte Auth (appel inter-service) & \urgent \\
+    F-USR-04 & D\'esactivation propag\'ee & D\'esactivation S2S d\'eclench\'ee par le Service Users (sans mot de passe) & \urgent \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textit{Note~: la suppression d\'efinitive (hard delete / RGPD) est orchestr\'ee par le Service Users, qui d\'eclenche la purge dans Auth apr\`es avoir nettoy\'e le profil.}
+    
+    \textbf{Terminologie (v2.0)~:}
+    \begin{itemize}[nosep]
+      \item \textbf{Block}~: mesure d'administration/s\'ecurit\'e. Temporaire ou r\'eversible. Ne modifie pas le statut Users.
+      \item \textbf{Deactivate}~: fermeture logique du compte d'authentification. Propag\'ee \`a Users comme \texttt{inactive}.
+      \item \textbf{Purge}~: suppression physique RGPD. Irr\'eversible. Orchestr\'ee par Users.
+    \end{itemize}
+    
+    \textbf{Identit\'e (v2.0)~:}
+    
+    \textit{Dans tous les endpoints \texttt{/auth/.../\{userId\}}, \texttt{userId} d\'esigne \texttt{users\_auth.id}, qui correspond \`a \texttt{auth\_user\_id} dans le Service Users.}
+    
+    % ============================================================
+    \section{Besoins Non-Fonctionnels}
+    % ============================================================
+    
+    \begin{tabularx}{\textwidth}{clLc}
+    \toprule
+    \textbf{ID} & \textbf{Cat\'egorie} & \textbf{Exigence} & \textbf{Cible} \\
+    \midrule
+    NF-01 & Performance   & Temps de r\'eponse           & < 200ms (P95) \\
+    NF-02 & Performance   & Throughput                    & 500 req/s min \\
+    NF-03 & Disponibilit\'e & Uptime                      & 99.9\% \\
+    NF-04 & S\'ecurit\'e  & Hashing                       & bcrypt, cost $\geq$ 12 \\
+    NF-05 & S\'ecurit\'e  & JWT signature                 & RS256 \\
+    NF-06 & S\'ecurit\'e  & Rate limiting login            & 10 req/min \\
+    NF-07 & S\'ecurit\'e  & Brute force                   & Blocage apr\`es 5 tentatives (15 min) \\
+    NF-08 & S\'ecurit\'e  & Tokens                        & Access: 15 min, Refresh: 7 jours \\
+    NF-09 & Scalabilit\'e & Horizontal                    & Stateless, multi-instance \\
+    NF-10 & Observabilit\'e & Logs structur\'es            & JSON, corr\'elation par request ID \\
+    NF-11 & Observabilit\'e & Health check                & \texttt{GET /auth/health} \\
+    \bottomrule
+    \end{tabularx}
+    
+    % ============================================================
+    \section{Architecture Technique}
+    % ============================================================
+    
+    \subsection{Vue d'ensemble}
+    
+    Le service Auth est un microservice REST stateless, d\'eploy\'e en conteneur Docker. Il expose une API JSON consomm\'ee par les plateformes clientes et les services internes.
+    
+    \subsection{Stack Technique}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Composant} & \textbf{Technologie} \\
+    \midrule
+    Langage \& Framework & Python 3.11+ / Django 5.x \\
+    API                  & Django REST Framework (DRF) \\
+    Base de donn\'ees    & PostgreSQL 15+ \\
+    ORM                  & Django ORM \\
+    Migrations           & Django Migrations \\
+    Cache / Sessions     & Redis 7+ \\
+    JWT                  & PyJWT (Signature RS256) \\
+    Hashing              & bcrypt (cost factor $\geq$ 12) \\
+    2FA / TOTP           & pyotp \\
+    Validation           & DRF Serializers \\
+    Conteneurisation     & Docker + Docker Compose \\
+    CI/CD                & GitHub Actions \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{D\'ependances Externes \& R\`egles d'Architecture}
+    
+    \begin{center}
+    \fbox{\parbox{0.9\textwidth}{
+    \textbf{R\`egle stricte de d\'ependance}\\[0.3em]
+    Auth ne d\'epend d'\textbf{aucun service m\'etier interne}, sauf le Notification Service (envoi emails/SMS).\\
+    Le User Service d\'epend de Auth (et non l'inverse). Auth g\`ere l'identit\'e pure et les credentials~; Users g\`ere le profil, les r\^oles et les permissions.
+    }}
+    \end{center}
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{Service} & \textbf{Type} & \textbf{Usage} \\
+    \midrule
+    Notification Service & Interne & Envoi emails (v\'erification, reset, magic link) et SMS (OTP) \\
+    Google OAuth         & Externe & Authentification via compte Google \\
+    Facebook OAuth       & Externe & Authentification via compte Facebook \\
+    SMS Provider         & Externe & Twilio / Vonage / Infobip pour OTP \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Format du JWT Payload}
+    
+    \begin{lstlisting}
+    {
+      "sub": "user-uuid",
+      "iss": "agt-auth",
+      "aud": "agt-ecosystem",
+      "iat": 1710840000,
+      "exp": 1710840900,
+      "jti": "unique-token-id",
+      "session_id": "session-uuid",
+      "platform_id": "agt-bot",
+      "email": "user@example.com",
+      "email_verified": true,
+      "two_fa_verified": false
+    }
+    \end{lstlisting}
+    
+    \textit{Note v1.3~: \texttt{session\_id} a \'et\'e ajout\'e au payload pour permettre \`a \texttt{verify-token} de v\'erifier que la session est active. \texttt{jti} reste un identifiant unique du token lui-m\^eme (ind\'ependant de la session).}
+    
+    \textit{Note~: le JWT ne contient pas de r\^oles. Les services consommateurs doivent interroger le Service Users pour obtenir les r\^oles et permissions d'un utilisateur.}
+    
+    % ============================================================
+    \section{Mod\'elisation}
+    % ============================================================
+    
+    \subsection{Diagramme de Classes}
+    
+    Le diagramme de classes complet est fourni en annexe au format PlantUML (voir section~\ref{sec:plantuml}). Il couvre les entit\'es~: \texttt{Platform}, \texttt{UserAuth}, \texttt{Session}, \texttt{RefreshToken}, \texttt{OAuthProvider}, \texttt{LoginHistory} et \texttt{VerificationToken}.
+    
+    \subsection{MLD --- Mod\`ele Logique de Donn\'ees}
+    
+    \subsubsection{Table \texttt{platforms}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id                     & UUID          & PK             & Identifiant unique \\
+    name                   & VARCHAR(50)   & UNIQUE, NOT NULL & Nom (agt-bot, agt-market, salma) \\
+    slug                   & VARCHAR(50)   & UNIQUE, NOT NULL & Slug URL-friendly \\
+    allowed\_auth\_methods & JSONB         & NOT NULL       & M\'ethodes activ\'ees \\
+    allowed\_redirect\_urls & JSONB        & NOT NULL       & Whitelist des URLs de redirection autoris\'ees (OAuth, magic link) \\
+    client\_secret\_hash   & VARCHAR(255)  & NOT NULL       & Hash bcrypt du secret S2S (le secret brut n'est affich\'e qu'\`a la cr\'eation) \\
+    is\_active             & BOOLEAN       & DEFAULT true   & Plateforme active \\
+    created\_at            & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+    updated\_at            & TIMESTAMPTZ   & NOT NULL       & Derni\`ere mise \`a jour \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsubsection{Table \texttt{users\_auth}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id                          & UUID          & PK             & Identifiant unique \\
+    email                       & VARCHAR(255)  & UNIQUE, NULL   & Adresse email \\
+    phone                       & VARCHAR(20)   & UNIQUE, NULL   & Num\'ero de t\'el\'ephone \\
+    password\_hash              & VARCHAR(255)  & NULL           & Hash bcrypt (cost 12+) \\
+    email\_verified             & BOOLEAN       & DEFAULT false  & Email v\'erifi\'e \\
+    phone\_verified             & BOOLEAN       & DEFAULT false  & T\'el\'ephone v\'erifi\'e \\
+    two\_fa\_enabled            & BOOLEAN       & DEFAULT false  & 2FA activ\'e \\
+    two\_fa\_secret             & VARCHAR(255)  & NULL           & Secret TOTP (chiffr\'e AES) \\
+    registration\_method        & VARCHAR(20)   & NOT NULL       & email, phone, google, facebook \\
+    registration\_platform\_id  & UUID          & FK $\to$ platforms & Plateforme d'inscription initiale \\
+    failed\_login\_attempts     & INT           & DEFAULT 0      & Compteur tentatives \'echou\'ees \\
+    locked\_until               & TIMESTAMPTZ   & NULL           & Fin de blocage auto (brute force) \\
+    is\_blocked                 & BOOLEAN       & DEFAULT false  & Blocage admin \\
+    is\_deactivated             & BOOLEAN       & DEFAULT false  & Soft delete (d\'esactivation) \\
+    created\_at                 & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+    updated\_at                 & TIMESTAMPTZ   & NOT NULL       & Derni\`ere mise \`a jour \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textit{Ajouts v1.1~: \texttt{registration\_platform\_id} (F-REG-06), \texttt{is\_blocked} (F-USR-02), \texttt{is\_deactivated} (F-USR-01).}
+    
+    \subsubsection{Table \texttt{sessions}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id            & UUID          & PK                   & Identifiant session \\
+    user\_id      & UUID          & FK $\to$ users\_auth & Utilisateur \\
+    platform\_id  & UUID          & FK $\to$ platforms   & Plateforme de connexion \\
+    ip\_address   & VARCHAR(45)   & NOT NULL             & IP du client \\
+    user\_agent   & TEXT          & NULL                 & User-Agent \\
+    is\_active    & BOOLEAN       & DEFAULT true         & Session active \\
+    created\_at   & TIMESTAMPTZ   & NOT NULL             & D\'ebut de session \\
+    expires\_at   & TIMESTAMPTZ   & NOT NULL             & Expiration \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsubsection{Table \texttt{refresh\_tokens}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id            & UUID          & PK                   & Identifiant \\
+    user\_id      & UUID          & FK $\to$ users\_auth & Utilisateur \\
+    session\_id   & UUID          & FK $\to$ sessions    & Session li\'ee \\
+    token\_hash   & VARCHAR(255)  & UNIQUE, NOT NULL     & Hash du refresh token \\
+    is\_revoked   & BOOLEAN       & DEFAULT false        & Token r\'evoqu\'e \\
+    created\_at   & TIMESTAMPTZ   & NOT NULL             & Cr\'eation \\
+    expires\_at   & TIMESTAMPTZ   & NOT NULL             & Expiration (7 jours) \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsubsection{Table \texttt{oauth\_providers}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id                 & UUID          & PK                   & Identifiant \\
+    user\_id           & UUID          & FK $\to$ users\_auth & Utilisateur li\'e \\
+    provider           & VARCHAR(20)   & NOT NULL             & google, facebook \\
+    provider\_user\_id & VARCHAR(255)  & NOT NULL             & ID chez le provider \\
+    email              & VARCHAR(255)  & NULL                 & Email du provider \\
+    created\_at        & TIMESTAMPTZ   & NOT NULL             & Cr\'eation \\
+    \bottomrule
+    \end{tabularx}
+    
+    Contraintes uniques~: \texttt{(user\_id, provider)} et \texttt{(provider, provider\_user\_id)}.
+    
+    \textit{La seconde contrainte emp\^eche qu'un m\^eme compte provider (ex~: un Google ID) soit li\'e \`a plusieurs utilisateurs Auth.}
+    
+    \subsubsection{Table \texttt{login\_history}}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id              & UUID          & PK                   & Identifiant \\
+    user\_id        & UUID          & FK $\to$ users\_auth & Utilisateur \\
+    platform\_id    & UUID          & FK $\to$ platforms   & Plateforme \\
+    method          & VARCHAR(20)   & NOT NULL             & email, phone, google, facebook, magic\_link \\
+    ip\_address     & VARCHAR(45)   & NOT NULL             & IP \\
+    user\_agent     & TEXT          & NULL                 & User-Agent \\
+    success         & BOOLEAN       & NOT NULL             & Succ\`es ou \'echec \\
+    failure\_reason & VARCHAR(100)  & NULL                 & Raison de l'\'echec \\
+    created\_at     & TIMESTAMPTZ   & NOT NULL             & Date/heure \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsubsection{Table \texttt{verification\_tokens}}
+    
+    \textit{Ajout v1.1~: table pour stocker les tokens temporaires (v\'erification email, reset password, magic link, OTP). Les tokens sont \'egalement cach\'es dans Redis pour un lookup rapide.}
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+    \midrule
+    id            & UUID          & PK                   & Identifiant \\
+    user\_id      & UUID          & FK $\to$ users\_auth & Utilisateur concern\'e \\
+    token\_hash   & VARCHAR(255)  & UNIQUE, NOT NULL     & Hash SHA-256 du token \\
+    type          & VARCHAR(30)   & NOT NULL             & email\_verification, password\_reset, magic\_link, phone\_otp \\
+    payload       & JSONB         & NULL                 & Donn\'ees compl\'ementaires (redirect\_url, platform\_id\ldots) \\
+    expires\_at   & TIMESTAMPTZ   & NOT NULL             & Expiration \\
+    used\_at      & TIMESTAMPTZ   & NULL                 & Date d'utilisation (NULL = non utilis\'e) \\
+    created\_at   & TIMESTAMPTZ   & NOT NULL             & Cr\'eation \\
+    \bottomrule
+    \end{tabularx}
+    
+    R\`egles~:
+    \begin{itemize}[nosep]
+      \item Un token ne peut \^etre utilis\'e qu'une seule fois (\texttt{used\_at} passe de NULL \`a la date).
+      \item Les tokens expir\'es sont purg\'es par un cron job quotidien.
+      \item Le token brut n'est jamais stock\'e~; seul le hash SHA-256 est persist\'e.
+      \item Chaque token est \'egalement stock\'e dans Redis avec un TTL correspondant \`a son expiration pour un lookup O(1).
+    \end{itemize}
+    
+    % ============================================================
+    \section{Contrats d'API}
+    % ============================================================
+    
+    Base URL~: \texttt{/api/v1}. Tous les endpoints retournent du JSON. Les endpoints prot\'eg\'es requi\`erent un header \texttt{Authorization: Bearer <token>}.
+    
+    % â”€â”€ 9.1 Health â”€â”€
+    \subsection{Health Check}
+    
+    \subsubsection{GET /auth/health}
+    
+    V\'erifie l'\'etat du service (base de donn\'ees, Redis). Aucune authentification requise.
+    
+    R\'eponse 200~:
+    \begin{lstlisting}
+    {
+      "status": "healthy",
+      "database": "ok",
+      "redis": "ok",
+      "version": "2.1.0"
+    }
+    \end{lstlisting}
+    
+    % â”€â”€ 9.2 Inscription â”€â”€
+    \subsection{Inscription \& V\'erification}
+    
+    \subsubsection{POST /auth/register}
+    
+    Cr\'eation d'un nouveau compte (email ou t\'el\'ephone). \textbf{Le flux OAuth ne passe pas par cet endpoint} (voir section OAuth).\\
+    Headers~: \texttt{X-Platform-Id: <platform\_uuid>}\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "email": "user@example.com",
+      "password": "SecureP@ss123",
+      "method": "email"
+    }
+    \end{lstlisting}
+    
+    \textbf{R\`egles de validation par m\'ethode~:}
+    
+    \begin{tabularx}{\textwidth}{llll}
+    \toprule
+    \textbf{method} & \textbf{email} & \textbf{phone} & \textbf{password} \\
+    \midrule
+    \texttt{email} & Obligatoire & Ignor\'e & Obligatoire \\
+    \texttt{phone} & Ignor\'e & Obligatoire & Ignor\'e (auth par OTP uniquement) \\
+    \bottomrule
+    \end{tabularx}
+    
+    \begin{itemize}[nosep]
+      \item Un seul identifiant par inscription~: email \textbf{ou} phone, jamais les deux.
+      \item L'autre identifiant peut \^etre ajout\'e ult\'erieurement (\'evolution future).
+      \item Si \texttt{method=email}, le champ \texttt{phone} est ignor\'e (et inversement).
+      \item Inscription OAuth~: flux s\'epar\'e via \texttt{GET /auth/oauth/\{provider\}}, cr\'eation auto au callback.
+      \item Inscription phone~: pas de mot de passe en MVP, authentification exclusivement par OTP.
+    \end{itemize}
+    
+    Response 201~:
+    \begin{lstlisting}
+    {
+      "id": "uuid",
+      "email": "user@example.com",
+      "email_verified": false,
+      "registration_method": "email",
+      "registration_platform_id": "platform-uuid",
+      "message": "Verification email sent"
+    }
+    \end{lstlisting}
+    
+    Codes~: 201 Created, 400 Validation error, 409 Email/phone already exists.
+    
+    \subsubsection{POST /auth/verify-email}
+    
+    Request body~:
+    \begin{lstlisting}
+    {
+      "token": "verification-token-from-email"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Email verified",
+      "email_verified": true
+    }
+    \end{lstlisting}
+    
+    \subsubsection{POST /auth/verify-otp}
+    
+    \textit{Ajout v1.1~: endpoint g\'en\'erique pour v\'erifier un OTP, utilis\'e pour l'inscription t\'el\'ephone ET le login phone.}
+    
+    Request body~:
+    \begin{lstlisting}
+    {
+      "phone": "+237600000000",
+      "otp_code": "482910",
+      "context": "login",
+      "platform_id": "uuid"
+    }
+    \end{lstlisting}
+    
+    Le champ \texttt{context} peut valoir \texttt{"registration"} ou \texttt{"login"}.
+    
+    Response 200 (context = login)~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 900
+    }
+    \end{lstlisting}
+    
+    \textit{Le refresh token est pos\'e dans un cookie HttpOnly (voir section Strat\'egie de Gestion des Tokens).}
+    
+    Response 200 (context = registration)~:
+    \begin{lstlisting}
+    {
+      "message": "Phone verified",
+      "phone_verified": true
+    }
+    \end{lstlisting}
+    
+    Codes~: 200 OK, 400 Invalid/expired OTP, 429 Rate limited.
+    
+    % â”€â”€ 9.3 Login â”€â”€
+    \subsection{Authentification (Login)}
+    
+    \subsubsection{POST /auth/login}
+    
+    Connexion email + mot de passe.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "email": "user@example.com",
+      "password": "SecureP@ss123",
+      "platform_id": "uuid"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 900,
+      "requires_2fa": false
+    }
+    \end{lstlisting}
+    
+    \textit{Le refresh token est pos\'e dans un cookie HttpOnly.}
+    
+    Si \texttt{requires\_2fa} est \texttt{true}, la r\'eponse contient un \texttt{temp\_token} au lieu de l'access token. Le client doit appeler \texttt{POST /auth/2fa/verify} pour finaliser.
+    
+    Codes~: 200 OK, 401 Invalid credentials, 403 Account locked/blocked/deactivated, 429 Rate limited.
+    
+    \subsubsection{POST /auth/login/phone}
+    
+    Demande d'OTP pour connexion par t\'el\'ephone.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "phone": "+237600000000",
+      "platform_id": "uuid"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "OTP sent",
+      "expires_in": 300
+    }
+    \end{lstlisting}
+    
+    \textit{Le client soumet ensuite l'OTP re\c{c}u via \texttt{POST /auth/verify-otp} avec \texttt{context: "login"}.}
+    
+    \subsubsection{POST /auth/login/magic-link}
+    
+    Envoi d'un lien de connexion par email.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "email": "user@example.com",
+      "platform_id": "uuid",
+      "redirect_url": "https://agt-bot.com/auth/callback"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Magic link sent",
+      "expires_in": 600
+    }
+    \end{lstlisting}
+    
+    \subsubsection{GET /auth/magic-link/callback}
+    
+    \textit{Ajout v1.1, s\'ecuris\'e v1.2~: endpoint de callback pour traiter le clic sur le magic link.}
+    
+    Query params~: \texttt{?token=xxx}
+    
+    \textbf{Comportement (v1.2)~:} le callback ne retourne \textbf{pas} les tokens dans le body JSON ni dans l'URL. Il pose les tokens dans des \textbf{cookies HttpOnly s\'ecuris\'es} (m\^eme m\'ecanisme que les callbacks OAuth) puis redirige vers la \texttt{redirect\_url} stock\'ee dans le \texttt{payload} du \texttt{verification\_token}.
+    
+    Response~: 302 Redirect vers \texttt{redirect\_url} avec cookies pos\'es~:
+    \begin{itemize}[nosep]
+      \item \texttt{Set-Cookie: access\_token=eyJ...; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=900}
+      \item \texttt{Set-Cookie: refresh\_token=dGh...; HttpOnly; Secure; SameSite=Lax; Path=/auth/refresh; Max-Age=604800}
+    \end{itemize}
+    
+    \textbf{R\`egles de s\'ecurit\'e~:}
+    \begin{itemize}[nosep]
+      \item Token \`a usage unique~: \texttt{used\_at} est renseign\'e d\`es le premier clic.
+      \item Token expir\'e ou d\'ej\`a utilis\'e~: 400 Bad Request.
+      \item Utilisateur bloqu\'e ou d\'esactiv\'e~: 403 Forbidden.
+      \item Whitelist des \texttt{redirect\_url} par plateforme.
+    \end{itemize}
+    
+    Codes~: 302 Redirect (succ\`es), 400 Token invalide/expir\'e/utilis\'e, 403 Utilisateur bloqu\'e/d\'esactiv\'e.
+    
+    % â”€â”€ 9.4 OAuth â”€â”€
+    \subsection{Authentification Sociale (OAuth)}
+    
+    \subsubsection{GET /auth/oauth/google}
+    
+    Initie le flux OAuth Google. Redirige vers l'\'ecran de consentement.\\
+    Query params~: \texttt{?platform\_id=uuid\&redirect\_uri=https://...}\\
+    Response~: 302 Redirect vers Google.
+    
+    \subsubsection{GET /auth/oauth/google/callback}
+    
+    Callback OAuth Google. Cr\'ee ou lie le compte, \'emet les tokens.
+    
+    \textbf{S\'ecurit\'e des callbacks (v1.2)~:} les tokens ne sont \textbf{jamais} transmis dans l'URL (risque de fuite via logs, referrer, historique navigateur). Le callback pose les tokens dans des \textbf{cookies HttpOnly s\'ecuris\'es}~:
+    
+    \begin{itemize}[nosep]
+      \item \texttt{Set-Cookie: access\_token=eyJ...; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=900}
+      \item \texttt{Set-Cookie: refresh\_token=dGh...; HttpOnly; Secure; SameSite=Lax; Path=/auth/refresh; Max-Age=604800}
+    \end{itemize}
+    
+    Response~: 302 Redirect vers \texttt{redirect\_uri} (sans tokens dans l'URL).\\
+    Les cookies sont envoy\'es automatiquement par le navigateur sur les requ\^etes API suivantes. Le frontend n'y acc\`ede pas en JavaScript (HttpOnly).
+    
+    \textbf{R\`egles de s\'ecurit\'e callback~:}
+    \begin{itemize}[nosep]
+      \item Whitelist stricte des \texttt{redirect\_uri} autoris\'ees par plateforme (stock\'ees dans \texttt{platforms}).
+      \item Param\`etre \texttt{state} anti-CSRF g\'en\'er\'e avant la redirection OAuth, valid\'e au retour.
+      \item Si l'email du provider existe d\'ej\`a dans \texttt{users\_auth}~: liaison automatique au compte existant.
+      \item Si le provider renvoie un email non v\'erifi\'e~: le compte est cr\'e\'e mais \texttt{email\_verified = false}.
+    \end{itemize}
+    
+    \subsubsection{GET /auth/oauth/facebook}
+    
+    Identique au flux Google, avec Facebook comme provider.
+    
+    \subsubsection{GET /auth/oauth/facebook/callback}
+    
+    Callback Facebook. M\^eme logique et m\^eme s\'ecurit\'e que Google callback (cookies HttpOnly).
+    
+    % â”€â”€ 9.5 Securite â”€â”€
+    \subsection{S\'ecurit\'e \& Mots de passe}
+    
+    \subsubsection{POST /auth/forgot-password}
+    
+    Request body~:
+    \begin{lstlisting}
+    {
+      "email": "user@example.com"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Reset link sent if account exists"
+    }
+    \end{lstlisting}
+    
+    \subsubsection{POST /auth/reset-password}
+    
+    Request body~:
+    \begin{lstlisting}
+    {
+      "token": "reset-token-uuid",
+      "new_password": "NewSecureP@ss456"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Password reset successfully"
+    }
+    \end{lstlisting}
+    
+    \subsubsection{PUT /auth/change-password}
+    
+    Auth~: Bearer token requis.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "current_password": "OldP@ss123",
+      "new_password": "NewP@ss456"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Password changed successfully"
+    }
+    \end{lstlisting}
+    
+    % â”€â”€ 9.6 2FA â”€â”€
+    \subsection{Authentification \`a Double Facteur (2FA)}
+    
+    \subsubsection{POST /auth/2fa/enable}
+    
+    Auth~: Bearer token requis.\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "secret": "JBSWY3DPEHPK3PXP",
+      "qr_code_url": "otpauth://totp/AGT:user@example.com?...",
+      "message": "Scan QR code, then verify with POST /auth/2fa/confirm"
+    }
+    \end{lstlisting}
+    
+    \subsubsection{POST /auth/2fa/confirm}
+    
+    \textit{Clarification v1.1~: cet endpoint confirme l'activation du 2FA apr\`es scan du QR code. Distinct de \texttt{/auth/2fa/verify} qui sert au challenge login.}
+    
+    Auth~: Bearer token requis.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "code": "482910"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "2FA activated",
+      "two_fa_enabled": true
+    }
+    \end{lstlisting}
+    
+    \subsubsection{POST /auth/2fa/verify}
+    
+    V\'erification du code 2FA lors du login. Appel\'e uniquement quand \texttt{requires\_2fa = true}.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "code": "482910",
+      "temp_token": "eyJ2ZmE..."
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 900
+    }
+    \end{lstlisting}
+    
+    \textit{Le refresh token est pos\'e dans un cookie HttpOnly.}
+    
+    \subsubsection{POST /auth/2fa/disable}
+    
+    Auth~: Bearer token requis.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "code": "482910"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "2FA disabled",
+      "two_fa_enabled": false
+    }
+    \end{lstlisting}
+    
+    % â”€â”€ 9.7 Sessions & Tokens â”€â”€
+    \subsection{Gestion des Sessions \& Tokens}
+    
+    \subsubsection{POST /auth/refresh}
+    
+    Renouvellement du JWT. Le refresh token est consomm\'e et un nouveau est \'emis (rotation).
+    
+    \textbf{Strat\'egie refresh token (v1.3)~:} le refresh token est transmis \textbf{exclusivement via cookie HttpOnly}. Aucun body n'est requis~; le serveur lit le cookie \texttt{refresh\_token} automatiquement.
+    
+    Request~: aucun body. Le cookie \texttt{refresh\_token} est envoy\'e automatiquement par le navigateur.
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 900
+    }
+    \end{lstlisting}
+    
+    Le nouveau refresh token est pos\'e dans un cookie mis \`a jour~:
+    \begin{itemize}[nosep]
+      \item \texttt{Set-Cookie: refresh\_token=bmV3...; HttpOnly; Secure; SameSite=Lax; Path=/auth/refresh; Max-Age=604800}
+    \end{itemize}
+    
+    \subsubsection{POST /auth/logout}
+    
+    Auth~: Bearer token requis. Le cookie \texttt{refresh\_token} est lu automatiquement.\\
+    Aucun body requis.
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Logged out successfully"
+    }
+    \end{lstlisting}
+    
+    \textbf{Effet sur les tokens (v1.3.1)~:}
+    \begin{itemize}[nosep]
+      \item La session est marqu\'ee \texttt{is\_active = false}.
+      \item Le refresh token associ\'e est r\'evoqu\'e.
+      \item Le cookie \texttt{refresh\_token} est supprim\'e (\texttt{Max-Age=0}).
+      \item L'access token JWT reste techniquement valide jusqu'\`a son expiration (15 min), mais tout appel \`a \texttt{verify-token} retournera \texttt{session\_revoked} car la session est inactive.
+      \item \textbf{Recommandation aux services consommateurs~:} les services qui v\'erifient les tokens uniquement par signature locale (sans appeler \texttt{verify-token}) doivent accepter un d\'elai de latence \'egal au TTL de l'access token. Les services sensibles doivent toujours appeler \texttt{verify-token} ou utiliser un cache Redis \`a TTL court (30s).
+    \end{itemize}
+    
+    \subsubsection{GET /auth/sessions}
+    
+    Auth~: Bearer token requis.\\
+    Query params~: \texttt{?page=1\&limit=20}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "data": [
+        {
+          "id": "uuid",
+          "platform": "agt-bot",
+          "ip_address": "192.168.1.1",
+          "user_agent": "Mozilla/5.0...",
+          "created_at": "2026-03-19T10:00:00Z",
+          "is_current": true
+        }
+      ],
+      "page": 1,
+      "limit": 20,
+      "total": 3
+    }
+    \end{lstlisting}
+    
+    \subsubsection{DELETE /auth/sessions/\{sessionId\}}
+    
+    Auth~: Bearer token requis.\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Session revoked"
+    }
+    \end{lstlisting}
+    
+    \subsubsection{GET /auth/verify-token}
+    
+    \textit{Usage~: endpoint interne pour les autres services. Valide un JWT \textbf{utilisateur}.}\\
+    Headers~: \texttt{Authorization: Bearer <access\_token>}\\
+    
+    \textbf{V\'erifications effectu\'ees (v1.2)~:}
+    \begin{enumerate}[nosep]
+      \item Signature JWT valide (RS256)
+      \item Token non expir\'e
+      \item Utilisateur \texttt{is\_blocked = false}
+      \item Utilisateur \texttt{is\_deactivated = false}
+      \item Plateforme \texttt{is\_active = true}
+      \item Session associ\'ee \texttt{is\_active = true}
+    \end{enumerate}
+    
+    \textit{Note~: les v\'erifications 3 \`a 6 impliquent un appel DB. Le r\'esultat peut \^etre cach\'e dans Redis (TTL court~: 30s) pour limiter la charge.}
+    
+    Response 200 (token valide)~:
+    \begin{lstlisting}
+    {
+      "valid": true,
+      "user_id": "uuid",
+      "platform_id": "agt-bot",
+      "expires_at": "2026-03-19T10:15:00Z"
+    }
+    \end{lstlisting}
+    
+    Response 401 (token invalide)~:
+    \begin{lstlisting}
+    {
+      "valid": false,
+      "reason": "user_blocked"
+    }
+    \end{lstlisting}
+    
+    Raisons possibles~: \texttt{invalid\_signature}, \texttt{token\_expired}, \texttt{user\_blocked}, \texttt{user\_deactivated}, \texttt{platform\_inactive}, \texttt{session\_revoked}.
+    
+    \textit{Note~: cet endpoint ne retourne pas de r\^oles. Les services consommateurs doivent interroger le Service Users pour les r\^oles et permissions.}
+    
+    \subsection{R\`egles de R\'evocation des Sessions}
+    \label{sec:revocation-rules}
+    
+    \textit{Ajout v1.2~: r\`egles formalis\'ees de r\'evocation des sessions et refresh tokens.}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{\'Ev\'enement} & \textbf{Effet sur les sessions / refresh tokens} \\
+    \midrule
+    \texttt{change-password} & Toutes les sessions r\'evoqu\'ees \textbf{sauf la session courante}. Tous les refresh tokens associ\'es invalid\'es. \\
+    \texttt{reset-password}  & \textbf{Toutes} les sessions r\'evoqu\'ees (l'utilisateur n'est pas connect\'e). Tous les refresh tokens invalid\'es. \\
+    \texttt{block} (admin)   & \textbf{Toutes} les sessions r\'evoqu\'ees. Tous les refresh tokens invalid\'es. \\
+    \texttt{unblock} (admin) & Les sessions pr\'ec\'edentes restent r\'evoqu\'ees. L'utilisateur doit se reconnecter. \\
+    \texttt{deactivate}      & \textbf{Toutes} les sessions r\'evoqu\'ees. Tous les refresh tokens invalid\'es. \\
+    \texttt{logout}          & Seule la session courante est r\'evoqu\'ee. Le refresh token associ\'e est invalid\'e. \\
+    \texttt{admin\_deactivate} (S2S) & \textbf{Toutes} les sessions r\'evoqu\'ees. Tous les refresh tokens invalid\'es. Statut propag\'e \`a Users. \\
+    \texttt{purge} (RGPD)    & Suppression physique totale du compte et de tous les artefacts Auth. \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textbf{Limite de refresh tokens~:} un utilisateur peut avoir au maximum \textbf{5 refresh tokens actifs} simultan\'ement. Lorsqu'un 6\`eme est \'emis, le plus ancien est automatiquement r\'evoqu\'e (FIFO).
+    
+    \textbf{Relation session / refresh token~:} un refresh token appartient toujours \`a une seule session (FK \texttt{session\_id}). La r\'evocation d'une session entra\^ine la r\'evocation de son refresh token associ\'e.
+    
+    % â”€â”€ 9.7bis Token Exchange â”€â”€
+    \subsection{\'Echange de Token (Cookie $\to$ Bearer)}
+    
+    \textit{Ajout v1.3.2~: cet endpoint r\'esout l'incoh\'erence entre les callbacks (qui posent des cookies HttpOnly) et les endpoints prot\'eg\'es (qui attendent un header \texttt{Authorization: Bearer}).}
+    
+    \begin{center}
+    \fbox{\parbox{0.9\textwidth}{
+    \textbf{Probl\`eme~:} apr\`es un callback OAuth ou magic link, l'access token est dans un cookie HttpOnly. Le frontend JavaScript ne peut pas le lire pour le mettre dans le header \texttt{Authorization: Bearer}. \\[0.3em]
+    \textbf{Solution~:} un endpoint d\'edi\'e qui lit le cookie et retourne l'access token dans le body JSON. Le frontend l'appelle une seule fois apr\`es la redirection.
+    }}
+    \end{center}
+    
+    \subsubsection{POST /auth/token/exchange}
+    
+    Aucun body requis. Le cookie \texttt{access\_token} est lu automatiquement par le serveur.
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 900
+    }
+    \end{lstlisting}
+    
+    Effet~: le cookie \texttt{access\_token} est supprim\'e (\texttt{Max-Age=0}) apr\`es l'\'echange. \`A partir de ce moment, le frontend utilise le header \texttt{Authorization: Bearer} pour toutes les requ\^etes.
+    
+    Le cookie \texttt{refresh\_token} reste en place (il ne passe jamais par le frontend).
+    
+    Codes~: 200 OK, 401 Cookie absent ou token invalide.
+    
+    \textbf{Flux complet OAuth / magic link (v1.3.2)~:}
+    \begin{enumerate}[nosep]
+      \item Frontend redirige vers \texttt{GET /auth/oauth/google} ou l'utilisateur clique le magic link.
+      \item Callback Auth pose \texttt{access\_token} et \texttt{refresh\_token} en cookies HttpOnly, puis redirige vers le frontend.
+      \item Frontend appelle \texttt{POST /auth/token/exchange} (les cookies partent automatiquement).
+      \item Auth retourne l'access token en JSON et supprime le cookie access\_token.
+      \item Frontend stocke l'access token en m\'emoire (variable JS, pas localStorage) et l'utilise en header Bearer.
+      \item Pour le refresh, le navigateur envoie automatiquement le cookie refresh\_token \`a \texttt{POST /auth/refresh}.
+    \end{enumerate}
+    
+    % â”€â”€ 9.8 Profil & Audit â”€â”€
+    \subsection{Profil \& Audit}
+    
+    \subsubsection{GET /auth/me}
+    
+    Auth~: Bearer token requis.\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "id": "uuid",
+      "email": "user@example.com",
+      "phone": "+237600000000",
+      "email_verified": true,
+      "phone_verified": true,
+      "two_fa_enabled": true,
+      "registration_method": "email",
+      "registration_platform_id": "platform-uuid",
+      "is_blocked": false,
+      "is_deactivated": false,
+      "created_at": "2026-01-15T10:30:00Z"
+    }
+    \end{lstlisting}
+    
+    \textit{Note~: aucun r\^ole n'est retourn\'e. Le profil \'etendu et les r\^oles sont g\'er\'es par le Service Users.}
+    
+    \subsubsection{GET /auth/login-history}
+    
+    Auth~: Bearer token requis.\\
+    Query params~: \texttt{?page=1\&limit=20\&platform=agt-bot}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "data": [
+        {
+          "id": "uuid",
+          "method": "email",
+          "platform": "agt-bot",
+          "ip_address": "192.168.1.1",
+          "success": true,
+          "created_at": "2026-03-19T09:45:00Z"
+        }
+      ],
+      "page": 1,
+      "limit": 20,
+      "total": 142
+    }
+    \end{lstlisting}
+    
+    \subsubsection{GET /auth/stats/\{userId\}}
+    
+    Auth~: Bearer token requis (admin ou m\^eme utilisateur).\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "user_id": "uuid",
+      "total_logins": 142,
+      "last_login": "2026-03-19T09:45:00Z",
+      "active_sessions": 3
+    }
+    \end{lstlisting}
+    
+    % â”€â”€ 9.9 Plateformes CRUD â”€â”€
+    \subsection{Gestion des Plateformes (Admin)}
+    
+    \textit{Ajout v1.1~: endpoints CRUD pour les plateformes, correspondant aux besoins F-PLAT-01 \`a F-PLAT-04. Prot\'eg\'es par \texttt{X-Admin-API-Key} (voir section Administration).}
+    
+    \subsubsection{POST /auth/platforms}
+    
+    Cr\'eation d'une nouvelle plateforme.\\
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "name": "AGT-Bot",
+      "slug": "agt-bot",
+      "allowed_auth_methods": ["email", "google", "facebook"]
+    }
+    \end{lstlisting}
+    
+    Response 201~:
+    \begin{lstlisting}
+    {
+      "id": "uuid",
+      "name": "AGT-Bot",
+      "slug": "agt-bot",
+      "allowed_auth_methods": ["email", "google", "facebook"],
+      "is_active": true,
+      "created_at": "2026-03-20T10:00:00Z"
+    }
+    \end{lstlisting}
+    
+    Codes~: 201 Created, 400 Validation error, 409 Slug already exists.
+    
+    \subsubsection{GET /auth/platforms}
+    
+    Liste toutes les plateformes.\\
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "data": [
+        {
+          "id": "uuid",
+          "name": "AGT-Bot",
+          "slug": "agt-bot",
+          "allowed_auth_methods": ["email", "google"],
+          "is_active": true,
+          "created_at": "2026-03-20T10:00:00Z"
+        }
+      ]
+    }
+    \end{lstlisting}
+    
+    \subsubsection{PUT /auth/platforms/\{platformId\}}
+    
+    Mise \`a jour d'une plateforme.\\
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "name": "AGT-Bot v2",
+      "allowed_auth_methods": ["email", "google", "facebook", "phone"]
+    }
+    \end{lstlisting}
+    
+    Response 200~: objet plateforme mis \`a jour.\\
+    Codes~: 200 OK, 404 Not found.
+    
+    \subsubsection{DELETE /auth/platforms/\{platformId\}}
+    
+    D\'esactivation d'une plateforme (\texttt{is\_active = false}). Ne supprime pas physiquement.\\
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Platform deactivated",
+      "is_active": false
+    }
+    \end{lstlisting}
+    
+    % â”€â”€ 9.10 Admin â”€â”€
+    \subsection{Administration}
+    
+    \begin{center}
+    \fbox{\parbox{0.9\textwidth}{
+    \textbf{Mod\`ele de s\'ecurit\'e admin (v1.2)}\\[0.3em]
+    Les endpoints \texttt{/auth/admin/*} et \texttt{/auth/platforms/*} sont prot\'eg\'es par une \textbf{API key statique} transmise via le header \texttt{X-Admin-API-Key}. Cette cl\'e est configur\'ee en variable d'environnement (\texttt{ADMIN\_API\_KEY}).\\[0.3em]
+    Aucun JWT utilisateur n'est requis. Aucune d\'ependance vers le Service Users.\\[0.3em]
+    Ce m\'ecanisme est destin\'e aux back-offices internes et scripts d'administration.
+    }}
+    \end{center}
+    
+    \subsubsection{POST /auth/admin/block/\{userId\}}
+    
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "User blocked",
+      "user_id": "uuid",
+      "is_blocked": true
+    }
+    \end{lstlisting}
+    
+    Effet~: l'utilisateur ne peut plus se connecter. \textbf{Toutes ses sessions actives sont r\'evoqu\'ees} et tous ses refresh tokens sont invalid\'es.
+    
+    \subsubsection{POST /auth/admin/unblock/\{userId\}}
+    
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "User unblocked",
+      "user_id": "uuid",
+      "is_blocked": false
+    }
+    \end{lstlisting}
+    
+    Effet~: l'utilisateur peut \`a nouveau se connecter. Les sessions pr\'ec\'edentes restent r\'evoqu\'ees~; il doit se reconnecter.
+    
+    \textit{Note v2.0~: \texttt{unblock} n'implique \textbf{pas} de r\'eactivation. Si \texttt{is\_deactivated = true}, l'utilisateur reste inactif. Aucun \texttt{status-sync} n'est envoy\'e \`a Users sur un unblock.}
+    
+    \subsubsection{POST /auth/account/deactivate}
+    
+    Soft delete c\^ot\'e Auth. L'utilisateur d\'esactive son propre compte.\\
+    Auth~: Bearer token requis.\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "password": "CurrentP@ss123"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "Account deactivated",
+      "is_deactivated": true
+    }
+    \end{lstlisting}
+    
+    Effet~: le compte est marqu\'e \texttt{is\_deactivated = true}, \textbf{toutes les sessions sont r\'evoqu\'ees}, les connexions sont refus\'ees. Apr\`es d\'esactivation r\'eussie, Auth propage \texttt{status: "inactive"} au Service Users via \texttt{POST /api/v1/users/status-sync}. La suppression d\'efinitive (hard delete) est orchestr\'ee par le Service Users.
+    
+    \subsubsection{POST /auth/admin/deactivate/\{authUserId\}}
+    
+    \textit{Ajout v2.0~: d\'esactivation inter-service. Utilis\'e par le Service Users pour le soft delete global sans mot de passe utilisateur. Distinct de \texttt{POST /auth/account/deactivate} qui est un endpoint utilisateur.}
+    
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "User deactivated",
+      "user_id": "uuid",
+      "is_deactivated": true
+    }
+    \end{lstlisting}
+    
+    Effet~: identique \`a \texttt{/auth/account/deactivate}~: \texttt{is\_deactivated = true}, toutes les sessions r\'evoqu\'ees, tous les refresh tokens invalid\'es. Auth pousse ensuite \texttt{POST /api/v1/users/status-sync} avec \texttt{status: "inactive"} (voir section Contrat Auth $\to$ Users).
+    
+    Codes~: 200 OK, 401 API key invalide, 404 Utilisateur non trouv\'e.
+    
+    \subsubsection{DELETE /auth/admin/purge/\{authUserId\}}
+    
+    \textit{Ajout v2.0~: suppression physique RGPD. Appel\'e par le Service Users apr\`es avoir nettoy\'e le profil. Irr\'eversible.}
+    
+    Auth~: \texttt{X-Admin-API-Key: <key>}\\
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "message": "User purged",
+      "user_id": "uuid",
+      "purged": true
+    }
+    \end{lstlisting}
+    
+    Effet~: suppression physique de toutes les donn\'ees de l'utilisateur~:
+    \begin{itemize}[nosep]
+      \item \texttt{users\_auth}
+      \item \texttt{sessions}
+      \item \texttt{refresh\_tokens}
+      \item \texttt{oauth\_providers}
+      \item \texttt{login\_history}
+      \item \texttt{verification\_tokens}
+    \end{itemize}
+    
+    \textbf{Important~:} \texttt{authUserId} d\'esigne \texttt{users\_auth.id} (pas \texttt{users\_profiles.id}).
+    
+    \textbf{Comportement transactionnel~:} l'op\'eration de purge doit \^etre transactionnelle. En cas d'\'echec partiel (ex~: suppression de \texttt{sessions} r\'eussie mais \texttt{oauth\_providers} \'echou\'ee), l'endpoint retourne une erreur 500 et aucune confirmation de purge ne doit \^etre consid\'er\'ee comme acquise par le Service Users.
+    
+    Codes~: 200 OK, 401 API key invalide, 404 Utilisateur non trouv\'e, 500 \'Echec partiel de purge.
+    
+    % â”€â”€ 9.11 S2S â”€â”€
+    \subsection{Tokens Inter-Services (Machine-to-Machine)}
+    
+    \begin{center}
+    \fbox{\parbox{0.9\textwidth}{
+    \textbf{Communication entre Microservices}\\[0.3em]
+    Pour qu'une plateforme (ex: AGT-Bot) puisse consommer un service interne (ex: M\'edia), elle s'authentifie en tant que Â«~Service ~Â» via un token S2S. Le service de destination utilise l'endpoint d'introspection pour valider ce token aupr\`es de Auth.
+    }}
+    \end{center}
+    
+    \subsubsection{POST /auth/s2s/token}
+    
+    G\'en\`ere un token d'acc\`es pour une plateforme (similaire au flux Client Credentials OAuth2).\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "client_id": "uuid-platform-123",
+      "client_secret": "super-secret-key"
+    }
+    \end{lstlisting}
+    
+    Response 200~:
+    \begin{lstlisting}
+    {
+      "access_token": "eyJhbG...",
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "service_name": "AGT-Bot"
+    }
+    \end{lstlisting}
+    
+    \subsubsection{POST /auth/s2s/introspect}
+    
+    \textit{Permet \`a un service (ex: M\'edia) de v\'erifier la validit\'e d'un token \textbf{S2S plateforme}. Distinct de \texttt{GET /auth/verify-token} qui valide un JWT utilisateur.}\\
+    Auth~: Bearer token requis (le service qui interroge doit lui-m\^eme \^etre authentifi\'e).\\
+    Request body~:
+    \begin{lstlisting}
+    {
+      "token": "eyJhbG..."
+    }
+    \end{lstlisting}
+    
+    Response 200 (token valide)~:
+    \begin{lstlisting}
+    {
+      "active": true,
+      "client_id": "uuid-platform-123",
+      "service_name": "AGT-Bot",
+      "exp": 1710846000
+    }
+    \end{lstlisting}
+    
+    Response 200 (token invalide)~:
+    \begin{lstlisting}
+    {
+      "active": false
+    }
+    \end{lstlisting}
+    
+    % ============================================================
+    \section{Infrastructure}
+    % ============================================================
+    
+    \subsection{Composants d'infrastructure}
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{Service} & \textbf{Technologie} & \textbf{R\^ole} \\
+    \midrule
+    Base de donn\'ees & PostgreSQL 15+ & Stockage utilisateurs, sessions, historiques, tokens \\
+    Cache             & Redis 7+       & Sessions actives, OTP temporaires, rate limiting, cache verification\_tokens \\
+    SMS Provider      & Twilio / Vonage & Envoi des OTP SMS \\
+    Email             & Notification Service & Envoi des emails transactionnels \\
+    Conteneur         & Docker         & D\'eploiement isol\'e et reproductible \\
+    Reverse Proxy     & Nginx / Traefik & TLS termination, load balancing \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Services externes \`a payer}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Cat\'egorie} & \textbf{Fournisseurs / Nature} \\
+    \midrule
+    Envoi SMS (OTP)       & Twilio, Vonage, Infobip --- facturation par SMS \\
+    Envoi Emails          & SendGrid, AWS SES, Mailgun --- facturation au volume \\
+    H\'ebergement \& BDD  & AWS, GCP, DigitalOcean --- conteneurs, PostgreSQL, Redis \\
+    S\'ecurit\'e / Anti-Bot & Cloudflare, reCAPTCHA --- protection brute force \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Variables d'Environnement}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Variable} & \textbf{Description} \\
+    \midrule
+    \texttt{DATABASE\_URL}           & URL de connexion PostgreSQL \\
+    \texttt{REDIS\_URL}              & URL de connexion Redis \\
+    \texttt{JWT\_PRIVATE\_KEY}       & Cl\'e priv\'ee RS256 pour signature JWT \\
+    \texttt{JWT\_PUBLIC\_KEY}        & Cl\'e publique RS256 pour v\'erification JWT \\
+    \texttt{JWT\_ACCESS\_TTL}        & Dur\'ee de vie access token (d\'efaut~: 900s) \\
+    \texttt{JWT\_REFRESH\_TTL}       & Dur\'ee de vie refresh token (d\'efaut~: 604800s) \\
+    \texttt{BCRYPT\_ROUNDS}          & Cost factor bcrypt (d\'efaut~: 12) \\
+    \texttt{NOTIFICATION\_SERVICE\_URL} & URL du Service Notification \\
+    \texttt{GOOGLE\_CLIENT\_ID}      & Client ID OAuth Google \\
+    \texttt{GOOGLE\_CLIENT\_SECRET}  & Client Secret OAuth Google \\
+    \texttt{FACEBOOK\_APP\_ID}       & App ID OAuth Facebook \\
+    \texttt{FACEBOOK\_APP\_SECRET}   & App Secret OAuth Facebook \\
+    \texttt{OTP\_TTL}                & Dur\'ee de vie OTP en secondes (d\'efaut~: 300) \\
+    \texttt{MAGIC\_LINK\_TTL}        & Dur\'ee de vie magic link (d\'efaut~: 600s) \\
+    \texttt{RATE\_LIMIT\_LOGIN}      & Limite login par minute (d\'efaut~: 10) \\
+    \texttt{BRUTE\_FORCE\_MAX}       & Tentatives avant blocage (d\'efaut~: 5) \\
+    \texttt{BRUTE\_FORCE\_LOCKOUT}   & Dur\'ee blocage en secondes (d\'efaut~: 900) \\
+    \texttt{ADMIN\_API\_KEY}         & Cl\'e API statique pour les endpoints admin (v1.2) \\
+    \texttt{MAX\_REFRESH\_TOKENS}    & Nombre max de refresh tokens actifs par user (d\'efaut~: 5) \\
+    \bottomrule
+    \end{tabularx}
+    
+    % ============================================================
+    \section{Strat\'egie de Gestion des Tokens (v1.3)}
+    % ============================================================
+    
+    \begin{center}
+    \fbox{\parbox{0.9\textwidth}{
+    \textbf{D\'ecision architecturale~:} tous les refresh tokens et les tokens d'authentification issus des callbacks (OAuth, magic link) sont transmis \textbf{exclusivement via cookies HttpOnly}. Aucun token sensible ne transite dans une URL, un body JSON ou le localStorage.
+    }}
+    \end{center}
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{Token} & \textbf{Transport} & \textbf{D\'etails} \\
+    \midrule
+    Access token (JWT)   & Header \texttt{Authorization: Bearer} & Retourn\'e dans le body JSON au login email/phone, au refresh et via \texttt{POST /auth/token/exchange}. Pos\'e temporairement en cookie HttpOnly lors des callbacks OAuth/magic link, puis \'echang\'e contre un bearer via \texttt{/auth/token/exchange}. \\
+    Refresh token        & Cookie HttpOnly uniquement & \texttt{Path=/auth/refresh; Secure; SameSite=Lax; Max-Age=604800} \\
+    Temp token (2FA)     & Body JSON                   & Retourn\'e dans la r\'eponse login quand \texttt{requires\_2fa=true}. Courte dur\'ee (5 min). \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textbf{Propri\'et\'es des cookies~:}
+    \begin{itemize}[nosep]
+      \item \texttt{HttpOnly}~: inaccessible en JavaScript (protection XSS).
+      \item \texttt{Secure}~: transmis uniquement sur HTTPS.
+      \item \texttt{SameSite=Lax}~: compatible avec les redirections cross-domain (OAuth, magic link) tout en prot\'egeant contre les requ\^etes CSRF de type POST.
+      \item \texttt{Path=/auth/refresh}~: le cookie refresh\_token n'est envoy\'e que sur l'endpoint de refresh.
+    \end{itemize}
+    
+    \textbf{Protection CSRF (v1.3.2)~:}
+    
+    Les endpoints qui consomment des cookies (\texttt{/auth/refresh}, \texttt{/auth/logout}, \texttt{/auth/token/exchange}) sont expos\'es aux attaques CSRF. La strat\'egie de protection repose sur trois niveaux~:
+    
+    \begin{enumerate}[nosep]
+      \item \textbf{SameSite=Lax}~: bloque les requ\^etes POST cross-origin (premi\`ere ligne de d\'efense).
+      \item \textbf{V\'erification du header \texttt{Origin} / \texttt{Referer}}~: le serveur rejette les requ\^etes POST dont l'origine ne correspond pas aux domaines autoris\'es de l'\'ecosyst\`eme AGT.
+      \item \textbf{Header custom obligatoire}~: les endpoints cookie-based exigent un header \texttt{X-Requested-With: XMLHttpRequest}. Ce header ne peut pas \^etre pos\'e par un formulaire HTML classique (protection contre les CSRF simples).
+    \end{enumerate}
+    
+    \textit{Note~: un token CSRF classique (double submit cookie) n'est pas n\'ecessaire gr\^ace \`a la combinaison SameSite=Lax + v\'erification Origin + header custom. Si l'architecture \'evolue vers du cross-domain complet, cette strat\'egie devra \^etre r\'e\'evalu\'ee.}
+    
+    % ============================================================
+    \section{Rate Limiting}
+    % ============================================================
+    
+    \begin{tabularx}{\textwidth}{llcL}
+    \toprule
+    \textbf{Endpoint} & \textbf{Fen\^etre} & \textbf{Limite} & \textbf{Strat\'egie} \\
+    \midrule
+    /auth/login            & 1 min  & 10 req & Par IP + email \\
+    /auth/login/phone      & 1 min  & 3 req  & Par IP + phone \\
+    /auth/verify-otp       & 1 min  & 5 req  & Par IP + phone \\
+    /auth/forgot-password   & 15 min & 3 req  & Par IP \\
+    /auth/register          & 1 heure & 5 req & Par IP \\
+    /auth/2fa/verify        & 1 min  & 5 req  & Par user \\
+    Global                  & 1 min  & 100 req & Par IP (tous endpoints) \\
+    \bottomrule
+    \end{tabularx}
+    
+    Impl\'ementation via Redis avec algorithme sliding window.
+    
+    % ============================================================
+    \section{Contrat d'Int\'egration Auth $\to$ Notification}
+    % ============================================================
+    
+    \textit{Ajout v1.3.1~: mini-contrat technique pour formaliser la communication entre Auth et le Service Notification.}
+    
+    \subsection{Mode de communication}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Param\`etre} & \textbf{Valeur} \\
+    \midrule
+    Transport     & HTTP POST (synchrone pour le MVP, migration vers message queue recommand\'ee en production) \\
+    Format        & JSON \\
+    Auth          & Token S2S (Auth s'authentifie aupr\`es de Notification via \texttt{POST /auth/s2s/token}) \\
+    Timeout       & 5 secondes max \\
+    Retry         & 3 tentatives avec backoff exponentiel (1s, 2s, 4s) \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Payload standard}
+    
+    \begin{lstlisting}
+    {
+      "type": "email_verification",
+      "recipient": {
+        "email": "user@example.com",
+        "phone": null
+      },
+      "template": "auth_verify_email",
+      "data": {
+        "verification_url": "https://auth.agt.com/...",
+        "expires_in_minutes": 60,
+        "platform_name": "AGT-Bot"
+      },
+      "priority": "high",
+      "idempotency_key": "uuid-unique"
+    }
+    \end{lstlisting}
+    
+    \subsection{Types de notifications \'emis par Auth}
+    
+    \begin{tabularx}{\textwidth}{llll}
+    \toprule
+    \textbf{Type} & \textbf{Canal} & \textbf{D\'eclencheur} & \textbf{Template} \\
+    \midrule
+    \texttt{email\_verification} & Email & POST /auth/register (method=email) & auth\_verify\_email \\
+    \texttt{phone\_otp}          & SMS   & POST /auth/register (method=phone), POST /auth/login/phone & auth\_otp \\
+    \texttt{password\_reset}     & Email & POST /auth/forgot-password & auth\_reset\_password \\
+    \texttt{magic\_link}         & Email & POST /auth/login/magic-link & auth\_magic\_link \\
+    \texttt{login\_alert}        & Email & Login depuis nouvelle IP/device (\'evolution future) & auth\_login\_alert \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection{Comportement en cas d'\'echec}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Sc\'enario} & \textbf{Comportement Auth} \\
+    \midrule
+    Notification indisponible (timeout/5xx) & Auth cr\'ee l'utilisateur/le token quand m\^eme, mais retourne un warning~: \texttt{"notification\_sent": false}. L'utilisateur peut redemander l'envoi. \\
+    Notification rejette (4xx) & Auth logge l'erreur. L'op\'eration Auth (register, reset) reste valid\'ee. \\
+    Retry \'epuis\'es & Auth logge un \'ev\'enement critique. Un cron job peut retenter les notifications en \'echec. \\
+    \bottomrule
+    \end{tabularx}
+    
+    \textit{R\`egle fondamentale~: l'\'echec de Notification ne doit \textbf{jamais} bloquer une op\'eration Auth. L'utilisateur doit toujours pouvoir redemander l'envoi.}
+    
+    % ============================================================
+    \section{Contrat d'Int\'egration Auth $\to$ Users}
+    % ============================================================
+    
+    \textit{Ajout v2.0~: contrat technique pour formaliser la communication entre Auth et le Service Users.}
+    
+    \subsection{Provisioning}
+    
+    Apr\`es une inscription r\'eussie (\texttt{POST /auth/register} ou callback OAuth), Auth appelle le Service Users pour cr\'eer le profil associ\'e~:
+    
+    \begin{lstlisting}
+    POST /api/v1/users
+    {
+      "auth_user_id": "users_auth.id",
+      "first_name": "",
+      "last_name": "",
+      "email": "user@example.com",
+      "phone": "+237600000000"
+    }
+    \end{lstlisting}
+    
+    \subsection{Synchronisation de statut}
+    
+    Lorsque \texttt{is\_deactivated} change dans Auth, Auth pousse la mise \`a jour vers Users~:
+    
+    \begin{lstlisting}
+    POST /api/v1/users/status-sync
+    {
+      "auth_user_id": "uuid",
+      "status": "inactive"
+    }
+    \end{lstlisting}
+    
+    \textbf{R\`egles~:}
+    \begin{itemize}[nosep]
+      \item Auth pousse \texttt{inactive} quand \texttt{is\_deactivated = true}.
+      \item Auth ne pousse \textbf{jamais} \texttt{deleted} ni \texttt{deletion\_in\_progress} (\'etats internes \`a Users).
+      \item \texttt{is\_blocked} n'est \textbf{pas} propag\'e \`a Users~: c'est une mesure de s\'ecurit\'e Auth, pas un changement de statut profil.
+      \item Auth ne pousse actuellement que \texttt{inactive}. \textbf{Aucun flux de r\'eactivation n'est d\'efini en v2.1.} Si ce besoin \'emerge, un endpoint \texttt{POST /auth/admin/reactivate/\{authUserId\}} devra \^etre ajout\'e.
+    \end{itemize}
+    
+    \subsection{Synchronisation email / t\'el\'ephone}
+    
+    Lorsque l'email ou le t\'el\'ephone change dans Auth (ex~: ajout d'un t\'el\'ephone apr\`es inscription email), Auth pousse la mise \`a jour vers Users~:
+    
+    \begin{lstlisting}
+    POST /api/v1/users/sync
+    {
+      "auth_user_id": "uuid",
+      "email": "new@example.com",
+      "phone": "+237600000000"
+    }
+    \end{lstlisting}
+    
+    \textbf{R\`egles~:}
+    \begin{itemize}[nosep]
+      \item D\'eclench\'e quand \texttt{email} ou \texttt{phone} change dans \texttt{users\_auth}.
+      \item Users ne modifie \textbf{jamais} seul ces champs~: Auth est la source de v\'erit\'e pour les identifiants d'authentification.
+      \item Seuls les champs modifi\'es sont envoy\'es.
+    \end{itemize}
+    
+    \subsection{Mapping de statuts Auth $\leftrightarrow$ Users}
+    
+    \begin{tabularx}{\textwidth}{llL}
+    \toprule
+    \textbf{\'Etat Auth} & \textbf{Projection Users} & \textbf{Commentaire} \\
+    \midrule
+    \texttt{is\_deactivated = false} & Aucune projection automatique & \'Etat par d\'efaut. Aucun push vers Users (pas de flux de r\'eactivation en v2.1) \\
+    \texttt{is\_deactivated = true}  & \texttt{inactive}          & Push via \texttt{status-sync} \\
+    \texttt{is\_blocked = true}      & Aucune projection          & Mesure de s\'ecurit\'e Auth uniquement \\
+    Purge RGPD                        & \texttt{deleted}           & Orchestr\'e par Users, pas par Auth \\
+    \bottomrule
+    \end{tabularx}
+    
+    % ============================================================
+    \section{Recommandations \& \'Evolutions}
+    % ============================================================
+    
+    \begin{itemize}
+      \item \textbf{Gestion des comptes li\'es~:} un utilisateur inscrit par email peut lier son compte Google/Facebook via la table \texttt{oauth\_providers}. Lors d'un login OAuth, le service v\'erifie d'abord si l'email existe dans \texttt{users\_auth}. Si oui, il lie automatiquement le provider au compte existant (apr\`es confirmation utilisateur).
+      \item \textbf{Nettoyage des sessions~:} un cron job quotidien doit purger les sessions expir\'ees, les refresh tokens r\'evoqu\'es et les verification\_tokens utilis\'es ou expir\'es.
+      \item \textbf{Monitoring~:} exposer des m\'etriques Prometheus (nombre de logins, erreurs 401/403, latence P95, sessions actives).
+      \item \textbf{Versioning API~:} pr\'efixe \texttt{/api/v1}. En cas de breaking changes, publier une \texttt{/api/v2} avec p\'eriode de cohabitation.
+      \item \textbf{Migration future~:} si le besoin de SSO \'emerge, envisager une couche OpenID Connect par-dessus le syst\`eme JWT existant.
+    \end{itemize}
+    
+    % ============================================================
+    \section*{Annexes}
+    % ============================================================
+    
+    \subsection*{Glossaire}
+    
+    \begin{tabularx}{\textwidth}{lL}
+    \toprule
+    \textbf{Terme} & \textbf{D\'efinition} \\
+    \midrule
+    JWT         & JSON Web Token --- standard pour transmettre des informations sign\'ees \\
+    Access Token & Jeton \`a dur\'ee courte (15 min) prouvant l'authentification \\
+    Refresh Token & Jeton \`a dur\'ee longue (7 jours) pour renouveler l'access token \\
+    OAuth       & Protocole d'autorisation via compte tiers (Google, Facebook) \\
+    2FA / TOTP  & Authentification \`a double facteur via code temporaire \\
+    OTP         & Mot de passe \`a usage unique, envoy\'e par SMS ou email \\
+    Magic Link  & Lien d'authentification unique envoy\'e par email \\
+    Rate Limiting & Limitation du nombre de requ\^etes par fen\^etre de temps \\
+    Stateless   & Architecture o\`u le serveur ne conserve pas d'\'etat en m\'emoire locale \\
+    S2S         & Service-to-Service --- communication entre microservices \\
+    Introspect  & V\'erification de validit\'e d'un token S2S par un service tiers \\
+    Soft Delete & D\'esactivation logique sans suppression physique \\
+    \bottomrule
+    \end{tabularx}
+    
+    \subsection*{Code PlantUML --- Diagramme de Classes}
+    \label{sec:plantuml}
+    
+    Le code PlantUML ci-dessous correspond au diagramme de classes complet du service Auth v2.1. Il peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+    
+    \begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+    @startuml Auth Service - Class Diagram v2.1
+    
+    skinparam classAttributeIconSize 0
+    skinparam linetype ortho
+    
+    entity "platforms" as platforms {
+      * id : UUID <<PK>>
+      --
+      * name : VARCHAR(50) <<UQ>>
+      * slug : VARCHAR(50) <<UQ>>
+      * allowed_auth_methods : JSONB
+      * allowed_redirect_urls : JSONB
+      * client_secret_hash : VARCHAR(255)
+      is_active : BOOLEAN = true
+      * created_at : TIMESTAMPTZ
+      * updated_at : TIMESTAMPTZ
+    }
+    
+    entity "users_auth" as users {
+      * id : UUID <<PK>>
+      --
+      email : VARCHAR(255) <<UQ>>
+      phone : VARCHAR(20) <<UQ>>
+      password_hash : VARCHAR(255)
+      email_verified : BOOLEAN = false
+      phone_verified : BOOLEAN = false
+      two_fa_enabled : BOOLEAN = false
+      two_fa_secret : VARCHAR(255)
+      * registration_method : VARCHAR(20)
+      * registration_platform_id : UUID <<FK>>
+      failed_login_attempts : INT = 0
+      locked_until : TIMESTAMPTZ
+      is_blocked : BOOLEAN = false
+      is_deactivated : BOOLEAN = false
+      * created_at : TIMESTAMPTZ
+      * updated_at : TIMESTAMPTZ
+    }
+    
+    entity "sessions" as sessions {
+      * id : UUID <<PK>>
+      --
+      * user_id : UUID <<FK>>
+      * platform_id : UUID <<FK>>
+      * ip_address : VARCHAR(45)
+      user_agent : TEXT
+      is_active : BOOLEAN = true
+      * created_at : TIMESTAMPTZ
+      * expires_at : TIMESTAMPTZ
+    }
+    
+    entity "refresh_tokens" as rtokens {
+      * id : UUID <<PK>>
+      --
+      * user_id : UUID <<FK>>
+      * session_id : UUID <<FK>>
+      * token_hash : VARCHAR(255) <<UQ>>
+      is_revoked : BOOLEAN = false
+      * created_at : TIMESTAMPTZ
+      * expires_at : TIMESTAMPTZ
+    }
+    
+    entity "oauth_providers" as oauth {
+      * id : UUID <<PK>>
+      --
+      * user_id : UUID <<FK>>
+      * provider : VARCHAR(20)
+      * provider_user_id : VARCHAR(255)
+      email : VARCHAR(255)
+      * created_at : TIMESTAMPTZ
+      ..
+      <<UQ>> (user_id, provider)
+      <<UQ>> (provider, provider_user_id)
+    }
+    
+    entity "login_history" as loghist {
+      * id : UUID <<PK>>
+      --
+      * user_id : UUID <<FK>>
+      * platform_id : UUID <<FK>>
+      * method : VARCHAR(20)
+      * ip_address : VARCHAR(45)
+      user_agent : TEXT
+      * success : BOOLEAN
+      failure_reason : VARCHAR(100)
+      * created_at : TIMESTAMPTZ
+    }
+    
+    entity "verification_tokens" as vtokens {
+      * id : UUID <<PK>>
+      --
+      * user_id : UUID <<FK>>
+      * token_hash : VARCHAR(255) <<UQ>>
+      * type : VARCHAR(30)
+      payload : JSONB
+      * expires_at : TIMESTAMPTZ
+      used_at : TIMESTAMPTZ
+      * created_at : TIMESTAMPTZ
+    }
+    
+    platforms ||--o{ sessions       : "1..* sessions"
+    platforms ||--o{ loghist        : "1..* login_history"
+    platforms ||--o{ users          : "1..* registered on"
+    
+    users ||--o{ sessions          : "1..* sessions"
+    users ||--o{ rtokens           : "1..* refresh_tokens"
+    users ||--o{ oauth             : "1..* oauth_providers"
+    users ||--o{ loghist           : "1..* login_history"
+    users ||--o{ vtokens           : "1..* verification_tokens"
+    
+    sessions ||--o| rtokens        : "1..0..1 refresh_token"
+    
+    @enduml
+    \end{lstlisting}
+    
+    \vfill
+    \begin{center}
+    \rule{0.5\textwidth}{0.4pt}\\[0.5em]
+    {\small\textcolor{agtgray}{AG Technologies --- Document confidentiel \`a usage interne exclusivement.}}\\
+    {\small\textcolor{agtgray}{Auth Service CDC v2.1 --- Mars 2026}}
+    \end{center}
+    
+    \end{document}
 `
 ===== FILE END =====
 
-===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\next\prompt_initialisation.md =====
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\10.wallet.txt =====
+`
+\documentclass[11pt,a4paper]{article}
+
+% === Encodage & Langue ===
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% === Mise en page ===
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+% === Tableaux ===
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+
+% === Code & couleurs ===
+\usepackage{listings}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{lastpage}
+\usepackage{amssymb}
+
+% === Boites ===
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% === Couleurs AGT ===
+\definecolor{agtblue}{HTML}{1A3A5C}
+\definecolor{agtgray}{HTML}{4A4A4A}
+\definecolor{agtgreen}{HTML}{2E7D32}
+\definecolor{agtred}{HTML}{C62828}
+\definecolor{agtorange}{HTML}{E65100}
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{lightbg}{HTML}{E8EEF4}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=agtblue,
+  urlcolor=agtblue,
+  pdfauthor={AG Technologies},
+  pdftitle={Service Wallet - CDC v1.1},
+}
+
+% === Listings JSON ===
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  string=[s]{"}{"},
+  stringstyle=\color{agtgreen},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{codebg},
+  rulecolor=\color{gray!30},
+  showstringspaces=false,
+  literate=
+    *{:}{{{\color{agtblue}:}}}{1}
+     {,}{{{\color{agtblue},}}}{1}
+     {\{}{{{\color{agtblue}\{}}}{1}
+     {\}}{{{\color{agtblue}\}}}}{1}
+     {[}{{{\color{agtblue}[}}}{1}
+     {]}{{{\color{agtblue}]}}}{1},
+}
+\lstset{language=json}
+
+% === Boites info/warn ===
+\newtcolorbox{infobox}[1][]{
+  colback=lightbg,colframe=agtblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtblue,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=orange!5,colframe=agtorange,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtorange,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+
+% === Header/Footer ===
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{agtgray}{AGT --- Service Wallet}}
+\fancyhead[R]{\small\textcolor{agtgray}{v1.1 --- Confidentiel}}
+\fancyfoot[C]{\small\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\textcolor{agtgray}{Avril 2026}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.2pt}
+
+% === Titres ===
+\titleformat{\section}{\Large\bfseries\color{agtblue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{agtblue!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{agtblue!60}}{\thesubsubsection}{1em}{}
+
+% === Commandes ===
+\newcommand{\urgent}{\textcolor{agtred}{\textbf{Urgent}}}
+\newcommand{\normale}{\textcolor{agtorange}{Normale}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+% ============================================================
+%  PAGE DE TITRE
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\Huge\bfseries\textcolor{agtblue}{AG TECHNOLOGIES}\\[0.3cm]}
+{\large\textcolor{agtgray}{Architecture de Services Partag\'es}\\[2cm]}
+\rule{\textwidth}{1.5pt}\\[0.5cm]
+{\LARGE\bfseries Cahier des Charges Technique\\[0.3cm]}
+{\Large Service Wallet Centralis\'e\\[0.3cm]}
+{\large\textit{Wallet Service --- AGT-Wallet}\\[0.5cm]}
+\rule{\textwidth}{1.5pt}\\[2cm]
+\begin{tabular}{ll}
+\textbf{Version}        & 1.1 \\
+\textbf{Date}           & Avril 2026 \\
+\textbf{Statut}         & Implementation-ready \\
+\textbf{Classification} & Confidentiel \\
+\textbf{Auteur}         & \'Equipe Architecture \\
+\textbf{D\'ependances}  & Auth v2.1, Users v1.0, Paiement v1.2, Notification v1.2 \\
+\end{tabular}
+\vfill
+{\small\textcolor{agtgray}{Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies}}
+\end{titlepage}
+
+% ============================================================
+%  HISTORIQUE
+% ============================================================
+\section*{Historique des R\'evisions}
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Ver.} & \textbf{Date} & \textbf{Auteur} & \textbf{Description} \\
+\midrule
+1.0 & 2026-04-04 & \'Equipe Archi. & Cr\'eation initiale. Wallet unique cross-plateforme. Ledger double-entry obligatoire. Comptes syst\`eme (user, organization, platform, escrow, external). Cash-in via Paiement, cash-out vers Mobile Money/banque. Virements user-to-user. Holds/r\'eservations. Partages automatis\'es (commissions). Idempotence. Events RabbitMQ. Diagramme PlantUML en annexe. \\
+1.1 & 2026-04-04 & \'Equipe Archi. & Version finale~: statut \textit{Implementation-ready}. Encart principes fondamentaux ajout\'e (lisibilit\'e). Sch\'ema visuel des flux financiers. \texttt{ledger\_reference\_id} ajout\'e sur \texttt{ledger\_transactions}. Health check version align\'ee. \\
+\bottomrule
+\end{tabularx}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+Ce document constitue le cahier des charges du \textbf{Service Wallet Centralis\'e} (ci-apr\`es \og~Wallet Service~\fg{}) destin\'e \`a l'\'ecosyst\`eme AGT. Il sert de r\'ef\'erence unique pour la conception, le d\'eveloppement et les d\'ecisions techniques.
+
+\begin{warnbox}[Principes fondamentaux --- \`A lire en premier]
+\begin{enumerate}[nosep]
+  \item \textbf{Double-entry ledger}~: chaque mouvement = 1 d\'ebit + 1 cr\'edit \'equilibr\'es. Pas d'exception.
+  \item \textbf{Append-only}~: aucun UPDATE, aucun DELETE sur les \'ecritures. Corrections par \'ecriture inverse (reversal).
+  \item \textbf{Ledger = source de v\'erit\'e}~: le champ \texttt{balance} est un cache. Le solde r\'eel = $\sum$ cr\'edits $-$ $\sum$ d\'ebits.
+  \item \textbf{Transactions atomiques}~: toute op\'eration d'\'ecriture est encapsul\'ee dans une transaction PostgreSQL (SERIALIZABLE).
+  \item \textbf{Idempotence}~: chaque mouvement porte un \texttt{idempotency\_key} unique. Doublon = retour du r\'esultat existant.
+  \item \textbf{Holds obligatoires}~: tout cash-out ou paiement en cours passe par une r\'eservation de fonds avant ex\'ecution.
+\end{enumerate}
+\end{warnbox}
+
+\subsection{P\'erim\`etre}
+
+Le service Wallet g\`ere la \textbf{comptabilit\'e interne} de l'\'ecosyst\`eme AGT~: comptes virtuels, mouvements financiers (cr\'edits, d\'ebits, virements, commissions), r\'eservations de fonds (holds), cash-out vers providers externes, et tra\c{c}abilit\'e compl\`ete via un ledger double-entry.
+
+\begin{infobox}[Principe fondamental]
+Le Wallet est un \textbf{ledger comptable interne}. Chaque mouvement d'argent est enregistr\'e comme une \'ecriture double (d\'ebit + cr\'edit). Le solde n'est \textbf{jamais} un simple champ incr\'ement\'e~: il est \textbf{d\'eriv\'e} de la somme des \'ecritures du ledger ou maintenu de mani\`ere coh\'erente via des transactions atomiques.
+\end{infobox}
+
+\subsection{Hors p\'erim\`etre}
+
+\begin{itemize}[nosep]
+  \item Authentification (d\'el\'egu\'ee au Service Auth v2.1)
+  \item Profils utilisateur (Service Users v1.0)
+  \item Ex\'ecution des paiements externes (Service Paiement v1.2)
+  \item Gestion des abonnements (Service Abonnement v1.2)
+  \item Logique m\'etier propre aux plateformes (commissions, r\`egles de partage)
+  \item Envoi de notifications (Service Notification v1.2)
+  \item Comptabilit\'e g\'en\'erale / ERP (hors p\'erim\`etre \'ecosyst\`eme)
+\end{itemize}
+
+\begin{warnbox}[Convention d'identit\'e]
+Dans tout ce document~:
+\begin{itemize}[nosep]
+  \item \texttt{user\_id} d\'esigne \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item \texttt{platform\_id} d\'esigne un UUID du registre Auth (\texttt{platforms.id})
+  \item Le wallet est \textbf{unique par user} pour tout l'\'ecosyst\`eme, mais chaque \'ecriture porte un \texttt{platform\_id} pour tra\c{c}abilit\'e
+\end{itemize}
+\end{warnbox}
+
+% ============================================================
+\section{Contexte \& Probl\'ematique}
+% ============================================================
+
+\subsection{Contexte}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Plateforme} & \textbf{Statut} & \textbf{Besoin wallet} \\
+\midrule
+AGT-Bot    & En d\'eveloppement & Cr\'edits bonus, remboursements futurs \\
+AGT-Market & En d\'eveloppement & Encaissement vendeurs, commissions, paiement fournisseurs/livreurs \\
+MboaMove   & En d\'eveloppement & Gains chauffeurs, commissions AGT, cash-out vers Mobile Money \\
+SALMA      & Migration pr\'evue & Cr\'edits formation, remboursements \\
+Futures    & Planifi\'e         & Tout flux financier interne \`a l'\'ecosyst\`eme \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Probl\'ematique}
+
+Sans ledger centralis\'e, chaque plateforme g\'ererait ses propres soldes avec un simple champ \texttt{balance}, entra\^inant~: incoh\'erences comptables, impossibilit\'e d'auditer les mouvements, race conditions sur les soldes, absence de r\'eservation de fonds, et aucune vision consolid\'ee des flux financiers de l'\'ecosyst\`eme.
+
+% ============================================================
+\section{Vision \& Objectifs}
+% ============================================================
+
+\subsection{Vision}
+
+Un \textbf{ledger double-entry centralis\'e} qui enregistre chaque mouvement financier de l'\'ecosyst\`eme. Le wallet d'un utilisateur est unique et cross-plateforme~: ses gains AGT-Market et MboaMove arrivent dans le m\^eme solde.
+
+\begin{warnbox}[S\'eparation des responsabilit\'es financi\`eres (rappel)]
+\begin{itemize}[nosep]
+  \item \textbf{Abonnement} d\'ecide quoi facturer
+  \item \textbf{Paiement} ex\'ecute la transaction externe
+  \item \textbf{Wallet} comptabilise le mouvement interne et r\'epartit les fonds
+\end{itemize}
+Le Wallet ne parle \textbf{jamais} directement aux providers de paiement. Il passe toujours par le Service Paiement pour les cash-in et cash-out.
+\end{warnbox}
+
+\subsection{Architecture des comptes}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Type de compte} & \textbf{Code} & \textbf{R\^ole} \\
+\midrule
+Wallet utilisateur   & \texttt{user}             & Solde de l'utilisateur (cross-plateforme) \\
+Wallet organisation  & \texttt{organization}     & Solde d'une organisation (B2B) \\
+Compte plateforme    & \texttt{platform\_system}  & Commissions et frais pr\'elev\'es par AGT \\
+Compte de transit    & \texttt{escrow}            & Fonds en attente de confirmation (hold) \\
+Compte externe       & \texttt{external}          & Repr\'esente l'entr\'ee/sortie vers providers (Orange Money, Stripe, etc.) \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Exemple~: achat sur AGT-Market (10~000 XAF)]
+\textbf{\'Etape 1 --- Cash-in (paiement confirm\'e)}~:
+\begin{itemize}[nosep]
+  \item DEBIT \texttt{external(orange\_money)} 10~000 XAF
+  \item CREDIT \texttt{escrow(market)} 10~000 XAF
+\end{itemize}
+\textbf{\'Etape 2 --- Livraison confirm\'ee (lib\'eration escrow)}~:
+\begin{itemize}[nosep]
+  \item DEBIT \texttt{escrow(market)} 10~000 XAF
+  \item CREDIT \texttt{wallet\_vendeur} 8~500 XAF (85\%)
+  \item CREDIT \texttt{platform\_system(agt)} 1~500 XAF (15\% commission)
+\end{itemize}
+\textbf{R\`egle comptable}~: la somme des d\'ebits = la somme des cr\'edits, toujours.
+\end{infobox}
+
+\subsection{Objectifs}
+
+\begin{tabularx}{\textwidth}{clL}
+\toprule
+\textbf{\#} & \textbf{Objectif} & \textbf{Indicateur} \\
+\midrule
+O1 & Ledger double-entry      & Chaque mouvement = 1 d\'ebit + 1 cr\'edit (ou N d\'ebits + N cr\'edits \'equilibr\'es) \\
+O2 & Wallet unique            & Un seul wallet par user, cross-plateforme \\
+O3 & Tra\c{c}abilit\'e totale & Chaque \'ecriture porte source, plateforme, r\'ef\'erence, timestamp \\
+O4 & Holds / escrow           & R\'eservation de fonds atomique avec TTL \\
+O5 & Cash-out MVP             & Retrait vers Mobile Money / banque via Paiement \\
+O6 & Virements                & User$\to$user, plateforme$\to$user, partages automatis\'es \\
+O7 & Idempotence              & Chaque mouvement porte un \texttt{idempotency\_key} unique \\
+O8 & Solde coh\'erent         & Solde = somme des \'ecritures, v\'erifiable \`a tout moment \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Parties Prenantes \& Utilisateurs}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{R\^ole} & \textbf{Type} & \textbf{Responsabilit\'e} \\
+\midrule
+Product Owner       & Interne & Priorisation des fonctionnalit\'es \\
+\'Equipe Backend    & Interne & D\'eveloppement et maintenance \\
+\'Equipe Frontend   & Interne & UI solde, historique, cash-out \\
+DevOps              & Interne & Infrastructure, monitoring, backups \\
+Admin global AGT    & Interne & R\'econciliation, audit, comptes syst\`eme \\
+Admin plateforme    & Interne & Consultation mouvements de sa plateforme \\
+Services internes   & Interne & Paiement (cash-in/out), plateformes (partages) \\
+Utilisateurs finaux & Externe & Consultation solde, historique, retrait \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Fonctionnels}
+% ============================================================
+
+\subsection{Gestion des Comptes}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ACC-01 & Cr\'eation wallet user      & Cr\'eer automatiquement un wallet \`a la premi\`ere interaction financi\`ere & \urgent \\
+F-ACC-02 & Cr\'eation wallet org       & Cr\'eer un wallet pour une organisation (li\'e au subscriber B2B Abonnement) & \urgent \\
+F-ACC-03 & Comptes syst\`eme          & Provisionner les comptes platform\_system, escrow, external au d\'eploiement & \urgent \\
+F-ACC-04 & Consultation solde          & Retourner le solde disponible (= solde total $-$ holds en cours) & \urgent \\
+F-ACC-05 & Gel de compte               & Admin peut geler un wallet (aucun mouvement autoris\'e) & \normale \\
+F-ACC-06 & Statut wallet               & active, frozen, closed & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Ledger \& \'Ecritures}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-LED-01 & \'Ecriture double-entry     & Chaque mouvement g\'en\`ere au minimum 1 ligne d\'ebit + 1 ligne cr\'edit \'equilibr\'ees & \urgent \\
+F-LED-02 & \'Ecriture multi-leg        & Support des \'ecritures \`a N lignes (ex~: 1 d\'ebit, 2 cr\'edits pour partage commission) & \urgent \\
+F-LED-03 & Immutabilit\'e              & Aucune \'ecriture ne peut \^etre modifi\'ee ou supprim\'ee. Correction = \'ecriture inverse & \urgent \\
+F-LED-04 & Idempotence                 & Chaque op\'eration porte un \texttt{idempotency\_key}. Doublon = retour du r\'esultat existant & \urgent \\
+F-LED-05 & R\'ef\'erence crois\'ee     & Chaque \'ecriture porte la r\'ef\'erence du d\'eclencheur (payment\_id, order\_id, etc.) & \urgent \\
+F-LED-06 & Historique                  & Consultation des \'ecritures avec filtres (date, type, plateforme, montant) & \urgent \\
+F-LED-07 & V\'erification d'int\'egrit\'e & Endpoint admin~: v\'erifier que $\sum$ d\'ebits = $\sum$ cr\'edits sur tout le ledger & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egle comptable fondamentale]
+\textbf{Invariant}~: pour chaque transaction dans le ledger, la somme des montants d\'ebit\'es doit \^etre \textbf{strictement \'egale} \`a la somme des montants cr\'edit\'es. Toute tentative de cr\'eer une \'ecriture d\'es\'equilibr\'ee est rejet\'ee avec une erreur 400.
+
+\textbf{Solde d'un compte}~: $\text{solde} = \sum \text{cr\'edits} - \sum \text{d\'ebits}$ sur toutes les lignes du ledger pour ce compte.
+
+\textbf{Solde disponible}~: $\text{disponible} = \text{solde} - \sum \text{holds pending}$.
+
+\textbf{Contr\^ole de solde}~: aucun d\'ebit n'est autoris\'e si le solde disponible est insuffisant (sauf pour les comptes syst\`eme \texttt{external} qui peuvent avoir un solde n\'egatif par nature).
+\end{warnbox}
+
+\subsection{Cash-in (Entr\'ee de fonds)}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-CIN-01 & Cr\'edit sur payment.confirmed & \`A la r\'eception de l'\'ev\'enement Paiement, cr\'editer le wallet concern\'e & \urgent \\
+F-CIN-02 & Cr\'edit en escrow             & Si le paiement est li\'e \`a une commande, cr\'editer l'escrow (pas le wallet final) & \urgent \\
+F-CIN-03 & Cr\'edit direct                & Cr\'edit admin (remboursement, ajustement, bonus) & \normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Cash-out (Sortie de fonds)}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-COUT-01 & Demande de retrait          & L'utilisateur demande un cash-out vers Mobile Money ou compte bancaire & \urgent \\
+F-COUT-02 & V\'erification solde         & V\'erifier solde disponible $\geq$ montant demand\'e & \urgent \\
+F-COUT-03 & Hold pr\'ealable             & R\'eserver le montant (hold) avant d'envoyer l'ordre \`a Paiement & \urgent \\
+F-COUT-04 & Envoi vers Paiement         & \'Emettre un ordre de paiement sortant via Paiement (event ou API) & \urgent \\
+F-COUT-05 & Confirmation cash-out       & Sur \texttt{payment.confirmed}, lib\'erer le hold et d\'ebiter d\'efinitivement & \urgent \\
+F-COUT-06 & \'Echec cash-out             & Sur \texttt{payment.failed}, lib\'erer le hold (fonds restituables) & \urgent \\
+F-COUT-07 & Seuils de retrait           & Montant minimum, plafond journalier, configurable par plateforme & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Flux cash-out complet]
+\begin{enumerate}[nosep]
+  \item User demande retrait de 5~000 XAF vers Orange Money
+  \item Wallet v\'erifie solde disponible $\geq$ 5~000
+  \item Wallet cr\'ee un hold de 5~000 XAF (DEBIT \texttt{wallet\_user} $\to$ CREDIT \texttt{escrow(cashout)})
+  \item Wallet \'emet \texttt{wallet.cashout.requested} vers Paiement
+  \item Paiement ex\'ecute le transfert Orange Money
+  \item Paiement \'emet \texttt{payment.confirmed}
+  \item Wallet lib\`ere l'escrow (DEBIT \texttt{escrow(cashout)} $\to$ CREDIT \texttt{external(orange\_money)})
+  \item Wallet \'emet \texttt{wallet.cashout.completed}
+\end{enumerate}
+Si \'echec \`a l'\'etape 6~: Wallet annule le hold (DEBIT \texttt{escrow(cashout)} $\to$ CREDIT \texttt{wallet\_user}).
+\end{infobox}
+
+\subsection{Holds / R\'eservation de fonds}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-HLD-01 & Cr\'eation hold             & R\'eserver un montant sur un wallet (solde disponible diminu\'e) & \urgent \\
+F-HLD-02 & Capture hold                & Confirmer le hold (d\'ebit d\'efinitif) & \urgent \\
+F-HLD-03 & Release hold                & Annuler le hold (fonds lib\'er\'es) & \urgent \\
+F-HLD-04 & Expiration hold             & Cron~: lib\'erer automatiquement les holds expir\'es (TTL configurable) & \urgent \\
+F-HLD-05 & Hold partiel                & Capturer partiellement un hold (ex~: commande modifi\'ee) & \normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Virements \& Partages}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-VIR-01 & Virement user$\to$user      & Transfert entre deux wallets utilisateurs & \urgent \\
+F-VIR-02 & Virement plateforme$\to$user & Cr\'edit d'un wallet par un compte syst\`eme & \urgent \\
+F-VIR-03 & Partage automatis\'e         & R\'epartition d'un montant selon des r\`egles de split (commissions) & \urgent \\
+F-VIR-04 & R\`egles de split            & La plateforme d\'efinit les r\`egles (ex~: 85\% vendeur, 15\% AGT) via l'API & \urgent \\
+F-VIR-05 & Partage multi-b\'en\'eficiaires & Split vers N wallets en une seule transaction (vendeur + livreur + AGT) & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Exemple~: partage MboaMove]
+Course \`a 3~000 XAF. R\`egle de split~: 80\% chauffeur, 20\% AGT.
+
+\'Ecriture atomique (1 transaction, 3 lignes)~:
+\begin{itemize}[nosep]
+  \item DEBIT \texttt{escrow(mboamove)} 3~000 XAF
+  \item CREDIT \texttt{wallet\_chauffeur} 2~400 XAF
+  \item CREDIT \texttt{platform\_system(agt)} 600 XAF
+\end{itemize}
+\end{infobox}
+
+\subsection{Administration}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ADM-01 & Stats globales              & Solde total \'ecosyst\`eme, volume mouvements, par plateforme & \normale \\
+F-ADM-02 & Audit ledger                & V\'erifier l'\'equilibre global $\sum$ d\'ebits = $\sum$ cr\'edits & \urgent \\
+F-ADM-03 & Ajustement admin            & Cr\'edit ou d\'ebit correctif avec justification obligatoire & \urgent \\
+F-ADM-04 & Gel / d\'egel wallet         & Geler un wallet suspect, d\'egeler apr\`es v\'erification & \urgent \\
+F-ADM-05 & Export \'ecritures           & Export CSV/JSON des \'ecritures par p\'eriode et par compte & \normale \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Non-Fonctionnels}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{clLc}
+\toprule
+\textbf{ID} & \textbf{Cat\'egorie} & \textbf{Exigence} & \textbf{Cible} \\
+\midrule
+NF-01 & Performance    & \'Ecriture ledger                       & < 100ms (P95) \\
+NF-02 & Performance    & Consultation solde                      & < 50ms (P95) \\
+NF-03 & Performance    & Throughput \'ecritures                  & 500 tx/s min \\
+NF-04 & Disponibilit\'e & Uptime                                 & 99.9\% \\
+NF-05 & S\'ecurit\'e   & Auth obligatoire                       & JWT ou S2S \\
+NF-06 & S\'ecurit\'e   & Rate limiting                          & Configurable \\
+NF-07 & S\'ecurit\'e   & Aucune suppression physique             & Append-only ledger \\
+NF-08 & Int\'egrit\'e  & Transactions atomiques                  & PostgreSQL SERIALIZABLE ou SELECT FOR UPDATE \\
+NF-09 & Int\'egrit\'e  & V\'erification d'\'equilibre p\'eriodique & Cron quotidien \\
+NF-10 & Scalabilit\'e  & Horizontal                              & Stateless, multi-instance \\
+NF-11 & Observabilit\'e & Logs structur\'es                      & JSON, request ID, masquage montants sensibles \\
+NF-12 & Observabilit\'e & Health check                           & \texttt{GET /wallet/health} \\
+NF-13 & Donn\'ees      & Timestamps                              & TIMESTAMPTZ \\
+NF-14 & Traitement     & Crons holds expir\'es                   & Celery Beat, retry 3x backoff, DLQ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Architecture Technique}
+% ============================================================
+
+\subsection{Vue d'ensemble}
+
+Le service Wallet est un microservice REST stateless, d\'eploy\'e en conteneur Docker. Il expose une API JSON et consomme/produit des \'ev\'enements RabbitMQ. C'est le service le plus critique en termes d'int\'egrit\'e de donn\'ees de tout l'\'ecosyst\`eme.
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Composant} & \textbf{Technologie} \\
+\midrule
+Langage \& Framework & Python 3.11+ / Django 5.x \\
+API                  & Django REST Framework (DRF) \\
+Base de donn\'ees    & PostgreSQL 15+ (niveau d'isolation SERIALIZABLE pour les \'ecritures ledger) \\
+ORM                  & Django ORM \\
+Migrations           & Django Migrations \\
+Cache                & Redis 7+ (soldes cach\'es, idempotence) \\
+Scheduler            & Celery + Celery Beat (holds expir\'es, audit quotidien) \\
+Message Broker       & RabbitMQ (\'ev\'enements entrants/sortants) \\
+Validation           & DRF Serializers \\
+Conteneurisation     & Docker + Docker Compose \\
+CI/CD                & GitHub Actions \\
+\bottomrule
+\end{tabularx}
+
+\subsection{D\'ependances \& R\`egles d'Architecture}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Service} & \textbf{Type} & \textbf{Usage} \\
+\midrule
+Service Auth          & Interne  & Validation JWT / S2S \\
+Service Users         & Interne  & R\'esolution \texttt{user\_id}, v\'erification statut actif \\
+Service Paiement      & Interne  & Cash-in (\texttt{payment.confirmed} $\to$ cr\'edit wallet). Cash-out (Wallet \'emet ordre $\to$ Paiement ex\'ecute). \\
+Service Notification  & Interne  & Alertes~: cr\'edit re\c{c}u, cash-out confirm\'e, solde faible \\
+Plateformes           & Interne  & D\'efinition des r\`egles de split, d\'eclenchement des partages \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egle stricte~: Wallet ne touche jamais les providers externes]
+Le Wallet ne communique \textbf{jamais} directement avec Orange Money, Stripe ou tout autre provider. Pour toute entr\'ee ou sortie d'argent r\'eel, il passe par le Service Paiement. Le Wallet ne g\`ere que la \textbf{comptabilit\'e interne}.
+\end{warnbox}
+
+\subsection{Strat\'egie d'int\'egrit\'e}
+
+\begin{warnbox}[Int\'egrit\'e des donn\'ees financi\`eres]
+\textbf{Transactions atomiques}~: chaque op\'eration d'\'ecriture (cr\'edit, d\'ebit, virement, split) est encapsul\'ee dans une transaction PostgreSQL. Si une seule ligne \'echoue, tout est annul\'e (rollback).
+
+\textbf{Niveau d'isolation}~: les \'ecritures ledger utilisent \texttt{SERIALIZABLE} ou \texttt{SELECT ... FOR UPDATE} pour \'eliminer les race conditions sur les soldes.
+
+\textbf{Solde cach\'e}~: le solde est maintenu dans un champ \texttt{balance} sur la table \texttt{accounts} pour la performance (lecture < 50ms). Ce champ est mis \`a jour \textbf{atomiquement dans la m\^eme transaction} que l'\'ecriture ledger. Un cron quotidien v\'erifie que \texttt{balance} = $\sum$ cr\'edits $-$ $\sum$ d\'ebits pour chaque compte.
+
+\textbf{Append-only}~: le ledger est en insertion seule. Aucun UPDATE, aucun DELETE sur les \'ecritures. Les corrections passent par des \'ecritures inverses (reversal).
+\end{warnbox}
+
+\subsection{Diagramme d'architecture}
+
+\begin{verbatim}
+  AGT-Market   MboaMove   SALMA   AGT-Bot   Futures
+      |           |          |        |         |
+      +-----+-----+-----+----+--------+---------+
+            |           |
+     Wallet Service (API REST + Workers)
+       |         |          |           |
+   Auth(JWT)  Users      Redis      PostgreSQL
+       |                               (ledger)
+   RabbitMQ
+     |       |
+  Paiement  Notification
+     |
+  [providers externes]
+\end{verbatim}
+
+\subsection{Flux financiers (v1.1)}
+
+\begin{verbatim}
+  === CASH-IN ===
+  Provider externe --> [Paiement] --> payment.confirmed
+                                         |
+                                    [Wallet: DEBIT external, CREDIT wallet_user]
+
+  === ACHAT AVEC ESCROW ===
+  Client paie --> [Paiement] --> payment.confirmed
+                                    |
+                               [Wallet: DEBIT external, CREDIT escrow]
+                                    |
+                           Livraison confirmee
+                                    |
+                               [Wallet: DEBIT escrow,
+                                        CREDIT wallet_vendeur (85%),
+                                        CREDIT platform_agt (15%)]
+
+  === CASH-OUT ===
+  User demande retrait
+       |
+  [Wallet: hold sur wallet_user]
+       |
+  wallet.cashout.requested --> [Paiement] --> provider
+       |                                        |
+  payment.confirmed                      payment.failed
+       |                                        |
+  [Wallet: DEBIT escrow,               [Wallet: release hold,
+   CREDIT external]                     fonds restitues]
+
+  === VIREMENT ===
+  [Wallet: DEBIT wallet_A, CREDIT wallet_B] (atomique)
+\end{verbatim}
+
+% ============================================================
+\section{Mod\'elisation}
+% ============================================================
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes complet est fourni en annexe au format PlantUML (voir section~\ref{sec:plantuml}). Il couvre les entit\'es~: \texttt{Account}, \texttt{LedgerTransaction}, \texttt{LedgerEntry}, \texttt{Hold}, \texttt{CashoutRequest} et \texttt{SplitRule}.
+
+\subsection{MLD --- Mod\`ele Logique de Donn\'ees}
+
+\subsubsection{Table \texttt{accounts}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+account\_type     & VARCHAR(20)   & NOT NULL       & user, organization, platform\_system, escrow, external \\
+owner\_type       & VARCHAR(20)   & NOT NULL       & user, organization, system \\
+owner\_id         & UUID          & NULL           & \texttt{users\_auth.id} ou \texttt{organizations.id}. NULL pour comptes syst\`eme. \\
+currency          & VARCHAR(3)    & NOT NULL       & Devise du compte (XAF, EUR, USD) \\
+balance           & DECIMAL(15,2) & DEFAULT 0      & Solde cach\'e (source de v\'erit\'e = ledger) \\
+hold\_amount      & DECIMAL(15,2) & DEFAULT 0      & Total des holds en cours \\
+status            & VARCHAR(20)   & DEFAULT 'active' & active, frozen, closed \\
+label             & VARCHAR(100)  & NULL           & Libell\'e (ex~: \og Wallet principal\fg{}, \og Escrow Market\fg{}) \\
+metadata          & JSONB         & NULL           & Donn\'ees compl\'ementaires \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(owner\_type, owner\_id, account\_type, currency)} pour les comptes user/org. Les comptes syst\`eme ont un \texttt{label} unique.
+
+\subsubsection{Table \texttt{ledger\_transactions}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                   & UUID          & PK             & Identifiant unique \\
+ledger\_reference\_id & VARCHAR(30)  & UNIQUE, NOT NULL & R\'ef\'erence s\'equentielle lisible (ex~: \texttt{LTX-2026-000001}). G\'en\'er\'ee automatiquement. \\
+idempotency\_key     & UUID          & UNIQUE, NOT NULL & Cl\'e d'idempotence \\
+transaction\_type    & VARCHAR(30)   & NOT NULL       & cashin, cashout, transfer, split, hold\_capture, hold\_release, adjustment, reversal \\
+platform\_id         & UUID          & NOT NULL       & Plateforme source \\
+source               & VARCHAR(30)   & NOT NULL       & payment, platform, admin, cron \\
+source\_reference\_id & UUID         & NULL           & R\'ef\'erence externe (payment\_id, order\_id) \\
+description          & VARCHAR(255)  & NULL           & Description lisible \\
+metadata             & JSONB         & NULL           & Donn\'ees opaques \\
+status               & VARCHAR(20)   & DEFAULT 'completed' & completed, reversed \\
+created\_at          & TIMESTAMPTZ   & NOT NULL       & Date de l'op\'eration \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{ledger\_entries}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                   & UUID          & PK             & Identifiant unique \\
+transaction\_id      & UUID          & FK $\to$ ledger\_transactions & Transaction parent \\
+account\_id          & UUID          & FK $\to$ accounts & Compte concern\'e \\
+direction            & VARCHAR(6)    & NOT NULL       & \texttt{debit} ou \texttt{credit} \\
+amount               & DECIMAL(15,2) & NOT NULL       & Montant (toujours positif) \\
+balance\_after       & DECIMAL(15,2) & NOT NULL       & Solde du compte apr\`es cette \'ecriture \\
+created\_at          & TIMESTAMPTZ   & NOT NULL       & Date \\
+\bottomrule
+\end{tabularx}
+
+Index~: \texttt{(account\_id, created\_at)} pour l'historique par compte.
+
+\begin{warnbox}[Contrainte d'\'equilibre]
+Une contrainte applicative (v\'erifi\'ee avant insertion) garantit que pour chaque \texttt{ledger\_transaction}, la somme des \texttt{amount} o\`u \texttt{direction = 'debit'} est \textbf{strictement \'egale} \`a la somme des \texttt{amount} o\`u \texttt{direction = 'credit'}. Toute violation est rejet\'ee.
+\end{warnbox}
+
+\subsubsection{Table \texttt{holds}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+account\_id       & UUID          & FK $\to$ accounts & Compte sur lequel le hold est plac\'e \\
+amount            & DECIMAL(15,2) & NOT NULL       & Montant r\'eserv\'e \\
+status            & VARCHAR(20)   & DEFAULT 'pending' & pending, captured, released, expired \\
+reason            & VARCHAR(50)   & NOT NULL       & cashout, order, escrow \\
+reference\_id     & UUID          & NULL           & R\'ef\'erence externe (cashout\_request\_id, order\_id) \\
+idempotency\_key  & UUID          & UNIQUE, NOT NULL & Idempotence \\
+expires\_at       & TIMESTAMPTZ   & NOT NULL       & Expiration du hold \\
+captured\_amount  & DECIMAL(15,2) & DEFAULT 0      & Montant effectivement captur\'e (partiel possible) \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+resolved\_at      & TIMESTAMPTZ   & NULL           & Date de capture/release/expiration \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{cashout\_requests}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                   & UUID          & PK             & Identifiant unique \\
+account\_id          & UUID          & FK $\to$ accounts & Wallet source \\
+amount               & DECIMAL(15,2) & NOT NULL       & Montant demand\'e \\
+currency             & VARCHAR(3)    & NOT NULL       & Devise \\
+destination\_provider & VARCHAR(30)  & NOT NULL       & orange\_money, mtn\_momo, bank\_transfer \\
+destination\_details & JSONB         & NOT NULL       & Num\'ero t\'el\'ephone ou IBAN (chiffr\'e) \\
+status               & VARCHAR(20)   & DEFAULT 'pending' & pending, processing, completed, failed, cancelled \\
+hold\_id             & UUID          & FK $\to$ holds & Hold associ\'e \\
+payment\_tx\_id      & UUID          & NULL           & Transaction Paiement associ\'ee \\
+idempotency\_key     & UUID          & UNIQUE, NOT NULL & Idempotence \\
+failure\_reason      & TEXT          & NULL           & Raison de l'\'echec \\
+created\_at          & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+completed\_at        & TIMESTAMPTZ   & NULL           & Date de compl\'etion \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{split\_rules}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+platform\_id      & UUID          & NOT NULL       & Plateforme \\
+name              & VARCHAR(100)  & NOT NULL       & Nom de la r\`egle (ex~: \og market\_sale\fg{}, \og ride\_completed\fg{}) \\
+splits            & JSONB         & NOT NULL       & D\'efinition des parts~: \texttt{[\{"target":"seller", "percent":85\}, \{"target":"platform", "percent":15\}]} \\
+is\_active        & BOOLEAN       & DEFAULT true   & R\`egle active \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, name)}.
+
+% ============================================================
+\section{Contrats d'API}
+% ============================================================
+
+Base URL~: \texttt{/api/v1}. Tous les endpoints retournent du JSON. Les endpoints prot\'eg\'es requi\`erent \texttt{Authorization: Bearer <token>}.
+
+\subsection{Health Check}
+
+\subsubsection{GET /wallet/health}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "status": "healthy",
+  "database": "ok",
+  "redis": "ok",
+  "rabbitmq": "ok",
+  "ledger_balanced": true,
+  "version": "1.1.0"
+}
+\end{lstlisting}
+
+\subsection{Comptes}
+
+\subsubsection{GET /wallet/accounts/me}
+
+Retourne le wallet de l'utilisateur authentifi\'e. Auth~: Bearer token.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "account_id": "acc-uuid",
+  "account_type": "user",
+  "currency": "XAF",
+  "balance": 45000,
+  "hold_amount": 5000,
+  "available_balance": 40000,
+  "status": "active"
+}
+\end{lstlisting}
+
+Codes~: 200, 401, 404 No wallet (cr\'eation automatique possible).
+
+\subsubsection{GET /wallet/accounts/\{accountId\}}
+
+D\'etail d'un compte. Auth~: admin ou propri\'etaire. Codes~: 200, 403, 404.
+
+\subsubsection{POST /wallet/accounts/\{accountId\}/freeze}
+
+Gel d'un wallet. Auth~: admin. Codes~: 200, 403, 404.
+
+\subsubsection{POST /wallet/accounts/\{accountId\}/unfreeze}
+
+D\'egel. Auth~: admin. Codes~: 200, 403, 404.
+
+\subsection{Op\'erations Ledger}
+
+\subsubsection{POST /wallet/credit}
+
+Cr\'edit d'un compte. Auth~: S2S ou admin.
+
+Request body~:
+\begin{lstlisting}
+{
+  "account_id": "acc-uuid",
+  "amount": 10000,
+  "currency": "XAF",
+  "platform_id": "uuid",
+  "source": "payment",
+  "source_reference_id": "payment-tx-uuid",
+  "idempotency_key": "unique-uuid",
+  "description": "Cash-in via Orange Money"
+}
+\end{lstlisting}
+
+Response 201~:
+\begin{lstlisting}
+{
+  "transaction_id": "ltx-uuid",
+  "account_id": "acc-uuid",
+  "amount": 10000,
+  "new_balance": 55000,
+  "message": "Credit completed"
+}
+\end{lstlisting}
+
+Codes~: 201, 200 Idempotent hit, 400, 401, 404 Account not found, 409 Account frozen.
+
+\subsubsection{POST /wallet/debit}
+
+D\'ebit d'un compte. Auth~: S2S ou admin.
+
+Request body~:
+\begin{lstlisting}
+{
+  "account_id": "acc-uuid",
+  "amount": 5000,
+  "currency": "XAF",
+  "platform_id": "uuid",
+  "source": "platform",
+  "source_reference_id": "order-uuid",
+  "idempotency_key": "unique-uuid",
+  "description": "Commission AGT"
+}
+\end{lstlisting}
+
+Codes~: 201, 200 Idempotent, 400, 403 Insufficient balance, 404, 409 Account frozen.
+
+\subsubsection{POST /wallet/transfer}
+
+Virement entre deux comptes. Auth~: S2S, admin, ou propri\'etaire du compte source.
+
+Request body~:
+\begin{lstlisting}
+{
+  "from_account_id": "acc-uuid-1",
+  "to_account_id": "acc-uuid-2",
+  "amount": 3000,
+  "currency": "XAF",
+  "platform_id": "uuid",
+  "idempotency_key": "unique-uuid",
+  "description": "Paiement fournisseur"
+}
+\end{lstlisting}
+
+Codes~: 201, 200 Idempotent, 400, 403 Insufficient balance, 404, 409 Account frozen.
+
+\subsubsection{POST /wallet/split}
+
+Partage d'un montant selon une r\`egle de split. Auth~: S2S.
+
+Request body~:
+\begin{lstlisting}
+{
+  "source_account_id": "escrow-uuid",
+  "amount": 10000,
+  "currency": "XAF",
+  "platform_id": "uuid",
+  "split_rule_id": "rule-uuid",
+  "targets": {
+    "seller": "acc-uuid-vendeur",
+    "platform": "acc-uuid-agt"
+  },
+  "idempotency_key": "unique-uuid",
+  "source_reference_id": "order-uuid"
+}
+\end{lstlisting}
+
+Response 201~:
+\begin{lstlisting}
+{
+  "transaction_id": "ltx-uuid",
+  "entries": [
+    { "account": "escrow", "direction": "debit", "amount": 10000 },
+    { "account": "vendeur", "direction": "credit", "amount": 8500 },
+    { "account": "agt", "direction": "credit", "amount": 1500 }
+  ],
+  "message": "Split completed"
+}
+\end{lstlisting}
+
+Codes~: 201, 200 Idempotent, 400 Split unbalanced, 403, 404.
+
+\subsubsection{GET /wallet/accounts/\{accountId\}/transactions}
+
+Historique des mouvements d'un compte. Query params~: \texttt{?type\&from\_date\&to\_date\&page\&limit}.
+
+Codes~: 200, 403, 404.
+
+\subsection{Holds}
+
+\subsubsection{POST /wallet/holds}
+
+Cr\'eation d'un hold. Auth~: S2S.
+
+Request body~:
+\begin{lstlisting}
+{
+  "account_id": "acc-uuid",
+  "amount": 5000,
+  "reason": "cashout",
+  "reference_id": "cashout-req-uuid",
+  "idempotency_key": "unique-uuid",
+  "ttl_seconds": 3600
+}
+\end{lstlisting}
+
+Codes~: 201, 403 Insufficient available balance, 404, 409 Account frozen.
+
+\subsubsection{POST /wallet/holds/\{holdId\}/capture}
+
+Capture totale ou partielle. Auth~: S2S.
+
+Request body~:
+\begin{lstlisting}
+{
+  "amount": 5000
+}
+\end{lstlisting}
+
+Codes~: 200, 400 Amount exceeds hold, 404, 410 Hold expired.
+
+\subsubsection{POST /wallet/holds/\{holdId\}/release}
+
+Lib\'eration du hold. Auth~: S2S. Codes~: 200, 404, 410 Already captured.
+
+\subsection{Cash-out}
+
+\subsubsection{POST /wallet/cashout}
+
+Demande de retrait. Auth~: Bearer token (propri\'etaire du wallet).
+
+Request body~:
+\begin{lstlisting}
+{
+  "amount": 5000,
+  "currency": "XAF",
+  "destination_provider": "orange_money",
+  "destination_details": {
+    "phone_number": "+237600000000"
+  },
+  "idempotency_key": "unique-uuid"
+}
+\end{lstlisting}
+
+Response 201~:
+\begin{lstlisting}
+{
+  "cashout_id": "co-uuid",
+  "status": "pending",
+  "amount": 5000,
+  "hold_id": "hold-uuid",
+  "message": "Cashout request created, processing"
+}
+\end{lstlisting}
+
+Codes~: 201, 400 Below minimum / above daily limit, 403 Insufficient balance, 409 Account frozen.
+
+\subsubsection{GET /wallet/cashout/\{cashoutId\}}
+
+D\'etail d'une demande de retrait. Codes~: 200, 404.
+
+\subsubsection{GET /wallet/cashout}
+
+Liste des demandes de retrait. Query params~: \texttt{?status\&from\_date\&to\_date\&page\&limit}. Codes~: 200, 401.
+
+\subsection{Split Rules}
+
+\subsubsection{POST /wallet/split-rules}
+
+Cr\'eation d'une r\`egle de partage. Auth~: admin plateforme.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "market_sale",
+  "splits": [
+    { "target": "seller", "percent": 85 },
+    { "target": "platform", "percent": 15 }
+  ]
+}
+\end{lstlisting}
+
+Codes~: 201, 400 Percentages don't sum to 100, 409 Name exists.
+
+\subsubsection{GET /wallet/split-rules}
+
+Query params~: \texttt{?platform\_id}. Codes~: 200.
+
+\subsubsection{PUT /wallet/split-rules/\{ruleId\}}
+
+Modification. Codes~: 200, 400. \textit{Note~: modifier une r\`egle n'affecte pas les transactions d\'ej\`a ex\'ecut\'ees.}
+
+\subsection{Administration}
+
+\subsubsection{GET /wallet/admin/stats}
+
+Query params~: \texttt{?platform\_id}. Auth~: admin.
+
+Codes~: 200, 403.
+
+\subsubsection{POST /wallet/admin/audit-ledger}
+
+Lance une v\'erification d'\'equilibre du ledger. Auth~: admin global.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "balanced": true,
+  "total_debits": 185000000,
+  "total_credits": 185000000,
+  "accounts_checked": 12450,
+  "anomalies": 0
+}
+\end{lstlisting}
+
+Codes~: 200, 403.
+
+\subsubsection{POST /wallet/admin/adjustment}
+
+Cr\'edit ou d\'ebit correctif. Auth~: admin global. Justification obligatoire.
+
+Request body~:
+\begin{lstlisting}
+{
+  "account_id": "acc-uuid",
+  "amount": 500,
+  "direction": "credit",
+  "reason": "Compensation erreur technique ref#12345",
+  "idempotency_key": "unique-uuid"
+}
+\end{lstlisting}
+
+Codes~: 201, 400, 403.
+
+\subsubsection{DELETE /wallet/by-user/\{userId\}}
+
+\textbf{Purge RGPD.} Auth~: S2S. Anonymise \texttt{owner\_id} sur les comptes et les donn\'ees personnelles dans \texttt{cashout\_requests}. Les \'ecritures du ledger sont conserv\'ees (obligation comptable).
+
+Codes~: 200, 401, 404.
+
+% ============================================================
+\section{Contrats Inter-Services}
+% ============================================================
+
+\subsection{Wallet $\to$ Auth (JWT / S2S)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint JWT  & \texttt{GET /auth/verify-token}. Cache Redis TTL 30s. \\
+Endpoint S2S  & \texttt{POST /auth/s2s/introspect} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Paiement $\to$ Wallet (\'ev\'enements RabbitMQ entrants)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement consomm\'e} & \textbf{Action Wallet} \\
+\midrule
+\texttt{payment.confirmed} o\`u \texttt{source = wallet\_cashin} & Cr\'editer le wallet utilisateur. \'Ecriture~: DEBIT \texttt{external} $\to$ CREDIT \texttt{wallet\_user}. \\
+\texttt{payment.confirmed} o\`u \texttt{source = wallet\_cashout} & Cash-out confirm\'e. Capturer le hold, lib\'erer l'escrow~: DEBIT \texttt{escrow} $\to$ CREDIT \texttt{external}. \\
+\texttt{payment.failed} o\`u \texttt{source = wallet\_cashout} & Cash-out \'echou\'e. Lib\'erer le hold (fonds retourn\'es au wallet user). \\
+\texttt{payment.confirmed} o\`u \texttt{source = subscription} & Pas consomm\'e par Wallet (consomm\'e par Abonnement). \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Wallet $\to$ Paiement (cash-out)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement publi\'e} & \textbf{Payload} \\
+\midrule
+\texttt{wallet.cashout.requested} & \texttt{event\_id}, \texttt{idempotency\_key}, \texttt{cashout\_request\_id}, \texttt{amount}, \texttt{currency}, \texttt{destination\_provider}, \texttt{destination\_details}, \texttt{user\_id} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Wallet $\to$ Notification (alertes)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Notification d\'eclench\'ee} \\
+\midrule
+Cr\'edit re\c{c}u          & Push/email~: \og Vous avez re\c{c}u X FCFA\fg{} \\
+Cash-out confirm\'e        & Push/email~: \og Retrait de X FCFA effectu\'e\fg{} \\
+Cash-out \'echou\'e        & Push~: \og \'Echec du retrait, fonds restitu\'es\fg{} \\
+Hold expir\'e              & Push~: \og R\'eservation de X FCFA lib\'er\'ee\fg{} \\
+Solde faible ($<$ seuil)   & Push~: \og Votre solde est faible\fg{} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Wallet --- \'Ev\'enements sortants g\'en\'eriques}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement publi\'e} & \textbf{Payload} \\
+\midrule
+\texttt{wallet.credited}           & \texttt{event\_id}, \texttt{account\_id}, \texttt{amount}, \texttt{currency}, \texttt{platform\_id}, \texttt{source}, \texttt{new\_balance} \\
+\texttt{wallet.debited}            & \texttt{event\_id}, \texttt{account\_id}, \texttt{amount}, \texttt{currency}, \texttt{platform\_id}, \texttt{source}, \texttt{new\_balance} \\
+\texttt{wallet.cashout.completed}  & \texttt{event\_id}, \texttt{cashout\_request\_id}, \texttt{amount}, \texttt{destination\_provider} \\
+\texttt{wallet.cashout.failed}     & \texttt{event\_id}, \texttt{cashout\_request\_id}, \texttt{failure\_reason} \\
+\texttt{wallet.hold.expired}       & \texttt{event\_id}, \texttt{hold\_id}, \texttt{account\_id}, \texttt{amount} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Users $\to$ Wallet (Purge RGPD)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint          & \texttt{DELETE /api/v1/wallet/by-user/\{userId\}} \\
+Auth              & Token S2S \\
+Donn\'ees anonymis\'ees & \texttt{owner\_id} $\to$ NULL, \texttt{destination\_details} $\to$ NULL. \'Ecritures ledger conserv\'ees. \\
+S\'equence        & Avant Auth purge \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Matrice d'Autorisation}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{lcccc}
+\toprule
+\textbf{Endpoint} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin Plat.} & \textbf{Admin Global} \\
+\midrule
+GET /wallet/accounts/me                      & $\checkmark$ &              &              &              \\
+GET /wallet/accounts/\{id\}                  & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /wallet/accounts/\{id\}/freeze          &              &              &              & $\checkmark$ \\
+POST /wallet/accounts/\{id\}/unfreeze        &              &              &              & $\checkmark$ \\
+POST /wallet/credit                          &              & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/debit                           &              & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/transfer                        & $\checkmark$ & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/split                           &              & $\checkmark$ &              & $\checkmark$ \\
+GET /wallet/accounts/\{id\}/transactions     & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /wallet/holds                           &              & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/holds/\{id\}/capture            &              & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/holds/\{id\}/release            &              & $\checkmark$ &              & $\checkmark$ \\
+POST /wallet/cashout                         & $\checkmark$ &              &              &              \\
+GET /wallet/cashout/\{id\}                   & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+GET /wallet/cashout                          & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /wallet/split-rules                     &              &              & $\checkmark$ & $\checkmark$ \\
+GET /wallet/split-rules                      &              & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+PUT /wallet/split-rules/\{id\}               &              &              & $\checkmark$ & $\checkmark$ \\
+GET /wallet/admin/stats                      &              &              & $\checkmark$ & $\checkmark$ \\
+POST /wallet/admin/audit-ledger              &              &              &              & $\checkmark$ \\
+POST /wallet/admin/adjustment                &              &              &              & $\checkmark$ \\
+DELETE /wallet/by-user/\{userId\}            &              & $\checkmark$ &              & $\checkmark$ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Recommandations \& \'Evolutions}
+% ============================================================
+
+\begin{itemize}
+  \item \textbf{Int\'er\^ets / rendements}~: calcul d'int\'er\^ets sur les soldes wallet (futur produit financier).
+  \item \textbf{Multi-devise par wallet}~: un utilisateur avec des sous-comptes en XAF, EUR, USD.
+  \item \textbf{Conversion de devises}~: taux de change entre sous-comptes.
+  \item \textbf{Limites dynamiques}~: plafonds de cash-out adapt\'es au profil de risque (KYC).
+  \item \textbf{Notifications enrichies}~: relev\'e mensuel par email.
+  \item \textbf{Monitoring}~: m\'etriques Prometheus (\'ecritures/s, solde total, holds actifs, anomalies d'\'equilibre).
+  \item \textbf{Versioning API}~: pr\'efixe \texttt{/api/v1}. Breaking changes $\to$ \texttt{/api/v2}.
+\end{itemize}
+
+% ============================================================
+\section*{Annexes}
+% ============================================================
+
+\subsection*{Glossaire}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Terme} & \textbf{D\'efinition} \\
+\midrule
+Ledger           & Registre comptable qui enregistre tous les mouvements financiers \\
+Double-entry     & Principe comptable~: chaque mouvement a un d\'ebit et un cr\'edit \'equilibr\'es \\
+Hold             & R\'eservation de fonds qui diminue le solde disponible sans d\'ebiter \\
+Escrow           & Compte de transit s\'ecurisant les fonds en attente de confirmation \\
+Cash-in          & Entr\'ee d'argent dans l'\'ecosyst\`eme (depuis un provider externe) \\
+Cash-out         & Sortie d'argent de l'\'ecosyst\`eme (vers un provider externe) \\
+Split            & R\'epartition d'un montant entre plusieurs comptes selon des pourcentages \\
+Reversal         & \'Ecriture inverse annulant une \'ecriture pr\'ec\'edente \\
+Balance          & Solde d'un compte = $\sum$ cr\'edits $-$ $\sum$ d\'ebits \\
+Available balance & Solde disponible = balance $-$ holds pending \\
+S2S              & Service-to-Service \\
+DLQ              & Dead Letter Queue \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Code PlantUML --- Diagramme de Classes}
+\label{sec:plantuml}
+
+Le code PlantUML ci-dessous correspond au diagramme de classes complet du service Wallet v1.1. Il peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+@startuml Wallet Service - Class Diagram v1.1
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "accounts" as acc {
+  * id : UUID <<PK>>
+  --
+  * account_type : VARCHAR(20)
+  * owner_type : VARCHAR(20)
+  owner_id : UUID
+  * currency : VARCHAR(3)
+  balance : DECIMAL(15,2) = 0
+  hold_amount : DECIMAL(15,2) = 0
+  status : VARCHAR(20) = 'active'
+  label : VARCHAR(100)
+  metadata : JSONB
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (owner_type, owner_id, account_type, currency)
+}
+
+entity "ledger_transactions" as ltx {
+  * id : UUID <<PK>>
+  --
+  * ledger_reference_id : VARCHAR(30) <<UQ>>
+  * idempotency_key : UUID <<UQ>>
+  * transaction_type : VARCHAR(30)
+  * platform_id : UUID
+  * source : VARCHAR(30)
+  source_reference_id : UUID
+  description : VARCHAR(255)
+  metadata : JSONB
+  status : VARCHAR(20) = 'completed'
+  * created_at : TIMESTAMPTZ
+}
+
+entity "ledger_entries" as entries {
+  * id : UUID <<PK>>
+  --
+  * transaction_id : UUID <<FK>>
+  * account_id : UUID <<FK>>
+  * direction : VARCHAR(6)
+  * amount : DECIMAL(15,2)
+  * balance_after : DECIMAL(15,2)
+  * created_at : TIMESTAMPTZ
+}
+
+entity "holds" as holds {
+  * id : UUID <<PK>>
+  --
+  * account_id : UUID <<FK>>
+  * amount : DECIMAL(15,2)
+  status : VARCHAR(20) = 'pending'
+  * reason : VARCHAR(50)
+  reference_id : UUID
+  * idempotency_key : UUID <<UQ>>
+  * expires_at : TIMESTAMPTZ
+  captured_amount : DECIMAL(15,2) = 0
+  * created_at : TIMESTAMPTZ
+  resolved_at : TIMESTAMPTZ
+}
+
+entity "cashout_requests" as cashouts {
+  * id : UUID <<PK>>
+  --
+  * account_id : UUID <<FK>>
+  * amount : DECIMAL(15,2)
+  * currency : VARCHAR(3)
+  * destination_provider : VARCHAR(30)
+  * destination_details : JSONB
+  status : VARCHAR(20) = 'pending'
+  hold_id : UUID <<FK>>
+  payment_tx_id : UUID
+  * idempotency_key : UUID <<UQ>>
+  failure_reason : TEXT
+  * created_at : TIMESTAMPTZ
+  completed_at : TIMESTAMPTZ
+}
+
+entity "split_rules" as splits {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * name : VARCHAR(100)
+  * splits : JSONB
+  is_active : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, name)
+}
+
+ltx ||--o{ entries     : "2..* entries (balanced)"
+acc ||--o{ entries     : "0..* entries"
+acc ||--o{ holds       : "0..* holds"
+acc ||--o{ cashouts    : "0..* cashout requests"
+holds ||--o| cashouts  : "0..1 cashout"
+
+@enduml
+\end{lstlisting}
+
+\vfill
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}\\[0.5em]
+{\small\textcolor{agtgray}{AG Technologies --- Document confidentiel \`a usage interne exclusivement.}}\\
+{\small\textcolor{agtgray}{Wallet Service CDC v1.1 --- Avril 2026}}
+\end{center}
+
+\end{document}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\11.geoloc.txt =====
+`
+\documentclass[11pt,a4paper]{article}
+
+% === Encodage & Langue ===
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% === Mise en page ===
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+% === Tableaux ===
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+
+% === Code & couleurs ===
+\usepackage{listings}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{lastpage}
+\usepackage{amssymb}
+
+% === Boites ===
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% === Couleurs AGT ===
+\definecolor{agtblue}{HTML}{1A3A5C}
+\definecolor{agtgray}{HTML}{4A4A4A}
+\definecolor{agtgreen}{HTML}{2E7D32}
+\definecolor{agtred}{HTML}{C62828}
+\definecolor{agtorange}{HTML}{E65100}
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{lightbg}{HTML}{E8EEF4}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=agtblue,
+  urlcolor=agtblue,
+  pdfauthor={AG Technologies},
+  pdftitle={Service Geolocalisation - CDC v1.2},
+}
+
+% === Listings JSON ===
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  string=[s]{"}{"},
+  stringstyle=\color{agtgreen},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{codebg},
+  rulecolor=\color{gray!30},
+  showstringspaces=false,
+  literate=
+    *{:}{{{\color{agtblue}:}}}{1}
+     {,}{{{\color{agtblue},}}}{1}
+     {\{}{{{\color{agtblue}\{}}}{1}
+     {\}}{{{\color{agtblue}\}}}}{1}
+     {[}{{{\color{agtblue}[}}}{1}
+     {]}{{{\color{agtblue}]}}}{1},
+}
+\lstset{language=json}
+
+% === Boites info/warn ===
+\newtcolorbox{infobox}[1][]{
+  colback=lightbg,colframe=agtblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtblue,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=orange!5,colframe=agtorange,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtorange,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+
+% === Header/Footer ===
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{agtgray}{AGT --- Service G\'eolocalisation}}
+\fancyhead[R]{\small\textcolor{agtgray}{v1.2 --- Confidentiel}}
+\fancyfoot[C]{\small\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\textcolor{agtgray}{Avril 2026}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.2pt}
+
+% === Titres ===
+\titleformat{\section}{\Large\bfseries\color{agtblue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{agtblue!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{agtblue!60}}{\thesubsubsection}{1em}{}
+
+% === Commandes ===
+\newcommand{\urgent}{\textcolor{agtred}{\textbf{Urgent}}}
+\newcommand{\normale}{\textcolor{agtorange}{Normale}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+% ============================================================
+%  PAGE DE TITRE
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\Huge\bfseries\textcolor{agtblue}{AG TECHNOLOGIES}\\[0.3cm]}
+{\large\textcolor{agtgray}{Architecture de Services Partag\'es}\\[2cm]}
+\rule{\textwidth}{1.5pt}\\[0.5cm]
+{\LARGE\bfseries Cahier des Charges Technique\\[0.3cm]}
+{\Large Service de G\'eolocalisation Centralis\'e\\[0.3cm]}
+{\large\textit{Geolocation Service --- AGT-Geo}\\[0.5cm]}
+\rule{\textwidth}{1.5pt}\\[2cm]
+\begin{tabular}{ll}
+\textbf{Version}        & 1.2 \\
+\textbf{Date}           & Avril 2026 \\
+\textbf{Statut}         & Implementation-ready \\
+\textbf{Classification} & Confidentiel \\
+\textbf{Auteur}         & \'Equipe Architecture \\
+\textbf{D\'ependances}  & Auth v2.1, Users v1.0, Notification v1.2 \\
+\end{tabular}
+\vfill
+{\small\textcolor{agtgray}{Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies}}
+\end{titlepage}
+
+% ============================================================
+%  HISTORIQUE
+% ============================================================
+\section*{Historique des R\'evisions}
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Ver.} & \textbf{Date} & \textbf{Auteur} & \textbf{Description} \\
+\midrule
+1.0 & 2026-04-05 & \'Equipe Archi. & Cr\'eation initiale. Position temps r\'eel (WebSocket + REST). Redis live + PostGIS historique. Proximit\'e. G\'eofencing event-driven scalable. Historique trajets. Multi-provider ETA/g\'eocodage (adapter pattern). Fr\'equence configurable par plateforme. Batch writes PostGIS. Diagramme PlantUML en annexe. \\
+1.1 & 2026-04-05 & \'Equipe Archi. & Post-audit~: dual Redis formalis\'e (index GEO + payload entit\'e). Autorisation WebSocket verrouill\'ee. RGPD compatible sch\'ema (anonymisation irr\'eversible). Machine \`a \'etats trips. NF-15 corrig\'e. R\^ole Users clarifi\'e. Invalidation cache geofence sur soft delete. Mod\`ele de pr\'esence/offline. \\
+1.2 & 2026-04-05 & \'Equipe Archi. & Version finale~: statut \textit{Implementation-ready}. \\
+\bottomrule
+\end{tabularx}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+Ce document constitue le cahier des charges du \textbf{Service de G\'eolocalisation Centralis\'e} (ci-apr\`es \og~Geolocation Service~\fg{}) destin\'e \`a l'\'ecosyst\`eme AGT. Il sert de r\'ef\'erence unique pour la conception, le d\'eveloppement et les d\'ecisions techniques.
+
+\begin{warnbox}[Principes fondamentaux --- \`A lire en premier]
+\begin{enumerate}[nosep]
+  \item \textbf{Dual storage}~: Redis pour les positions live (volatile, TTL), PostGIS pour l'historique et les requ\^etes spatiales (persistant).
+  \item \textbf{Fr\'equence configurable}~: chaque plateforme d\'efinit l'intervalle de mise \`a jour (1s \`a 60s).
+  \item \textbf{G\'eofencing event-driven}~: v\'erification \`a chaque mise \`a jour de position, pas en polling. Scalable.
+  \item \textbf{Batch writes}~: les positions sont batch\'ees avant insertion PostGIS (10--30s) pour absorber la charge.
+  \item \textbf{Multi-provider}~: ETA et g\'eocodage abstraits derri\`ere des adapters (Google Maps, OSRM, Nominatim).
+  \item \textbf{Stateless}~: chaque instance NestJS est interchangeable. Redis est le point de coordination.
+\end{enumerate}
+\end{warnbox}
+
+\subsection{P\'erim\`etre}
+
+Le service G\'eolocalisation couvre~: r\'eception et diffusion des positions en temps r\'eel, stockage de l'historique des trajets, recherche de proximit\'e, g\'eofencing (zones avec alertes entr\'ee/sortie), calcul de distance/ETA, et g\'eocodage (adresse $\leftrightarrow$ coordonn\'ees).
+
+\begin{infobox}[Principe fondamental]
+Le service g\`ere les \textbf{coordonn\'ees et la logique spatiale}. Il ne conna\^it aucun concept m\'etier~: il ne sait pas ce qu'est un chauffeur, un livreur ou un vendeur. Il g\`ere des \texttt{tracked\_entities} avec des positions, des trajets et des zones. La plateforme consommatrice donne le sens m\'etier.
+\end{infobox}
+
+\subsection{Hors p\'erim\`etre}
+
+\begin{itemize}[nosep]
+  \item Authentification (d\'el\'egu\'ee au Service Auth v2.1)
+  \item Profils utilisateur (Service Users v1.0)
+  \item Logique m\'etier (dispatch, affectation de courses, matching vendeur/livreur)
+  \item Affichage cartographique (le frontend utilise Google Maps / Mapbox directement)
+  \item Paiement, abonnement, wallet
+  \item Notification (d\'el\'egu\'ee au Service Notification v1.2)
+\end{itemize}
+
+\begin{warnbox}[Convention d'identit\'e]
+Dans tout ce document~:
+\begin{itemize}[nosep]
+  \item \texttt{user\_id} d\'esigne \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item \texttt{platform\_id} d\'esigne un UUID du registre Auth (\texttt{platforms.id})
+  \item \texttt{entity\_id} d\'esigne l'identifiant de l'entit\'e track\'ee (= \texttt{user\_id} dans la plupart des cas)
+\end{itemize}
+\end{warnbox}
+
+% ============================================================
+\section{Contexte \& Probl\'ematique}
+% ============================================================
+
+\subsection{Contexte}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Plateforme} & \textbf{Statut} & \textbf{Besoin g\'eolocalisation} \\
+\midrule
+MboaMove   & En d\'eveloppement & Position live chauffeurs, proximit\'e, ETA, suivi de course, historique trajets \\
+AGT-Market & En d\'eveloppement & Position livreurs, suivi livraison, proximit\'e vendeurs \\
+SALMA      & Migration pr\'evue & Localisation centres de formation (statique) \\
+Futures    & Planifi\'e         & Tout besoin de localisation \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Probl\'ematique}
+
+Sans service centralis\'e, chaque plateforme impl\'ementerait sa propre gestion GPS, entra\^inant~: duplication des int\'egrations cartographiques, absence de recherche de proximit\'e performante, pas de g\'eofencing r\'eutilisable, et aucune vision unifi\'ee des donn\'ees de localisation.
+
+% ============================================================
+\section{Vision \& Objectifs}
+% ============================================================
+
+\subsection{Vision}
+
+Un service \textbf{g\'en\'erique et abstrait} qui g\`ere les positions, trajets et zones pour tout l'\'ecosyst\`eme. Il ne conna\^it aucun concept m\'etier~: il g\`ere des entit\'es track\'ees, des coordonn\'ees et des polygones.
+
+\subsection{Objectifs}
+
+\begin{tabularx}{\textwidth}{clL}
+\toprule
+\textbf{\#} & \textbf{Objectif} & \textbf{Indicateur} \\
+\midrule
+O1 & Position temps r\'eel       & Latence < 200ms entre envoi et diffusion \\
+O2 & Proximit\'e performante     & Trouver les N plus proches en < 100ms \\
+O3 & Historique trajets           & Stockage et restitution de tout trajet \\
+O4 & G\'eofencing scalable       & 10~000+ zones actives sans d\'egradation \\
+O5 & Multi-provider               & ETA et g\'eocodage abstraits (adapter pattern) \\
+O6 & Fr\'equence configurable    & 1s \`a 60s selon la plateforme et le contexte \\
+O7 & Scalabilit\'e horizontale   & 100~000+ entit\'es track\'ees simultan\'ement \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Parties Prenantes \& Utilisateurs}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{R\^ole} & \textbf{Type} & \textbf{Responsabilit\'e} \\
+\midrule
+Product Owner       & Interne & Priorisation des fonctionnalit\'es \\
+\'Equipe Backend    & Interne & D\'eveloppement, int\'egration providers \\
+\'Equipe Frontend   & Interne & Int\'egration carte, suivi temps r\'eel \\
+\'Equipe Mobile     & Interne & SDK GPS, envoi positions, battery management \\
+DevOps              & Interne & Infrastructure Redis/PostGIS, monitoring \\
+Admin global AGT    & Interne & Configuration zones, providers \\
+Admin plateforme    & Interne & G\'eofencing, fr\'equence, consultation trajets \\
+Utilisateurs finaux & Externe & Partage de position, suivi \\
+Services internes   & Interne & Plateformes (dispatch, suivi livraison) \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Fonctionnels}
+% ============================================================
+
+\subsection{Position Temps R\'eel}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-POS-01 & Envoi position (WebSocket)  & L'entit\'e envoie sa position via WebSocket. Haute fr\'equence. & \urgent \\
+F-POS-02 & Envoi position (REST)       & Endpoint REST pour les mises \`a jour ponctuelles ou batch & \urgent \\
+F-POS-03 & Stockage live Redis         & Derni\`ere position connue stock\'ee dans Redis avec TTL & \urgent \\
+F-POS-04 & Diffusion live              & Les abonn\'es (plateformes, autres users) re\c{c}oivent les mises \`a jour en temps r\'eel via WebSocket & \urgent \\
+F-POS-05 & TTL auto-expiration         & Si aucune mise \`a jour pendant X secondes (configurable), l'entit\'e est consid\'er\'ee offline & \urgent \\
+F-POS-06 & Fr\'equence configurable    & Chaque plateforme d\'efinit l'intervalle de mise \`a jour (d\'efaut~: 5s) & \urgent \\
+F-POS-07 & Batch write PostGIS         & Les positions sont accumul\'ees en m\'emoire/Redis et flush\'ees vers PostGIS en batch (10--30s) & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Architecture dual-storage (v1.1)]
+Le stockage live Redis repose sur \textbf{deux couches compl\'ementaires}~:
+
+\textbf{Couche A --- Index GEO par plateforme} (proximit\'e)~:
+\begin{itemize}[nosep]
+  \item Cl\'e~: \texttt{geo:index:\{platform\_id\}}
+  \item Contenu~: membres = \texttt{entity\_id}, avec longitude et latitude
+  \item Commandes~: \texttt{GEOADD}, \texttt{GEOSEARCH}, \texttt{GEODIST}
+  \item Usage~: \textbf{exclusivement} pour la recherche de proximit\'e live
+\end{itemize}
+
+\textbf{Couche B --- Payload d\'etaill\'e par entit\'e}~:
+\begin{itemize}[nosep]
+  \item Cl\'e~: \texttt{geo:entity:\{platform\_id\}:\{entity\_id\}}
+  \item Valeur~: \texttt{\{lat, lng, heading, speed, accuracy, tags, entity\_type, recorded\_at, is\_online\}}
+  \item TTL~: configurable par plateforme (d\'efaut 30s). Expiration = entit\'e offline.
+  \item Usage~: lecture de la derni\`ere position d\'etaill\'ee, diffusion WebSocket
+\end{itemize}
+
+\textbf{R\`egle}~: la proximit\'e live n'est \textbf{jamais} calcul\'ee \`a partir des cl\'es individuelles d'entit\'e. Elle s'appuie exclusivement sur l'index GEO par plateforme.
+
+\textbf{Mise \`a jour atomique}~: chaque position update met \`a jour les deux couches dans la m\^eme op\'eration (pipeline Redis).
+
+\textbf{PostGIS} (historique)~:
+\begin{itemize}[nosep]
+  \item Table \texttt{position\_history} avec colonne \texttt{GEOGRAPHY(Point, 4326)}.
+  \item Index GiST pour les requ\^etes spatiales.
+  \item Insertion en batch (buffer de 10--30s) pour absorber la charge.
+  \item Partitionnement par mois sur \texttt{recorded\_at}.
+\end{itemize}
+\end{warnbox}
+
+\subsection{Recherche de Proximit\'e}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-PRX-01 & Recherche par rayon         & Trouver toutes les entit\'es dans un rayon de N km autour d'un point & \urgent \\
+F-PRX-02 & N plus proches              & Trouver les N entit\'es les plus proches d'un point & \urgent \\
+F-PRX-03 & Filtre par plateforme       & La recherche est scop\'ee par \texttt{platform\_id} & \urgent \\
+F-PRX-04 & Filtre par tags             & Filtrer par tags m\'etier (ex~: \texttt{available}, \texttt{busy}, \texttt{vip}) & \urgent \\
+F-PRX-05 & Proximit\'e live vs historique & Proximit\'e live (Redis) pour le temps r\'eel, PostGIS pour l'historique & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Performance proximit\'e]
+\textbf{Live (Redis)}~: \texttt{GEORADIUS} ou \texttt{GEOSEARCH} sur les positions Redis. Complexit\'e O(N+log(M)). R\'eponse < 50ms pour 100~000 entit\'es.
+
+\textbf{Historique (PostGIS)}~: \texttt{ST\_DWithin} avec index GiST. R\'eponse < 200ms sur des millions de points.
+\end{infobox}
+
+\subsection{G\'eofencing}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-GEO-01 & Cr\'eation de zone          & D\'efinir une zone g\'eographique (polygone ou cercle) & \urgent \\
+F-GEO-02 & Zones par plateforme        & Chaque plateforme g\`ere ses propres zones & \urgent \\
+F-GEO-03 & D\'etection entr\'ee/sortie & \`A chaque mise \`a jour de position, v\'erifier si l'entit\'e entre ou sort d'une zone & \urgent \\
+F-GEO-04 & \'Ev\'enement geofence      & \'Emettre un \'ev\'enement RabbitMQ lors d'une entr\'ee ou sortie & \urgent \\
+F-GEO-05 & Zones actives/inactives     & Activer/d\'esactiver une zone sans la supprimer & \normale \\
+F-GEO-06 & M\'etadonn\'ees zone        & Tags et metadata libres sur les zones & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Scalabilit\'e du g\'eofencing --- Architecture event-driven]
+\textbf{Probl\`eme}~: v\'erifier 100~000 positions contre 10~000 zones en polling = 1 milliard de checks par cycle. Non scalable.
+
+\textbf{Solution~: g\'eofencing event-driven en 3 couches}~:
+
+\textbf{Couche 1 --- Cache zones en m\'emoire}~: au d\'emarrage et \`a chaque modification, les zones actives sont charg\'ees dans un cache m\'emoire local (par instance NestJS). Structure~: R-tree ou quadtree pour lookup spatial O(log N).
+
+\textbf{Couche 2 --- V\'erification \`a chaque position update}~: quand une position arrive (WebSocket ou REST), le service v\'erifie \textbf{uniquement cette position} contre les zones pertinentes via le spatial index en m\'emoire. Co\^ut~: O(log Z) o\`u Z = nombre de zones (pas O(Z)).
+
+\textbf{Couche 3 --- \'Etat pr\'ec\'edent en Redis}~: pour chaque entit\'e, Redis stocke la liste des zones dans lesquelles elle se trouve actuellement (\texttt{geo:fences:\{entity\_id\}}). La comparaison ancien \'etat / nouvel \'etat d\'etermine les entr\'ees et sorties.
+
+\textbf{R\'esultat}~: chaque mise \`a jour de position co\^ute O(log Z) au lieu de O(Z). Pour 10~000 zones et 20~000 updates/seconde~: $\sim$280~000 lookups/s (faisable sur une seule instance).
+
+\textbf{Invalidation cache}~: quand une zone est cr\'e\'ee/modifi\'ee/supprim\'ee, un message Redis pub/sub informe toutes les instances de recharger la zone concern\'ee (pas tout le cache).
+\end{warnbox}
+
+\subsection{Trajets}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-TRJ-01 & D\'emarrer un trajet         & Cr\'eer un trajet avec point de d\'epart & \urgent \\
+F-TRJ-02 & Enregistrer les positions    & Les positions envoy\'ees pendant un trajet sont li\'ees au trajet & \urgent \\
+F-TRJ-03 & Terminer un trajet           & Cl\^oturer le trajet avec point d'arriv\'ee et m\'etriques (distance, dur\'ee) & \urgent \\
+F-TRJ-04 & Consulter un trajet          & Restituer le trac\'e complet (polyline) avec m\'etriques & \urgent \\
+F-TRJ-05 & Historique des trajets       & Liste des trajets d'une entit\'e, filtr\'ee par date & \urgent \\
+F-TRJ-06 & Distance calcul\'ee          & Distance totale du trajet calcul\'ee \`a partir des points GPS & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Machine \`a \'etats des trajets (v1.1)]
+\begin{verbatim}
+  [creation via POST /geo/trips] --> active
+  active --> completed    (POST /geo/trips/{id}/end)
+  active --> cancelled    (annulation explicite ou timeout admin)
+\end{verbatim}
+
+\textbf{\'Etats terminaux}~: \texttt{completed}, \texttt{cancelled}. Aucune transition sortante.
+
+\textbf{R\`egles}~:
+\begin{itemize}[nosep]
+  \item Un seul trajet actif par \texttt{(platform\_id, entity\_id)} \`a tout moment.
+  \item Les positions GPS peuvent exister \textbf{hors trajet}. En l'absence de trajet actif, les positions sont stock\'ees dans \texttt{position\_history} avec \texttt{trip\_id = NULL}.
+  \item La cr\'eation d'un trajet est une d\'ecision \textbf{explicite} via \texttt{POST /geo/trips}, pas une d\'etection automatique.
+  \item Si l'entit\'e passe offline pendant un trajet actif, le trajet reste \texttt{active} jusqu'\`a cl\^oture explicite ou timeout configurable par la plateforme.
+\end{itemize}
+\end{warnbox}
+
+\subsection{Distance \& ETA}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ETA-01 & Distance vol d'oiseau       & Calcul interne Haversine (aucun provider externe) & \urgent \\
+F-ETA-02 & Distance routi\`ere          & Via provider externe (Google Maps, OSRM) & \urgent \\
+F-ETA-03 & ETA                          & Temps estim\'e d'arriv\'ee via provider externe & \urgent \\
+F-ETA-04 & Multi-provider               & Adapter pattern~: ajouter un provider = ajouter un adapter & \urgent \\
+F-ETA-05 & Cache ETA                    & R\'esultats cach\'es dans Redis (TTL 60s) pour \'eviter les appels r\'ep\'et\'es & \urgent \\
+F-ETA-06 & Fallback                     & Si le provider principal est down, fallback vers Haversine + estimation & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Architecture multi-provider ETA/g\'eocodage]
+Chaque provider est impl\'ement\'e comme un adapter derri\`ere une interface commune~:
+\begin{itemize}[nosep]
+  \item \texttt{getDistance(origin, destination)} $\to$ \texttt{\{distance\_m, duration\_s, polyline?\}}
+  \item \texttt{getETA(origin, destination)} $\to$ \texttt{\{eta\_seconds, eta\_datetime\}}
+  \item \texttt{geocode(address)} $\to$ \texttt{\{lat, lng, formatted\_address\}}
+  \item \texttt{reverseGeocode(lat, lng)} $\to$ \texttt{\{address, city, country\}}
+\end{itemize}
+
+Providers support\'es au MVP~:
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Provider} & \textbf{Type} & \textbf{Usage} \\
+\midrule
+Interne (Haversine) & Gratuit  & Distance vol d'oiseau, fallback, estimation rapide \\
+OSRM               & Gratuit (self-hosted) & Distance/ETA routi\`ere, open source \\
+Google Maps         & Payant   & Distance/ETA pr\'ecise, g\'eocodage, trafic temps r\'eel \\
+Nominatim           & Gratuit  & G\'eocodage (adresse $\leftrightarrow$ coordonn\'ees), OpenStreetMap \\
+\bottomrule
+\end{tabularx}
+\end{infobox}
+
+\subsection{G\'eocodage}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-GCD-01 & G\'eocodage direct          & Adresse $\to$ coordonn\'ees via provider externe & \urgent \\
+F-GCD-02 & G\'eocodage inverse         & Coordonn\'ees $\to$ adresse via provider externe & \urgent \\
+F-GCD-03 & Cache g\'eocodage           & R\'esultats cach\'es dans Redis (TTL 24h) & \urgent \\
+F-GCD-04 & Multi-provider              & Adapter pattern (Nominatim, Google Maps) & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Administration}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ADM-01 & Stats plateforme            & Entit\'es actives, positions/s, trajets, zones & \normale \\
+F-ADM-02 & Config plateforme           & Fr\'equence, TTL, providers actifs, provider ETA prioritaire & \urgent \\
+F-ADM-03 & Monitoring providers        & Latence, taux d'erreur par provider ETA/g\'eocodage & \normale \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Non-Fonctionnels}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{clLc}
+\toprule
+\textbf{ID} & \textbf{Cat\'egorie} & \textbf{Exigence} & \textbf{Cible} \\
+\midrule
+NF-01 & Performance    & Latence position update $\to$ diffusion             & < 200ms \\
+NF-02 & Performance    & Recherche proximit\'e live                           & < 50ms (P95) \\
+NF-03 & Performance    & Recherche proximit\'e historique                     & < 200ms (P95) \\
+NF-04 & Performance    & Throughput position updates                          & 20~000 msg/s (100K entit\'es \`a 5s) \\
+NF-05 & Disponibilit\'e & Uptime                                              & 99.9\% \\
+NF-06 & S\'ecurit\'e   & Auth obligatoire (WebSocket et REST)                 & JWT ou S2S \\
+NF-07 & S\'ecurit\'e   & Rate limiting                                        & Configurable par plateforme \\
+NF-08 & Scalabilit\'e  & Horizontal                                           & Stateless, multi-instance, Redis coordonne \\
+NF-09 & Scalabilit\'e  & PostGIS partitionnement                              & Par mois sur position\_history \\
+NF-10 & Observabilit\'e & Logs structur\'es                                   & JSON, request ID \\
+NF-11 & Observabilit\'e & Health check                                        & \texttt{GET /geo/health} \\
+NF-12 & Donn\'ees      & Timestamps                                           & TIMESTAMPTZ \\
+NF-13 & Donn\'ees      & Coordonn\'ees                                        & GEOGRAPHY(Point, 4326) / WGS84 \\
+NF-14 & Traitement     & Batch flush PostGIS                                  & Toutes les 10--30s \\
+NF-15 & Traitement     & Maintenance~: offline detection, batch flush PostGIS, cleanup buffers Redis, rotation jobs & Cron NestJS natif \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Architecture Technique}
+% ============================================================
+
+\subsection{Vue d'ensemble}
+
+Le service G\'eolocalisation est un microservice temps r\'eel, d\'eploy\'e en conteneur Docker. Il expose une API REST + WebSocket. Il utilise Redis pour les donn\'ees live et PostgreSQL/PostGIS pour l'historique et les requ\^etes spatiales.
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Composant} & \textbf{Technologie} \\
+\midrule
+Runtime              & Node.js 20 LTS \\
+Framework            & NestJS \\
+WebSocket            & Socket.IO (NestJS Gateway) + Redis Adapter (multi-instance) \\
+API REST             & NestJS Controllers \\
+Base de donn\'ees    & PostgreSQL 15+ avec extension PostGIS 3.x \\
+ORM                  & TypeORM (support natif PostGIS) \\
+Cache \& Live data   & Redis 7+ (GEO commands, pub/sub, cache ETA/g\'eocodage) \\
+Message Broker       & RabbitMQ (\'ev\'enements geofence, position batch) \\
+Spatial index (m\'emoire) & rbush (R-tree JavaScript) pour g\'eofencing \\
+Conteneurisation     & Docker + Docker Compose \\
+CI/CD                & GitHub Actions \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Justification NestJS (vs Django)]
+Le service G\'eolocalisation est I/O-intensif avec des milliers de connexions WebSocket simultan\'ees et des flux GPS \`a haute fr\'equence. Node.js/NestJS est choisi pour les m\^emes raisons que le Service M\'edia (NestJS) et le Service Chat (WebSocket natif)~:
+\begin{itemize}[nosep]
+  \item Event loop non bloquant~: milliers de connexions simultann\'ees sans threads
+  \item Socket.IO natif avec Redis adapter pour le scaling horizontal
+  \item Biblioth\`eques spatiales performantes (rbush, turf.js)
+\end{itemize}
+L'h\'et\'erog\'en\'eit\'e de stack est accept\'ee en microservices quand elle est justifi\'ee par des besoins techniques sp\'ecifiques.
+\end{warnbox}
+
+\subsection{D\'ependances \& R\`egles d'Architecture}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Service} & \textbf{Type} & \textbf{Usage} \\
+\midrule
+Service Auth          & Interne  & Validation JWT (REST et WebSocket handshake). S2S pour appels inter-services. \\
+Service Users         & Interne  & V\'erification statut actif et permissions m\'etier indirectes. \textbf{Non appel\'e sur chaque update GPS.} Lookup uniquement \`a la cr\'eation d'une \texttt{tracked\_entity} ou sur demande explicite. Cache Redis TTL 5 min. \\
+Service Notification  & Interne  & Alertes g\'eofencing (entr\'ee/sortie de zone). \\
+Google Maps API       & Externe  & ETA, distance routi\`ere, g\'eocodage (payant). \\
+OSRM                  & Externe  & ETA, distance routi\`ere (self-hosted, gratuit). \\
+Nominatim             & Externe  & G\'eocodage direct et inverse (gratuit). \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egle stricte de d\'ependance]
+G\'eolocalisation ne d\'epend d'aucun service m\'etier. Il est consomm\'e par les plateformes (MboaMove, Market) pour leurs besoins de localisation. Le couplage est unidirectionnel~: les plateformes interrogent G\'eolocalisation, jamais l'inverse.
+
+\textbf{Exception}~: G\'eolocalisation \'emet des \'ev\'enements RabbitMQ consomm\'es par les plateformes (geofence triggers) et Notification (alertes).
+\end{warnbox}
+
+\subsection{Strat\'egie de scalabilit\'e}
+
+\begin{infobox}[Scaling pour 100~000+ entit\'es simultan\'ees]
+\textbf{WebSocket}~: Socket.IO avec Redis adapter. Chaque instance NestJS g\`ere un sous-ensemble de connexions. Redis pub/sub synchronise les \'ev\'enements entre instances. Load balancer avec sticky sessions (ou transport polling+websocket).
+
+\textbf{Redis GEO}~: les commandes \texttt{GEOADD}/\texttt{GEOSEARCH} supportent des millions de points. Les positions live sont stock\'ees dans des sets Redis par plateforme~: \texttt{geo:live:\{platform\_id\}}.
+
+\textbf{PostGIS batch writes}~: un buffer en m\'emoire accumule les positions pendant 10--30s, puis les ins\`ere en un seul \texttt{INSERT ... VALUES} batch. \`A 20~000 msg/s, un batch de 30s = 600~000 lignes, ins\'er\'e en < 2s avec des insertions batch PostgreSQL.
+
+\textbf{PostGIS partitionnement}~: la table \texttt{position\_history} est partitionn\'ee par mois sur \texttt{recorded\_at}. Les requ\^etes spatiales ne scannent que les partitions pertinentes.
+
+\textbf{G\'eofencing}~: R-tree en m\'emoire (rbush) avec invalidation cibl\'ee via Redis pub/sub. O(log Z) par position update.
+
+\textbf{ETA/g\'eocodage}~: cache Redis (TTL 60s ETA, 24h g\'eocodage). Taux de cache hit > 80\% en r\'egime nominal.
+\end{infobox}
+
+\subsection{Mod\`ele de pr\'esence / offline (v1.1)}
+
+\begin{infobox}[D\'etection de pr\'esence temps r\'eel]
+\textbf{Online}~: une entit\'e est consid\'er\'ee online tant que sa cl\'e payload Redis \texttt{geo:entity:\{platform\_id\}:\{entity\_id\}} n'a pas expir\'e (TTL configurable, d\'efaut 30s).
+
+\textbf{Offline}~: d\`es que le TTL expire (aucune mise \`a jour de position re\c{c}ue pendant X secondes) ou que la connexion WebSocket est ferm\'ee sans reprise~:
+\begin{enumerate}[nosep]
+  \item La cl\'e payload Redis expire automatiquement
+  \item L'entit\'e est retir\'ee de l'index GEO (\texttt{ZREM geo:index:\{platform\_id\} entity\_id})
+  \item L'\'ev\'enement \texttt{geo.entity.offline} est \'emis \textbf{une seule fois} par transition online $\to$ offline
+  \item \texttt{tracked\_entities.last\_seen\_at} est mis \`a jour en base
+\end{enumerate}
+
+\textbf{D\'etection}~: un cron NestJS (toutes les 10s) scanne les entit\'es dont la cl\'e payload a expir\'e mais qui sont encore dans l'index GEO, et effectue le nettoyage. Alternativement, Redis Keyspace Notifications (\texttt{expired} events) peuvent d\'eclencher le processus de mani\`ere event-driven.
+
+\textbf{R\`egle}~: l'\'ev\'enement \texttt{geo.entity.offline} n'est \'emis qu'une seule fois par transition. Pas de r\'e-\'emission tant que l'entit\'e n'est pas repass\'ee online.
+\end{infobox}
+
+\subsection{Diagramme d'architecture}
+
+\begin{verbatim}
+  MboaMove(mobile)  AGT-Market(web)   SALMA   Futures
+      |                  |               |        |
+  [WebSocket]        [REST/WS]       [REST]   [REST/WS]
+      |                  |               |        |
+      +------+-----------+-------+-------+--------+
+             |                   |
+      Geolocation Service (NestJS)
+        |         |          |           |          |
+    Redis GEO   PostGIS    RabbitMQ   Auth(JWT)  Users
+    (live)     (history)   (events)
+        |
+    Socket.IO Redis Adapter (multi-instance sync)
+        |
+    [Providers externes]
+    Google Maps | OSRM | Nominatim
+\end{verbatim}
+
+% ============================================================
+\section{Mod\'elisation}
+% ============================================================
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes complet est fourni en annexe au format PlantUML (voir section~\ref{sec:plantuml}). Il couvre les entit\'es~: \texttt{TrackedEntity}, \texttt{PositionHistory}, \texttt{Trip}, \texttt{TripPoint}, \texttt{Geofence}, \texttt{GeofenceEvent} et \texttt{PlatformGeoConfig}.
+
+\subsection{MLD --- Mod\`ele Logique de Donn\'ees}
+
+\subsubsection{Table \texttt{tracked\_entities}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+platform\_id      & UUID          & NOT NULL       & Plateforme \\
+entity\_type      & VARCHAR(20)   & NOT NULL       & user, vehicle, asset \\
+entity\_id        & UUID          & NOT NULL       & R\'ef\'erence externe (\texttt{users\_auth.id} ou autre) \\
+tags              & JSONB         & DEFAULT '[]'   & Tags m\'etier libres (\texttt{["available","vip"]}) \\
+is\_active        & BOOLEAN       & DEFAULT true   & Tracking actif \\
+last\_seen\_at    & TIMESTAMPTZ   & NULL           & Derni\`ere position connue \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, entity\_type, entity\_id)}.
+
+\subsubsection{Table \texttt{position\_history}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+entity\_id        & UUID          & FK $\to$ tracked\_entities & Entit\'e track\'ee \\
+location          & GEOGRAPHY(Point, 4326) & NOT NULL & Coordonn\'ees WGS84 \\
+altitude          & FLOAT         & NULL           & Altitude en m\`etres \\
+heading           & FLOAT         & NULL           & Direction (0--360\textdegree) \\
+speed             & FLOAT         & NULL           & Vitesse en m/s \\
+accuracy          & FLOAT         & NULL           & Pr\'ecision GPS en m\`etres \\
+trip\_id          & UUID          & FK $\to$ trips, NULL & Trajet associ\'e (NULL si hors trajet) \\
+recorded\_at      & TIMESTAMPTZ   & NOT NULL       & Horodatage de la mesure GPS \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Date d'insertion en base \\
+\bottomrule
+\end{tabularx}
+
+Index~: GiST sur \texttt{location}. B-tree sur \texttt{(entity\_id, recorded\_at)}.
+
+Partitionnement~: par mois sur \texttt{recorded\_at}.
+
+\subsubsection{Table \texttt{trips}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+entity\_id        & UUID          & FK $\to$ tracked\_entities & Entit\'e \\
+platform\_id      & UUID          & NOT NULL       & Plateforme \\
+status            & VARCHAR(20)   & NOT NULL       & active, completed, cancelled \\
+start\_location   & GEOGRAPHY(Point, 4326) & NOT NULL & Point de d\'epart \\
+end\_location     & GEOGRAPHY(Point, 4326) & NULL  & Point d'arriv\'ee \\
+start\_address    & VARCHAR(255)  & NULL           & Adresse de d\'epart (g\'eocod\'ee) \\
+end\_address      & VARCHAR(255)  & NULL           & Adresse d'arriv\'ee \\
+distance\_meters  & FLOAT         & DEFAULT 0      & Distance totale calcul\'ee \\
+duration\_seconds & INT           & DEFAULT 0      & Dur\'ee totale \\
+metadata          & JSONB         & NULL           & Donn\'ees m\'etier opaques \\
+started\_at       & TIMESTAMPTZ   & NOT NULL       & D\'ebut \\
+ended\_at         & TIMESTAMPTZ   & NULL           & Fin \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{geofences}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+platform\_id      & UUID          & NOT NULL       & Plateforme \\
+name              & VARCHAR(100)  & NOT NULL       & Nom de la zone \\
+fence\_type       & VARCHAR(10)   & NOT NULL       & polygon ou circle \\
+geometry          & GEOGRAPHY(Polygon, 4326) & NULL & Polygone (si polygon) \\
+center            & GEOGRAPHY(Point, 4326) & NULL   & Centre (si circle) \\
+radius\_meters    & FLOAT         & NULL           & Rayon (si circle) \\
+tags              & JSONB         & DEFAULT '[]'   & Tags libres \\
+metadata          & JSONB         & NULL           & Donn\'ees compl\'ementaires \\
+is\_active        & BOOLEAN       & DEFAULT true   & Zone active \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, name)}.
+
+Index~: GiST sur \texttt{geometry} et \texttt{center}.
+
+\subsubsection{Table \texttt{geofence\_events}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+geofence\_id      & UUID          & FK $\to$ geofences & Zone concern\'ee \\
+entity\_id        & UUID          & FK $\to$ tracked\_entities & Entit\'e \\
+event\_type       & VARCHAR(10)   & NOT NULL       & enter ou exit \\
+location          & GEOGRAPHY(Point, 4326) & NOT NULL & Position au moment de l'\'ev\'enement \\
+recorded\_at      & TIMESTAMPTZ   & NOT NULL       & Horodatage \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{platform\_geo\_configs}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                        & UUID          & PK             & Identifiant unique \\
+platform\_id              & UUID          & UNIQUE, NOT NULL & Plateforme \\
+update\_interval\_seconds & INT           & DEFAULT 5      & Fr\'equence de mise \`a jour (secondes) \\
+position\_ttl\_seconds    & INT           & DEFAULT 30     & TTL Redis (offline apr\`es X secondes sans update) \\
+batch\_flush\_seconds     & INT           & DEFAULT 15     & Intervalle de flush batch PostGIS \\
+default\_eta\_provider    & VARCHAR(30)   & DEFAULT 'haversine' & Provider ETA par d\'efaut \\
+default\_geocode\_provider & VARCHAR(30)  & DEFAULT 'nominatim' & Provider g\'eocodage par d\'efaut \\
+max\_proximity\_radius\_km & FLOAT        & DEFAULT 50     & Rayon max autoris\'e pour proximit\'e \\
+created\_at               & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at               & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Contrats d'API}
+% ============================================================
+
+Base URL~: \texttt{/api/v1}. Tous les endpoints REST retournent du JSON. Auth~: \texttt{Authorization: Bearer <token>}.
+
+\subsection{Health Check}
+
+\subsubsection{GET /geo/health}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "status": "healthy",
+  "database": "ok",
+  "postgis": "ok",
+  "redis": "ok",
+  "rabbitmq": "ok",
+  "active_connections": 1245,
+  "version": "1.2.0"
+}
+\end{lstlisting}
+
+\subsection{Position (REST)}
+
+\subsubsection{POST /geo/positions}
+
+Envoi d'une position (REST, usage ponctuel). Auth~: Bearer ou S2S.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "entity_type": "user",
+  "entity_id": "user-uuid",
+  "latitude": 3.8480,
+  "longitude": 11.5021,
+  "heading": 45.0,
+  "speed": 12.5,
+  "accuracy": 10.0,
+  "tags": ["available"],
+  "recorded_at": "2026-04-05T10:00:00Z"
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "entity_id": "user-uuid",
+  "status": "updated",
+  "geofence_events": [
+    { "geofence_id": "zone-uuid", "name": "Zone Centre", "event": "enter" }
+  ]
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 401, 429 Rate limited.
+
+\subsubsection{GET /geo/positions/\{entityId\}}
+
+Derni\`ere position connue (depuis Redis). Auth~: Bearer ou S2S.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "entity_id": "user-uuid",
+  "latitude": 3.8480,
+  "longitude": 11.5021,
+  "heading": 45.0,
+  "speed": 12.5,
+  "tags": ["available"],
+  "recorded_at": "2026-04-05T10:00:00Z",
+  "is_online": true
+}
+\end{lstlisting}
+
+Codes~: 200, 404 Entity not found or offline.
+
+\subsection{Position (WebSocket)}
+
+\subsubsection{Connexion WebSocket}
+
+Endpoint~: \texttt{ws://host/geo}. Auth~: token JWT pass\'e en query param ou header lors du handshake.
+
+\textbf{\'Ev\'enements client $\to$ serveur}~:
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Payload} \\
+\midrule
+\texttt{position:update}   & \texttt{\{platform\_id, entity\_type, entity\_id, latitude, longitude, heading, speed, accuracy, tags, recorded\_at\}} \\
+\texttt{position:subscribe} & \texttt{\{platform\_id, entity\_ids: ["uuid1", "uuid2"]\}} --- s'abonner aux positions d'autres entit\'es \\
+\texttt{position:unsubscribe} & \texttt{\{entity\_ids: ["uuid1"]\}} \\
+\bottomrule
+\end{tabularx}
+
+\textbf{\'Ev\'enements serveur $\to$ client}~:
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Payload} \\
+\midrule
+\texttt{position:updated}   & \texttt{\{entity\_id, latitude, longitude, heading, speed, recorded\_at\}} --- position d'une entit\'e suivie \\
+\texttt{position:offline}    & \texttt{\{entity\_id\}} --- entit\'e pass\'ee offline (TTL expir\'e) \\
+\texttt{geofence:trigger}    & \texttt{\{entity\_id, geofence\_id, name, event: "enter"|"exit", location\}} \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egles d'autorisation WebSocket (v1.1)]
+L'abonnement WebSocket aux positions d'autres entit\'es n'est \textbf{jamais libre}.
+
+\textbf{Cas 1 --- Suivi de sa propre position}~: autoris\'e. Un client JWT peut toujours \'ecouter ses propres mises \`a jour.
+
+\textbf{Cas 2 --- Suivi d'autres entit\'es (frontend m\'etier)}~: interdit en acc\`es direct JWT sauf si~:
+\begin{itemize}[nosep]
+  \item permission explicite accord\'ee par le backend produit de la plateforme (ex~: un passager MboaMove suit son chauffeur assign\'e)~;
+  \item ou token S2S \'emis par le backend de la plateforme avec la liste des \texttt{entity\_ids} autoris\'es.
+\end{itemize}
+
+\textbf{Cas 3 --- Abonnement massif (toutes les entit\'es d'une plateforme)}~: r\'eserv\'e aux appels S2S ou aux r\^oles admin plateforme. Jamais accessible en JWT standard.
+
+\textbf{Impl\'ementation}~: lors d'un \texttt{position:subscribe}, le service v\'erifie que chaque \texttt{entity\_id} demand\'e est soit l'appelant lui-m\^eme, soit pr\'esent dans une liste d'autorisations fournie par le backend produit (via un cache Redis \texttt{geo:auth:\{user\_id\}:\{platform\_id\}} avec TTL 5 min).
+\end{warnbox}
+
+\subsection{Proximit\'e}
+
+\subsubsection{GET /geo/proximity}
+
+Recherche de proximit\'e live. Auth~: Bearer ou S2S.
+
+Query params~: \texttt{?platform\_id=uuid\&latitude=3.85\&longitude=11.50\&radius\_km=5\&limit=10\&tags=available}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "results": [
+    {
+      "entity_id": "uuid-1",
+      "latitude": 3.8490,
+      "longitude": 11.5030,
+      "distance_meters": 320,
+      "tags": ["available"],
+      "recorded_at": "2026-04-05T10:00:05Z"
+    },
+    {
+      "entity_id": "uuid-2",
+      "latitude": 3.8510,
+      "longitude": 11.5050,
+      "distance_meters": 580,
+      "tags": ["available", "vip"],
+      "recorded_at": "2026-04-05T10:00:03Z"
+    }
+  ],
+  "total": 2
+}
+\end{lstlisting}
+
+Codes~: 200, 400 Radius exceeds max, 401.
+
+\subsection{Trajets}
+
+\subsubsection{POST /geo/trips}
+
+D\'emarrer un trajet.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "entity_id": "user-uuid",
+  "start_latitude": 3.8480,
+  "start_longitude": 11.5021,
+  "metadata": { "ride_id": "ride-uuid" }
+}
+\end{lstlisting}
+
+Codes~: 201, 400, 409 Active trip already exists.
+
+\subsubsection{POST /geo/trips/\{tripId\}/end}
+
+Terminer un trajet.
+
+Request body~:
+\begin{lstlisting}
+{
+  "end_latitude": 3.8700,
+  "end_longitude": 11.5200
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "trip_id": "trip-uuid",
+  "status": "completed",
+  "distance_meters": 4520,
+  "duration_seconds": 1230,
+  "start_address": "Carrefour Bastos, Yaounde",
+  "end_address": "Marche Central, Yaounde"
+}
+\end{lstlisting}
+
+Codes~: 200, 404, 409 Trip already ended.
+
+\subsubsection{GET /geo/trips/\{tripId\}}
+
+D\'etail d'un trajet avec polyline.
+
+Codes~: 200, 404.
+
+\subsubsection{GET /geo/trips}
+
+Historique des trajets. Query params~: \texttt{?entity\_id\&platform\_id\&from\_date\&to\_date\&page\&limit}.
+
+Codes~: 200, 401.
+
+\subsection{G\'eofences}
+
+\subsubsection{POST /geo/geofences}
+
+Cr\'eation d'une zone. Auth~: admin plateforme.
+
+Request body (polygone)~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "Zone Centre Yaounde",
+  "fence_type": "polygon",
+  "coordinates": [
+    [11.49, 3.84], [11.52, 3.84],
+    [11.52, 3.87], [11.49, 3.87],
+    [11.49, 3.84]
+  ],
+  "tags": ["delivery_zone"]
+}
+\end{lstlisting}
+
+Request body (cercle)~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "Rayon Aeroport Nsimalen",
+  "fence_type": "circle",
+  "center_latitude": 3.7200,
+  "center_longitude": 11.5533,
+  "radius_meters": 5000,
+  "tags": ["airport_zone"]
+}
+\end{lstlisting}
+
+Codes~: 201, 400, 409 Name exists.
+
+\subsubsection{GET /geo/geofences}
+
+Liste des zones. Query params~: \texttt{?platform\_id\&is\_active\&tags}.
+
+Codes~: 200.
+
+\subsubsection{PUT /geo/geofences/\{geofenceId\}}
+
+Modification. D\'eclenche invalidation cache m\'emoire via Redis pub/sub.
+
+Codes~: 200, 400, 404.
+
+\subsubsection{DELETE /geo/geofences/\{geofenceId\}}
+
+Suppression (soft~: \texttt{is\_active = false}). D\'eclenche une invalidation cibl\'ee via Redis pub/sub pour rechargement de l'index m\'emoire sur toutes les instances.
+
+Codes~: 200, 404.
+
+\begin{infobox}[Invalidation cache geofence (v1.1)]
+Toute cr\'eation, modification, d\'esactivation (\texttt{is\_active = false}) ou suppression logique d'une geofence d\'eclenche une invalidation cibl\'ee via Redis pub/sub. Chaque instance NestJS recharge uniquement la zone concern\'ee dans son R-tree local, pas l'ensemble du cache.
+\end{infobox}
+
+\subsection{Distance \& ETA}
+
+\subsubsection{GET /geo/distance}
+
+Query params~: \texttt{?origin\_lat\&origin\_lng\&dest\_lat\&dest\_lng\&provider=google\_maps}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "provider": "google_maps",
+  "distance_meters": 4520,
+  "duration_seconds": 1230,
+  "cached": false
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 503 Provider unavailable.
+
+\subsubsection{GET /geo/eta}
+
+Query params~: \texttt{?origin\_lat\&origin\_lng\&dest\_lat\&dest\_lng\&provider=osrm}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "provider": "osrm",
+  "eta_seconds": 1230,
+  "eta_datetime": "2026-04-05T10:20:30Z",
+  "cached": true
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 503.
+
+\subsection{G\'eocodage}
+
+\subsubsection{GET /geo/geocode}
+
+Query params~: \texttt{?address=Carrefour+Bastos+Yaounde\&provider=nominatim}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "latitude": 3.8845,
+  "longitude": 11.5027,
+  "formatted_address": "Carrefour Bastos, Yaounde, Cameroun",
+  "provider": "nominatim",
+  "cached": true
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 404 Address not found, 503.
+
+\subsubsection{GET /geo/reverse-geocode}
+
+Query params~: \texttt{?latitude=3.8845\&longitude=11.5027\&provider=nominatim}
+
+Codes~: 200, 400, 503.
+
+\subsection{Configuration Plateforme}
+
+\subsubsection{PUT /geo/config/\{platformId\}}
+
+Auth~: admin plateforme ou admin global.
+
+Request body~:
+\begin{lstlisting}
+{
+  "update_interval_seconds": 5,
+  "position_ttl_seconds": 30,
+  "batch_flush_seconds": 15,
+  "default_eta_provider": "osrm",
+  "default_geocode_provider": "nominatim",
+  "max_proximity_radius_km": 50
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 403.
+
+\subsubsection{GET /geo/config/\{platformId\}}
+
+Codes~: 200, 404.
+
+\subsection{Administration}
+
+\subsubsection{GET /geo/admin/stats}
+
+Query params~: \texttt{?platform\_id}. Auth~: admin.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "active_entities": 12450,
+  "active_websockets": 8900,
+  "positions_per_second": 1780,
+  "active_trips": 340,
+  "active_geofences": 125,
+  "geofence_events_24h": 45200
+}
+\end{lstlisting}
+
+Codes~: 200, 403.
+
+\subsubsection{DELETE /geo/by-user/\{userId\}}
+
+\textbf{Purge RGPD.} Auth~: S2S. Supprime les \texttt{tracked\_entities}. Les positions historiques et trajets sont anonymis\'es par remplacement de \texttt{entity\_id} par un identifiant technique d'anonymisation irr\'eversible (UUID g\'en\'er\'e, sans lien vers \texttt{users\_auth.id}). Les lignes historiques sont conserv\'ees pour l'analytics spatiale.
+
+Codes~: 200, 401, 404.
+
+% ============================================================
+\section{Contrats Inter-Services}
+% ============================================================
+
+\subsection{G\'eolocalisation $\to$ Auth (JWT / S2S)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint JWT  & \texttt{GET /auth/verify-token}. Valide au WebSocket handshake + chaque appel REST. Cache Redis TTL 30s. \\
+Endpoint S2S  & \texttt{POST /auth/s2s/introspect} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{G\'eolocalisation $\to$ Notification (alertes)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Notification d\'eclench\'ee} \\
+\midrule
+Geofence enter    & Push~: \og Vous \^etes entr\'e dans la zone X\fg{} (si config plateforme l'exige) \\
+Geofence exit     & Push~: \og Vous avez quitt\'e la zone X\fg{} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{G\'eolocalisation --- \'Ev\'enements RabbitMQ sortants}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement publi\'e} & \textbf{Payload} \\
+\midrule
+\texttt{geo.position.updated}  & \texttt{entity\_id}, \texttt{platform\_id}, \texttt{latitude}, \texttt{longitude}, \texttt{speed}, \texttt{heading}, \texttt{tags}, \texttt{recorded\_at} \\
+\texttt{geo.geofence.enter}    & \texttt{entity\_id}, \texttt{geofence\_id}, \texttt{geofence\_name}, \texttt{platform\_id}, \texttt{location}, \texttt{recorded\_at} \\
+\texttt{geo.geofence.exit}     & Idem \\
+\texttt{geo.trip.started}      & \texttt{trip\_id}, \texttt{entity\_id}, \texttt{platform\_id}, \texttt{start\_location} \\
+\texttt{geo.trip.ended}        & \texttt{trip\_id}, \texttt{entity\_id}, \texttt{platform\_id}, \texttt{distance\_meters}, \texttt{duration\_seconds} \\
+\texttt{geo.entity.offline}    & \texttt{entity\_id}, \texttt{platform\_id}, \texttt{last\_seen\_at} \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Routage des \'ev\'enements]
+Les \'ev\'enements sont publi\'es sur un exchange RabbitMQ de type \texttt{topic}. Les consommateurs s'abonnent selon leur besoin~:
+\begin{itemize}[nosep]
+  \item MboaMove \'ecoute \texttt{geo.position.updated} pour le dispatch
+  \item AGT-Market \'ecoute \texttt{geo.geofence.*} pour la livraison
+  \item Notification \'ecoute \texttt{geo.geofence.*} pour les alertes push
+\end{itemize}
+\end{infobox}
+
+\subsection{Users $\to$ G\'eolocalisation (Purge RGPD)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint          & \texttt{DELETE /api/v1/geo/by-user/\{userId\}} \\
+Auth              & Token S2S \\
+Donn\'ees anonymis\'ees & \texttt{tracked\_entities} supprim\'ees. Dans \texttt{position\_history} et \texttt{trips}, \texttt{entity\_id} est remplac\'e par un UUID technique d'anonymisation irr\'eversible (pas NULL, FK conserv\'ee vers une entit\'e anonyme). Aucune r\'e-identification possible. \\
+S\'equence        & Avant Auth purge \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Matrice d'Autorisation}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{lcccc}
+\toprule
+\textbf{Endpoint} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin Plat.} & \textbf{Admin Global} \\
+\midrule
+POST /geo/positions                       & $\checkmark$ & $\checkmark$ &              &              \\
+GET /geo/positions/\{entityId\}           & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+WebSocket /geo                            & $\checkmark$ &              &              &              \\
+GET /geo/proximity                        & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /geo/trips                           & $\checkmark$ & $\checkmark$ &              &              \\
+POST /geo/trips/\{id\}/end               & $\checkmark$ & $\checkmark$ &              &              \\
+GET /geo/trips/\{id\}                     & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+GET /geo/trips                            & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /geo/geofences                       &              &              & $\checkmark$ & $\checkmark$ \\
+GET /geo/geofences                        & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+PUT /geo/geofences/\{id\}                 &              &              & $\checkmark$ & $\checkmark$ \\
+DELETE /geo/geofences/\{id\}              &              &              & $\checkmark$ & $\checkmark$ \\
+GET /geo/distance                         & $\checkmark$ & $\checkmark$ &              &              \\
+GET /geo/eta                              & $\checkmark$ & $\checkmark$ &              &              \\
+GET /geo/geocode                          & $\checkmark$ & $\checkmark$ &              &              \\
+GET /geo/reverse-geocode                  & $\checkmark$ & $\checkmark$ &              &              \\
+PUT /geo/config/\{platformId\}            &              &              & $\checkmark$ & $\checkmark$ \\
+GET /geo/config/\{platformId\}            &              &              & $\checkmark$ & $\checkmark$ \\
+GET /geo/admin/stats                      &              &              & $\checkmark$ & $\checkmark$ \\
+DELETE /geo/by-user/\{userId\}            &              & $\checkmark$ &              & $\checkmark$ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Recommandations \& \'Evolutions}
+% ============================================================
+
+\begin{itemize}
+  \item \textbf{Heatmap}~: visualisation de densit\'e de positions sur une zone (utile pour analytics MboaMove/Market).
+  \item \textbf{Clustering}~: regroupement d'entit\'es proches pour l'affichage carte \`a faible zoom.
+  \item \textbf{Replay de trajet}~: rejouer un trajet en temps acc\'el\'er\'e (utile pour audit, r\'eclamations).
+  \item \textbf{Alertes vitesse}~: d\'etecter les exc\`es de vitesse dans les zones g\'eofenc\'ees.
+  \item \textbf{Isochrones}~: zones accessibles en N minutes depuis un point.
+  \item \textbf{Offline-first mobile}~: buffer GPS c\^ot\'e mobile avec sync \`a la reconnexion.
+  \item \textbf{Monitoring}~: m\'etriques Prometheus (positions/s, connexions WS, latence proximit\'e, cache hit rate ETA).
+  \item \textbf{Versioning API}~: pr\'efixe \texttt{/api/v1}. Breaking changes $\to$ \texttt{/api/v2}.
+\end{itemize}
+
+% ============================================================
+\section*{Annexes}
+% ============================================================
+
+\subsection*{Glossaire}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Terme} & \textbf{D\'efinition} \\
+\midrule
+PostGIS         & Extension spatiale de PostgreSQL pour les donn\'ees g\'eographiques \\
+WGS84           & Syst\`eme de coordonn\'ees g\'eod\'esiques mondial (SRID 4326) \\
+GiST            & Generalized Search Tree --- index PostgreSQL optimis\'e pour les donn\'ees spatiales \\
+Geofence        & Zone g\'eographique virtuelle d\'eclenchant des alertes \`a l'entr\'ee/sortie \\
+R-tree          & Structure de donn\'ees spatiale pour la recherche par rectangle englobant \\
+Haversine       & Formule de calcul de distance entre deux points sur une sph\`ere \\
+ETA             & Estimated Time of Arrival --- temps estim\'e d'arriv\'ee \\
+OSRM            & Open Source Routing Machine --- moteur de routage open source \\
+Geocoding       & Conversion adresse $\to$ coordonn\'ees (et inverse) \\
+Socket.IO       & Biblioth\`eque WebSocket avec fallback polling et reconnexion automatique \\
+Sticky session  & Affinit\'e de session entre un client et une instance serveur \\
+S2S             & Service-to-Service \\
+DLQ             & Dead Letter Queue \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Code PlantUML --- Diagramme de Classes}
+\label{sec:plantuml}
+
+Le code PlantUML ci-dessous correspond au diagramme de classes complet du service G\'eolocalisation v1.2. Il peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+@startuml Geolocation Service - Class Diagram v1.2
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "tracked_entities" as entities {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * entity_type : VARCHAR(20)
+  * entity_id : UUID
+  tags : JSONB = '[]'
+  is_active : BOOLEAN = true
+  last_seen_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, entity_type, entity_id)
+}
+
+entity "position_history" as positions {
+  * id : UUID <<PK>>
+  --
+  * entity_id : UUID <<FK>>
+  * location : GEOGRAPHY(Point, 4326)
+  altitude : FLOAT
+  heading : FLOAT
+  speed : FLOAT
+  accuracy : FLOAT
+  trip_id : UUID <<FK>>
+  * recorded_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  ..
+  <<INDEX GiST>> location
+  <<PARTITION>> BY RANGE (recorded_at)
+}
+
+entity "trips" as trips {
+  * id : UUID <<PK>>
+  --
+  * entity_id : UUID <<FK>>
+  * platform_id : UUID
+  * status : VARCHAR(20)
+  * start_location : GEOGRAPHY(Point, 4326)
+  end_location : GEOGRAPHY(Point, 4326)
+  start_address : VARCHAR(255)
+  end_address : VARCHAR(255)
+  distance_meters : FLOAT = 0
+  duration_seconds : INT = 0
+  metadata : JSONB
+  * started_at : TIMESTAMPTZ
+  ended_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+}
+
+entity "geofences" as fences {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * name : VARCHAR(100)
+  * fence_type : VARCHAR(10)
+  geometry : GEOGRAPHY(Polygon, 4326)
+  center : GEOGRAPHY(Point, 4326)
+  radius_meters : FLOAT
+  tags : JSONB = '[]'
+  metadata : JSONB
+  is_active : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, name)
+  <<INDEX GiST>> geometry, center
+}
+
+entity "geofence_events" as geoevents {
+  * id : UUID <<PK>>
+  --
+  * geofence_id : UUID <<FK>>
+  * entity_id : UUID <<FK>>
+  * event_type : VARCHAR(10)
+  * location : GEOGRAPHY(Point, 4326)
+  * recorded_at : TIMESTAMPTZ
+}
+
+entity "platform_geo_configs" as geoconfig {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID <<UQ>>
+  update_interval_seconds : INT = 5
+  position_ttl_seconds : INT = 30
+  batch_flush_seconds : INT = 15
+  default_eta_provider : VARCHAR(30) = 'haversine'
+  default_geocode_provider : VARCHAR(30) = 'nominatim'
+  max_proximity_radius_km : FLOAT = 50
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entities ||--o{ positions    : "0..* positions"
+entities ||--o{ trips        : "0..* trips"
+entities ||--o{ geoevents    : "0..* geofence events"
+
+trips ||--o{ positions       : "0..* trip points"
+
+fences ||--o{ geoevents      : "0..* events"
+
+@enduml
+\end{lstlisting}
+
+\vfill
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}\\[0.5em]
+{\small\textcolor{agtgray}{AG Technologies --- Document confidentiel \`a usage interne exclusivement.}}\\
+{\small\textcolor{agtgray}{Geolocation Service CDC v1.2 --- Avril 2026}}
+\end{center}
+
+\end{document}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\2.users.txt =====
+`
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel} % Remplacer par [french] si texlive-lang-french install\'e
+\usepackage[margin=2cm,bottom=2.5cm]{geometry}
+%\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{colortbl}
+\usepackage{lastpage}
+
+\definecolor{dark}{HTML}{1a1a2e}
+\definecolor{primary}{HTML}{16213e}
+\definecolor{accent}{HTML}{0f3460}
+\definecolor{lightbg}{HTML}{f8f9fa}
+\definecolor{border}{HTML}{dee2e6}
+\definecolor{muted}{HTML}{6c757d}
+\definecolor{codepink}{HTML}{d63384}
+\definecolor{warnbg}{HTML}{fff3cd}
+\definecolor{warntxt}{HTML}{856404}
+\definecolor{infobg}{HTML}{d1ecf1}
+\definecolor{infotxt}{HTML}{0c5460}
+
+\titleformat{\section}{\Large\bfseries\color{dark}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{accent}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{primary}}{}{0em}{}
+\titlespacing*{\section}{0pt}{16pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+\titlespacing*{\subsubsection}{0pt}{8pt}{3pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}AGT --- Service Users v2.1 --- Confidentiel}
+\fancyfoot[L]{\small\color{muted}AG Technologies --- Confidentiel}
+\fancyfoot[R]{\small\color{muted}\thepage\ / \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\lstset{
+  basicstyle=\small\ttfamily\color{codepink},
+  backgroundcolor=\color{lightbg},
+  frame=single, rulecolor=\color{border},
+  breaklines=true, tabsize=2, showstringspaces=false,
+  xleftmargin=4pt, xrightmargin=4pt,
+  aboveskip=6pt, belowskip=6pt,
+}
+
+\tcbuselibrary{skins,breakable}
+\newtcolorbox{warningbox}{colback=warnbg,colframe=warntxt,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable}
+\newtcolorbox{infobox}{colback=infobg,colframe=infotxt,boxrule=0.5pt,arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt,breakable}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcommand{\thdr}[1]{\textcolor{white}{\textbf{#1}}}
+\newcommand{\hdrrow}{\rowcolor{accent}}
+
+\hypersetup{colorlinks=true,linkcolor=accent,urlcolor=accent,
+  pdftitle={AG Technologies - User Service CDC v2.1},pdfauthor={Equipe Architecture}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\vspace*{5cm}
+\begin{center}
+\colorbox{dark}{\parbox{14cm}{\centering\vspace{12pt}
+  {\Huge\bfseries\color{white}AG TECHNOLOGIES}\par\vspace{6pt}
+  {\large\color{white!70}Service Gestion des Utilisateurs}\par\vspace{2pt}
+  {\normalsize\color{white!70}Profils, R\^oles \& Permissions Dynamiques --- User Service}\par\vspace{10pt}
+  {\large\color{white!70}Cahier des Charges Technique v2.1}\par\vspace{2pt}
+  {\normalsize\color{white!60}implementation-ready}\par\vspace{12pt}
+}}
+\end{center}
+\vspace{2cm}
+\begin{center}
+\begin{tabular}{ll}
+\textbf{Version} & 2.1 (implementation-ready) \\
+\textbf{Date} & Mars 2026 \\
+\textbf{Statut} & Post-audit --- Corrections appliqu\'ees \\
+\textbf{Classification} & Confidentiel \\
+\textbf{Auteur} & \'Equipe Architecture \\
+\end{tabular}
+\end{center}
+\vfill
+\begin{center}\small\color{muted}Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies\end{center}
+\newpage
+
+\section*{Historique des R\'evisions}
+{\small\begin{tabularx}{\textwidth}{L{1cm}L{2.5cm}X}\toprule
+\hdrrow \thdr{Ver.} & \thdr{Date} & \thdr{Description} \\\midrule
+1.0 & 20/03/2026 & Cr\'eation initiale \\
+2.0 & 20/03/2026 & Post-audit : plateformes unifi\'ees (Auth=ma\^itre, UUID), email/phone read-only, contrats inter-services, MLD corrig\'e, rate limiting, health check \\
+2.1 & 20/03/2026 & Clarifications finales : mod\`ele de suppression dual (quitter plateforme vs soft delete g\'en\'eral + deactivate Auth), s\'equence hard delete s\'ecuris\'ee, endpoint retrait plateforme, \{id\}=users\_profiles.id explicit\'e, endpoint lookup par auth\_user\_id, assigned\_by clarifi\'e \\
+\bottomrule\end{tabularx}}
+\newpage\tableofcontents\newpage
+
+\section{Introduction}
+\subsection{Objet}
+Cahier des charges technique du User Service d'AG Technologies.
+
+\subsection{P\'erim\`etre}
+\textbf{Inclus :} profils, adresses, RBAC dynamique, documents, m\'etadonn\'ees, recherche, statistiques, audit trail.
+
+\textbf{Hors p\'erim\`etre :}
+\begin{itemize}[nosep]
+\item Authentification, credentials, tokens $\to$ Service Auth
+\item Stockage fichiers $\to$ Service M\'edia
+\item Envoi emails/SMS $\to$ Service Notification
+\item CRUD plateformes $\to$ Service Auth (registre ma\^itre)
+\item Logique m\'etier / KYC des plateformes
+\end{itemize}
+
+\begin{infobox}
+\textbf{Source de v\'erit\'e :} Auth est la source ma\^itre pour l'identit\'e d'authentification (\texttt{auth\_user\_id}, email, phone, statut d'acc\`es). Users est la source ma\^itre pour le profil, les r\^oles, permissions, adresses, documents et m\'etadonn\'ees.
+\end{infobox}
+
+\subsection{Destinataires}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Destinataire} & \thdr{R\^ole} \\\midrule
+\'Equipe Backend & D\'eveloppement et maintenance \\
+\'Equipe Frontend & Int\'egration APIs \\
+\'Equipes consommatrices & AGT-Market, AGT-Bot, SALMA, Auth \\
+Lead Technique & Validation choix techniques \\
+\bottomrule\end{tabularx}}
+
+\section{Contexte \& Probl\'ematique}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Probl\`eme} & \thdr{Solution} \\\midrule
+Profils dupliqu\'es & Profil unique partag\'e \\
+R\^oles cod\'es en dur & RBAC 100\% dynamique via API \\
+Donn\'ees incoh\'erentes & Source unique de v\'erit\'e \\
+Suppression complexe & Soft + hard delete RGPD configurable \\
+V\'erification droits & Endpoint rapide + cache Redis \\
+\bottomrule\end{tabularx}}
+
+\section{Vision \& Objectifs}
+Le Service Users est \textbf{g\'en\'erique, abstrait et dynamique}. Aucun concept m\'etier cod\'e en dur.
+
+\begin{infobox}
+\textbf{Principe :} Users = registre central de \emph{qui est qui} et \emph{ce qu'il peut faire} --- sans contexte m\'etier.
+\end{infobox}
+
+\subsection{KPIs}
+{\small\begin{tabularx}{\textwidth}{L{5cm}C{3cm}C{3cm}}\toprule
+\hdrrow \thdr{KPI} & \thdr{MVP} & \thdr{Long terme} \\\midrule
+Lecture profil & $<200$ms & $<100$ms \\
+V\'erification permission & $<200$ms & $<50$ms \\
+Recherche & $<500$ms & $<200$ms \\
+Disponibilit\'e & $\geq99\%$ & $\geq99{,}5\%$ \\
+\bottomrule\end{tabularx}}
+
+\section{Parties Prenantes}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Service} & \thdr{Usage} \\\midrule
+AGT-Market & R\^oles client/vendeur/livreur, documents KYC \\
+SALMA & R\^oles \'etudiant/formateur, documents dipl\^omes \\
+AGT-Bot & R\^oles tenant/op\'erateur \\
+Service Auth & POST /users apr\`es inscription (provisioning sync) \\
+Service Notification & Alertes changements r\^oles, validation documents \\
+Service M\'edia & Stockage photos et documents \\
+\bottomrule\end{tabularx}}
+
+\section{Besoins Fonctionnels}
+
+\subsection{Module Profil}
+{\small\begin{tabularx}{\textwidth}{L{2cm}XL{2cm}}\toprule
+\hdrrow \thdr{ID} & \thdr{Fonctionnalit\'e} & \thdr{Priorit\'e} \\\midrule
+F-PRO-01 & Cr\'eation profil li\'e \`a Auth (auth\_user\_id) & Urgent \\
+F-PRO-02 & Consultation profil & Urgent \\
+F-PRO-03 & MAJ nom, pr\'enom, naissance, genre, photo & Urgent \\
+F-PRO-04 & Email/phone read-only sync Auth & Urgent \\
+F-PRO-05 & Quitter une plateforme (retrait r\^oles, m\'etadonn\'ees, documents) & Urgent \\
+F-PRO-06 & Soft delete g\'en\'eral (status=deleted + deactivate Auth) & Urgent \\
+F-PRO-07 & Hard delete RGPD (d\'elai configurable, s\'equence s\'ecuris\'ee) & Urgent \\
+F-PRO-08 & Upload photo via M\'edia & Normal \\
+\bottomrule\end{tabularx}}
+
+\subsection{Module Adresses}
+{\small\begin{tabularx}{\textwidth}{L{2cm}XL{2cm}}\toprule
+\hdrrow \thdr{ID} & \thdr{Fonctionnalit\'e} & \thdr{Priorit\'e} \\\midrule
+F-ADR-01 & CRUD adresses, type libre & Urgent \\
+F-ADR-02 & Adresse par d\'efaut & Normal \\
+\bottomrule\end{tabularx}}
+
+\subsection{Module RBAC Dynamique}
+\begin{infobox}
+\textbf{Aucun r\^ole ni permission cod\'e en dur.} Tout est cr\'e\'e dynamiquement via l'API.
+\end{infobox}
+
+{\small\begin{tabularx}{\textwidth}{L{2cm}XL{2cm}}\toprule
+\hdrrow \thdr{ID} & \thdr{Fonctionnalit\'e} & \thdr{Priorit\'e} \\\midrule
+F-ROL-01 & CRUD r\^oles par plateforme & Urgent \\
+F-ROL-02 & CRUD permissions par plateforme & Urgent \\
+F-ROL-03 & Attacher/d\'etacher permissions \`a un r\^ole & Urgent \\
+F-ROL-04 & Assigner/retirer r\^oles par user par plateforme & Urgent \\
+F-ROL-05 & Multi-r\^oles, multi-plateformes & Urgent \\
+F-ROL-06 & V\'erification permission (rapide, cache Redis) & Urgent \\
+\bottomrule\end{tabularx}}
+
+\subsection{Module Documents}
+{\small\begin{tabularx}{\textwidth}{L{2cm}XL{2cm}}\toprule
+\hdrrow \thdr{ID} & \thdr{Fonctionnalit\'e} & \thdr{Priorit\'e} \\\midrule
+F-DOC-01 & Attacher document, type libre & Urgent \\
+F-DOC-02 & Fichier dans M\'edia, Users garde r\'ef\'erence & Urgent \\
+F-DOC-03 & Workflow pending$\to$validated/rejected & Urgent \\
+F-DOC-04 & Re-soumission (historique conserv\'e) & Normal \\
+F-DOC-05 & Listage filtrable & Normal \\
+\bottomrule\end{tabularx}}
+
+\subsection{Module M\'etadonn\'ees}
+Syst\`eme cl\'e-valeur flexible par plateforme, sans modification du sch\'ema central.
+
+\subsection{Module Recherche \& Statistiques}
+Listage pagin\'e (filtres plateforme, r\^ole, statut), recherche texte, stats par plateforme/r\^ole/statut.
+
+\section{Besoins Non-Fonctionnels}
+{\small\begin{tabularx}{\textwidth}{L{1.5cm}L{2.5cm}XL{3.5cm}}\toprule
+\hdrrow \thdr{ID} & \thdr{Cat\'egorie} & \thdr{Exigence} & \thdr{Cible} \\\midrule
+NF-01 & Performance & Lecture profil & $<200$ms (P95) \\
+NF-02 & Performance & V\'erif. permission & $<200$ms (cache) \\
+NF-03 & Performance & Recherche & $<500$ms \\
+NF-04 & Performance & \'Ecriture & $<300$ms \\
+NF-05 & Disponibilit\'e & Uptime & $\geq99{,}5\%$ \\
+NF-06 & S\'ecurit\'e & Auth obligatoire & Bearer token \\
+NF-07 & S\'ecurit\'e & Isolation donn\'ees & Par plateforme \\
+NF-08 & S\'ecurit\'e & PII prot\'eg\'es & Exclus des logs \\
+NF-09 & S\'ecurit\'e & Audit trail & Toute modification \\
+NF-10 & Scalabilit\'e & Horizontal & Stateless \\
+NF-11 & Scalabilit\'e & Cache & Redis TTL config. \\
+NF-12 & Observabilit\'e & Health check & GET /api/v1/health \\
+NF-13 & Observabilit\'e & Logs & JSON structur\'e \\
+\bottomrule\end{tabularx}}
+
+\section{Architecture Technique}
+
+\subsection{Stack}
+{\small\begin{tabularx}{\textwidth}{L{4.5cm}X}\toprule
+\hdrrow \thdr{Composant} & \thdr{Technologie} \\\midrule
+Langage \& Framework & Python 3.11+ / Django 5.x \\
+API & Django REST Framework \\
+Base de donn\'ees & PostgreSQL 15+ \\
+Cache & Redis 7+ \\
+Conteneurisation & Docker + Docker Compose \\
+CI/CD & GitHub Actions \\
+\bottomrule\end{tabularx}}
+
+\subsection{D\'ependances}
+\begin{warningbox}
+\textbf{R\`egle :} Users d\'epend de Auth. Auth ne d\'epend PAS de Users. Plateformes g\'er\'ees par Auth (registre ma\^itre).
+\end{warningbox}
+
+{\small\begin{tabularx}{\textwidth}{L{3.5cm}L{2cm}X}\toprule
+\hdrrow \thdr{Service} & \thdr{Type} & \thdr{Usage} \\\midrule
+Service Auth & Interne & Validation JWT, source plateformes, source email/phone \\
+Service M\'edia & Interne & Stockage photos et documents \\
+Service Notification & Interne & Alertes r\^oles, validation documents \\
+\bottomrule\end{tabularx}}
+
+\subsection{Mod\`ele d'Autorisation}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{4.5cm}X}\toprule
+\hdrrow \thdr{Niveau} & \thdr{M\'ecanisme} & \thdr{Endpoints} \\\midrule
+Service-to-Service & Token S2S Auth & POST /users, purge RGPD \\
+Admin plateforme & Bearer + RBAC (manage\_roles\ldots) & CRUD r\^oles, permissions, documents \\
+Utilisateur & Bearer token & Son profil, adresses, documents \\
+\bottomrule\end{tabularx}}
+
+Chaque plateforme cr\'ee ses r\^oles admin \`a l'init avec permissions n\'ecessaires. Pas de m\'ecanisme sp\'ecial.
+
+\newpage
+\section{Mod\'elisation --- MLD}
+
+\begin{warningbox}
+\textbf{v2.0 :} Plus de table \texttt{platforms} locale. Tous les \texttt{platform\_id} = UUID Auth.
+\end{warningbox}
+
+\subsection{Table \texttt{users\_profiles}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & Identifiant \\
+auth\_user\_id & UUID & NOT NULL, UNIQUE & FK logique $\to$ Auth \\
+first\_name & VARCHAR(100) & NOT NULL & Pr\'enom \\
+last\_name & VARCHAR(100) & NOT NULL & Nom \\
+email & VARCHAR(255) & NULL & Read-only (Auth) \\
+phone & VARCHAR(20) & NULL & Read-only (Auth) \\
+avatar\_url & VARCHAR(500) & NULL & URL photo \\
+birth\_date & DATE & NULL & Naissance \\
+gender & VARCHAR(20) & NULL & Genre \\
+status & VARCHAR(20) & DEFAULT 'active' & active/inactive/deleted/deletion\_in\_progress \\
+deleted\_at & TIMESTAMPTZ & NULL & Soft delete \\
+hard\_delete\_after & TIMESTAMPTZ & NULL & Hard delete planifi\'e \\
+purge\_auth\_pending & BOOLEAN & DEFAULT false & Purge Auth en attente apr\`es \'echec \\
+deletion\_error\_reason & TEXT & NULL & Dernier motif d'\'echec suppression \\
+created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\
+updated\_at & TIMESTAMPTZ & NOT NULL & MAJ \\
+\bottomrule\end{tabularx}}
+
+\subsection{Table \texttt{addresses}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+user\_id & UUID & FK $\to$ users\_profiles & \\
+type & VARCHAR(50) & NOT NULL & Type libre \\
+street & VARCHAR(255) & NOT NULL & \\
+city & VARCHAR(100) & NOT NULL & \\
+country & VARCHAR(100) & NOT NULL & \\
+postal\_code & VARCHAR(20) & NULL & Code postal \\
+is\_default & BOOLEAN & DEFAULT false & \\
+created\_at & TIMESTAMPTZ & NOT NULL & \\
+updated\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+
+\subsection{Table \texttt{roles}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+platform\_id & UUID & NOT NULL & R\'ef. Auth \\
+name & VARCHAR(100) & NOT NULL & \\
+description & TEXT & NULL & \\
+created\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+\textbf{UNIQUE :} (platform\_id, name)
+
+\subsection{Table \texttt{permissions}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+platform\_id & UUID & NOT NULL & R\'ef. Auth \\
+name & VARCHAR(100) & NOT NULL & \\
+description & TEXT & NULL & \\
+created\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+\textbf{UNIQUE :} (platform\_id, name)
+
+\subsection{Table \texttt{role\_permissions}}
+PK composite (role\_id, permission\_id). FK $\to$ roles, FK $\to$ permissions. + created\_at.
+
+\subsection{Table \texttt{user\_roles}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+user\_id & UUID & FK $\to$ users\_profiles & \\
+role\_id & UUID & FK $\to$ roles & \\
+assigned\_by & UUID & NULL & Admin \\
+assigned\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+\textbf{UNIQUE :} (user\_id, role\_id). Note v2.0 : platform\_id retir\'e (redondant). \textbf{Note v2.1 :} \texttt{assigned\_by} = \texttt{users\_profiles.id} de l'admin qui a assign\'e le r\^ole (coh\'erent avec audit\_logs.actor\_id).
+
+\subsection{Table \texttt{documents}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+user\_id & UUID & FK $\to$ users\_profiles & \\
+platform\_id & UUID & NOT NULL & Plateforme \\
+doc\_type & VARCHAR(100) & NOT NULL & Type libre \\
+media\_id & UUID & NOT NULL & R\'ef. M\'edia \\
+status & VARCHAR(20) & DEFAULT 'pending' & \\
+comment & TEXT & NULL & Review \\
+submitted\_at & TIMESTAMPTZ & NOT NULL & \\
+reviewed\_at & TIMESTAMPTZ & NULL & \\
+created\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+
+\subsection{Table \texttt{document\_history}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+document\_id & UUID & FK $\to$ documents & Parent \\
+media\_id & UUID & NOT NULL & Ancienne r\'ef. \\
+status & VARCHAR(20) & NOT NULL & Archiv\'e \\
+comment & TEXT & NULL & \\
+submitted\_at & TIMESTAMPTZ & NOT NULL & \\
+reviewed\_at & TIMESTAMPTZ & NULL & \\
+archived\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+
+\subsection{Table \texttt{user\_metadata}}
+{\small\begin{tabularx}{\textwidth}{L{3cm}L{2.8cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+user\_id & UUID & FK $\to$ users\_profiles & \\
+platform\_id & UUID & NOT NULL & \\
+key & VARCHAR(100) & NOT NULL & \\
+value & TEXT & NOT NULL & \\
+updated\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+\textbf{UNIQUE :} (user\_id, platform\_id, key)
+
+\subsection{Table \texttt{audit\_logs}}
+{\small\begin{tabularx}{\textwidth}{L{2.8cm}L{2.5cm}L{3.5cm}X}\toprule
+\hdrrow \thdr{Colonne} & \thdr{Type} & \thdr{Contrainte} & \thdr{Description} \\\midrule
+id & UUID & PK & \\
+entity\_type & VARCHAR(50) & NOT NULL & Table modifi\'ee \\
+entity\_id & UUID & NOT NULL & \\
+action & VARCHAR(30) & NOT NULL & create, update\ldots \\
+actor\_id & UUID & NULL & NULL=syst\`eme \\
+actor\_type & VARCHAR(20) & DEFAULT 'user' & user/service/system \\
+old\_value & JSONB & NULL & \\
+new\_value & JSONB & NULL & \\
+created\_at & TIMESTAMPTZ & NOT NULL & \\
+\bottomrule\end{tabularx}}
+\textbf{Index :} (entity\_type, entity\_id), (actor\_id), (created\_at)
+
+\newpage
+\section{Contrats d'API}
+\textbf{Base URL :} \texttt{/api/v1} \quad \textbf{Format :} JSON \quad \textbf{Auth :} Bearer token (sauf mention)
+
+\textbf{Pagination :}
+\begin{lstlisting}
+{"data": [...], "page": 1, "limit": 20, "total": 142}
+\end{lstlisting}
+
+\begin{warningbox}
+\textbf{Convention v2.1 :} dans tous les endpoints \texttt{/users/\{id\}}, \texttt{\{id\}} d\'esigne toujours \texttt{users\_profiles.id} (UUID interne Users). Les services qui ne disposent que du \texttt{auth\_user\_id} doivent d'abord appeler \texttt{GET /api/v1/users/by-auth/\{authUserId\}} pour r\'esoudre l'ID.
+\end{warningbox}
+
+\subsection{GET /api/v1/health}
+Sans auth. V\'erifie DB + Redis.
+\begin{lstlisting}
+{"status":"healthy","database":"ok","redis":"ok","version":"2.1"}
+\end{lstlisting}
+
+\subsection{Profil}
+
+\subsubsection{POST /api/v1/users --- Provisioning}
+Auth : Token S2S (par Auth apr\`es inscription).
+\begin{lstlisting}
+{"auth_user_id":"uuid","first_name":"Jean","last_name":"Dupont",
+ "email":"jean@example.com","phone":"+237600000000"}
+\end{lstlisting}
+\textbf{Note v2.1 :} les champs email/phone sont une \textbf{projection initiale} depuis Auth. Users ne les modifie jamais lui-m\^eme --- seul Auth peut les mettre \`a jour via POST /api/v1/users/sync.\\
+Codes : 201, 400, 409 (existe), 401.
+
+\subsubsection{POST /api/v1/users/sync --- Sync email/phone}
+Auth : Token S2S. Par Auth quand email/phone change.
+\begin{lstlisting}
+{"auth_user_id":"uuid","email":"new@example.com","phone":"+237611111111"}
+\end{lstlisting}
+Codes : 200, 404, 401.
+
+\subsubsection{POST /api/v1/users/status-sync --- Sync status}
+Auth : Token S2S. Utilis\'e par Auth pour propager un changement d'\'etat de compte vers Users (ex: d\'esactivation).
+\begin{lstlisting}
+{"auth_user_id":"uuid","status":"inactive"}
+\end{lstlisting}
+Codes : 200, 404, 401.
+
+\subsubsection{GET /api/v1/users/\{id\}}
+Codes : 200, 401, 403, 404.
+
+\subsubsection{GET /api/v1/users/by-auth/\{authUserId\} --- Lookup}
+Auth : Bearer ou Token S2S. R\'esout un \texttt{auth\_user\_id} vers un profil Users complet. Utile pour les int\'egrations inter-services.\\
+Codes : 200, 401, 404.
+
+\subsubsection{PUT /api/v1/users/\{id\}}
+Auth : propri\'etaire ou manage\_users. Champs : first\_name, last\_name, birth\_date, gender. \textbf{email/phone NON modifiables.}
+
+\subsubsection{DELETE /api/v1/users/\{id\}/platforms/\{platformId\} --- Quitter une plateforme}
+Auth : Bearer (propri\'etaire) ou manage\_users. Retire tous les r\^oles et m\'etadonn\'ees de l'utilisateur sur cette plateforme, et archive logiquement les documents associ\'es sans suppression imm\'ediate des fichiers physiques. Le profil global et le compte Auth restent intacts. L'utilisateur peut revenir.
+\begin{lstlisting}
+{"message":"Platform left","platform_id":"uuid",
+ "roles_removed":2,"metadata_cleared":true,"documents_archived":3}
+\end{lstlisting}
+Codes : 200, 401, 403, 404.
+
+\subsubsection{DELETE /api/v1/users/\{id\} --- Soft delete g\'en\'eral}
+Auth : Bearer (propri\'etaire). Suppression compl\`ete du compte sur \textbf{toutes les plateformes}. Marque status=deleted, calcule hard\_delete\_after. \textbf{D\'eclenche aussi une d\'esactivation Auth via un endpoint S2S d\'edi\'e (sans mot de passe), afin de bloquer imm\'ediatement la connexion utilisateur.}
+\begin{lstlisting}
+{"message":"Account deactivated","status":"deleted",
+ "hard_delete_scheduled":"2026-04-19T10:00:00Z"}
+\end{lstlisting}
+Codes : 200, 401, 403, 404.
+
+\begin{infobox}
+\textbf{Mod\`ele de suppression dual (v2.1) :}\\
+--- \textbf{Quitter une plateforme} = retrait r\^oles/m\'etadonn\'ees/documents de cette plateforme. Profil et Auth intacts.\\
+--- \textbf{Soft delete g\'en\'eral} = profil marqu\'e deleted + Auth d\'esactiv\'e. Hard delete apr\`es d\'elai configurable.\\
+Un utilisateur multi-plateforme peut quitter une plateforme sans perdre son compte global.
+\end{infobox}
+
+\subsubsection{DELETE /api/v1/users/\{id\}/permanent --- Hard delete}
+Auth : manage\_users ou S2S. Irr\'eversible + purge Auth.
+
+\subsubsection{PUT /api/v1/users/\{id\}/photo}
+Body : \texttt{\{"media\_id":"uuid"\}}
+
+\subsubsection{GET /api/v1/users}
+Auth : manage\_users. Query : platform\_id, role, status, page, limit.
+
+\subsubsection{GET /api/v1/users/search}
+Auth : manage\_users. Query : q, page, limit.
+
+\subsubsection{GET /api/v1/users/stats}
+Auth : view\_stats.
+
+\subsection{Adresses}
+Auth : propri\'etaire ou manage\_users.
+
+\subsubsection{POST /api/v1/users/\{id\}/addresses}
+\begin{lstlisting}
+{"type":"livraison","street":"123 Rue","city":"Yaounde",
+ "country":"Cameroun","postal_code":"BP1234","is_default":true}
+\end{lstlisting}
+
+\subsubsection{GET, PUT, DELETE --- standard CRUD}
+
+\subsubsection{PUT /api/v1/users/\{id\}/addresses/\{addressId\}/default}
+
+\subsection{R\^oles}
+Auth : manage\_roles.
+
+\subsubsection{POST /api/v1/platforms/\{platformId\}/roles}
+\begin{lstlisting}
+{"name":"vendeur","description":"Utilisateur vendeur"}
+\end{lstlisting}
+platformId = UUID Auth. Codes : 201, 400, 403, 409.
+
+\subsubsection{GET, PUT, DELETE --- standard CRUD}
+
+\subsection{Permissions}
+Auth : manage\_roles.
+
+\subsubsection{POST /api/v1/platforms/\{platformId\}/permissions}
+\begin{lstlisting}
+{"name":"create_product","description":"Peut creer des produits"}
+\end{lstlisting}
+
+\subsubsection{POST /api/v1/platforms/\{platformId\}/roles/\{roleId\}/permissions}
+Body : \texttt{\{"permission\_id":"uuid"\}}
+
+\subsubsection{DELETE .../permissions/\{permId\}}
+
+\subsection{R\^oles Utilisateur}
+Auth : manage\_roles.
+
+\subsubsection{POST /api/v1/users/\{id\}/roles}
+Body : \texttt{\{"role\_id":"uuid"\}}. Codes : 201, 409 (d\'ej\`a assign\'e).
+
+\subsubsection{GET /api/v1/users/\{id\}/roles}
+Query : ?platform\_id=uuid.
+\begin{lstlisting}
+{"user_id":"uuid","roles":[
+  {"role":{"id":"...","name":"vendeur"},"platform_id":"uuid",
+   "assigned_at":"...","assigned_by":"uuid"}]}
+\end{lstlisting}
+
+\subsubsection{DELETE /api/v1/users/\{id\}/roles/\{roleId\}}
+
+\subsubsection{GET /api/v1/users/\{id\}/permissions/check}
+Auth : Bearer ou S2S. Cache Redis. Query : platform\_id, permission (obligatoires).
+\begin{lstlisting}
+{"user_id":"uuid","platform_id":"uuid","permission":"create_product",
+ "granted":true,"via_role":"vendeur"}
+\end{lstlisting}
+Cache : \texttt{perm:\{userId\}:\{platformId\}:\{permName\}}, TTL config. Invalidation auto.
+
+\subsection{Documents}
+
+\subsubsection{POST /api/v1/users/\{id\}/documents}
+\begin{lstlisting}
+{"platform_id":"uuid","doc_type":"cni","media_id":"uuid"}
+\end{lstlisting}
+Re-soumission : ancien archiv\'e dans document\_history.
+
+\subsubsection{GET /api/v1/users/\{id\}/documents}
+Query : ?type=cni\&status=pending
+
+\subsubsection{PUT /api/v1/users/\{id\}/documents/\{docId\}/status}
+Auth : manage\_documents. Body : \texttt{\{"status":"validated","comment":"OK"\}}
+
+\subsubsection{DELETE, GET .../history --- standard}
+
+\subsection{M\'etadonn\'ees}
+
+\subsubsection{PUT /api/v1/users/\{id\}/metadata/\{platformId\}}
+\begin{lstlisting}
+{"nom_boutique":"Tech Shop","siret":"123456789"}
+\end{lstlisting}
+Upsert.
+
+\subsubsection{GET, DELETE .../\{key\} --- standard}
+
+\newpage
+\section{Contrats Inter-Services}
+
+\subsection{Auth $\to$ Users (Provisioning)}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Param.} & \thdr{Valeur} \\\midrule
+D\'eclencheur & Register r\'eussi (email, phone, OAuth) \\
+Transport & HTTP POST sync \\
+Endpoint & POST /api/v1/users \\
+Auth & Token S2S \\
+Timeout/Retry & 5s / 3x backoff (1s,2s,4s) \\
+\'Echec & Auth cr\'ee compte + warning, cron retente \\
+\bottomrule\end{tabularx}}
+
+\subsection{Auth $\to$ Users (Sync email/phone)}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Param.} & \thdr{Valeur} \\\midrule
+D\'eclencheur & Changement email/phone dans Auth \\
+Transport & HTTP POST sync \\
+Endpoint & POST /api/v1/users/sync \\
+\'Echec & Auth logge, op\'eration valid\'ee \\
+\bottomrule\end{tabularx}}
+
+\subsection{Auth $\to$ Users (Sync status)}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Param.} & \thdr{Valeur} \\\midrule
+D\'eclencheur & Changement d'\'etat du compte dans Auth (\texttt{is\_deactivated}) \\
+Transport & HTTP POST sync \\
+Endpoint & POST /api/v1/users/status-sync \\
+Auth & Token S2S \\
+Payload & \texttt{\{"auth\_user\_id":"uuid","status":"inactive"\}} \\
+\'Echec & Auth logge, op\'eration Auth reste valide \\
+\bottomrule\end{tabularx}}
+
+\subsection{Users $\to$ Auth (Purge RGPD)}
+
+\begin{warningbox}
+\textbf{Contrat additionnel v2.1 --- Soft delete g\'en\'eral :} quand un utilisateur soft-delete son compte global, Users appelle un endpoint Auth \textbf{S2S d\'edi\'e} de d\'esactivation propag\'ee. \textbf{L'endpoint utilisateur} \texttt{POST /auth/account/deactivate} reste r\'eserv\'e aux appels frontend avec mot de passe. Une extension Auth v1.4 est requise pour la propagation inter-service.
+\end{warningbox}
+
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Param.} & \thdr{Valeur} \\\midrule
+D\'eclencheur & DELETE /api/v1/users/\{id\} (soft delete global) \\
+Transport & HTTP POST sync \\
+Endpoint Auth & POST /auth/admin/deactivate/\{authUserId\} (Auth v1.4) \\
+Auth & Token S2S ou X-Admin-API-Key \\
+Effet & Positionne \texttt{is\_deactivated=true}, r\'evoque sessions et refresh tokens \\
+\'Echec & Users annule ou journalise pour retry \\
+\bottomrule\end{tabularx}}
+
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Param.} & \thdr{Valeur} \\\midrule
+D\'eclencheur & Cron: hard\_delete\_after d\'epass\'e, ou admin \\
+Transport & HTTP DELETE sync \\
+Endpoint Auth & DELETE /auth/admin/purge/\{userId\} (Auth v1.4) \\
+S\'equence & 1) Marquer status=deletion\_in\_progress 2) Appel Auth purge 3) Si succ\`es: purge Users 4) Si \'echec: purge\_auth\_pending=true, retry cron \\
+\'Echec & Donn\'ees Users intactes tant qu'Auth n'a pas confirm\'e \\
+\bottomrule\end{tabularx}}
+
+\begin{warningbox}
+\textbf{Auth v1.4 requis :} DELETE /auth/admin/purge/\{userId\} --- supprime users\_auth, sessions, refresh\_tokens, oauth\_providers, login\_history, verification\_tokens.
+\end{warningbox}
+
+\subsection{Users $\to$ Notification}
+Transport : HTTP POST sync (MVP). Token S2S. Timeout 5s, 3x retry.
+
+Types : role\_assigned, role\_removed, document\_validated, document\_rejected, account\_deleted.
+
+\subsection{Users $\to$ M\'edia}
+Frontend upload direct vers M\'edia, Users re\c{c}oit media\_id. Users supprime via M\'edia au hard delete. Auth : S2S.
+
+\section{Rate Limiting}
+{\small\begin{tabularx}{\textwidth}{L{5.5cm}L{2cm}L{2cm}X}\toprule
+\hdrrow \thdr{Endpoint} & \thdr{Fen.} & \thdr{Limite} & \thdr{Strat.} \\\midrule
+/users/search & 1 min & 20 & IP+user \\
+/users/\{id\}/permissions/check & 1 min & 100 & IP \\
+POST .../documents & 1h & 10 & user \\
+Global & 1 min & 200 & IP \\
+\bottomrule\end{tabularx}}
+Redis sliding window.
+
+\section{Infrastructure}
+{\small\begin{tabularx}{\textwidth}{L{6.5cm}X}\toprule
+\hdrrow \thdr{Variable} & \thdr{Description} \\\midrule
+DATABASE\_URL & PostgreSQL \\
+REDIS\_URL & Redis \\
+AUTH\_SERVICE\_URL & Service Auth \\
+MEDIA\_SERVICE\_URL & Service M\'edia \\
+NOTIFICATION\_SERVICE\_URL & Service Notification \\
+PERMISSION\_CACHE\_TTL & Cache permissions (300s) \\
+PROFILE\_CACHE\_TTL & Cache profils (600s) \\
+SECRET\_KEY & Django secret \\
+DEFAULT\_HARD\_DELETE\_DELAY\_DAYS & D\'elai RGPD (30j) \\
+PURGE\_CRON\_SCHEDULE & Cron purge (0 2 * * *) \\
+\bottomrule\end{tabularx}}
+
+\section{Mapping Statuts Auth $\leftrightarrow$ Users}
+{\small\begin{tabularx}{\textwidth}{L{2.5cm}L{3cm}L{3cm}X}\toprule
+\hdrrow \thdr{\'Ev\'en.} & \thdr{Auth} & \thdr{Users} & \thdr{Propagation} \\\midrule
+Inscription & Compte & Profil active & Auth$\to$POST /users \\
+Blocage & is\_blocked & Pas d'impact & Aucune \\
+D\'esactivation Auth & is\_deactivated & status=inactive & Auth$\to$POST /users/status-sync \\
+Quitter plateforme & --- & R\^oles/m\'eta/docs retir\'es & Users seul \\
+Soft delete global & is\_deactivated & status=deleted & Users$\to$Auth S2S deactivate \\
+Hard delete & Purge creds & Purge profil & Users$\to$Auth purge \\
+\bottomrule\end{tabularx}}
+
+Auth g\`ere l'acc\`es et l'\'etat d'authentification. Users g\`ere le cycle de vie du profil et l'appartenance aux plateformes. Toute propagation de statut passe par un contrat inter-service explicite. Pas de mapping automatique \texttt{is\_blocked} $\leftrightarrow$ \texttt{status}.
+
+\section{Recommandations}
+\begin{itemize}[nosep]
+\item Migration SALMA : export $\to$ transform $\to$ POST /api/v1/users + r\^oles
+\item Cache permissions : invalidation auto sur modif r\^ole/assignation
+\item PII exclus des logs et r\'eponses d'erreur
+\item Migration future vers event bus (RabbitMQ/Redis Streams)
+\item Monitoring Prometheus (requ\^etes, latence P95, cache hit ratio)
+\item Versioning : /api/v1, cohabitation /api/v2 si breaking changes
+\end{itemize}
+
+\newpage
+\section*{Glossaire}
+{\small\begin{tabularx}{\textwidth}{L{4cm}X}\toprule
+\hdrrow \thdr{Terme} & \thdr{D\'efinition} \\\midrule
+RBAC & Role-Based Access Control \\
+Soft Delete & Suppression logique \\
+Hard Delete & Suppression physique (RGPD) \\
+PII & Personally Identifiable Information \\
+JWT & JSON Web Token \\
+S2S & Service-to-Service \\
+Token S2S & Via POST /auth/s2s/token \\
+TTL & Time To Live (cache) \\
+Audit Trail & Historique des modifications \\
+\bottomrule\end{tabularx}}
+
+\vfill
+\begin{center}\small\color{muted}
+AG Technologies --- Confidentiel --- User Service CDC v2.1 --- Mars 2026
+\end{center}
+
+\end{document}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\3.notifs.txt =====
+`
+\documentclass[11pt,a4paper]{article}
+
+% â”€â”€â”€ Encodage & Langue â”€â”€â”€
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% â”€â”€â”€ Mise en page â”€â”€â”€
+\usepackage[top=1.8cm,bottom=1.8cm,left=2cm,right=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+% â”€â”€â”€ Couleurs â”€â”€â”€
+\usepackage[table,dvipsnames]{xcolor}
+\definecolor{primary}{HTML}{0D47A1}
+\definecolor{secondary}{HTML}{1565C0}
+\definecolor{accent}{HTML}{42A5F5}
+\definecolor{lightbg}{HTML}{E3F2FD}
+\definecolor{darktext}{HTML}{1A237E}
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{success}{HTML}{2E7D32}
+\definecolor{warning}{HTML}{E65100}
+\definecolor{tabhead}{HTML}{0D47A1}
+\definecolor{tabrow}{HTML}{E3F2FD}
+
+% â”€â”€â”€ Typographie & sections â”€â”€â”€
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries\color{primary}}{{\thesection}}{0.8em}{}[\color{accent}\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{secondary}}{{\thesubsection}}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{darktext}}{{\thesubsubsection}}{0.5em}{}
+\titlespacing*{\section}{0pt}{10pt}{5pt}
+\titlespacing*{\subsection}{0pt}{8pt}{3pt}
+\titlespacing*{\subsubsection}{0pt}{6pt}{2pt}
+
+% â”€â”€â”€ Tableaux â”€â”€â”€
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% â”€â”€â”€ Listes â”€â”€â”€
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.5em,itemsep=2pt}
+
+% â”€â”€â”€ Code / JSON â”€â”€â”€
+\usepackage{listings}
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  stringstyle=\color{primary},
+  numbers=none,
+  showstringspaces=false,
+  breaklines=true,
+  literate=
+    *{:}{{{\color{darktext}{:}}}}{1}
+    {,}{{{\color{darktext}{,}}}}{1}
+    {\{}{{{\color{secondary}{\{}}}}{1}
+    {\}}{{{\color{secondary}{\}}}}}{1}
+    {[}{{{\color{secondary}{[}}}}{1}
+    {]}{{{\color{secondary}{]}}}}{1},
+}
+\lstdefinelanguage{plantuml}{
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{primary}\bfseries,
+  commentstyle=\color{gray},
+  stringstyle=\color{secondary},
+  numbers=none,
+  showstringspaces=false,
+  breaklines=true,
+  morekeywords={@startuml,@enduml,entity,class,enum,abstract,interface,skinparam,hide,show,package,note,as,left,right,of,on},
+}
+\lstset{
+  language=json,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{accent},
+  framesep=4pt,
+  xleftmargin=6pt,
+  xrightmargin=6pt,
+  aboveskip=5pt,
+  belowskip=5pt,
+}
+
+% â”€â”€â”€ BoÃ®tes â”€â”€â”€
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\newtcolorbox{infobox}[1][]{
+  colback=lightbg,colframe=primary,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=primary,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=orange!5,colframe=warning,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=warning,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+
+% â”€â”€â”€ Liens â”€â”€â”€
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,linkcolor=primary,
+  urlcolor=secondary,citecolor=primary,
+  bookmarks=true,pdfstartview=FitH,
+  pdftitle={Cahier des Charges -- Service Notification CentralisÃ©},
+  pdfauthor={Ã‰quipe Architecture AGT},
+}
+
+% â”€â”€â”€ En-tÃªte / Pied â”€â”€â”€
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{primary}\textbf{AGT --- Service Notification}}
+\fancyhead[R]{\small\color{primary}v1.2 --- Confidentiel}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+% â”€â”€â”€ Divers â”€â”€â”€
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc,fit}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\begin{document}
+
+% â”€â”€â”€â”€ PAGE DE GARDE â”€â”€â”€â”€
+\begin{titlepage}
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[primary] (current page.north west) rectangle ([yshift=-6cm]current page.north east);
+  \fill[secondary] ([yshift=-6cm]current page.north west) rectangle ([yshift=-6.4cm]current page.north east);
+  \fill[accent] ([yshift=-6.4cm]current page.north west) rectangle ([yshift=-6.6cm]current page.north east);
+  \node[anchor=north west,white,font=\fontsize{12}{14}\selectfont] at ([xshift=2.2cm,yshift=-1.5cm]current page.north west) {AGT --- Shared Services Architecture};
+  \node[anchor=north west,white,font=\fontsize{28}{34}\selectfont\bfseries,text width=16cm] at ([xshift=2.2cm,yshift=-2.8cm]current page.north west) {Cahier des Charges\\Service de Notification CentralisÃ©};
+  \fill[lightbg] ([yshift=3cm]current page.south west) rectangle (current page.south east);
+\end{tikzpicture}
+
+\vspace*{8cm}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{@{}l@{\hspace{1.5cm}}l@{}}
+\textbf{\color{primary}Version} & 1.2 \\
+\textbf{\color{primary}Date} & Mars 2026 \\
+\textbf{\color{primary}Statut} & Post-audit --- AlignÃ© Auth v2.1 + Users v1.0 \\
+\textbf{\color{primary}Classification} & Confidentiel \\
+\end{tabular}
+\end{center}
+
+\vfill
+\begin{center}
+\color{primary}\rule{8cm}{0.4pt}\\[4pt]
+{\small\color{secondary} AGT Engineering --- Architecture des Services PartagÃ©s}
+\end{center}
+\end{titlepage}
+
+% â”€â”€â”€â”€ HISTORIQUE â”€â”€â”€â”€
+\thispagestyle{fancy}
+\section*{Historique des RÃ©visions}
+\begin{tabularx}{\textwidth}{@{}c c l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Ver.} & \color{white}\textbf{Date} & \color{white}\textbf{Auteur} & \color{white}\textbf{Description} \\
+\midrule
+1.0 & 2026-03-20 & Ã‰quipe Architecture & CrÃ©ation initiale du cahier des charges \\
+\rowcolor{tabrow}
+1.1 & 2026-03-20 & Ã‰quipe Architecture & Post-audit : alignement Auth v2.1 + Users v1.0. IdentitÃ© \texttt{user\_id} clarifiÃ©e. \texttt{platform\_id} alignÃ© UUID. Contrats inter-services formalisÃ©s. Table \texttt{device\_tokens} ajoutÃ©e. MLD corrigÃ©. PrÃ©fÃ©rences : Notification source de vÃ©ritÃ©. \\
+1.2 & 2026-03-20 & Ã‰quipe Architecture & Multi-canal orchestrÃ© par Notification (\texttt{channels:[]}). \texttt{send-bulk} limitÃ© Ã  100. Templates UNIQUE(name, platform\_id). Cache coordonnÃ©es Users. VÃ©rification user actif. PrÃ©fÃ©rences par dÃ©faut. SÃ©curitÃ© device tokens / prÃ©fÃ©rences. Idempotency scoped + TTL. Ordre retry/provider/fallback clarifiÃ©. Diagramme PlantUML en annexe. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{1cm}
+\tableofcontents
+\newpage
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% 1. INTRODUCTION
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Introduction}
+
+Ce document constitue le cahier des charges du \textbf{Service de Notification CentralisÃ©} destinÃ© Ã  l'Ã©cosystÃ¨me de plateformes AGT. Il sert de rÃ©fÃ©rence unique pour la conception, le dÃ©veloppement et l'intÃ©gration avec les autres services de l'architecture partagÃ©e.
+
+\textbf{PÃ©rimÃ¨tre.} Le service couvre l'ensemble du cycle de vie des notifications : envoi multi-canal (email, SMS, push, in-app, WhatsApp), gestion de templates dynamiques, prÃ©fÃ©rences utilisateur, planification, campagnes, historique et statistiques. Il est conÃ§u comme un service centralisÃ© rÃ©utilisable par toute plateforme de l'Ã©cosystÃ¨me.
+
+\begin{warnbox}[Convention d'identitÃ© (v1.1+)]
+Dans tout ce document :
+\begin{itemize}
+  \item \textbf{\texttt{user\_id}} dÃ©signe \texttt{users\_profiles.id} du Service Users. C'est l'identifiant du profil utilisateur, distinct de l'identifiant d'authentification.
+  \item \textbf{\texttt{platform\_id}} dÃ©signe un UUID provenant du registre des plateformes du Service Auth (\texttt{platforms.id}).
+  \item Notification ne stocke aucune table locale de plateformes ni d'utilisateurs. Il consomme les services Auth et Users pour la validation et la rÃ©solution des donnÃ©es.
+\end{itemize}
+\end{warnbox}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% 2. CONTEXTE & PROBLÃ‰MATIQUE
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Contexte \& ProblÃ©matique}
+
+\subsection{Contexte}
+
+L'organisation dÃ©veloppe plusieurs plateformes indÃ©pendantes :
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Plateforme} & \color{white}\textbf{Statut} & \color{white}\textbf{Description} \\
+\midrule
+AGT-Bot & En dÃ©veloppement & Plateforme de bots automatisÃ©s \\
+\rowcolor{tabrow} AGT-Market & En dÃ©veloppement & Marketplace de services \\
+SALMA & Migration prÃ©vue & Plateforme existante Ã  intÃ©grer \\
+\rowcolor{tabrow} Futures & PlanifiÃ© & Nouvelles plateformes Ã  venir \\
+\bottomrule
+\end{tabularx}
+
+Chaque service partagÃ© (Auth, Users, Notification, MÃ©dia\ldots) est indÃ©pendant et accessible via API REST.
+
+\subsection{ProblÃ©matique}
+
+Sans service centralisÃ©, chaque plateforme implÃ©mente ses propres intÃ©grations d'envoi de notifications, ce qui entraÃ®ne : duplication des intÃ©grations avec les providers (SendGrid, Twilio, FCM\ldots), impossibilitÃ© de gÃ©rer les prÃ©fÃ©rences utilisateur de maniÃ¨re unifiÃ©e, absence de traÃ§abilitÃ© centralisÃ©e, coÃ»ts de maintenance Ã©levÃ©s et risques d'incohÃ©rences.
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% 3. VISION & OBJECTIFS
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Vision \& Objectifs}
+
+\subsection{Vision}
+
+Un point d'entrÃ©e unique pour l'envoi de toute notification dans l'Ã©cosystÃ¨me. Aucune plateforme n'envoie directement un email, SMS, push ou WhatsApp. \textbf{Tout passe par le Service Notification.}
+
+\subsection{Objectifs}
+
+\begin{tabularx}{\textwidth}{@{}c X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{\#} & \color{white}\textbf{Objectif} & \color{white}\textbf{Indicateur} \\
+\midrule
+O1 & Envoi unifiÃ© multi-canal & 5 canaux supportÃ©s \\
+\rowcolor{tabrow} O2 & Templates dynamiques multilingues & CRUD + versionning \\
+O3 & PrÃ©fÃ©rences utilisateur respectÃ©es & Par canal, catÃ©gorie, plateforme \\
+\rowcolor{tabrow} O4 & TraÃ§abilitÃ© complÃ¨te & Logs + statuts par notification \\
+O5 & Envoi asynchrone performant & Mise en queue < 100ms \\
+\rowcolor{tabrow} O6 & Planification et campagnes & Envois diffÃ©rÃ©s + masse \\
+O7 & RÃ©utilisabilitÃ© & IntÃ©gration nouvelle plateforme < 1 jour \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% 4. PARTIES PRENANTES
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Parties Prenantes \& Utilisateurs}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{RÃ´le} & \color{white}\textbf{Type} & \color{white}\textbf{ResponsabilitÃ©} \\
+\midrule
+Product Owner & Interne & Priorisation des fonctionnalitÃ©s \\
+\rowcolor{tabrow} Ã‰quipe Backend & Interne & DÃ©veloppement et maintenance du service \\
+Ã‰quipe Frontend & Interne & IntÃ©gration notifications in-app \\
+\rowcolor{tabrow} DevOps & Interne & Infrastructure, CI/CD, monitoring \\
+Services internes & Interne & Consommateurs de l'API (Auth, plateformes) \\
+\rowcolor{tabrow} Utilisateurs finaux & Externe & RÃ©ception des notifications, gestion prÃ©fÃ©rences \\
+Administrateurs & Interne & Gestion templates, campagnes, supervision \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% 5. BESOINS FONCTIONNELS
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Besoins Fonctionnels}
+
+\subsection{Envoi de notifications}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{FonctionnalitÃ©} & \color{white}\textbf{PrioritÃ©} \\
+\midrule
+F-SEND-01 & Envoi immÃ©diat mono-canal ou multi-canal & Urgent \\
+\rowcolor{tabrow} F-SEND-02 & Envoi multi-canal orchestrÃ© par Notification avec fallback automatique configurable & Urgent \\
+F-SEND-03 & Fallback automatique entre canaux (sauf catÃ©gorie \texttt{security}) & Urgent \\
+\rowcolor{tabrow} F-SEND-04 & Envoi planifiÃ© (date/heure future) & Normale \\
+F-SEND-05 & Envoi en masse (campagnes) avec throttling & Normale \\
+\rowcolor{tabrow} F-SEND-06 & Retry automatique (3 tentatives + backoff exponentiel) & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Orchestration multi-canal (v1.2)]
+Le service appelant envoie \textbf{un seul appel} avec un champ \texttt{channels: ["email", "push"]}. Notification orchestre l'envoi sur chaque canal demandÃ©, applique les prÃ©fÃ©rences utilisateur, et gÃ¨re le fallback automatique selon la configuration de la plateforme. Le service appelant n'a plus besoin de faire N appels sÃ©parÃ©s.
+
+Si un seul canal est fourni (\texttt{channels: ["sms"]}), le comportement est identique Ã  un envoi mono-canal.
+\end{infobox}
+
+\subsection{Gestion des templates}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{FonctionnalitÃ©} & \color{white}\textbf{PrioritÃ©} \\
+\midrule
+F-TPL-01 & CRUD complet des templates & Urgent \\
+\rowcolor{tabrow} F-TPL-02 & Variables dynamiques (\texttt{\{\{variable\}\}}) & Urgent \\
+F-TPL-03 & Support multilingue (FR, EN minimum) & Urgent \\
+\rowcolor{tabrow} F-TPL-04 & Templates par canal et par plateforme & Urgent \\
+F-TPL-05 & Versionning des templates & Normale \\
+\rowcolor{tabrow} F-TPL-06 & Preview avec variables de test & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{PrÃ©fÃ©rences utilisateur}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{FonctionnalitÃ©} & \color{white}\textbf{PrioritÃ©} \\
+\midrule
+F-PREF-01 & Activer/dÃ©sactiver canaux par utilisateur & Urgent \\
+\rowcolor{tabrow} F-PREF-02 & Activer/dÃ©sactiver catÃ©gories (marketing, transactionnel\ldots) & Urgent \\
+F-PREF-03 & PrÃ©fÃ©rences par plateforme & Normale \\
+\rowcolor{tabrow} F-PREF-04 & Les notifications critiques (OTP, sÃ©curitÃ©) ignorent les prÃ©fÃ©rences & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Source de vÃ©ritÃ© et valeurs par dÃ©faut (v1.2)]
+Le \textbf{Service Notification est la source de vÃ©ritÃ©} pour les prÃ©fÃ©rences de notification. Si aucune prÃ©fÃ©rence n'existe pour un utilisateur sur une plateforme donnÃ©e, les \textbf{valeurs par dÃ©faut} sont appliquÃ©es : tous les canaux activÃ©s, catÃ©gories \texttt{transactional} et \texttt{security} activÃ©es, catÃ©gorie \texttt{marketing} dÃ©sactivÃ©e. La catÃ©gorie \texttt{security} est toujours forcÃ©e Ã  \texttt{true}.
+\end{infobox}
+
+\subsection{Notifications in-app}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{FonctionnalitÃ©} & \color{white}\textbf{PrioritÃ©} \\
+\midrule
+F-INAPP-01 & Stockage des notifications in-app & Urgent \\
+\rowcolor{tabrow} F-INAPP-02 & Marquer lu / non lu & Urgent \\
+F-INAPP-03 & Compteur de non lues (badge) & Urgent \\
+\rowcolor{tabrow} F-INAPP-04 & Suppression logique par l'utilisateur & Normale \\
+F-INAPP-05 & Marquer toutes comme lues & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Historique \& Statistiques}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{FonctionnalitÃ©} & \color{white}\textbf{PrioritÃ©} \\
+\midrule
+F-LOG-01 & Logs complets par notification & Urgent \\
+\rowcolor{tabrow} F-LOG-02 & Statuts : pending, sent, delivered, read, failed & Urgent \\
+F-LOG-03 & Statistiques agrÃ©gÃ©es par canal, plateforme, pÃ©riode & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Planification}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{FonctionnalitÃ©} & \color{white}\textbf{PrioritÃ©} \\
+\midrule
+F-SCHED-01 & CrÃ©er une notification planifiÃ©e & Normale \\
+\rowcolor{tabrow} F-SCHED-02 & Modifier / supprimer une planification & Normale \\
+F-SCHED-03 & Lister les notifications planifiÃ©es & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Campagnes}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{FonctionnalitÃ©} & \color{white}\textbf{PrioritÃ©} \\
+\midrule
+F-CAMP-01 & CrÃ©ation de campagne avec liste de destinataires & Normale \\
+\rowcolor{tabrow} F-CAMP-02 & Throttling configurable (N messages/seconde) & Normale \\
+F-CAMP-03 & Suivi de progression en temps rÃ©el & Normale \\
+\rowcolor{tabrow} F-CAMP-04 & Annulation d'une campagne en cours & Normale \\
+F-CAMP-05 & Statistiques par campagne & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Device Tokens (v1.1)}
+
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{FonctionnalitÃ©} & \color{white}\textbf{PrioritÃ©} \\
+\midrule
+F-DEV-01 & Enregistrement d'un device token (FCM/APNs) pour un utilisateur & Urgent \\
+\rowcolor{tabrow} F-DEV-02 & Suppression d'un device token (dÃ©connexion, dÃ©sinstallation) & Urgent \\
+F-DEV-03 & Liste des device tokens d'un utilisateur & Normale \\
+\rowcolor{tabrow} F-DEV-04 & Invalidation de tous les device tokens lors d'une rÃ©vocation globale de sessions (v1.2) & Urgent \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% 6. BESOINS NON-FONCTIONNELS
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Besoins Non-Fonctionnels}
+
+\begin{tabularx}{\textwidth}{@{}l l X l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ID} & \color{white}\textbf{CatÃ©gorie} & \color{white}\textbf{Exigence} & \color{white}\textbf{Cible} \\
+\midrule
+NF-01 & Performance & Mise en queue d'une notification & < 100ms \\
+\rowcolor{tabrow} NF-02 & Performance & Throughput d'envoi & 500 msg/s \\
+NF-03 & DisponibilitÃ© & Uptime du service & 99.9\% \\
+\rowcolor{tabrow} NF-04 & FiabilitÃ© & Retry automatique avec backoff & 3 tentatives \\
+NF-05 & SÃ©curitÃ© & Authentification par Bearer token (validÃ© via Auth) & Obligatoire \\
+\rowcolor{tabrow} NF-06 & SÃ©curitÃ© & Masquage donnÃ©es sensibles dans les logs & Obligatoire \\
+NF-07 & SÃ©curitÃ© & Rate limiting par provider & Configurable \\
+\rowcolor{tabrow} NF-08 & ScalabilitÃ© & Architecture stateless, multi-instance & Horizontal \\
+NF-09 & ObservabilitÃ© & Logs structurÃ©s JSON, corrÃ©lation par request ID & Obligatoire \\
+\rowcolor{tabrow} NF-10 & Traitement & Envoi asynchrone via message broker & Obligatoire \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% 7. ARCHITECTURE TECHNIQUE
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Architecture Technique}
+
+\subsection{Vue d'ensemble}
+
+Le Service Notification est un microservice REST stateless, dÃ©ployÃ© en conteneur Docker. Il reÃ§oit les demandes d'envoi via API, les place en file d'attente (message broker), et des workers asynchrones traitent l'envoi effectif via les providers externes.
+
+\subsection{Stack technique}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Composant} & \color{white}\textbf{Technologie} & \color{white}\textbf{Justification} \\
+\midrule
+Langage \& Framework & Python 3.11+ / Django REST Framework & CohÃ©rence avec l'Ã©cosystÃ¨me \\
+\rowcolor{tabrow} Base de donnÃ©es & PostgreSQL 15+ & Stockage principal \\
+Cache & Redis 7+ & Cache coordonnÃ©es Users, rate limiting, compteurs badge \\
+\rowcolor{tabrow} Message Broker & RabbitMQ (ou Redis Queue) & File d'attente asynchrone \\
+ORM & Django ORM & ModÃ¨les et migrations \\
+\rowcolor{tabrow} Scheduler & Celery + Celery Beat & TÃ¢ches planifiÃ©es et pÃ©riodiques \\
+Conteneurisation & Docker + Docker Compose & DÃ©ploiement isolÃ© \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Canaux supportÃ©s \& PrioritÃ©s}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Canal} & \color{white}\textbf{PrioritÃ© par dÃ©faut} & \color{white}\textbf{Provider} & \color{white}\textbf{Notes} \\
+\midrule
+Email & Haute & SendGrid / Mailgun / SES & Fallback entre providers \\
+\rowcolor{tabrow} Push & Haute & FCM / APNs & NÃ©cessite device tokens (table locale) \\
+In-app & Moyenne & Interne (PostgreSQL) & Stockage en base \\
+\rowcolor{tabrow} WhatsApp & Basse & Meta Cloud API & Templates validÃ©s par Meta uniquement \\
+SMS & Basse & Twilio / Vonage / Infobip & Critique uniquement (OTP) \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[RÃ¨gles de fallback (v1.2)]
+\textbf{Ordre de traitement en cas d'Ã©chec :}
+\begin{enumerate}[itemsep=1pt]
+  \item \textbf{Retry sur le mÃªme provider} (3 tentatives, backoff exponentiel : 1s, 2s, 4s).
+  \item \textbf{Changement de provider} sur le mÃªme canal (ex: SendGrid $\rightarrow$ Mailgun $\rightarrow$ SES).
+  \item \textbf{Fallback inter-canal} vers le canal suivant dans l'ordre de prioritÃ© configurÃ© par la plateforme.
+\end{enumerate}
+
+\textbf{Exception :} les notifications de catÃ©gorie \texttt{security} (OTP, 2FA, alertes) \textbf{n'autorisent jamais le fallback inter-canal}. Elles sont envoyÃ©es exclusivement sur le canal demandÃ©. En cas d'Ã©chec dÃ©finitif sur tous les providers du canal, elles passent en statut \texttt{failed}.
+\end{warnbox}
+
+\subsection{DÃ©pendances}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Service} & \color{white}\textbf{Type} & \color{white}\textbf{Usage} \\
+\midrule
+Service Auth & Interne & Validation des tokens Bearer via \texttt{GET /auth/verify-token}. Registre maÃ®tre des plateformes (\texttt{platform\_id} = UUID Auth). \\
+\rowcolor{tabrow} Service Users & Interne & RÃ©solution des coordonnÃ©es destinataire : email, tÃ©lÃ©phone (via \texttt{GET /users/\{id\}}). RÃ©sultat mis en cache Redis (TTL court). \\
+Email providers & Externe & SendGrid, Mailgun, AWS SES \\
+\rowcolor{tabrow} SMS providers & Externe & Twilio, Vonage, Infobip \\
+Push & Externe & FCM (Android), APNs (iOS) \\
+\rowcolor{tabrow} WhatsApp & Externe & Meta Cloud API \\
+Message broker & Interne & RabbitMQ / Redis Queue \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Clarification des dÃ©pendances (v1.2)]
+\begin{itemize}
+  \item \textbf{Auth} : validation du Bearer token, vÃ©rification que la plateforme est active et que l'utilisateur n'est pas bloquÃ©/dÃ©sactivÃ©. Notification appelle systÃ©matiquement \texttt{GET /auth/verify-token}.
+  \item \textbf{Users} : rÃ©solution de l'email et du tÃ©lÃ©phone Ã  partir du \texttt{user\_id}. Les coordonnÃ©es sont mises en cache dans Redis (TTL 5 minutes) pour rÃ©duire la latence et la charge sur Users.
+  \item \textbf{VÃ©rification user actif (v1.2)} : avant tout envoi, le worker vÃ©rifie que l'utilisateur est actif (non supprimÃ©, non dÃ©sactivÃ©). Cette vÃ©rification est effectuÃ©e soit via le cache des coordonnÃ©es Users (champ \texttt{status}), soit via \texttt{GET /auth/verify-token} si le token est disponible.
+  \item \textbf{PrÃ©fÃ©rences de notification} : gÃ©rÃ©es localement par Notification (table \texttt{user\_preferences}). Users n'est pas source des prÃ©fÃ©rences.
+  \item \textbf{Device tokens push} : gÃ©rÃ©s localement par Notification (table \texttt{device\_tokens}). InvalidÃ©s en cas de dÃ©connexion globale ou rÃ©vocation de sessions Auth.
+\end{itemize}
+\end{infobox}
+
+\subsection{Source des coordonnÃ©es par canal}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Canal} & \color{white}\textbf{Source de la donnÃ©e} & \color{white}\textbf{Champ / Cache} \\
+\midrule
+Email & Service Users (cache Redis TTL 5min) & \texttt{users\_profiles.email} \\
+\rowcolor{tabrow} SMS & Service Users (cache Redis TTL 5min) & \texttt{users\_profiles.phone} \\
+Push & Notification (local) & \texttt{device\_tokens.token} \\
+\rowcolor{tabrow} WhatsApp & Service Users (cache Redis TTL 5min) & \texttt{users\_profiles.phone} \\
+In-app & Aucun provider externe & Stockage local en base \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Flux d'envoi}
+
+\begin{infobox}[Flux type : envoi d'une notification (v1.2)]
+\begin{enumerate}[itemsep=2pt]
+  \item Le service appelant envoie \texttt{POST /notifications/send} avec Bearer token et \texttt{channels: ["email", "push"]}.
+  \item Notification valide le token via \texttt{GET /auth/verify-token} (vÃ©rifie signature, expiration, user non bloquÃ©/dÃ©sactivÃ©, plateforme active, session active).
+  \item VÃ©rification d'idempotence : si \texttt{idempotency\_key} est fourni et existe dÃ©jÃ  pour cette plateforme (non expirÃ©), retourne 409. Sinon, enregistrement de la clÃ© (TTL 24h).
+  \item Le \texttt{user\_id} est rÃ©solu : rÃ©cupÃ©ration des coordonnÃ©es depuis le cache Redis, ou appel \texttt{GET /users/\{id\}} si cache expirÃ©. VÃ©rification que le \texttt{status} utilisateur est \texttt{active}.
+  \item Les prÃ©fÃ©rences utilisateur sont vÃ©rifiÃ©es localement. Si aucune prÃ©fÃ©rence n'existe, les valeurs par dÃ©faut sont appliquÃ©es. Si la catÃ©gorie est \texttt{security}, les prÃ©fÃ©rences sont ignorÃ©es.
+  \item Pour chaque canal demandÃ© : le template est rÃ©solu par \texttt{(name, platform\_id)}, la version courante pour la locale est rÃ©cupÃ©rÃ©e, le contenu est rendu avec les variables.
+  \item Une notification est enregistrÃ©e en base par canal (statut \texttt{pending}) et placÃ©e en queue.
+  \item Un worker asynchrone consomme le message et envoie via le provider appropriÃ©.
+  \item En cas d'Ã©chec : (1) retry mÃªme provider, (2) changement de provider mÃªme canal, (3) fallback inter-canal si autorisÃ©.
+  \item Le statut est mis Ã  jour : \texttt{sent}, \texttt{delivered}, \texttt{failed}.
+\end{enumerate}
+\end{infobox}
+
+\subsection{StratÃ©gie de fallback providers}
+
+Pour chaque canal, plusieurs providers sont configurÃ©s par ordre de prioritÃ© :
+
+\begin{tabularx}{\textwidth}{@{}l l l l@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Canal} & \color{white}\textbf{Provider 1} & \color{white}\textbf{Provider 2} & \color{white}\textbf{Provider 3} \\
+\midrule
+Email & SendGrid & Mailgun & AWS SES \\
+\rowcolor{tabrow} SMS & Twilio & Vonage & Infobip \\
+Push & FCM & APNs & --- \\
+\rowcolor{tabrow} WhatsApp & Meta Cloud API & --- & --- \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% 8. MODÃ‰LISATION
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{ModÃ©lisation}
+
+\subsection{Diagramme de classes}
+
+Le diagramme de classes complet est fourni en annexe au format PlantUML (voir Annexe C). Il couvre les entitÃ©s : Notification, Template, TemplateVersion, TemplateVariable, UserPreference, NotificationLog, Campaign, CampaignRecipient, ScheduledNotification, DeviceToken, PlatformChannelConfig.
+
+\subsection{MLD --- ModÃ¨le Logique de DonnÃ©es}
+
+\subsubsection{Table \texttt{notifications}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} user\_id & UUID & NOT NULL & Destinataire (\texttt{users\_profiles.id}) \\
+platform\_id & UUID & NOT NULL & Plateforme source (UUID Auth) \\
+\rowcolor{tabrow} template\_id & UUID & FK $\rightarrow$ templates, NULL & Template utilisÃ© \\
+channel & VARCHAR(20) & NOT NULL & email, sms, push, in\_app, whatsapp \\
+\rowcolor{tabrow} category & VARCHAR(30) & NOT NULL & transactional, marketing, security \\
+subject & VARCHAR(255) & NULL & Sujet (email) \\
+\rowcolor{tabrow} body & TEXT & NOT NULL & Contenu rendu \\
+status & VARCHAR(20) & NOT NULL & pending, sent, delivered, read, failed \\
+\rowcolor{tabrow} priority & VARCHAR(10) & DEFAULT 'normal' & low, normal, high, critical \\
+metadata & JSONB & NULL & DonnÃ©es additionnelles \\
+\rowcolor{tabrow} idempotency\_key & VARCHAR(100) & NULL & ClÃ© d'idempotence \\
+read\_at & TIMESTAMPTZ & NULL & Date de lecture (in-app) \\
+\rowcolor{tabrow} deleted\_at & TIMESTAMPTZ & NULL & Suppression logique (in-app) \\
+sent\_at & TIMESTAMPTZ & NULL & Date d'envoi effectif \\
+\rowcolor{tabrow} created\_at & TIMESTAMPTZ & NOT NULL & Date de crÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique : \texttt{(platform\_id, idempotency\_key)} --- scoped par plateforme (v1.2). Les clÃ©s d'idempotence sont expirÃ©es et purgÃ©es aprÃ¨s 24h via un cron job.
+
+\begin{infobox}[Champs in-app (v1.1+)]
+Pour les notifications de canal \texttt{in\_app} :
+\begin{itemize}
+  \item \texttt{is\_read} dans l'API est dÃ©rivÃ© de \texttt{read\_at IS NOT NULL}.
+  \item La suppression par l'utilisateur est un soft delete via \texttt{deleted\_at}.
+  \item Le statut \texttt{read} est mis Ã  jour en parallÃ¨le de \texttt{read\_at} pour cohÃ©rence des statistiques.
+\end{itemize}
+\end{infobox}
+
+\subsubsection{Table \texttt{templates}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} name & VARCHAR(100) & NOT NULL & Nom du template \\
+channel & VARCHAR(20) & NOT NULL & Canal cible \\
+\rowcolor{tabrow} platform\_id & UUID & NULL & Plateforme (NULL = global) \\
+category & VARCHAR(30) & NOT NULL & CatÃ©gorie de notification \\
+\rowcolor{tabrow} is\_active & BOOLEAN & DEFAULT true & Template actif \\
+created\_by & UUID & NULL & CrÃ©ateur \\
+\rowcolor{tabrow} created\_at & TIMESTAMPTZ & NOT NULL & Date de crÃ©ation \\
+updated\_at & TIMESTAMPTZ & NOT NULL & DerniÃ¨re modification \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique : \texttt{(name, platform\_id)} (v1.2). Deux plateformes peuvent avoir un template du mÃªme nom.
+
+\begin{infobox}[RÃ©solution template\_name $\rightarrow$ template\_id (v1.2)]
+Lorsque l'API reÃ§oit un \texttt{template\_name} :
+\begin{enumerate}[itemsep=1pt]
+  \item Lookup par \texttt{(name, platform\_id)} fourni dans la requÃªte.
+  \item Si non trouvÃ© avec le \texttt{platform\_id}, fallback vers \texttt{platform\_id = NULL} (template global).
+  \item VÃ©rification \texttt{is\_active = true}.
+  \item RÃ©cupÃ©ration de la version courante (\texttt{is\_current = true}) pour la locale demandÃ©e, avec fallback vers locale \texttt{fr}.
+\end{enumerate}
+\end{infobox}
+
+\subsubsection{Table \texttt{template\_versions}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} template\_id & UUID & FK $\rightarrow$ templates & Template parent \\
+version & INT & NOT NULL & NumÃ©ro de version \\
+\rowcolor{tabrow} locale & VARCHAR(5) & NOT NULL & Langue (fr, en) \\
+subject & VARCHAR(255) & NULL & Sujet (email) \\
+\rowcolor{tabrow} body & TEXT & NOT NULL & Corps avec variables \{\{var\}\} \\
+is\_current & BOOLEAN & DEFAULT false & Version active \\
+\rowcolor{tabrow} created\_at & TIMESTAMPTZ & NOT NULL & Date de crÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique : \texttt{(template\_id, version, locale)}.
+
+\subsubsection{Table \texttt{template\_variables}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} template\_version\_id & UUID & FK $\rightarrow$ template\_versions & Version du template \\
+key & VARCHAR(50) & NOT NULL & Nom de la variable \\
+\rowcolor{tabrow} description & VARCHAR(255) & NULL & Description \\
+required & BOOLEAN & DEFAULT true & Variable obligatoire \\
+\rowcolor{tabrow} default\_value & VARCHAR(255) & NULL & Valeur par dÃ©faut \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{user\_preferences}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} user\_id & UUID & NOT NULL & Utilisateur (\texttt{users\_profiles.id}) \\
+platform\_id & UUID & NOT NULL & Plateforme (UUID Auth) \\
+\rowcolor{tabrow} channel\_email & BOOLEAN & DEFAULT true & Email activÃ© \\
+channel\_sms & BOOLEAN & DEFAULT true & SMS activÃ© \\
+\rowcolor{tabrow} channel\_push & BOOLEAN & DEFAULT true & Push activÃ© \\
+channel\_whatsapp & BOOLEAN & DEFAULT true & WhatsApp activÃ© \\
+\rowcolor{tabrow} channel\_in\_app & BOOLEAN & DEFAULT true & In-app activÃ© \\
+cat\_transactional & BOOLEAN & DEFAULT true & CatÃ©gorie transactionnelle \\
+\rowcolor{tabrow} cat\_marketing & BOOLEAN & DEFAULT false & CatÃ©gorie marketing \\
+cat\_security & BOOLEAN & DEFAULT true & CatÃ©gorie sÃ©curitÃ© (toujours forcÃ© Ã  true) \\
+\rowcolor{tabrow} updated\_at & TIMESTAMPTZ & NOT NULL & DerniÃ¨re modification \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique : \texttt{(user\_id, platform\_id)}.
+
+\subsubsection{Table \texttt{notification\_logs}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} notification\_id & UUID & FK $\rightarrow$ notifications & Notification associÃ©e \\
+channel & VARCHAR(20) & NOT NULL & Canal tentÃ© \\
+\rowcolor{tabrow} provider & VARCHAR(30) & NOT NULL & Provider utilisÃ© \\
+status & VARCHAR(20) & NOT NULL & sent, delivered, failed \\
+\rowcolor{tabrow} attempt & INT & NOT NULL & NumÃ©ro de tentative \\
+error\_message & TEXT & NULL & Message d'erreur (donnÃ©es sensibles masquÃ©es) \\
+\rowcolor{tabrow} provider\_message\_id & VARCHAR(255) & NULL & ID provider externe \\
+created\_at & TIMESTAMPTZ & NOT NULL & Date de tentative \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{campaigns}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} name & VARCHAR(100) & NOT NULL & Nom de la campagne \\
+platform\_id & UUID & NOT NULL & Plateforme source (UUID Auth) \\
+\rowcolor{tabrow} template\_id & UUID & FK $\rightarrow$ templates & Template utilisÃ© \\
+channel & VARCHAR(20) & NOT NULL & Canal d'envoi \\
+\rowcolor{tabrow} status & VARCHAR(20) & NOT NULL & draft, running, completed, cancelled \\
+total\_recipients & INT & DEFAULT 0 & Nombre total de destinataires \\
+\rowcolor{tabrow} sent\_count & INT & DEFAULT 0 & Nombre envoyÃ© \\
+failed\_count & INT & DEFAULT 0 & Nombre en Ã©chec \\
+\rowcolor{tabrow} throttle\_per\_second & INT & DEFAULT 10 & Rate limiting \\
+scheduled\_at & TIMESTAMPTZ & NULL & Date d'envoi planifiÃ©e \\
+\rowcolor{tabrow} started\_at & TIMESTAMPTZ & NULL & DÃ©but effectif \\
+completed\_at & TIMESTAMPTZ & NULL & Fin de campagne \\
+\rowcolor{tabrow} created\_by & UUID & NULL & CrÃ©ateur \\
+created\_at & TIMESTAMPTZ & NOT NULL & Date de crÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{campaign\_recipients}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} campaign\_id & UUID & FK $\rightarrow$ campaigns & Campagne associÃ©e \\
+user\_id & UUID & NOT NULL & Destinataire (\texttt{users\_profiles.id}) \\
+\rowcolor{tabrow} notification\_id & UUID & FK $\rightarrow$ notifications, NULL & Notification gÃ©nÃ©rÃ©e \\
+status & VARCHAR(20) & DEFAULT 'pending' & pending, sent, failed, skipped \\
+\rowcolor{tabrow} variables & JSONB & NULL & Variables spÃ©cifiques au destinataire \\
+created\_at & TIMESTAMPTZ & NOT NULL & Date de crÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{scheduled\_notifications}}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} user\_id & UUID & NOT NULL & Destinataire (\texttt{users\_profiles.id}) \\
+platform\_id & UUID & NOT NULL & Plateforme source (UUID Auth) \\
+\rowcolor{tabrow} template\_id & UUID & FK $\rightarrow$ templates & Template Ã  utiliser \\
+channel & VARCHAR(20) & NOT NULL & Canal d'envoi \\
+\rowcolor{tabrow} variables & JSONB & NULL & Variables du template \\
+scheduled\_at & TIMESTAMPTZ & NOT NULL & Date/heure d'envoi \\
+\rowcolor{tabrow} status & VARCHAR(20) & DEFAULT 'pending' & pending, sent, cancelled \\
+notification\_id & UUID & FK $\rightarrow$ notifications, NULL & Notification crÃ©Ã©e aprÃ¨s envoi \\
+\rowcolor{tabrow} created\_at & TIMESTAMPTZ & NOT NULL & Date de crÃ©ation \\
+updated\_at & TIMESTAMPTZ & NOT NULL & DerniÃ¨re modification \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{device\_tokens} (v1.1)}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} user\_id & UUID & NOT NULL & Utilisateur (\texttt{users\_profiles.id}) \\
+platform\_id & UUID & NOT NULL & Plateforme (UUID Auth) \\
+\rowcolor{tabrow} token & TEXT & NOT NULL & Token FCM ou APNs \\
+device\_type & VARCHAR(20) & NOT NULL & android, ios, web \\
+\rowcolor{tabrow} device\_name & VARCHAR(100) & NULL & Nom de l'appareil \\
+is\_active & BOOLEAN & DEFAULT true & Token actif \\
+\rowcolor{tabrow} created\_at & TIMESTAMPTZ & NOT NULL & Date d'enregistrement \\
+updated\_at & TIMESTAMPTZ & NOT NULL & DerniÃ¨re mise Ã  jour \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique : \texttt{(user\_id, token)}.
+
+\begin{infobox}[SÃ©curitÃ© device tokens (v1.2)]
+Les device tokens peuvent Ãªtre invalidÃ©s (\texttt{is\_active = false}) lors d'une dÃ©connexion globale ou d'une rÃ©vocation de toutes les sessions cÃ´tÃ© Auth. Lorsque Notification reÃ§oit un signal de blocage ou dÃ©sactivation d'un utilisateur (via le statut retournÃ© par \texttt{verify-token} ou le cache Users), il dÃ©sactive automatiquement tous les device tokens de cet utilisateur.
+\end{infobox}
+
+\subsubsection{Table \texttt{platform\_channel\_config} (v1.1)}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+\rowcolor{tabrow} platform\_id & UUID & UNIQUE, NOT NULL & Plateforme (UUID Auth) \\
+priority\_order & JSONB & NOT NULL & Ordre des canaux \\
+\rowcolor{tabrow} fallback\_enabled & BOOLEAN & DEFAULT true & Fallback inter-canal activÃ© \\
+created\_at & TIMESTAMPTZ & NOT NULL & Date de crÃ©ation \\
+\rowcolor{tabrow} updated\_at & TIMESTAMPTZ & NOT NULL & DerniÃ¨re modification \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% 9. CONTRATS D'API
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Contrats d'API}
+
+Base URL : \texttt{/api/v1}. Tous les endpoints retournent du JSON. Tous les endpoints requiÃ¨rent le header \texttt{Authorization: Bearer <token>}, validÃ© via \texttt{GET /auth/verify-token}.
+
+% â”€â”€ 9.1 ENVOI â”€â”€
+\subsection{Envoi}
+
+\subsubsection{POST /notifications/send}
+
+\textbf{Description :} Envoi d'une notification mono ou multi-canal Ã  un utilisateur. Notification orchestre l'envoi sur chaque canal demandÃ©.
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "user_id": "uuid (users_profiles.id)",
+  "channels": ["email", "push"],
+  "template_name": "agt_market_order_confirmed",
+  "locale": "fr",
+  "variables": {
+    "user_name": "Jean Dupont",
+    "order_id": "CMD-001",
+    "total": "15000 FCFA"
+  },
+  "priority": "high",
+  "category": "transactional",
+  "idempotency_key": "uuid-unique (optionnel)"
+}
+\end{lstlisting}
+
+\textbf{Response 202 :}
+\begin{lstlisting}
+{
+  "notifications": [
+    { "id": "notif-uuid-1", "channel": "email", "status": "pending" },
+    { "id": "notif-uuid-2", "channel": "push", "status": "pending" }
+  ],
+  "message": "Notifications queued"
+}
+\end{lstlisting}
+
+\textbf{Codes :} 202 Accepted, 400 Validation error, 401 Unauthorized, 404 Template not found, 409 Idempotency conflict, 429 Rate limited.
+
+\begin{infobox}[CompatibilitÃ© mono-canal]
+Si un seul canal est fourni (\texttt{channels: ["sms"]}), le comportement est identique Ã  un envoi mono-canal classique. Le champ \texttt{channels} remplace l'ancien champ \texttt{channel} (v1.0).
+\end{infobox}
+
+\subsubsection{POST /notifications/send-bulk}
+
+\textbf{Description :} Envoi en masse Ã  plusieurs utilisateurs. LimitÃ© Ã  \textbf{100 \texttt{user\_ids}} maximum par appel. Pour des volumes plus importants, utiliser les campagnes.
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "user_ids": ["uuid-1", "uuid-2", "uuid-3"],
+  "channels": ["push"],
+  "template_name": "promo_weekend",
+  "locale": "fr",
+  "variables": { "discount": "20%" },
+  "category": "marketing"
+}
+\end{lstlisting}
+
+\textbf{Response 202 :}
+\begin{lstlisting}
+{
+  "queued_count": 3,
+  "message": "Bulk notifications queued"
+}
+\end{lstlisting}
+
+\textbf{Codes :} 202 Accepted, 400 Validation error (dont \texttt{user\_ids} > 100), 401 Unauthorized.
+
+% â”€â”€ 9.2 TEMPLATES â”€â”€
+\subsection{Templates}
+
+\subsubsection{POST /templates}
+
+\textbf{Description :} CrÃ©ation d'un template. Contrainte UNIQUE sur \texttt{(name, platform\_id)}.
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "name": "order_confirmed",
+  "channel": "email",
+  "platform_id": "uuid-or-null",
+  "category": "transactional",
+  "locale": "fr",
+  "subject": "Commande {{order_id}} confirmee",
+  "body": "Bonjour {{user_name}}, votre commande..."
+}
+\end{lstlisting}
+
+\textbf{Response 201 :}
+\begin{lstlisting}
+{
+  "id": "tpl-uuid",
+  "name": "order_confirmed",
+  "platform_id": "uuid",
+  "version": 1,
+  "message": "Template created"
+}
+\end{lstlisting}
+
+\textbf{Codes :} 201 Created, 400 Validation error, 409 Name already exists for this platform.
+
+\subsubsection{GET /templates}
+
+\textbf{Description :} Liste des templates. \textbf{Query params :} \texttt{?channel=email\&platform\_id=uuid\&page=1\&limit=20}
+
+\subsubsection{GET /templates/\{id\}}
+
+\textbf{Description :} DÃ©tail d'un template avec sa version courante.
+
+\subsubsection{PUT /templates/\{id\}}
+
+\textbf{Description :} Mise Ã  jour d'un template. CrÃ©e automatiquement une nouvelle version.
+
+\subsubsection{DELETE /templates/\{id\}}
+
+\textbf{Description :} Suppression logique (dÃ©sactivation). \textbf{Response 200 :} \texttt{\{"message": "Template deactivated"\}}
+
+\subsubsection{POST /templates/\{id\}/preview}
+
+\textbf{Description :} Preview du template avec des variables de test.
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "locale": "fr",
+  "variables": {
+    "user_name": "Test User",
+    "order_id": "CMD-001"
+  }
+}
+\end{lstlisting}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "subject": "Commande CMD-001 confirmee",
+  "body": "Bonjour Test User, votre commande..."
+}
+\end{lstlisting}
+
+\subsubsection{GET /templates/\{id\}/versions}
+
+\textbf{Description :} Historique des versions d'un template.
+
+% â”€â”€ 9.3 PRÃ‰FÃ‰RENCES â”€â”€
+\subsection{PrÃ©fÃ©rences}
+
+\subsubsection{GET /users/\{userId\}/notification-preferences}
+
+\textbf{Description :} Lecture des prÃ©fÃ©rences (source de vÃ©ritÃ© locale). Si aucune prÃ©fÃ©rence n'existe, retourne les valeurs par dÃ©faut. \textbf{Query params :} \texttt{?platform\_id=uuid}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "user_id": "uuid (users_profiles.id)",
+  "platform_id": "uuid",
+  "channels": {
+    "email": true, "sms": true,
+    "push": true, "whatsapp": false,
+    "in_app": true
+  },
+  "categories": {
+    "transactional": true,
+    "marketing": false,
+    "security": true
+  }
+}
+\end{lstlisting}
+
+\subsubsection{PUT /users/\{userId\}/notification-preferences}
+
+\textbf{Description :} Modification des prÃ©fÃ©rences. \textbf{L'utilisateur ne peut modifier que ses propres prÃ©fÃ©rences}, sauf via un token S2S autorisÃ©. La catÃ©gorie \texttt{security} est ignorÃ©e si passÃ©e Ã  \texttt{false}. \textbf{Response 200 :} \texttt{\{"message": "Preferences updated"\}}
+
+% â”€â”€ 9.4 IN-APP â”€â”€
+\subsection{Notifications In-App}
+
+\subsubsection{GET /users/\{userId\}/notifications}
+
+\textbf{Description :} Liste des notifications in-app (exclut \texttt{deleted\_at IS NOT NULL}). \textbf{Query params :} \texttt{?status=unread\&page=1\&limit=20}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "id": "notif-uuid",
+      "subject": "Commande confirmee",
+      "body": "Votre commande CMD-001...",
+      "is_read": false,
+      "category": "transactional",
+      "created_at": "2026-03-20T10:00:00Z"
+    }
+  ],
+  "total": 5, "unread_count": 3
+}
+\end{lstlisting}
+
+\subsubsection{GET /users/\{userId\}/notifications/unread-count}
+
+\textbf{Response 200 :} \texttt{\{"unread\_count": 3\}}
+
+\subsubsection{PUT /users/\{userId\}/notifications/\{notifId\}/read}
+
+\textbf{Response 200 :} \texttt{\{"message": "Notification marked as read"\}}
+
+\subsubsection{PUT /users/\{userId\}/notifications/read-all}
+
+\textbf{Response 200 :} \texttt{\{"message": "All notifications marked as read", "updated\_count": 3\}}
+
+\subsubsection{DELETE /users/\{userId\}/notifications/\{notifId\}}
+
+\textbf{Description :} Suppression logique. \textbf{Response 200 :} \texttt{\{"message": "Notification deleted"\}}
+
+% â”€â”€ 9.5 PLANIFICATION â”€â”€
+\subsection{Planification}
+
+\subsubsection{POST /notifications/schedule}
+
+\textbf{Description :} Planifier une notification pour envoi futur.
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "user_id": "uuid (users_profiles.id)",
+  "channels": ["email"],
+  "template_name": "weekly_digest",
+  "locale": "fr",
+  "variables": { "week": "12" },
+  "scheduled_at": "2026-03-25T08:00:00Z"
+}
+\end{lstlisting}
+
+\textbf{Response 201 :}
+\begin{lstlisting}
+{
+  "id": "sched-uuid",
+  "status": "pending",
+  "scheduled_at": "2026-03-25T08:00:00Z",
+  "message": "Notification scheduled"
+}
+\end{lstlisting}
+
+\subsubsection{GET /notifications/scheduled}
+
+\textbf{Query params :} \texttt{?status=pending\&page=1}
+
+\subsubsection{PUT /notifications/scheduled/\{id\}}
+
+\textbf{Description :} Modifier la date ou les paramÃ¨tres.
+
+\subsubsection{DELETE /notifications/scheduled/\{id\}}
+
+\textbf{Response 200 :} \texttt{\{"message": "Scheduled notification cancelled"\}}
+
+% â”€â”€ 9.6 CAMPAGNES â”€â”€
+\subsection{Campagnes}
+
+\subsubsection{POST /campaigns}
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "name": "Promo Ete 2026",
+  "platform_id": "uuid",
+  "template_name": "promo_summer",
+  "channel": "email",
+  "locale": "fr",
+  "user_ids": ["uuid-1", "uuid-2"],
+  "throttle_per_second": 50,
+  "scheduled_at": "2026-06-01T09:00:00Z"
+}
+\end{lstlisting}
+
+\textbf{Response 201 :}
+\begin{lstlisting}
+{
+  "id": "camp-uuid",
+  "name": "Promo Ete 2026",
+  "status": "draft",
+  "total_recipients": 2,
+  "message": "Campaign created"
+}
+\end{lstlisting}
+
+\subsubsection{GET /campaigns}
+
+\textbf{Query params :} \texttt{?status=running\&page=1\&limit=20}
+
+\subsubsection{GET /campaigns/\{id\}}
+
+\textbf{Description :} DÃ©tail d'une campagne.
+
+\subsubsection{GET /campaigns/\{id\}/progress}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "total": 5000,
+  "sent": 3200,
+  "failed": 15,
+  "pending": 1785,
+  "progress_percent": 64.3
+}
+\end{lstlisting}
+
+\subsubsection{POST /campaigns/\{id\}/cancel}
+
+\textbf{Response 200 :} \texttt{\{"message": "Campaign cancelled", "sent\_before\_cancel": 3200\}}
+
+\subsubsection{GET /campaigns/\{id\}/stats}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "total_recipients": 5000,
+  "sent": 4985,
+  "delivered": 4900,
+  "failed": 15,
+  "read": 2100,
+  "delivery_rate": 98.3,
+  "read_rate": 42.0
+}
+\end{lstlisting}
+
+% â”€â”€ 9.7 DEVICE TOKENS â”€â”€
+\subsection{Device Tokens}
+
+\subsubsection{POST /users/\{userId\}/device-tokens}
+
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "token": "fcm-token-xxx...",
+  "device_type": "android",
+  "device_name": "Samsung Galaxy S24",
+  "platform_id": "uuid"
+}
+\end{lstlisting}
+
+\textbf{Response 201 :} \texttt{\{"id": "dt-uuid", "message": "Device token registered"\}}
+
+\subsubsection{GET /users/\{userId\}/device-tokens}
+
+\textbf{Description :} Liste des device tokens.
+
+\subsubsection{DELETE /users/\{userId\}/device-tokens/\{tokenId\}}
+
+\textbf{Response 200 :} \texttt{\{"message": "Device token removed"\}}
+
+% â”€â”€ 9.8 LOGS & STATS â”€â”€
+\subsection{Logs \& Statistiques}
+
+\subsubsection{GET /notifications/logs}
+
+\textbf{Query params :} \texttt{?channel=email\&status=failed\&from=2026-03-01\&to=2026-03-20\&page=1}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "id": "log-uuid",
+      "notification_id": "notif-uuid",
+      "channel": "email",
+      "provider": "sendgrid",
+      "status": "delivered",
+      "attempt": 1,
+      "created_at": "2026-03-20T10:00:05Z"
+    }
+  ],
+  "total": 150, "page": 1
+}
+\end{lstlisting}
+
+\subsubsection{GET /notifications/stats}
+
+\textbf{Query params :} \texttt{?platform\_id=uuid\&period=last\_30d}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "total_sent": 125000,
+  "by_channel": {
+    "email": 80000, "push": 30000,
+    "sms": 5000, "in_app": 8000,
+    "whatsapp": 2000
+  },
+  "by_status": {
+    "delivered": 120000, "failed": 3000,
+    "pending": 2000
+  },
+  "delivery_rate": 96.0
+}
+\end{lstlisting}
+
+% â”€â”€ 9.9 CONFIGURATION â”€â”€
+\subsection{Configuration}
+
+\subsubsection{GET /platforms/\{platformId\}/channels-priority}
+
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "priority_order": ["email","push","in_app","whatsapp","sms"],
+  "fallback_enabled": true
+}
+\end{lstlisting}
+
+\subsubsection{PUT /platforms/\{platformId\}/channels-priority}
+
+\textbf{Request body :} MÃªme structure. \textbf{Response 200 :} \texttt{\{"message": "Channel priority updated"\}}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% 10. CONTRATS INTER-SERVICES
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Contrats Inter-Services}
+
+\subsection{Auth $\rightarrow$ Notification}
+
+Le Service Auth appelle Notification pour l'envoi de notifications de sÃ©curitÃ© (OTP, vÃ©rification, reset, magic link).
+
+\subsubsection{Mode de communication}
+
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{ParamÃ¨tre} & \color{white}\textbf{Valeur} \\
+\midrule
+Transport & HTTP POST synchrone via \texttt{POST /api/v1/notifications/send} \\
+\rowcolor{tabrow} Auth & Token S2S (Auth s'authentifie via \texttt{POST /auth/s2s/token}) \\
+CatÃ©gorie & Toujours \texttt{security} \\
+\rowcolor{tabrow} PrioritÃ© & Toujours \texttt{high} ou \texttt{critical} \\
+Fallback inter-canal & Interdit (catÃ©gorie \texttt{security}) \\
+\rowcolor{tabrow} Idempotency & Champ \texttt{idempotency\_key} fourni par Auth (scoped par platform\_id, TTL 24h) \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Templates prÃ©-requis Auth}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Template name} & \color{white}\textbf{Canal} & \color{white}\textbf{DÃ©clencheur Auth} & \color{white}\textbf{Variables attendues} \\
+\midrule
+auth\_verify\_email & email & POST /auth/register (email) & verification\_url, expires\_in\_minutes, platform\_name \\
+\rowcolor{tabrow} auth\_otp\_sms & sms & register (phone), login/phone & otp\_code, expires\_in\_minutes, platform\_name \\
+auth\_reset\_password & email & POST /auth/forgot-password & reset\_url, expires\_in\_minutes, platform\_name \\
+\rowcolor{tabrow} auth\_magic\_link & email & POST /auth/login/magic-link & magic\_link\_url, expires\_in\_minutes, platform\_name \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Comportement en cas d'Ã©chec}
+
+L'Ã©chec de Notification ne bloque \textbf{jamais} une opÃ©ration Auth. Auth crÃ©e l'utilisateur/le token quand mÃªme et l'utilisateur peut redemander l'envoi.
+
+\subsection{Users $\rightarrow$ Notification}
+
+\begin{tabularx}{\textwidth}{@{}l l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Ã‰vÃ©nement} & \color{white}\textbf{Canal} & \color{white}\textbf{CatÃ©gorie} & \color{white}\textbf{DÃ©clencheur Users} \\
+\midrule
+role\_assigned & email + in\_app & transactional & POST /users/\{id\}/roles \\
+\rowcolor{tabrow} role\_removed & email + in\_app & transactional & DELETE /users/\{id\}/roles/\{roleId\} \\
+document\_validated & email + in\_app & transactional & PUT .../status (validated) \\
+\rowcolor{tabrow} document\_rejected & email + in\_app & transactional & PUT .../status (rejected) \\
+\bottomrule
+\end{tabularx}
+
+Templates prÃ©-requis : \texttt{users\_role\_assigned}, \texttt{users\_role\_removed}, \texttt{users\_document\_validated}, \texttt{users\_document\_rejected} (avec \texttt{platform\_id = NULL} pour templates globaux).
+
+\subsection{Notification $\rightarrow$ Auth}
+
+Validation Bearer token via \texttt{GET /auth/verify-token} Ã  chaque requÃªte API entrante. VÃ©rifie : signature JWT, expiration, user non bloquÃ©/dÃ©sactivÃ©, plateforme active, session active.
+
+\subsection{Notification $\rightarrow$ Users}
+
+RÃ©solution des coordonnÃ©es destinataire via \texttt{GET /users/\{id\}}. RÃ©sultat mis en cache Redis (TTL 5 min). VÃ©rification que le statut utilisateur est \texttt{active} avant envoi.
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% 11. INFRASTRUCTURE
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Infrastructure}
+
+\subsection{Composants d'infrastructure}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Service} & \color{white}\textbf{Technologie} & \color{white}\textbf{RÃ´le} \\
+\midrule
+Backend API & Python 3.11+ / Django REST Framework & API REST principale \\
+\rowcolor{tabrow} Workers asynchrones & Celery + RabbitMQ & Traitement des envois \\
+Scheduler & Celery Beat & Envois planifiÃ©s, purge idempotency keys, purge device tokens inactifs \\
+\rowcolor{tabrow} Base de donnÃ©es & PostgreSQL 15+ & Stockage principal \\
+Cache & Redis 7+ & Cache coordonnÃ©es Users, rate limiting, compteurs badge, idempotency \\
+\rowcolor{tabrow} Conteneur & Docker + Docker Compose & DÃ©ploiement isolÃ© \\
+Reverse Proxy & Nginx / Traefik & TLS termination, load balancing \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Services externes Ã  payer}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{CatÃ©gorie} & \color{white}\textbf{Fournisseurs} & \color{white}\textbf{Facturation} \\
+\midrule
+Email & SendGrid, Mailgun, AWS SES & Par volume \\
+\rowcolor{tabrow} SMS & Twilio, Vonage, Infobip & Par SMS \\
+Push & FCM (gratuit), APNs (gratuit) & Gratuit \\
+\rowcolor{tabrow} WhatsApp & Meta Cloud API & Par message \\
+HÃ©bergement & AWS, GCP, DigitalOcean & Conteneurs, BDD, Redis \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Variables d'environnement}
+
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Variable} & \color{white}\textbf{Description} \\
+\midrule
+DATABASE\_URL & URL de connexion PostgreSQL \\
+\rowcolor{tabrow} REDIS\_URL & URL de connexion Redis \\
+AUTH\_SERVICE\_URL & URL du Service Auth \\
+\rowcolor{tabrow} USERS\_SERVICE\_URL & URL du Service Users \\
+RABBITMQ\_URL & URL du message broker \\
+\rowcolor{tabrow} SENDGRID\_API\_KEY & ClÃ© API SendGrid \\
+TWILIO\_ACCOUNT\_SID & Identifiant Twilio \\
+\rowcolor{tabrow} TWILIO\_AUTH\_TOKEN & Token Twilio \\
+FCM\_SERVER\_KEY & ClÃ© serveur Firebase \\
+\rowcolor{tabrow} APNS\_KEY\_ID & Identifiant clÃ© APNs \\
+META\_WHATSAPP\_TOKEN & Token Meta Cloud API \\
+\rowcolor{tabrow} SECRET\_KEY & ClÃ© secrÃ¨te Django \\
+USER\_CACHE\_TTL & TTL cache coordonnÃ©es Users en secondes (dÃ©faut : 300) \\
+\rowcolor{tabrow} IDEMPOTENCY\_TTL & TTL des clÃ©s d'idempotence en secondes (dÃ©faut : 86400) \\
+\bottomrule
+\end{tabularx}
+
+\subsection{StratÃ©gie d'archivage des logs}
+
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{PÃ©riode} & \color{white}\textbf{Stockage} & \color{white}\textbf{Action} \\
+\midrule
+0--90 jours & PostgreSQL (\texttt{notification\_logs}) & AccÃ¨s temps rÃ©el \\
+\rowcolor{tabrow} 90--365 jours & Table partitionnÃ©e / archivÃ©e & RequÃªtes analytiques \\
+> 365 jours & Stockage froid (S3 / GCS) & Conservation lÃ©gale, suppression PII \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Monitoring temps rÃ©el}
+
+\begin{infobox}[Dashboard de monitoring]
+MÃ©triques clÃ©s :
+\begin{itemize}
+  \item Taux de livraison par canal et par provider (cible > 96\%)
+  \item Latence de mise en queue (cible < 100ms P95)
+  \item File d'attente : taille et temps de traitement moyen
+  \item Taux d'erreur par provider (alertes si > 5\%)
+  \item Campagnes actives : progression temps rÃ©el
+  \item Rate limiting : consommation par provider
+  \item Cache hit ratio coordonnÃ©es Users (v1.2)
+\end{itemize}
+\end{infobox}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+% ANNEXES
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section*{Annexes}
+\addcontentsline{toc}{section}{Annexes}
+
+\subsection*{A. Cas d'usage}
+\addcontentsline{toc}{subsection}{A. Cas d'usage}
+
+\textbf{CU-01 : OTP via Service Auth.}
+Le Service Auth appelle \texttt{POST /notifications/send} avec \texttt{user\_id} (\texttt{users\_profiles.id}), \texttt{channels: ["sms"]}, \texttt{template\_name: "auth\_otp\_sms"}, \texttt{category: "security"}, \texttt{priority: "critical"}, \texttt{idempotency\_key: "uuid-unique"}. Notification ignore les prÃ©fÃ©rences (catÃ©gorie security), rÃ©sout le numÃ©ro via Users (ou cache), et envoie. Aucun fallback inter-canal.
+
+\textbf{CU-02 : Confirmation de commande (AGT-Market).}
+AGT-Market envoie \textbf{un seul appel} \texttt{POST /notifications/send} avec \texttt{channels: ["email", "push"]}, \texttt{template\_name: "order\_confirmed"}, \texttt{category: "transactional"}. Notification orchestre l'envoi sur les deux canaux, rÃ©sout les templates par \texttt{(name, platform\_id)}, et applique les prÃ©fÃ©rences utilisateur.
+
+\textbf{CU-03 : Campagne marketing.}
+Un administrateur crÃ©e une campagne via \texttt{POST /campaigns} avec 10\,000 destinataires et un throttle de 50 msg/s. L'admin suit la progression via \texttt{GET /campaigns/\{id\}/progress}.
+
+\textbf{CU-04 : DÃ©sactivation des prÃ©fÃ©rences.}
+Un utilisateur dÃ©sactive les notifications marketing sur AGT-Bot via \texttt{PUT /users/\{userId\}/notification-preferences}. Seul l'utilisateur propriÃ©taire (ou un token S2S) peut modifier ses prÃ©fÃ©rences.
+
+\textbf{CU-05 : Dashboard admin.}
+Un administrateur consulte \texttt{GET /notifications/stats} pour les taux de livraison et erreurs par canal.
+
+\textbf{CU-06 : Enregistrement device token push.}
+L'app mobile appelle \texttt{POST /users/\{userId\}/device-tokens} avec le token FCM. Lors d'un envoi push, le worker rÃ©cupÃ¨re tous les device tokens actifs.
+
+\textbf{CU-07 : Notification de changement de rÃ´le.}
+Users appelle \texttt{POST /notifications/send} avec \texttt{channels: ["email", "in\_app"]}, \texttt{template\_name: "users\_role\_assigned"}, \texttt{category: "transactional"}.
+
+\textbf{CU-08 : Utilisateur dÃ©sactivÃ© (v1.2).}
+Un utilisateur est dÃ©sactivÃ© cÃ´tÃ© Auth. Au prochain envoi, le worker dÃ©tecte via le cache Users ou \texttt{verify-token} que l'utilisateur est inactif. L'envoi est annulÃ© (statut \texttt{failed}, raison \texttt{user\_inactive}). Les device tokens sont dÃ©sactivÃ©s.
+
+\subsection*{B. Glossaire}
+\addcontentsline{toc}{subsection}{B. Glossaire}
+
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+\toprule
+\rowcolor{tabhead}\color{white}\textbf{Terme} & \color{white}\textbf{DÃ©finition} \\
+\midrule
+Fallback & MÃ©canisme de repli automatique vers un canal ou provider alternatif. Interdit pour \texttt{security}. \\
+\rowcolor{tabrow} Throttling & Limitation du dÃ©bit d'envoi pour respecter les quotas des providers. \\
+Backoff exponentiel & StratÃ©gie de retry oÃ¹ le dÃ©lai augmente exponentiellement (1s, 2s, 4s). \\
+\rowcolor{tabrow} Template & ModÃ¨le de notification avec des variables dynamiques (\texttt{\{\{var\}\}}). \\
+In-app & Notification affichÃ©e dans l'interface de la plateforme. \\
+\rowcolor{tabrow} Worker & Processus asynchrone consommant les messages de la file d'attente. \\
+Rate limiting & Limitation du nombre de requÃªtes par unitÃ© de temps. \\
+\rowcolor{tabrow} Provider & Service tiers d'envoi (SendGrid, Twilio, FCM, Meta Cloud API\ldots). \\
+Celery & Framework Python de traitement de tÃ¢ches asynchrones distribuÃ©es. \\
+\rowcolor{tabrow} Bearer token & Jeton d'authentification validÃ© via \texttt{GET /auth/verify-token}. \\
+Device token & Identifiant unique attribuÃ© par FCM/APNs Ã  un appareil pour les notifications push. \\
+\rowcolor{tabrow} Idempotency key & ClÃ© unique scoped par \texttt{(platform\_id, key)} avec TTL 24h pour Ã©viter les doublons. \\
+\texttt{user\_id} & \texttt{users\_profiles.id} du Service Users. \\
+\rowcolor{tabrow} \texttt{platform\_id} & UUID de la plateforme, registre Auth. \\
+S2S & Service-to-Service --- communication authentifiÃ©e via \texttt{POST /auth/s2s/token}. \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{C. Code PlantUML --- Diagramme de Classes}
+\addcontentsline{toc}{subsection}{C. Code PlantUML --- Diagramme de Classes}
+
+Le code PlantUML ci-dessous correspond au diagramme de classes complet du Service Notification v1.2. Il peut Ãªtre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language=plantuml,basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+@startuml Notification Service - Class Diagram v1.2
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "notifications" as notif {
+  * id : UUID <<PK>>
+  --
+  * user_id : UUID
+  * platform_id : UUID
+  template_id : UUID <<FK>>
+  * channel : VARCHAR(20)
+  * category : VARCHAR(30)
+  subject : VARCHAR(255)
+  * body : TEXT
+  * status : VARCHAR(20)
+  priority : VARCHAR(10) = 'normal'
+  metadata : JSONB
+  idempotency_key : VARCHAR(100)
+  read_at : TIMESTAMPTZ
+  deleted_at : TIMESTAMPTZ
+  sent_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, idempotency_key)
+}
+
+entity "templates" as tpl {
+  * id : UUID <<PK>>
+  --
+  * name : VARCHAR(100)
+  * channel : VARCHAR(20)
+  platform_id : UUID
+  * category : VARCHAR(30)
+  is_active : BOOLEAN = true
+  created_by : UUID
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (name, platform_id)
+}
+
+entity "template_versions" as tplv {
+  * id : UUID <<PK>>
+  --
+  * template_id : UUID <<FK>>
+  * version : INT
+  * locale : VARCHAR(5)
+  subject : VARCHAR(255)
+  * body : TEXT
+  is_current : BOOLEAN = false
+  * created_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (template_id, version, locale)
+}
+
+entity "template_variables" as tplvar {
+  * id : UUID <<PK>>
+  --
+  * template_version_id : UUID <<FK>>
+  * key : VARCHAR(50)
+  description : VARCHAR(255)
+  required : BOOLEAN = true
+  default_value : VARCHAR(255)
+}
+
+entity "user_preferences" as pref {
+  * id : UUID <<PK>>
+  --
+  * user_id : UUID
+  * platform_id : UUID
+  channel_email : BOOLEAN = true
+  channel_sms : BOOLEAN = true
+  channel_push : BOOLEAN = true
+  channel_whatsapp : BOOLEAN = true
+  channel_in_app : BOOLEAN = true
+  cat_transactional : BOOLEAN = true
+  cat_marketing : BOOLEAN = false
+  cat_security : BOOLEAN = true
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (user_id, platform_id)
+}
+
+entity "notification_logs" as logs {
+  * id : UUID <<PK>>
+  --
+  * notification_id : UUID <<FK>>
+  * channel : VARCHAR(20)
+  * provider : VARCHAR(30)
+  * status : VARCHAR(20)
+  * attempt : INT
+  error_message : TEXT
+  provider_message_id : VARCHAR(255)
+  * created_at : TIMESTAMPTZ
+}
+
+entity "campaigns" as camp {
+  * id : UUID <<PK>>
+  --
+  * name : VARCHAR(100)
+  * platform_id : UUID
+  * template_id : UUID <<FK>>
+  * channel : VARCHAR(20)
+  * status : VARCHAR(20)
+  total_recipients : INT = 0
+  sent_count : INT = 0
+  failed_count : INT = 0
+  throttle_per_second : INT = 10
+  scheduled_at : TIMESTAMPTZ
+  started_at : TIMESTAMPTZ
+  completed_at : TIMESTAMPTZ
+  created_by : UUID
+  * created_at : TIMESTAMPTZ
+}
+
+entity "campaign_recipients" as camprec {
+  * id : UUID <<PK>>
+  --
+  * campaign_id : UUID <<FK>>
+  * user_id : UUID
+  notification_id : UUID <<FK>>
+  status : VARCHAR(20) = 'pending'
+  variables : JSONB
+  * created_at : TIMESTAMPTZ
+}
+
+entity "scheduled_notifications" as sched {
+  * id : UUID <<PK>>
+  --
+  * user_id : UUID
+  * platform_id : UUID
+  * template_id : UUID <<FK>>
+  * channel : VARCHAR(20)
+  variables : JSONB
+  * scheduled_at : TIMESTAMPTZ
+  status : VARCHAR(20) = 'pending'
+  notification_id : UUID <<FK>>
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "device_tokens" as devtok {
+  * id : UUID <<PK>>
+  --
+  * user_id : UUID
+  * platform_id : UUID
+  * token : TEXT
+  * device_type : VARCHAR(20)
+  device_name : VARCHAR(100)
+  is_active : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (user_id, token)
+}
+
+entity "platform_channel_config" as pcc {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID <<UQ>>
+  * priority_order : JSONB
+  fallback_enabled : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+tpl ||--o{ tplv : "1..* versions"
+tplv ||--o{ tplvar : "0..* variables"
+tpl ||--o{ notif : "0..* notifications"
+tpl ||--o{ camp : "0..* campaigns"
+tpl ||--o{ sched : "0..* scheduled"
+notif ||--o{ logs : "1..* logs"
+camp ||--o{ camprec : "1..* recipients"
+camprec }o--|| notif : "0..1 notification"
+sched }o--o| notif : "0..1 notification"
+
+@enduml
+\end{lstlisting}
+
+\vfill
+\begin{center}
+\color{primary}\rule{8cm}{0.4pt}\\[6pt]
+{\small\color{secondary}\textbf{Fin du document} --- AGT Engineering --- v1.2}
+\end{center}
+
+\end{document}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\4.medias.txt =====
+`
+% ============================================================
+%  CAHIER DES CHARGES TECHNIQUE â€” SERVICE MÃ‰DIA v1.4
+%  AG Technologies â€” Architecture de Services PartagÃ©s
+%  AlignÃ© : Auth v2.1 Â· Users v1.0 Â· Notification v1.2
+%  Compilable sur Overleaf (pdfLaTeX)
+% ============================================================
+\documentclass[a4paper,12pt]{article}
+
+% --- Encodage & Langue ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% --- Mise en page ---
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{float}
+\usepackage{graphicx}
+
+% --- Couleurs & Graphismes ---
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+\usepackage{mdframed}
+\usepackage{letterspace}
+
+% --- Tableaux ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{colortbl}
+
+% --- Listes ---
+\usepackage{enumitem}
+
+% --- Code & Monospace ---
+\usepackage{listings}
+\usepackage{inconsolata}
+
+% --- Liens ---
+\usepackage[colorlinks=true, linkcolor=AGBlue, urlcolor=AGBlue, citecolor=AGBlue]{hyperref}
+
+% --- IcÃ´nes ---
+\usepackage{fontawesome5}
+
+% --- NumÃ©rotation & Espacement ---
+\usepackage{setspace}
+\usepackage{lastpage}
+
+% ============================================================
+%  PALETTE DE COULEURS AG TECHNOLOGIES
+% ============================================================
+\definecolor{AGBlue}{RGB}{30, 90, 168}
+\definecolor{AGLightBlue}{RGB}{220, 235, 255}
+\definecolor{AGDark}{RGB}{20, 30, 50}
+\definecolor{AGGray}{RGB}{100, 110, 125}
+\definecolor{AGLightGray}{RGB}{245, 247, 250}
+\definecolor{AGGreen}{RGB}{30, 160, 100}
+\definecolor{AGOrange}{RGB}{230, 115, 20}
+\definecolor{AGRed}{RGB}{200, 50, 50}
+\definecolor{TableHeader}{RGB}{30, 90, 168}
+\definecolor{TableAlt}{RGB}{240, 245, 255}
+\definecolor{CodeBg}{RGB}{248, 249, 252}
+
+% ============================================================
+%  STYLES DES TITRES
+% ============================================================
+\titleformat{\section}
+  {\color{AGBlue}\Large\bfseries}
+  {\thesection}{1em}{}
+  [\color{AGBlue}\titlerule]
+
+\titleformat{\subsection}
+  {\color{AGDark}\large\bfseries}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\color{AGGray}\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+\titlespacing*{\subsubsection}{0pt}{8pt}{2pt}
+
+% ============================================================
+%  EN-TÃŠTE & PIED DE PAGE
+% ============================================================
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.3pt}
+\fancyhead[L]{\small\color{AGGray}\textbf{AG Technologies} --- Service M\'edia}
+\fancyhead[R]{\small\color{AGGray}Cahier des Charges Technique}
+\fancyfoot[L]{\small\color{AGGray}Confidentiel --- Usage Interne}
+\fancyfoot[C]{\small\color{AGGray}\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\color{AGGray}v1.4 --- Mars 2026}
+
+% ============================================================
+%  STYLE CODE
+% ============================================================
+\lstset{
+  backgroundcolor=\color{CodeBg},
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  framesep=4pt,
+  rulecolor=\color{AGBlue!30},
+  commentstyle=\color{AGGreen},
+  keywordstyle=\color{AGBlue}\bfseries,
+  stringstyle=\color{AGOrange},
+  numbers=left,
+  numberstyle=\tiny\color{AGGray},
+  numbersep=8pt,
+  xleftmargin=16pt,
+  tabsize=2,
+  showstringspaces=false,
+}
+
+% ============================================================
+%  ENVIRONNEMENTS PERSONNALISÃ‰S
+% ============================================================
+\newmdenv[
+  linecolor=AGBlue,
+  linewidth=2pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  backgroundcolor=AGLightBlue,
+  innerleftmargin=12pt,
+  innerrightmargin=8pt,
+  innertopmargin=6pt,
+  innerbottommargin=6pt,
+  skipabove=8pt,
+  skipbelow=8pt,
+]{infobox}
+
+\newmdenv[
+  linecolor=AGOrange,
+  linewidth=2pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  backgroundcolor=AGOrange!8,
+  innerleftmargin=12pt,
+  innerrightmargin=8pt,
+  innertopmargin=6pt,
+  innerbottommargin=6pt,
+  skipabove=8pt,
+  skipbelow=8pt,
+]{warningbox}
+
+\newmdenv[
+  linecolor=AGGreen,
+  linewidth=2pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  backgroundcolor=AGGreen!8,
+  innerleftmargin=12pt,
+  innerrightmargin=8pt,
+  innertopmargin=6pt,
+  innerbottommargin=6pt,
+  skipabove=8pt,
+  skipbelow=8pt,
+]{successbox}
+
+\newcommand{\badge}[2]{%
+  \tikz[baseline=-2pt]{\node[fill=#1, text=white, rounded corners=3pt,
+    inner sep=3pt, font=\footnotesize\bfseries]{#2};}%
+}
+
+\newcommand{\httpmethod}[1]{%
+  \colorbox{AGBlue!15}{\textcolor{AGBlue}{\ttfamily\footnotesize\bfseries #1}}%
+}
+
+% ============================================================
+%  TABLE DES MATIÃˆRES â€” STYLE
+% ============================================================
+\setcounter{tocdepth}{3}
+\renewcommand{\contentsname}{Table des Mati\`eres}
+
+% ============================================================
+%  DOCUMENT
+% ============================================================
+\begin{document}
+
+% -------------------------------------------------------
+%  PAGE DE GARDE
+% -------------------------------------------------------
+\begin{titlepage}
+\pagecolor{AGDark}
+\color{white}
+
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[AGBlue!50, opacity=0.45]
+    (current page.north west) rectangle ([yshift=-3.8cm]current page.north east);
+  \fill[AGBlue!80, opacity=0.20]
+    (current page.north west) rectangle ([yshift=-1.0cm]current page.north east);
+  \fill[white, opacity=0.025]
+    ([xshift=-1.5cm, yshift=-4.5cm]current page.north east) circle (6.0cm);
+  \fill[AGBlue!70, opacity=0.10]
+    ([xshift=2.0cm,  yshift=-9.0cm]current page.north east) circle (4.5cm);
+  \fill[AGBlue!40, opacity=0.08]
+    ([xshift=3.5cm,  yshift=-16cm]current page.north west) circle (3.2cm);
+  \fill[white, opacity=0.015]
+    ([xshift=-3cm,   yshift=6cm]current page.south west)   circle (5.0cm);
+  \fill[AGBlue,    opacity=0.55]
+    (current page.south west) rectangle ([yshift=0.65cm]current page.south east);
+  \fill[AGBlue!40, opacity=0.30]
+    ([yshift=0.65cm]current page.south west)
+    rectangle ([yshift=2.0cm]current page.south east);
+  \node[text=white!40, font=\fontsize{7}{9}\selectfont, anchor=south]
+    at ([yshift=0.18cm]current page.south)
+    {Document confidentiel $\cdot$ Usage interne AG Technologies $\cdot$ v1.4};
+\end{tikzpicture}
+
+\vspace*{1.2cm}
+
+\begin{center}
+  {\fontsize{10}{12}\selectfont\color{white!80}%
+    \textbf{AG\,TECHNOLOGIES} \quad\textcolor{white!60}{$|$}\quad
+    Architecture de Services Partag\'es}\\[0.25cm]
+  {\color{AGBlue!80}\rule{10cm}{0.6pt}}
+\end{center}
+
+\vspace{1.0cm}
+
+\begin{center}
+\begin{tikzpicture}
+  \fill[AGBlue!20, opacity=0.20] (0,0) circle (3.0cm);
+  \fill[AGBlue!40, opacity=0.22] (0,0) circle (2.3cm);
+  \fill[AGBlue!70, opacity=0.50] (0,0) circle (1.6cm);
+  \fill[AGBlue,    opacity=0.80] (0,0) circle (1.15cm);
+  \node[text=white, font=\fontsize{30}{30}\selectfont] at (0, 0)
+    {\faFile};
+  \node[text=white!75, font=\fontsize{14}{14}\selectfont]
+    at ({2.6*cos(52)},  {2.6*sin(52)})  {\faImage};
+  \node[text=white!75, font=\fontsize{14}{14}\selectfont]
+    at ({2.6*cos(128)}, {2.6*sin(128)}) {\faVideo};
+  \node[text=white!60, font=\fontsize{12}{12}\selectfont]
+    at ({2.5*cos(200)}, {2.5*sin(200)}) {\faMusic};
+  \node[text=white!60, font=\fontsize{12}{12}\selectfont]
+    at ({2.5*cos(320)}, {2.5*sin(320)}) {\faFilePdf};
+  \node[text=white!45, font=\fontsize{10}{10}\selectfont]
+    at ({2.4*cos(-90)}, {2.4*sin(-90)}) {\faCloud};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.7cm}
+
+\begin{center}
+  {\color{AGBlue!80}\rule{3.5cm}{0.6pt}}%
+  \hspace{0.4cm}{\color{AGLightBlue!70}\fontsize{8}{8}\selectfont\faCircle[regular]}%
+  \hspace{0.4cm}{\color{AGBlue!80}\rule{3.5cm}{0.6pt}}\\[0.55cm]
+
+  {\fontsize{9}{11}\selectfont\color{white!80}%
+    \textls[250]{CAHIER DES CHARGES TECHNIQUE}}\\[0.45cm]
+
+  \begin{tikzpicture}
+    \fill[AGBlue, opacity=0.70, rounded corners=7pt]
+      (-6.5,-0.62) rectangle (6.5,0.62);
+    \fill[white, opacity=0.06, rounded corners=7pt]
+      (-6.5, 0.0)  rectangle (6.5, 0.62);
+    \node[text=white, font=\LARGE\bfseries] at (0,0)
+      {\faFile\enspace Service M\'edia};
+  \end{tikzpicture}\\[0.4cm]
+
+  {\fontsize{10}{12}\selectfont\color{white}
+    Gestion Centralis\'ee des Fichiers --- Media Service}\\[0.25cm]
+
+  {\fontsize{9}{11}\selectfont\color{AGBlue!60}
+    Version 1.4 --- Final --- Align\'e Auth v2.1 $\cdot$ Users v1.0 $\cdot$ Notification v1.2}\\[0.45cm]
+
+  {\color{AGBlue!80}\rule{3.5cm}{0.6pt}}%
+  \hspace{0.4cm}{\color{AGLightBlue!70}\fontsize{8}{8}\selectfont\faCircle[regular]}%
+  \hspace{0.4cm}{\color{AGBlue!80}\rule{3.5cm}{0.6pt}}
+\end{center}
+
+\vspace{1.1cm}
+
+\begin{center}
+\begin{tikzpicture}
+  \fill[white, opacity=0.06, rounded corners=6pt] (-5.5, -1.8) rectangle (5.5, 1.8);
+  \draw[white, opacity=0.12, rounded corners=6pt] (-5.5, -1.8) rectangle (5.5, 1.8);
+  \node[text=white!50, font=\small, anchor=west] at (-4.8, 1.2)
+    {\faCalendar\enspace \textbf{Date :} Mars 2026};
+  \node[text=white!50, font=\small, anchor=west] at (-4.8, 0.5)
+    {\faTag\enspace \textbf{Version :} 1.4 (final)};
+  \node[text=white!50, font=\small, anchor=west] at (-4.8, -0.2)
+    {\faUsers\enspace \textbf{Auteur :} \'Equipe Architecture};
+  \node[text=white!50, font=\small, anchor=west] at (-4.8, -0.9)
+    {\faLock\enspace \textbf{Classification :} Confidentiel};
+  \node[text=white!50, font=\small, anchor=west] at (-4.8, -1.5)
+    {\faCheckCircle\enspace \textbf{Statut :} Implementation-ready};
+\end{tikzpicture}
+\end{center}
+
+\nopagecolor
+\end{titlepage}
+
+% -------------------------------------------------------
+%  HISTORIQUE DES RÃ‰VISIONS
+% -------------------------------------------------------
+\newpage
+\section*{Historique des R\'evisions}
+\addcontentsline{toc}{section}{Historique des R\'evisions}
+
+\begin{tabularx}{\textwidth}{|p{1.4cm}|p{2.6cm}|X|p{2.8cm}|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Ver.} &
+  \color{white}\textbf{Date} &
+  \color{white}\textbf{Description} &
+  \color{white}\textbf{Auteur} \\
+  \hline
+  1.0 & 2026-03-21 & Cr\'eation initiale du document & \'Equipe Ing\'enierie \\
+  \hline
+  \rowcolor{TableAlt}1.2 & 2026-03-21 & Post-audit : alignement platform\_id UUID (Auth v2.1). Contrats inter-services. Stack Node.js/NestJS. Rate limiting. RGPD. Pr\'efixe /api/v1. Health check. Corrections MLD. PlantUML annexe. & \'Equipe Architecture \\
+  \hline
+  1.3 & 2026-03-21 & Ajout owner\_user\_id. Contrat Users $\leftrightarrow$ M\'edia (photo/KYC). S\'equence RGPD orchestr\'ee. Diagramme async corrig\'e. Autorisation hard delete pr\'ecis\'ee. S\'ecurit\'e SSRF from-url. D\'eduplication retir\'ee du MLD. Consommateurs futurs. & \'Equipe Architecture \\
+  \hline
+  \rowcolor{TableAlt}1.4 & 2026-03-21 & Version finale : avatar\_media\_id (pas avatar\_url) dans contrat Users. D\'ependance Notification marqu\'ee futur (pas MVP). Hard delete S2S-only. Coquilles version corrig\'ees. & \'Equipe Architecture \\
+  \hline
+\end{tabularx}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ==============================================================
+\section{Introduction}
+
+\subsection{Objet du Document}
+
+Ce document constitue le \textbf{Cahier des Charges Technique et Fonctionnel} du \textbf{Service M\'edia} d'AG Technologies, version 1.4 finale. Il int\`egre les corrections d'alignement avec Auth v2.1, Users v1.0 et Notification v1.2.
+
+\begin{infobox}
+\faInfoCircle\quad \textbf{Convention d'identit\'e (v1.4)} :\\[4pt]
+\texttt{platform\_id} = \textbf{UUID} du registre Auth (\texttt{platforms.id}).\\
+\texttt{uploaded\_by} = \texttt{users\_auth.id} --- l'acteur technique qui a effectu\'e l'upload (extrait du JWT \texttt{sub}). \texttt{NULL} si upload S2S.\\
+\texttt{owner\_user\_id} = \texttt{users\_auth.id} --- le propri\'etaire m\'etier du fichier (ex : l'utilisateur dont c'est la photo de profil ou le document KYC). Fourni en body par le service consommateur. \texttt{NULL} si non applicable.\\
+M\'edia ne stocke aucune table locale de plateformes ni d'utilisateurs. Le mapping vers \texttt{users\_profiles.id} est r\'esolu par le Service Users.
+\end{infobox}
+
+\subsection{Destinataires}
+
+\begin{tabularx}{\textwidth}{|p{3.6cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Destinataire} & \color{white}\textbf{R\^ole} \\
+  \hline
+  \'Equipe Backend & D\'eveloppement et maintenance du service \\
+  \hline
+  \rowcolor{TableAlt}\'Equipe Frontend & Int\'egration des APIs d'upload et d'affichage \\
+  \hline
+  \'Equipes consommatrices & AGT-Market, AGT-Bot, Service Users, Service Chat \\
+  \hline
+  \rowcolor{TableAlt}Lead Technique / Architecte & Validation des choix techniques \\
+  \hline
+  Chef de Projet & Suivi et validation fonctionnelle \\
+  \hline
+\end{tabularx}
+
+\subsection{P\'erim\`etre du Service}
+
+\begin{infobox}
+\faInfoCircle\quad \textbf{Inclus :} upload, validation, stockage, traitement (compression, thumbnails, conversion), contr\^ole d'acc\`es, distribution CDN, m\'etadonn\'ees, suppression, archivage, purge RGPD, logs d'acc\`es.
+\end{infobox}
+
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{Hors p\'erim\`etre :} gestion des utilisateurs (Service Users), authentification (Service Auth), envoi de notifications (Service Notification), logique m\'etier des plateformes.
+\end{warningbox}
+
+% ==============================================================
+\section{Contexte \& Probl\'ematique}
+
+\subsection{Pourquoi Ce Service Existe}
+
+Dans un \'ecosyst\`eme multi-plateformes, la gestion des fichiers est un besoin transverse critique. Sans service centralis\'e : duplication de code, incoh\'erence des traitements, risques de s\'ecurit\'e, co\^uts \'elev\'es.
+
+\subsection{Positionnement dans l'Architecture}
+
+Le Service M\'edia est un \textbf{service de base}. Il d\'epend de \textbf{Auth} (validation tokens, d\'ependance MVP). La d\'ependance vers \textbf{Notification} (alertes quota) est \textbf{future} et n'est pas requise au MVP.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\small},
+  consumer/.style={draw=AGGray, fill=AGLightGray, rounded corners=4pt,
+                   minimum width=2.6cm, minimum height=0.65cm, align=center},
+  medianode/.style={draw=AGBlue, fill=AGLightBlue, rounded corners=6pt,
+                    minimum width=3.8cm, minimum height=1.0cm,
+                    align=center, line width=1.5pt},
+  depnode/.style={draw=AGGreen!80, fill=AGGreen!10, rounded corners=4pt,
+                  minimum width=2.6cm, minimum height=0.65cm, align=center},
+]
+  \node[consumer] (market) at (-4.5, 0) {AGT-Market};
+  \node[consumer] (users)  at (-1.5, 0) {Service Users};
+  \node[consumer] (chat)   at ( 1.5, 0) {Service Chat};
+  \node[consumer] (bot)    at ( 4.5, 0) {AGT-Bot};
+  \node[medianode] (media) at (0, -2) {\textbf{\faFile\ Media Service}};
+  \node[depnode] (auth)    at (-3.5, -4) {Service Auth};
+  \node[depnode] (storage) at (   0, -4) {Stockage};
+  \node[depnode] (notif)   at ( 3.5, -4) {Notification};
+  \draw[->, thick, color=AGGray] (market) -- (media);
+  \draw[->, thick, color=AGGray] (users)  -- (media);
+  \draw[->, thick, color=AGGray] (chat)   -- (media);
+  \draw[->, thick, color=AGGray] (bot)    -- (media);
+  \draw[->, thick, color=AGGreen]  (media) -- (auth);
+  \draw[->, thick, color=AGOrange] (media) -- (storage);
+  \draw[->, thick, color=AGRed]    (media) -- (notif);
+\end{tikzpicture}
+\end{center}
+
+% ==============================================================
+\section{Vision \& Objectifs}
+
+\subsection{Concept}
+
+Service \textbf{g\'en\'erique} de fichiers. Il ne conna\^it pas le contexte m\'etier. C'est la plateforme consommatrice qui donne du sens via les m\'etadonn\'ees.
+
+\subsection{Objectifs MVP \& Long Terme}
+
+\begin{tabularx}{\textwidth}{|p{2.4cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Phase} & \color{white}\textbf{Objectifs} \\
+  \hline
+  \textbf{MVP} & Upload/t\'el\'echargement ; validation ; stockage local VPS ; compression/thumbnails (Sharp) ; acc\`es public/priv\'e ; URLs sign\'ees ; API REST \texttt{/api/v1} ; auth via Auth ; purge RGPD ; rate limiting \\
+  \hline
+  \rowcolor{TableAlt}\textbf{Long terme} & Migration cloud (S3/GCS) ; CDN ; vid\'eo avanc\'e (FFmpeg) ; quotas + alertes ; d\'eduplication SHA-256 ; versioning ; monitoring avanc\'e \\
+  \hline
+\end{tabularx}
+
+\subsection{KPIs}
+
+\begin{tabularx}{\textwidth}{|X|p{2.0cm}|p{2.4cm}|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{KPI} & \color{white}\textbf{MVP} & \color{white}\textbf{Long Terme} \\
+  \hline
+  Upload 5 MB & $<$ 3s & $<$ 2s \\
+  \hline
+  \rowcolor{TableAlt}Thumbnails & $<$ 2s & $<$ 1s \\
+  \hline
+  Resize (cache) & $<$ 1s & $<$ 500ms \\
+  \hline
+  \rowcolor{TableAlt}Disponibilit\'e & $\geq$ 99\% & $\geq$ 99,5\% \\
+  \hline
+  Taux erreur & $<$ 1\% & $<$ 0,5\% \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\section{Parties Prenantes}
+
+\subsection{Services Consommateurs}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Service} & \color{white}\textbf{Usage} \\
+  \hline
+  AGT-Market & Photos/vid\'eos produits, galeries, thumbnails \\
+  \hline
+  \rowcolor{TableAlt}Service Users & Photos de profil, documents KYC (priv\'es), purge RGPD \\
+  \hline
+  Service Chat & Pi\`eces jointes (images, documents, audio) \\
+  \hline
+  \rowcolor{TableAlt}AGT-Bot & Images r\'eponse, vocaux WhatsApp, documents FAQ \\
+  \hline
+  Notification & Images dans emails et push \\
+  \hline
+  \rowcolor{TableAlt}SALMA & Documents formation, ressources p\'edagogiques (migration pr\'evue) \\
+  \hline
+  \textit{Futures plateformes} & \textit{Tout nouveau service de l'\'ecosyst\`eme AGT peut consommer M\'edia via les m\^emes contrats (JWT ou S2S). Aucune modification de M\'edia n'est requise.} \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\section{Besoins Fonctionnels}
+
+\subsection{Module Upload}
+
+\subsubsection{Upload Simple}
+\begin{itemize}[leftmargin=1.5cm]
+  \item Upload via \texttt{multipart/form-data}
+  \item Validation type MIME, extension, taille (selon config plateforme)
+  \item Hash SHA-256 calcul\'e \`a la r\'eception
+  \item \texttt{platform\_id} extrait du JWT (\texttt{platform\_id}) ou du token S2S (via introspection)
+  \item \texttt{uploaded\_by} = \texttt{sub} du JWT ; \texttt{NULL} pour uploads S2S
+  \item \texttt{owner\_user\_id} (optionnel, en body) = propri\'etaire m\'etier du fichier (\texttt{users\_auth.id}). Utilis\'e quand un service ou un admin uploade pour le compte d'un utilisateur
+  \item D\'eclenchement automatique du pipeline de traitement
+\end{itemize}
+
+\subsubsection{Upload Multiple (Batch)}
+Upload de plusieurs fichiers en une requ\^ete. R\'eponse 207 Multi-Status avec statut par fichier.
+
+\subsubsection{Upload depuis URL Externe}
+T\'el\'echargement depuis URL HTTP/HTTPS. M\^eme pipeline que l'upload direct.
+
+\subsubsection{Types de Fichiers Support\'es}
+
+\begin{tabularx}{\textwidth}{|p{2.4cm}|p{3.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Cat\'egorie} & \color{white}\textbf{Formats} & \color{white}\textbf{Traitements} \\
+  \hline
+  Images & JPEG, PNG, WebP, GIF & Compression, thumbnails, resize \\
+  \hline
+  \rowcolor{TableAlt}Vid\'eos & MP4, WebM & Dur\'ee, thumbnail (FFmpeg) \\
+  \hline
+  Documents & PDF, DOCX, XLSX, CSV, TXT & Stockage brut \\
+  \hline
+  \rowcolor{TableAlt}Audio & MP3, WAV, OGG & Dur\'ee, stockage brut \\
+  \hline
+\end{tabularx}
+
+\subsection{Module Traitement (Sharp / FFmpeg)}
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item \textbf{Compression} : qualit\'e configurable par plateforme, original toujours conserv\'e
+  \item \textbf{Thumbnails} : tailles configurables (ex: 150$\times$150, 300$\times$300), stock\'ees comme variantes
+  \item \textbf{Resize \`a la vol\'ee} : endpoint d\'edi\'e, r\'esultat cach\'e Redis
+\end{itemize}
+
+\subsection{Module Acc\`es \& Distribution}
+
+Fichiers publics (URL directe), fichiers priv\'es (token requis), URLs temporaires sign\'ees (dur\'ee configurable), CDN futur.
+
+\subsection{Module Gestion}
+
+Soft delete, mise \`a jour m\'etadonn\'ees, changement visibilit\'e, listage pagin\'e/filtrable, \textbf{purge RGPD} (suppression totale par utilisateur).
+
+\subsection{Module M\'etadonn\'ees}
+
+Syst\`eme (UUID, nom, MIME, taille, hash, dimensions, dur\'ee, dates) + personnalis\'ees (cl\'e-valeur libre par plateforme).
+
+\subsection{Module Configuration Plateforme}
+
+Types autoris\'es, tailles max par cat\'egorie (JSONB), thumbnails, compression, quota. Approche \textbf{upsert}.
+
+\subsection{Module Statistiques}
+
+Espace global/plateforme/utilisateur, fichiers par MIME, fichiers populaires, bande passante.
+
+\subsection{Module Logs d'Acc\`es}
+
+Chaque download et g\'en\'eration d'URL sign\'ee sont logg\'es. Consultation admin par fichier.
+
+% ==============================================================
+\section{Besoins Non-Fonctionnels}
+
+\begin{tabularx}{\textwidth}{|p{2.0cm}|X|p{3.4cm}|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{ID} & \color{white}\textbf{Exigence} & \color{white}\textbf{Cible} \\
+  \hline
+  NF-01 & Upload 5 MB & $<$ 3s \\
+  \hline
+  \rowcolor{TableAlt}NF-02 & Thumbnails apr\`es upload & $<$ 2s \\
+  \hline
+  NF-03 & Resize avec cache & $<$ 1s \\
+  \hline
+  \rowcolor{TableAlt}NF-04 & Taille max d\'efaut & 50 MB (configurable) \\
+  \hline
+  NF-05 & Auth obligatoire & JWT via \texttt{verify-token} ou S2S via \texttt{introspect} \\
+  \hline
+  \rowcolor{TableAlt}NF-06 & Rate limiting upload & 30 req/min user, 100 req/min S2S \\
+  \hline
+  NF-07 & Fichiers ex\'ecutables & Interdits par d\'efaut \\
+  \hline
+  \rowcolor{TableAlt}NF-08 & Scalabilit\'e & Horizontale, provider abstrait \\
+  \hline
+  NF-09 & Disponibilit\'e & $\geq$ 99,5\% \\
+  \hline
+  \rowcolor{TableAlt}NF-10 & Health check & \texttt{GET /api/v1/media/health} \\
+  \hline
+  NF-11 & Traitement async & BullMQ (Redis) \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\section{Architecture Technique}
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{|p{3.4cm}|p{3.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Composant} & \color{white}\textbf{Technologie} & \color{white}\textbf{Justification} \\
+  \hline
+  Runtime & Node.js 20 LTS & Performance I/O, streams natifs \\
+  \hline
+  \rowcolor{TableAlt}Framework & NestJS & Modulaire, DI, TypeScript \\
+  \hline
+  Images & Sharp & Compression/resize haute perf \\
+  \hline
+  \rowcolor{TableAlt}Vid\'eo/Audio & FFmpeg & Dur\'ee, thumbnail vid\'eo \\
+  \hline
+  BDD & PostgreSQL 16+ & M\'etadonn\'ees, configs, logs \\
+  \hline
+  \rowcolor{TableAlt}ORM & TypeORM / Prisma & Mapping, migrations \\
+  \hline
+  Cache \& Queue & Redis 7+ / BullMQ & Cache, rate limiting, async \\
+  \hline
+  \rowcolor{TableAlt}Conteneur & Docker + Compose & D\'eploiement isol\'e \\
+  \hline
+\end{tabularx}
+
+\begin{warningbox}
+\faExclamationTriangle\quad Auth, Users et Notification utilisent Django/DRF. Le choix Node.js/NestJS pour M\'edia est d\'elib\'er\'e : service I/O-intensif, Sharp 5--10$\times$ plus performant que Pillow. L'h\'et\'erog\'en\'eit\'e de stack est accept\'ee en microservices.
+\end{warningbox}
+
+\subsection{Flux de Traitement Asynchrone}
+
+\begin{center}
+\begin{tikzpicture}[
+  font=\small,
+  >=stealth,
+  line width=0.8pt,
+  every node/.style={font=\small},
+  box/.style={draw, rounded corners=4pt, minimum width=3.0cm, minimum height=0.65cm, align=center},
+]
+  \node[box, draw=AGBlue, fill=AGLightBlue, line width=1.2pt] (api) at (0,0) {\faServer\ API (NestJS)};
+  \node[box, draw=AGRed!70, fill=AGRed!10] (queue) at (5,0) {\faDatabase\ BullMQ (Redis)};
+  \node[box, draw=AGOrange!80, fill=AGOrange!10] (workers) at (10,0) {\faCog\ Workers (Sharp/FFmpeg)};
+  \node[box, draw=AGOrange!90, fill=AGOrange!10] (storage) at (10,-1.8) {\faHdd\ Stockage};
+  \node[box, draw=AGBlue!70, fill=AGBlue!10] (pg) at (0,-1.8) {\faDatabase\ PostgreSQL};
+
+  \draw[->, thick, color=AGBlue] (api) -- node[above, font=\tiny]{enqueue job} (queue);
+  \draw[->, thick, color=AGRed!80] (queue) -- node[above, font=\tiny]{consume} (workers);
+  \draw[->, thick, color=AGOrange] (workers) -- (storage);
+  \draw[->, thick, color=AGBlue] (api) -- (pg);
+  \draw[->, thick, color=AGGray, dashed] (workers) -- node[below, font=\tiny]{MAJ m\'etadonn\'ees} (pg);
+\end{tikzpicture}
+\end{center}
+
+\begin{infobox}
+\faInfoCircle\quad \textbf{Flux (v1.4)} : L'API enregistre le fichier brut et enqueue un job dans BullMQ. Les Workers consomment la queue et ex\'ecutent les traitements (compression, thumbnails, extraction dur\'ee). Les Workers mettent \`a jour les m\'etadonn\'ees et variantes dans PostgreSQL une fois le traitement termin\'e.
+\end{infobox}
+
+\subsection{Provider de Stockage Abstrait}
+
+\begin{lstlisting}[language=JavaScript, caption=Interface StorageProvider (TypeScript)]
+interface StorageProvider {
+  upload(file: Buffer, key: string, opts?: UploadOptions): Promise<string>;
+  download(key: string): Promise<Buffer>;
+  delete(key: string): Promise<void>;
+  getUrl(key: string, expiresIn?: number): Promise<string>;
+  exists(key: string): Promise<boolean>;
+}
+\end{lstlisting}
+
+Providers : \texttt{LocalStorageProvider} (MVP), \texttt{S3StorageProvider} (futur), \texttt{GCSStorageProvider} (futur).
+
+Organisation : \texttt{/\{platformUUID\}/\{ann\'ee\}/\{mois\}/\{fileUUID\}/}
+
+% ==============================================================
+\section{Mod\'elisation}
+
+\subsection{Table \texttt{media\_files}}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.6cm}|p{2.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+  \hline
+  id & UUID & PK & Identifiant unique \\
+  \hline
+  \rowcolor{TableAlt}original\_name & VARCHAR(255) & NOT NULL & Nom original \\
+  \hline
+  mime\_type & VARCHAR(100) & NOT NULL & Type MIME \\
+  \hline
+  \rowcolor{TableAlt}size\_bytes & BIGINT & NOT NULL & Taille en octets \\
+  \hline
+  sha256\_hash & CHAR(64) & NOT NULL & Hash d'int\'egrit\'e \\
+  \hline
+  \rowcolor{TableAlt}storage\_key & VARCHAR(500) & NOT NULL & Cl\'e stockage \\
+  \hline
+  visibility & VARCHAR(20) & NOT NULL & public / private \\
+  \hline
+  \rowcolor{TableAlt}platform\_id & UUID & NOT NULL & FK logique $\to$ Auth platforms.id \\
+  \hline
+  uploaded\_by & UUID & NULL & FK logique $\to$ Auth users\_auth.id \\
+  \hline
+  \rowcolor{TableAlt}owner\_user\_id & UUID & NULL & Propri\'etaire m\'etier. FK logique $\to$ Auth users\_auth.id \\
+  \hline
+  width & INTEGER & NULL & Largeur (images/vid\'eos) \\
+  \hline
+  height & INTEGER & NULL & Hauteur \\
+  \hline
+  \rowcolor{TableAlt}duration\_ms & INTEGER & NULL & Dur\'ee (vid\'eo/audio) \\
+  \hline
+  deleted\_at & TIMESTAMPTZ & NULL & Soft delete \\
+  \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\
+  \hline
+  updated\_at & TIMESTAMPTZ & NOT NULL & Mise \`a jour \\
+  \hline
+\end{tabularx}
+
+\subsection{Table \texttt{media\_variants}}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.6cm}|p{2.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+  \hline
+  id & UUID & PK & Identifiant \\
+  \hline
+  \rowcolor{TableAlt}media\_id & UUID & FK & Fichier parent \\
+  \hline
+  variant\_type & VARCHAR(20) & NOT NULL & thumbnail / compressed / resized \\
+  \hline
+  \rowcolor{TableAlt}width & INTEGER & NULL & Largeur \\
+  \hline
+  height & INTEGER & NULL & Hauteur \\
+  \hline
+  \rowcolor{TableAlt}storage\_key & VARCHAR(500) & NOT NULL & Cl\'e stockage \\
+  \hline
+  size\_bytes & BIGINT & NOT NULL & Taille \\
+  \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\
+  \hline
+\end{tabularx}
+
+\subsection{Table \texttt{media\_metadata}}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.6cm}|p{2.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+  \hline
+  id & UUID & PK & Identifiant \\
+  \hline
+  \rowcolor{TableAlt}media\_id & UUID & FK & Fichier \\
+  \hline
+  key & VARCHAR(100) & NOT NULL & Cl\'e \\
+  \hline
+  \rowcolor{TableAlt}value & TEXT & NOT NULL & Valeur \\
+  \hline
+  created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\
+  \hline
+\end{tabularx}
+
+\subsection{Table \texttt{platform\_media\_configs}}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.6cm}|p{2.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+  \hline
+  platform\_id & UUID & PK & FK logique $\to$ Auth \\
+  \hline
+  \rowcolor{TableAlt}allowed\_types & JSONB & NOT NULL & Types MIME autoris\'es \\
+  \hline
+  max\_size\_bytes & JSONB & NOT NULL & Limites par cat\'egorie \\
+  \hline
+  \rowcolor{TableAlt}thumbnail\_sizes & JSONB & NOT NULL & Tailles thumbnails \\
+  \hline
+  compression\_quality & INTEGER & NULL & Qualit\'e 1--100 \\
+  \hline
+  \rowcolor{TableAlt}storage\_quota\_bytes & BIGINT & NULL & Quota optionnel \\
+  \hline
+  created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\
+  \hline
+  \rowcolor{TableAlt}updated\_at & TIMESTAMPTZ & NOT NULL & Mise \`a jour \\
+  \hline
+\end{tabularx}
+
+\subsection{Table \texttt{media\_access\_logs}}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.6cm}|p{2.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contrainte} & \color{white}\textbf{Description} \\
+  \hline
+  id & BIGSERIAL & PK & Auto-incr\'ement \\
+  \hline
+  \rowcolor{TableAlt}media\_id & UUID & FK & Fichier acc\'ed\'e \\
+  \hline
+  accessed\_by & UUID & NULL & Utilisateur \\
+  \hline
+  \rowcolor{TableAlt}ip\_address & INET & NULL & Adresse IP \\
+  \hline
+  action & VARCHAR(50) & NOT NULL & download / signed\_url / view \\
+  \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Horodatage \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\section{Contrats d'API}
+
+\begin{infobox}
+\faLock\quad Tous les endpoints (sauf publics et sign\'es) requi\`erent : \texttt{Authorization: Bearer <token>}\\
+Valid\'e via \texttt{GET /auth/verify-token} (JWT) ou \texttt{POST /auth/s2s/introspect} (S2S).\\
+\textbf{Pr\'efixe :} \texttt{/api/v1}
+\end{infobox}
+
+\subsection{Health Check}
+
+\subsubsection{\httpmethod{GET} /api/v1/media/health}
+
+Sans authentification. Retourne l'\'etat du service et de ses d\'ependances.
+
+\subsection{Upload}
+
+\subsubsection{\httpmethod{POST} /api/v1/media}
+Upload fichier unique. \texttt{platform\_id} et \texttt{uploaded\_by} extraits du token.\\
+Body \texttt{multipart/form-data} : \texttt{file} (requis), \texttt{visibility} (d\'efaut: public), \texttt{metadata} (JSON), \texttt{owner\_user\_id} (UUID, optionnel --- propri\'etaire m\'etier).\\
+Si \texttt{visibility=public} : champ \texttt{url} renseign\'e, \texttt{signed\_url} null.\\
+Si \texttt{visibility=private} : champ \texttt{url} null, \texttt{signed\_url} renseign\'e (TTL 1h).\\
+Codes : 201, 400, 401, 413, 429, 500.
+
+\subsubsection{\httpmethod{POST} /api/v1/media/batch}
+Upload multiple. R\'eponse 207 Multi-Status.
+
+\subsubsection{\httpmethod{POST} /api/v1/media/from-url}
+Upload depuis URL externe. Body JSON : \texttt{url}, \texttt{visibility}, \texttt{metadata}, \texttt{owner\_user\_id} (optionnel).
+
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{S\'ecurit\'e SSRF (v1.4)} : r\`egles obligatoires pour cet endpoint :\\[4pt]
+--- Sch\'emas autoris\'es : \texttt{http}, \texttt{https} uniquement\\
+--- Refus des IP priv\'ees, localhost, 127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.169.254 (metadata cloud)\\
+--- Maximum 3 redirections HTTP\\
+--- Timeout r\'eseau : 10 secondes\\
+--- Taille max t\'el\'echarg\'ee : selon \texttt{max\_size\_bytes} de la config plateforme\\
+--- R\'esolution DNS v\'erifi\'ee avant connexion (pas de DNS rebinding)
+\end{warningbox}
+
+\subsection{Consultation}
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}}
+T\'el\'echargement binaire. D\'eclenche un log d'acc\`es. Codes : 200, 401, 404.
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/info}
+M\'etadonn\'ees uniquement (JSON).
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/thumbnails}
+Liste des variantes thumbnails.
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/thumbnail/\{size\}}
+Thumbnail sp\'ecifique (ex: 300x300).
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/resize}
+Resize \`a la vol\'ee. Query : \texttt{w}, \texttt{h}, \texttt{crop}. Cache Redis.
+
+\subsubsection{\httpmethod{GET} /api/v1/media}
+Listage pagin\'e. Query : \texttt{platform\_id}, \texttt{uploaded\_by}, \texttt{owner\_user\_id}, \texttt{mime\_type}, \texttt{visibility}, \texttt{from}, \texttt{to}, \texttt{page}, \texttt{limit}.
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/access-logs}
+Logs d'acc\`es. Admin ou propri\'etaire. Pagin\'e.
+
+\subsection{Gestion}
+
+\subsubsection{\httpmethod{PUT} /api/v1/media/\{id\}/metadata}
+MAJ m\'etadonn\'ees personnalis\'ees.
+
+\subsubsection{\httpmethod{PUT} /api/v1/media/\{id\}/visibility}
+Changement de visibilit\'e.
+
+\subsubsection{\httpmethod{DELETE} /api/v1/media/\{id\}}
+Soft delete. 204 No Content.
+
+\subsubsection{\httpmethod{DELETE} /api/v1/media/\{id\}/permanent}
+Hard delete. \textbf{Autoris\'e uniquement via token S2S.} M\'edia ne v\'erifie pas les r\^oles utilisateur --- si un service consommateur souhaite offrir la suppression d\'efinitive \`a un utilisateur final, c'est ce service qui valide les permissions puis appelle M\'edia via son propre token S2S. Codes : 204, 401, 403, 404.
+
+\subsubsection{\httpmethod{GET} /api/v1/media/\{id\}/signed-url}
+URL temporaire sign\'ee. Query : \texttt{expires} (secondes, d\'efaut 3600). D\'eclenche un log.
+
+\subsubsection{\httpmethod{DELETE} /api/v1/media/by-user/\{userId\}}
+\badge{AGRed}{RGPD} Purge physique totale des fichiers d'un utilisateur. Token S2S uniquement. \texttt{userId} = \texttt{users\_auth.id}. Supprime tous les fichiers o\`u \texttt{uploaded\_by = userId} OU \texttt{owner\_user\_id = userId}, ainsi que leurs variantes, m\'etadonn\'ees et logs d'acc\`es.\\
+R\'eponse 200 : \texttt{files\_deleted}, \texttt{variants\_deleted}, \texttt{storage\_freed\_bytes}.\\
+Codes : 200, 401, 404, 500.
+
+\subsection{Configuration Plateforme}
+
+\subsubsection{\httpmethod{GET} /api/v1/platforms/\{platformId\}/media-config}
+Config m\'edia d'une plateforme.
+
+\subsubsection{\httpmethod{PUT} /api/v1/platforms/\{platformId\}/media-config}
+\textbf{Upsert} : cr\'eation ou mise \`a jour. S2S ou admin requis. Codes : 200/201, 400, 401.
+
+\subsection{Statistiques}
+
+\subsubsection{\httpmethod{GET} /api/v1/media/stats}
+Stats globales.
+
+\subsubsection{\httpmethod{GET} /api/v1/media/stats/\{platformId\}}
+Stats par plateforme.
+
+% ==============================================================
+\section{Contrats Inter-Services}
+
+\subsection{M\'edia $\to$ Auth (JWT utilisateur)}
+
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\
+  \hline
+  Endpoint & \texttt{GET /auth/verify-token} \\
+  \hline
+  \rowcolor{TableAlt}Auth & \texttt{Authorization: Bearer <access\_token>} \\
+  \hline
+  Donn\'ees & \texttt{user\_id} (sub), \texttt{platform\_id} \\
+  \hline
+  \rowcolor{TableAlt}Cache & Redis TTL 30s \\
+  \hline
+\end{tabularx}
+
+\subsection{M\'edia $\to$ Auth (token S2S)}
+
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\
+  \hline
+  Endpoint & \texttt{POST /auth/s2s/introspect} \\
+  \hline
+  \rowcolor{TableAlt}Donn\'ees & \texttt{client\_id} (= platform\_id), \texttt{service\_name} \\
+  \hline
+  Usage & Uploads S2S (AGT-Bot, Users, etc.) \\
+  \hline
+\end{tabularx}
+
+\subsection{Users $\to$ M\'edia (Photo de profil \& Documents KYC)}
+
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\
+  \hline
+  Flux photo & Users appelle \texttt{POST /api/v1/media} (token S2S, \texttt{owner\_user\_id} = auth\_user\_id de l'utilisateur). M\'edia retourne \texttt{media\_id}. Users stocke ce \texttt{media\_id} dans un champ d\'edi\'e (ex: \texttt{avatar\_media\_id} de type UUID, distinct de \texttt{avatar\_url}). L'URL publique est r\'esolue \`a la lecture via \texttt{GET /api/v1/media/\{id\}/info}. \\
+  \hline
+  \rowcolor{TableAlt}Flux KYC & Idem. Users stocke \texttt{media\_id} dans \texttt{documents.media\_id}. M\'edia re\c{c}oit \texttt{visibility=private} et \texttt{metadata=\{"context":"kyc"\}}. \\
+  \hline
+  V\'erit\'e m\'etier & \textbf{Users} porte la logique m\'etier (quel fichier est une photo de profil, quel fichier est un document KYC). \textbf{M\'edia} reste g\'en\'erique et ne conna\^it pas le contexte m\'etier. \\
+  \hline
+  \rowcolor{TableAlt}R\'ef\'erencement & Users stocke les \texttt{media\_id} dans ses propres tables. M\'edia ne stocke aucune r\'ef\'erence vers Users. \\
+  \hline
+\end{tabularx}
+
+\subsection{Users $\to$ M\'edia (Purge RGPD)}
+
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\
+  \hline
+  Endpoint & \texttt{DELETE /api/v1/media/by-user/\{userId\}} \\
+  \hline
+  \rowcolor{TableAlt}Auth & Token S2S \\
+  \hline
+  S\'equence & 1. Users marque le profil \texttt{status=deletion\_in\_progress}\\
+  & 2. Users appelle M\'edia purge (\texttt{userId} = \texttt{auth\_user\_id})\\
+  & 3. Users appelle Auth purge\\
+  & 4. Users finalise son propre hard delete\\
+  & Le \texttt{userId} est conserv\'e jusqu'\`a la fin du workflow. \\
+  \hline
+  \rowcolor{TableAlt}Tol\'erance erreurs & Si M\'edia \'echoue (500), Users conserve le statut \texttt{deletion\_in\_progress} et peut retenter. Aucune donn\'ee n'est perdue. Un cron de rattrapage peut relancer les purges \'echou\'ees. \\
+  \hline
+\end{tabularx}
+
+\subsection{M\'edia $\to$ Notification (Alertes quota)}
+
+\badge{AGOrange}{FUTUR --- NON REQUIS AU MVP}
+
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\
+  \hline
+  Endpoint & \texttt{POST /api/v1/notifications/send} \\
+  \hline
+  \rowcolor{TableAlt}D\'eclencheur & Stockage plateforme $\geq$ 80\% ou 100\% du quota \\
+  \hline
+  Templates & \texttt{media\_quota\_warning} / \texttt{media\_quota\_exceeded} \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\section{Infrastructure}
+
+\subsection{Variables d'Environnement}
+
+\begin{tabularx}{\textwidth}{|p{4.4cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Variable} & \color{white}\textbf{Description} \\
+  \hline
+  \texttt{STORAGE\_PROVIDER} & local | s3 | gcs \\
+  \hline
+  \rowcolor{TableAlt}\texttt{LOCAL\_STORAGE\_PATH} & Chemin racine stockage \\
+  \hline
+  \texttt{DATABASE\_URL} & PostgreSQL \\
+  \hline
+  \rowcolor{TableAlt}\texttt{REDIS\_URL} & Redis \\
+  \hline
+  \texttt{AUTH\_SERVICE\_URL} & URL Service Auth \\
+  \hline
+  \rowcolor{TableAlt}\texttt{NOTIFICATION\_SERVICE\_URL} & URL Service Notification (futur --- alertes quota) \\
+  \hline
+  \texttt{S2S\_CLIENT\_ID} & Client ID pour tokens S2S \\
+  \hline
+  \rowcolor{TableAlt}\texttt{S2S\_CLIENT\_SECRET} & Client secret \\
+  \hline
+  \texttt{SIGNED\_URL\_SECRET} & Cl\'e HMAC URLs sign\'ees \\
+  \hline
+  \rowcolor{TableAlt}\texttt{SOFT\_DELETE\_RETENTION\_DAYS} & D\'elai avant purge \\
+  \hline
+  \texttt{RATE\_LIMIT\_USER} & 30 req/min (d\'efaut) \\
+  \hline
+  \rowcolor{TableAlt}\texttt{RATE\_LIMIT\_S2S} & 100 req/min (d\'efaut) \\
+  \hline
+\end{tabularx}
+
+\subsection{Docker Compose}
+
+\begin{lstlisting}[language=bash, caption=docker-compose.yml --- Media Service v1.4]
+services:
+  media-service:
+    build: ./media-service
+    ports:
+      - "3003:3003"
+    volumes:
+      - media_storage:/data/media
+    environment:
+      - STORAGE_PROVIDER=local
+      - LOCAL_STORAGE_PATH=/data/media
+      - DATABASE_URL=postgresql://...
+      - REDIS_URL=redis://redis:6379
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - NOTIFICATION_SERVICE_URL=http://notif-service:3004
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:16-alpine
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  media_storage:
+  pg_data:
+\end{lstlisting}
+
+% ==============================================================
+\section{Recommandations \& \'Evolutions}
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item \textbf{D\'eduplication SHA-256 (futur v2)} : si hash identique pour m\^eme plateforme, retourner r\'ef\'erence existante. N\'ecessitera un champ \texttt{ref\_count} dans \texttt{media\_files} --- non mod\'elis\'e en v1.4 pour garder le MLD simple au MVP
+  \item \textbf{Migration Local $\to$ Cloud} : double \'ecriture, migration async, bascule, v\'erification int\'egrit\'e
+  \item \textbf{Quotas + alertes} : 80\% warning, 100\% blocage (429), via Service Notification
+  \item \textbf{Optimisation Web} : conversion WebP/AVIF auto (header Accept), compression progressive JPEG
+  \item \textbf{Soft vs Hard delete} : soft = utilisateur, hard auto = cron apr\`es X jours, hard imm\'ediat = admin, purge RGPD = S2S Users
+\end{itemize}
+
+% ==============================================================
+\newpage
+\section*{Annexe A --- Glossaire}
+\addcontentsline{toc}{section}{Annexe A --- Glossaire}
+
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Terme} & \color{white}\textbf{D\'efinition} \\
+  \hline
+  CDN & R\'eseau de distribution de contenu \\
+  \hline
+  \rowcolor{TableAlt}Soft Delete & Suppression logique, donn\'ees conserv\'ees \\
+  \hline
+  Hard Delete & Suppression physique d\'efinitive \\
+  \hline
+  \rowcolor{TableAlt}Signed URL & URL temporaire avec signature cryptographique \\
+  \hline
+  SHA-256 & Hachage cryptographique pour int\'egrit\'e \\
+  \hline
+  \rowcolor{TableAlt}S2S & Service-to-Service (inter-microservices) \\
+  \hline
+  BullMQ & File d'attente Node.js bas\'ee sur Redis \\
+  \hline
+  \rowcolor{TableAlt}Sharp & Librairie Node.js haute performance pour images \\
+  \hline
+\end{tabularx}
+
+% ==============================================================
+\newpage
+\section*{Annexe B --- Diagramme de Classes (PlantUML)}
+\addcontentsline{toc}{section}{Annexe B --- Diagramme de Classes (PlantUML)}
+
+Le code ci-dessous peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language=Java, caption=PlantUML --- Media Service v1.4, basicstyle=\ttfamily\scriptsize]
+@startuml Media Service - Class Diagram v1.4
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "media_files" as media_files {
+  * id : UUID <<PK>>
+  --
+  * original_name : VARCHAR(255)
+  * mime_type : VARCHAR(100)
+  * size_bytes : BIGINT
+  * sha256_hash : CHAR(64)
+  * storage_key : VARCHAR(500)
+  * visibility : VARCHAR(20)
+  * platform_id : UUID <<FK logique -> Auth platforms.id>>
+  uploaded_by : UUID <<FK logique -> Auth users_auth.id>>
+  owner_user_id : UUID <<FK logique -> Auth users_auth.id>>
+  width : INTEGER
+  height : INTEGER
+  duration_ms : INTEGER
+  deleted_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "media_variants" as media_variants {
+  * id : UUID <<PK>>
+  --
+  * media_id : UUID <<FK>>
+  * variant_type : VARCHAR(20)
+  width : INTEGER
+  height : INTEGER
+  * storage_key : VARCHAR(500)
+  * size_bytes : BIGINT
+  * created_at : TIMESTAMPTZ
+}
+
+entity "media_metadata" as media_metadata {
+  * id : UUID <<PK>>
+  --
+  * media_id : UUID <<FK>>
+  * key : VARCHAR(100)
+  * value : TEXT
+  * created_at : TIMESTAMPTZ
+}
+
+entity "platform_media_configs" as platform_configs {
+  * platform_id : UUID <<PK, FK logique -> Auth>>
+  --
+  * allowed_types : JSONB
+  * max_size_bytes : JSONB
+  * thumbnail_sizes : JSONB
+  compression_quality : INTEGER
+  storage_quota_bytes : BIGINT
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "media_access_logs" as access_logs {
+  * id : BIGSERIAL <<PK>>
+  --
+  * media_id : UUID <<FK>>
+  accessed_by : UUID
+  ip_address : INET
+  * action : VARCHAR(50)
+  * created_at : TIMESTAMPTZ
+}
+
+class "<<interface>>\nStorageProvider" as SP {
+  +upload(file, key) : String
+  +download(key) : Buffer
+  +delete(key) : void
+  +getUrl(key, ttl) : String
+  +exists(key) : Boolean
+}
+
+class "LocalStorageProvider" as LSP {
+  +base_path : String
+}
+
+class "S3StorageProvider" as S3P {
+  +bucket_name : String
+  +region : String
+}
+
+media_files ||--o{ media_variants : "has variants"
+media_files ||--o{ media_metadata : "has metadata"
+media_files ||--o{ access_logs : "has logs"
+platform_configs ||--o{ media_files : "configures"
+
+SP <|.. LSP : implements
+SP <|.. S3P : implements
+media_files ..> SP : "uses"
+
+@enduml
+\end{lstlisting}
+
+\vspace{2cm}
+\begin{center}
+  \color{AGGray}\small
+  \textbf{AG Technologies} --- Document confidentiel \`a usage interne exclusivement.\\
+  \textit{Media Service CDC v1.4 --- Mars 2026}
+\end{center}
+
+\end{document}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\5.search.txt =====
+`
+\documentclass[a4paper,11pt]{article}
+
+% === Packages ===
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{lastpage}
+
+\geometry{margin=2.5cm, top=3cm, bottom=3cm}
+
+% === Couleurs ===
+\definecolor{agtblue}{HTML}{1A56DB}
+\definecolor{agtgray}{HTML}{6B7280}
+\definecolor{agtgreen}{HTML}{059669}
+\definecolor{agtred}{HTML}{DC2626}
+\definecolor{agtorange}{HTML}{D97706}
+\definecolor{codebg}{HTML}{F3F4F6}
+\definecolor{notebg}{HTML}{EFF6FF}
+\definecolor{warnbg}{HTML}{FFFBEB}
+
+% === Hyperref ===
+\hypersetup{
+  colorlinks=true,
+  linkcolor=agtblue,
+  urlcolor=agtblue,
+  citecolor=agtblue
+}
+
+% === Headers/Footers ===
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{AG Technologies} --- Service Recherche}
+\fancyhead[R]{\textit{Cahier des Charges Technique}}
+\fancyfoot[L]{Confidentiel --- Usage Interne}
+\fancyfoot[C]{\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{v1.2 --- 21 mars 2026}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% === Listings ===
+\lstset{
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{agtgray!30},
+  numbers=left,
+  numberstyle=\tiny\color{agtgray},
+  keywordstyle=\color{agtblue},
+  stringstyle=\color{agtgreen},
+  commentstyle=\color{agtgray},
+  tabsize=2,
+  showstringspaces=false
+}
+
+% === tcolorbox ===
+\newtcolorbox{notebox}{
+  colback=notebg, colframe=agtblue!50, 
+  fonttitle=\bfseries, title={\textsf{Note}},
+  boxrule=0.5pt, arc=2pt
+}
+\newtcolorbox{warnbox}{
+  colback=warnbg, colframe=agtorange!50,
+  fonttitle=\bfseries, title={\textsf{Attention}},
+  boxrule=0.5pt, arc=2pt
+}
+\newtcolorbox{infobox}[1][]{
+  colback=notebg, colframe=agtblue!50,
+  fonttitle=\bfseries, title={#1},
+  boxrule=0.5pt, arc=2pt
+}
+
+% === Titre sections ===
+\titleformat{\section}{\Large\bfseries\color{agtblue}}{{\thesection}}{1em}{}
+\titleformat{\subsection}{\large\bfseries}{{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{{\thesubsubsection}}{1em}{}
+
+\begin{document}
+
+% ============================================================
+% PAGE DE TITRE
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{3cm}
+{\Huge\bfseries\color{agtblue} AG Technologies\par}
+\vspace{0.5cm}
+{\Large Service Recherche\par}
+\vspace{0.3cm}
+{\Large Cahier des Charges Technique et Fonctionnel\par}
+\vspace{2cm}
+{\large Version 1.2 --- 21 mars 2026\par}
+\vspace{1cm}
+{\large\color{agtgray} Statut : \textbf{\color{agtgreen}Implementation-ready}\par}
+\vspace{2cm}
+
+\begin{tabular}{ll}
+\toprule
+\textbf{Attribut} & \textbf{Valeur} \\
+\midrule
+Document & CDC Technique et Fonctionnel \\
+Service & Search Service \\
+Version & 1.2 \\
+Classification & Confidentiel --- Usage interne \\
+Stack & Django / DRF / Elasticsearch / Redis / PostgreSQL \\
+DÃ©pendances validÃ©es & Auth v2.1, Users v1.0, Notification v1.2, MÃ©dia v1.4 \\
+\bottomrule
+\end{tabular}
+
+\vfill
+{\small AG Technologies --- Document confidentiel Ã  usage interne exclusivement.}
+\end{titlepage}
+
+% ============================================================
+% HISTORIQUE DES RÃ‰VISIONS
+% ============================================================
+\newpage
+\section*{Historique des RÃ©visions}
+
+\begin{tabularx}{\textwidth}{llXl}
+\toprule
+\textbf{Version} & \textbf{Date} & \textbf{Description} & \textbf{Auteur} \\
+\midrule
+1.0 & 21 mars 2026 & CrÃ©ation initiale du document & Ã‰quipe IngÃ©nierie \\
+\addlinespace
+1.1 & 21 mars 2026 & Post-audit : alignement \texttt{platform\_id} UUID (Auth v2.1). PrÃ©fixe \texttt{/api/v1} sur tous les endpoints. Contrainte UNIQUE \texttt{(name, platform\_id)}. Table \texttt{popular\_searches} documentÃ©e. \texttt{TIMESTAMPTZ} partout. Contrats inter-services formalisÃ©s (Auth, RGPD). Codes HTTP sur tous les endpoints. IdentitÃ© \texttt{user\_id = users\_auth.id}. Isolation multi-tenant documentÃ©e. Celery ajoutÃ© Ã  la stack. Contrat d'Ã©vÃ©nements d'indexation. Garde-fous anti-abus. Health check dÃ©taillÃ©. PlantUML en annexe. & Ã‰quipe Architecture \\
+\addlinespace
+1.2 & 21 mars 2026 & Version finale : rÃ¨gle d'architecture Search $\neq$ Users (profils jamais indexÃ©s par Search). Gouvernance des index (nommage, quotas, bulk max, suppression prod). Matrice d'autorisation exhaustive par endpoint (JWT / S2S / Admin / Public). Statut passÃ© Ã  \textit{Implementation-ready}. & Ã‰quipe Architecture \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% TABLE DES MATIÃˆRES
+% ============================================================
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+% 1. INTRODUCTION
+% ============================================================
+\section{Introduction}
+
+\subsection{Objet du Document}
+
+Ce document constitue le Cahier des Charges Technique et Fonctionnel du Service Recherche (Search Service) d'AG Technologies. Il dÃ©finit de maniÃ¨re exhaustive les objectifs, les fonctionnalitÃ©s, l'architecture technique et les contrats d'API de ce service partagÃ©.
+
+Il sert de rÃ©fÃ©rence officielle pour :
+\begin{itemize}[nosep]
+  \item La conception et la modÃ©lisation du service
+  \item Le dÃ©veloppement et l'implÃ©mentation
+  \item Les dÃ©cisions techniques et les arbitrages d'architecture
+  \item L'intÃ©gration par les Ã©quipes et services consommateurs
+\end{itemize}
+
+\subsection{Destinataires}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Destinataire} & \textbf{RÃ´le} \\
+\midrule
+Ã‰quipe Backend & DÃ©veloppement et maintenance du service \\
+Ã‰quipe Frontend & IntÃ©gration des APIs de recherche et d'auto-complÃ©tion \\
+Ã‰quipes consommatrices & AGT-Market, AGT-Bot, SALMA, Service Chatbot, et toute future plateforme AG Technologies \\
+Lead Technique / Architecte & Validation des choix techniques \\
+Chef de Projet & Suivi et validation fonctionnelle \\
+\bottomrule
+\end{tabularx}
+
+\subsection{PÃ©rimÃ¨tre du Service}
+
+\begin{infobox}[PÃ©rimÃ¨tre inclus]
+Gestion des index dynamiques, indexation unitaire et bulk, recherche full-text avec scoring, auto-complÃ©tion, filtres avancÃ©s avec facettes, boost de rÃ©sultats, recherche par similaritÃ©, historique de recherche, statistiques et configuration par index.
+\end{infobox}
+
+\begin{warnbox}
+\textbf{Hors pÃ©rimÃ¨tre :} authentification (dÃ©lÃ©guÃ©e au Service Auth v2.1), stockage des donnÃ©es source (chaque plateforme conserve sa propre base), facturation du boost (dÃ©lÃ©guÃ©e au Service Abonnement), accÃ¨s direct Ã  Elasticsearch (jamais exposÃ© aux plateformes), gestion des rÃ´les et permissions (dÃ©lÃ©guÃ©e au Service Users v1.0).
+\end{warnbox}
+
+\subsection{Conventions Ã©cosystÃ¨me AG Technologies}
+\label{sec:conventions}
+
+\begin{notebox}
+Ce service s'intÃ¨gre dans un Ã©cosystÃ¨me dont les conventions suivantes sont \textbf{non nÃ©gociables} (validÃ©es dans Auth v2.1, Users v1.0, Notification v1.2, MÃ©dia v1.4) :
+\begin{itemize}[nosep]
+  \item \texttt{platform\_id} = UUID du registre Auth (\texttt{platforms.id})
+  \item IdentitÃ© utilisateur = \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item JWT validÃ© via \texttt{GET /auth/verify-token} ; token S2S via \texttt{POST /auth/s2s/introspect}
+  \item PrÃ©fixe API : \texttt{/api/v1}
+  \item RÃ´les et permissions gÃ©rÃ©s par Users, pas par Auth
+  \item RGPD orchestrÃ© par Users
+  \item Stack : Django/DRF pour Auth, Users, Notif ; Node.js/NestJS pour MÃ©dia ; Django/DRF pour Recherche
+  \item Timestamps : \texttt{TIMESTAMPTZ} (avec timezone)
+\end{itemize}
+\end{notebox}
+
+\subsection{RÃ¨gle d'architecture : frontiÃ¨re Search / Users (v1.2)}
+\label{sec:boundary}
+
+\begin{warnbox}
+\textbf{RÃ¨gle non nÃ©gociable :} Le Service Recherche n'indexe \textbf{jamais} de profils utilisateurs. La recherche d'utilisateurs (par nom, email, tÃ©lÃ©phone) est une responsabilitÃ© exclusive du Service Users (endpoint interne Users, cible $<$ 500ms).
+
+Le Service Recherche indexe uniquement des \textbf{donnÃ©es mÃ©tier} fournies par les plateformes consommatrices : produits (AGT-Market), FAQ (AGT-Bot), formations (SALMA), base de connaissances (Chatbot).
+
+Si une plateforme a besoin de rechercher des utilisateurs \textit{et} des produits, elle appelle deux services distincts :
+\begin{itemize}[nosep]
+  \item \texttt{GET /api/v1/users?search=...} $\rightarrow$ Service Users
+  \item \texttt{POST /api/v1/search/query} $\rightarrow$ Service Recherche
+\end{itemize}
+
+Cette sÃ©paration garantit que les donnÃ©es PII (email, tÃ©lÃ©phone, date de naissance) ne transitent jamais dans Elasticsearch, conformÃ©ment Ã  la stratÃ©gie RGPD de l'Ã©cosystÃ¨me.
+\end{warnbox}
+
+% ============================================================
+% 2. CONTEXTE & PROBLÃ‰MATIQUE
+% ============================================================
+\section{Contexte \& ProblÃ©matique}
+
+\subsection{Pourquoi Ce Service Existe}
+
+Dans un Ã©cosystÃ¨me multi-plateformes, chaque application a besoin de capacitÃ©s de recherche performantes : produits sur AGT-Market, FAQ sur AGT-Bot, formations sur SALMA. Sans service centralisÃ©, chaque plateforme dÃ©velopperait sa propre intÃ©gration Elasticsearch, entraÃ®nant :
+
+\begin{itemize}[nosep]
+  \item \textbf{Duplication de la complexitÃ©} --- chaque Ã©quipe gÃ¨re ses propres index, mappings et analyseurs
+  \item \textbf{IncohÃ©rence de l'expÃ©rience} --- rÃ©sultats de qualitÃ© hÃ©tÃ©rogÃ¨ne selon la plateforme
+  \item \textbf{CoÃ»ts d'infrastructure multipliÃ©s} --- plusieurs clusters Elasticsearch au lieu d'un seul
+  \item \textbf{Exposition directe d'Elasticsearch} --- risques de sÃ©curitÃ© et de mauvaise utilisation
+  \item \textbf{Absence de statistiques unifiÃ©es} --- impossible de mesurer la qualitÃ© globalement
+\end{itemize}
+
+\subsection{ProblÃ¨mes RÃ©solus}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{ProblÃ¨me} & \textbf{Solution apportÃ©e} \\
+\midrule
+IntÃ©gration ES complexe & API REST simplifiÃ©e masquant toute la complexitÃ© Elasticsearch \\
+Index rigides codÃ©s en dur & Index 100\% dynamiques dÃ©finis par les plateformes via l'API \\
+Recherche lente et peu pertinente & Full-text avec scoring, boost, fuzzy et analyseurs configurables \\
+Pas de suggestions temps rÃ©el & Auto-complÃ©tion dÃ©diÃ©e optimisÃ©e < 50ms \\
+Statistiques absentes & Historique, termes populaires, recherches sans rÃ©sultat \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Positionnement dans l'Architecture Globale}
+
+Le Service Recherche est un service de base consommÃ© par toutes les plateformes. Il encapsule Elasticsearch et n'expose que son API REST.
+
+\begin{verbatim}
+  AGT-Market    AGT-Bot    SALMA    Chatbot
+       |            |         |        |
+       +------+-----+----+----+--------+
+              |           |
+         Search Service (API REST)
+              |           |
+    +---------+-----------+----------+
+    |         |           |          |
+Service Auth  ES       Redis    PostgreSQL
+\end{verbatim}
+
+% ============================================================
+% 3. VISION & OBJECTIFS
+% ============================================================
+\section{Vision \& Objectifs}
+
+\subsection{Concept du Service}
+
+Le Service Recherche est le moteur de recherche unifiÃ© et gÃ©nÃ©rique de toutes les plateformes AG Technologies. Il ne connaÃ®t aucun concept mÃ©tier. Il gÃ¨re des index abstraits contenant des documents avec des champs dÃ©finis dynamiquement par les plateformes.
+
+\begin{infobox}[Principe fondamental]
+Elasticsearch est entiÃ¨rement encapsulÃ©. Les plateformes n'y accÃ¨dent jamais directement --- tout passe par l'API du Service Recherche. La plateforme crÃ©e ses index, dÃ©finit ses schÃ©mas et indexe ses documents. Le service gÃ¨re la complexitÃ©.
+\end{infobox}
+
+\subsection{Objectifs MVP \& Long Terme}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Phase} & \textbf{Objectifs} \\
+\midrule
+MVP & Index dynamiques avec schÃ©ma configurable ; recherche full-text multi-champs avec scoring ; filtres avancÃ©s et facettes ; auto-complÃ©tion (< 50ms) ; fuzzy matching ; boost de rÃ©sultats ; indexation unitaire et bulk ; historique de recherche ; API REST complÃ¨te \\
+\addlinespace
+Long terme & Recherche sÃ©mantique par embeddings vectoriels ; personnalisation des rÃ©sultats par utilisateur ; synonymes auto-enrichis basÃ©s sur les recherches ; A/B testing des algorithmes de ranking ; monitoring Elasticsearch avancÃ© \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Indicateurs de Performance (KPIs)}
+
+\begin{tabularx}{\textwidth}{Xcc}
+\toprule
+\textbf{KPI} & \textbf{Cible MVP} & \textbf{Cible Long Terme} \\
+\midrule
+Temps de rÃ©ponse recherche full-text & < 200ms & < 100ms \\
+Temps auto-complÃ©tion & < 50ms & < 30ms \\
+Indexation unitaire & < 100ms & < 50ms \\
+Indexation bulk (1000 docs) & < 5s & < 2s \\
+DisponibilitÃ© du service & $\geq$ 99\% & $\geq$ 99,5\% \\
+Taux d'erreur API & < 1\% & < 0,5\% \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% 4. PARTIES PRENANTES
+% ============================================================
+\section{Parties Prenantes \& Utilisateurs}
+
+\subsection{Ã‰quipe Technique}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{RÃ´le} & \textbf{ResponsabilitÃ©s} \\
+\midrule
+IngÃ©nieur Backend & DÃ©veloppement API, intÃ©gration Elasticsearch, pipeline d'indexation \\
+Lead Technique & Architecture, tuning Elasticsearch, dÃ©cisions de performance \\
+IngÃ©nieur DevOps & Cluster ES, Redis, monitoring, volumes persistants \\
+IngÃ©nieur Frontend & IntÃ©gration barre de recherche, auto-complÃ©tion, facettes \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Services Consommateurs}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Service} & \textbf{Usage} \\
+\midrule
+AGT-Market & Index produits et boutiques ; filtres prix/catÃ©gorie ; boost sponsorisÃ© ; auto-complÃ©tion \\
+AGT-Bot & Index FAQ ; recherche par similaritÃ© pour trouver la rÃ©ponse la plus proche \\
+SALMA & Index formations ; recherche par niveau, prix, domaine \\
+Service Chatbot & Recherche sÃ©mantique dans la base de connaissances \\
+\textit{Futures plateformes} & \textit{Tout nouveau service AG Technologies peut crÃ©er ses propres index dynamiquement via l'API. La liste ci-dessus n'est pas figÃ©e.} \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% 5. BESOINS FONCTIONNELS
+% ============================================================
+\section{Besoins Fonctionnels}
+
+\subsection{Module Index Dynamiques}
+
+\begin{infobox}[Principe clÃ©]
+Aucun index n'est codÃ© en dur. Chaque plateforme crÃ©e et gÃ¨re ses propres index via l'API, en dÃ©finissant librement le schÃ©ma de ses documents.
+\end{infobox}
+
+\subsubsection{Types de Champs SupportÃ©s}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Type} & \textbf{Description \& usage} \\
+\midrule
+\texttt{text} & Contenu textuel recherchable en full-text (analysÃ©, tokenizÃ©) \\
+\texttt{keyword} & Valeur exacte, filtrable et triable (catÃ©gorie, statut, ID) \\
+\texttt{number} & Valeur numÃ©rique, filtrable et triable (prix, note, quantitÃ©) \\
+\texttt{date} & Date/heure, filtrable et triable \\
+\texttt{boolean} & Vrai/faux, filtrable \\
+\texttt{geo\_point} & CoordonnÃ©es gÃ©ographiques --- recherche par distance (futur) \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{PropriÃ©tÃ©s Configurables par Champ}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{PropriÃ©tÃ©} & \textbf{Description} \\
+\midrule
+\texttt{searchable} & Le champ est inclus dans la recherche full-text \\
+\texttt{filterable} & Le champ peut Ãªtre utilisÃ© comme filtre \\
+\texttt{sortable} & Le champ peut servir de critÃ¨re de tri \\
+\texttt{autocomplete} & Le champ est utilisÃ© pour l'auto-complÃ©tion \\
+\texttt{boost\_weight} & Poids du champ dans le score de pertinence \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Exemple de SchÃ©ma --- Index Produits (AGT-Market)}
+
+\begin{lstlisting}[language=Java,caption={Exemple de mapping index products}]
+{
+  "index": "products",
+  "platform_id": "uuid-agt-market-123",
+  "analyzer": "french",
+  "fields": {
+    "title": { "type": "text", "searchable": true,
+      "autocomplete": true, "boost_weight": 3 },
+    "description": { "type": "text", "searchable": true,
+      "boost_weight": 1 },
+    "price": { "type": "number", "filterable": true,
+      "sortable": true },
+    "category": { "type": "keyword", "filterable": true },
+    "rating": { "type": "number", "filterable": true,
+      "sortable": true },
+    "is_boosted": { "type": "boolean", "filterable": true },
+    "created_at": { "type": "date", "filterable": true,
+      "sortable": true }
+  }
+}
+\end{lstlisting}
+
+\subsection{Module Indexation}
+
+\begin{itemize}[nosep]
+  \item Indexation unitaire : ajout ou mise Ã  jour d'un document dans un index (< 100ms)
+  \item Suppression unitaire : retrait d'un document de l'index
+  \item Indexation bulk : ajout, mise Ã  jour et suppression de centaines de documents en une requÃªte
+  \item RÃ©indexation complÃ¨te : reconstruction de l'index aprÃ¨s modification du schÃ©ma (via alias ES, cf. section~\ref{sec:reindex})
+  \item Les plateformes sont responsables de maintenir leurs index synchronisÃ©s avec leur base de donnÃ©es
+  \item Pattern recommandÃ© : Ã©vÃ©nement asynchrone via message broker aprÃ¨s chaque modification en base (cf. section~\ref{sec:event-contract})
+\end{itemize}
+
+\subsection{Module Recherche Full-Text}
+
+\begin{itemize}[nosep]
+  \item Recherche multi-champs dans tous les champs marquÃ©s \texttt{searchable}
+  \item Analyse linguistique : tokenisation, stemming, suppression des stop words
+  \item Support franÃ§ais et anglais (analyseurs configurables par index)
+  \item Fuzzy matching : tolÃ©rance aux fautes de frappe configurable
+  \item Score de pertinence : chaque rÃ©sultat est classÃ© selon sa correspondance
+  \item Boost : les documents avec \texttt{is\_boosted = true} remontent dans les rÃ©sultats
+  \item Pagination (\texttt{page}, \texttt{limit}) et tri multi-critÃ¨res
+\end{itemize}
+
+\subsection{Module Auto-ComplÃ©tion}
+
+\begin{itemize}[nosep]
+  \item Endpoint dÃ©diÃ© optimisÃ© pour la vitesse (< 50ms)
+  \item Suggestions basÃ©es sur les champs marquÃ©s \texttt{autocomplete}
+  \item Suggestions enrichies par les recherches populaires (historique agrÃ©gÃ© anonymisÃ©)
+  \item Nombre de suggestions configurable (dÃ©faut : 8)
+  \item Support du prefix matching : \texttt{"chaus"} $\rightarrow$ \texttt{"chaussures"}, \texttt{"chaussettes"}
+  \item Highlight : la partie matchÃ©e est identifiÃ©e dans la suggestion
+\end{itemize}
+
+\subsection{Module Filtres \& Facettes}
+
+\begin{itemize}[nosep]
+  \item Filtre exact : \texttt{category = "Ã‰lectronique"}
+  \item Filtre range : \texttt{price >= 5000 AND price <= 50000}
+  \item Filtre multi-valeurs : \texttt{category IN ["Ã‰lectronique", "Mode"]}
+  \item Filtre boolÃ©en : \texttt{is\_available = true}
+  \item Filtre date : \texttt{created\_at >= "2026-01-01"}
+  \item Filtre gÃ©ographique (futur) : distance $\leq$ 10km de (lat, lng)
+  \item Les filtres sont combinables entre eux (AND logique)
+  \item Facettes : le service retourne les compteurs par valeur de filtre pour alimenter l'UI
+\end{itemize}
+
+\subsection{Module Recherche par SimilaritÃ©}
+
+\begin{itemize}[nosep]
+  \item Comprend le sens de la requÃªte au-delÃ  des mots exacts
+  \item \texttt{"tÃ©lÃ©phone portable"} trouve aussi \texttt{"smartphone"}, \texttt{"mobile"}
+  \item Utile pour le Service Chatbot (FAQ la plus proche d'une question reformulÃ©e)
+  \item MVP : synonymes + fuzzy matching Elasticsearch
+  \item Futur : embeddings vectoriels via API IA stockÃ©s dans Elasticsearch \texttt{dense\_vector}
+\end{itemize}
+
+\subsection{Module Historique \& Statistiques}
+
+\begin{itemize}[nosep]
+  \item Chaque recherche est enregistrÃ©e : requÃªte, filtres, index, \texttt{user\_id}, timestamp, nb rÃ©sultats
+  \item L'utilisateur peut consulter et supprimer son historique (RGPD)
+  \item Les recherches populaires sont agrÃ©gÃ©es de faÃ§on anonymisÃ©e (table \texttt{popular\_searches})
+  \item Statistiques admin : termes les plus recherchÃ©s, recherches sans rÃ©sultat, temps de rÃ©ponse
+\end{itemize}
+
+% ============================================================
+% 6. BESOINS NON-FONCTIONNELS
+% ============================================================
+\section{Besoins Non-Fonctionnels}
+
+\subsection{Performance}
+
+\begin{tabularx}{\textwidth}{Xl}
+\toprule
+\textbf{Exigence} & \textbf{Valeur cible} \\
+\midrule
+Temps de rÃ©ponse recherche full-text & < 200ms \\
+Temps de rÃ©ponse auto-complÃ©tion & < 50ms \\
+Indexation unitaire & < 100ms \\
+Indexation bulk (1000 documents) & < 5 secondes \\
+Cache Redis (auto-complÃ©tions frÃ©quentes) & TTL configurable \\
+RAM Elasticsearch (heap JVM) & $\geq$ 2 GB dÃ©diÃ©s \\
+\bottomrule
+\end{tabularx}
+
+\subsection{SÃ©curitÃ©}
+
+\begin{itemize}[nosep]
+  \item \textbf{Authentification obligatoire} : tous les endpoints (sauf health check) requiÃ¨rent un token Bearer valide (Service Auth v2.1)
+  \item \textbf{Isolation des index} : une plateforme ne peut accÃ©der qu'Ã  ses propres index. Le \texttt{platform\_id} est extrait du JWT vÃ©rifiÃ© (champ \texttt{platform\_id} du payload, cf. Auth v2.1 section 7.4). Toute requÃªte est automatiquement scopÃ©e cÃ´tÃ© serveur --- jamais de trust client
+  \item \textbf{Elasticsearch jamais exposÃ©} : aucun endpoint ES n'est accessible depuis l'extÃ©rieur
+  \item \textbf{DonnÃ©es historique RGPD} : droit Ã  la suppression de l'historique par utilisateur
+  \item \textbf{Rate limiting} : protection contre les abus via Redis
+\end{itemize}
+
+\subsubsection{Garde-fous anti-abus (v1.1)}
+\label{sec:guardrails}
+
+\begin{tabularx}{\textwidth}{lXl}
+\toprule
+\textbf{Protection} & \textbf{Description} & \textbf{Valeur} \\
+\midrule
+\texttt{limit} max & Plafond de rÃ©sultats par requÃªte & 100 \\
+Timeout query ES & Timeout cÃ´tÃ© Elasticsearch pour Ã©viter les requÃªtes lourdes & 5s \\
+Wildcards & Interdiction des wildcards en dÃ©but de terme (\texttt{*chaussure}) & BloquÃ© \\
+Fuzzy distance max & Distance d'Ã©dition maximale autorisÃ©e & 2 \\
+Rate limit recherche & RequÃªtes de recherche par minute par plateforme & 600/min \\
+Rate limit indexation & RequÃªtes d'indexation par minute par plateforme & 120/min \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Gouvernance des index (v1.2)}
+\label{sec:governance}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{RÃ¨gle} & \textbf{Description} \\
+\midrule
+\textbf{Convention de nommage} & \texttt{snake\_case}, lettres minuscules, pas d'espaces ni de caractÃ¨res spÃ©ciaux. Exemples valides : \texttt{products}, \texttt{faq\_entries}, \texttt{formations\_salma}. ValidÃ© par regex cÃ´tÃ© serveur : \texttt{\^{}[a-z][a-z0-9\_]\{2,49\}\$} \\
+\addlinespace
+\textbf{Quota d'index par plateforme} & Maximum 20 index actifs par plateforme (configurable via variable d'environnement \texttt{MAX\_INDEXES\_PER\_PLATFORM}). Au-delÃ  $\rightarrow$ erreur 429. \\
+\addlinespace
+\textbf{Taille max bulk payload} & Maximum 500 opÃ©rations par requÃªte bulk. Maximum 10 MB par requÃªte. Au-delÃ  $\rightarrow$ erreur 413 Payload Too Large. \\
+\addlinespace
+\textbf{Taille max document} & Un document individuel ne peut pas dÃ©passer 1 MB (donnÃ©es JSON). \\
+\addlinespace
+\textbf{Suppression d'index en prod} & \texttt{DELETE /api/v1/search/indexes/\{indexName\}} est irrÃ©versible. Le statut passe Ã  \texttt{deleted} en PostgreSQL. L'alias ES et l'index physique sont supprimÃ©s. Aucune rÃ©cupÃ©ration possible. En production, cette opÃ©ration devrait Ãªtre protÃ©gÃ©e par une permission spÃ©cifique cÃ´tÃ© plateforme (vÃ©rifiÃ©e via Service Users). \\
+\addlinespace
+\textbf{Nombre max de champs par index} & Maximum 100 champs par schÃ©ma d'index. Protection contre l'explosion du mapping ES. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{ScalabilitÃ©}
+
+\begin{itemize}[nosep]
+  \item ScalabilitÃ© horizontale de l'API : plusieurs instances derriÃ¨re un load balancer
+  \item Elasticsearch scalable par ajout de nÅ“uds (shards et replicas configurables)
+  \item Cache Redis pour les auto-complÃ©tions et recherches populaires frÃ©quentes
+  \item CohÃ©rence Ã©ventuelle acceptable : l'index reflÃ¨te l'Ã©tat de la base source avec un lÃ©ger dÃ©lai
+  \item Le service est stateless --- tout l'Ã©tat est dans Elasticsearch et Redis
+\end{itemize}
+
+\subsection{DisponibilitÃ©}
+
+\begin{itemize}[nosep]
+  \item DisponibilitÃ© cible : $\geq$ 99,5\%
+  \item Elasticsearch sur volume Docker persistant (SSD recommandÃ©)
+  \item Health check exposÃ© sur \texttt{GET /api/v1/search/health} (Ã©tat API + Ã©tat cluster ES + Redis + PostgreSQL)
+  \item DÃ©ploiement sans interruption (rolling updates)
+\end{itemize}
+
+% ============================================================
+% 7. ARCHITECTURE TECHNIQUE
+% ============================================================
+\section{Architecture Technique}
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Composant} & \textbf{Technologie} & \textbf{RÃ´le} \\
+\midrule
+Runtime & Django (Python 3.11+) & Logique applicative, orchestration des requÃªtes ES \\
+Framework API & Django REST Framework & Exposition des endpoints REST \\
+Moteur de recherche & Elasticsearch 8.x & Stockage, indexation, recherche full-text \\
+Client ES & \texttt{elasticsearch-py} & Librairie Python officielle pour Elasticsearch \\
+Base de donnÃ©es & PostgreSQL 15+ & MÃ©tadonnÃ©es, historique, synonymes, configs \\
+Cache & Redis 7+ & Auto-complÃ©tions, recherches populaires, rate limiting \\
+Workers async & Celery & Consommation des Ã©vÃ©nements d'indexation \\
+Message Broker & RabbitMQ & File d'attente pour indexation asynchrone \\
+Conteneurisation & Docker + Docker Compose & Elasticsearch + API dans des conteneurs dÃ©diÃ©s \\
+\bottomrule
+\end{tabularx}
+
+\begin{notebox}
+\textbf{Choix de stack (v1.1) :} Django/DRF est retenu pour cohÃ©rence avec Auth, Users et Notification. Celery + RabbitMQ est ajoutÃ© pour le pipeline d'indexation asynchrone, conformÃ©ment au pattern utilisÃ© dans le Service Notification (Celery + RabbitMQ pour le traitement des envois).
+\end{notebox}
+
+\subsection{SchÃ©ma d'Architecture}
+
+\begin{verbatim}
+  Couche clients
+  +-------------+----------+---------+----------+
+  | AGT-Market  | AGT-Bot  | SALMA   | Chatbot  |
+  +------+------+----+-----+----+----+-----+----+
+         |           |          |           |
+  Couche securite
+  +------+-----------+----------+-----------+----+
+  |    Auth Middleware -> Service Auth (JWT)      |
+  +------+-----------+----------+-----------+----+
+         |           |          |           |
+  Couche application
+  +------+-----------+----------+-----------+----+
+  |        API REST -- Search Service            |
+  +------+-----------+----------+-----------+----+
+  |  Recherche | Autocompl. | Indexation | Histo. |
+  +------+-----+------+-----+-----+------+------+
+         |            |           |
+  Couche persistance
+  +------+-----+ +----+----+ +--+--------+
+  | PostgreSQL | | Redis   | | Celery    |
+  +------------+ +---------+ +-----+-----+
+                                    |
+                              +-----+-----+
+                              | RabbitMQ  |
+                              +-----------+
+         |
+  +------+----------+
+  | Elasticsearch   |
+  +-----------------+
+\end{verbatim}
+
+\subsection{IntÃ©grations Externes}
+
+\begin{tabularx}{\textwidth}{lXl}
+\toprule
+\textbf{Service externe} & \textbf{RÃ´le} & \textbf{Phase} \\
+\midrule
+Service Auth v2.1 & Validation obligatoire du token Bearer sur chaque requÃªte (\texttt{GET /auth/verify-token}) & MVP \\
+Elasticsearch 8.x & Moteur de recherche et stockage des index & MVP \\
+Redis 7+ & Cache auto-complÃ©tion, recherches populaires, rate limiting & MVP \\
+RabbitMQ & Indexation asynchrone depuis les plateformes (via Celery) & MVP \\
+PostgreSQL 15+ & MÃ©tadonnÃ©es d'index, historique, synonymes, configs & MVP \\
+API Embeddings (OpenAI) & GÃ©nÃ©ration de vecteurs pour recherche sÃ©mantique & Futur \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% 8. MODÃ‰LISATION
+% ============================================================
+\section{ModÃ©lisation}
+
+\begin{notebox}
+\textbf{Note d'architecture :} Les donnÃ©es recherchables (documents indexÃ©s) rÃ©sident dans \textbf{Elasticsearch}, pas en PostgreSQL. PostgreSQL stocke uniquement les mÃ©tadonnÃ©es de gestion : registre des index, configurations, historique de recherche, recherches populaires et synonymes.
+\end{notebox}
+
+\subsection{Diagramme de Classes}
+
+Voir \textbf{Annexe A} pour le code PlantUML complet du diagramme de classes.
+
+\subsection{ModÃ¨le Logique de DonnÃ©es (MLD)}
+
+\subsubsection{Table \texttt{indexes\_registry}}
+
+\begin{tabularx}{\textwidth}{llllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{id} & UUID & PK & Identifiant \\
+\texttt{name} & VARCHAR(100) & NOT NULL & Nom de l'index \\
+\texttt{platform\_id} & UUID & NOT NULL & Plateforme propriÃ©taire (FK logique $\rightarrow$ Auth \texttt{platforms.id}) \\
+\texttt{es\_alias} & VARCHAR(150) & NOT NULL, UNIQUE & Alias Elasticsearch actif (ex: \texttt{products\_live}) \\
+\texttt{doc\_count} & BIGINT & NOT NULL, DEFAULT 0 & Nombre de documents indexÃ©s \\
+\texttt{status} & VARCHAR(20) & NOT NULL & \texttt{active} / \texttt{rebuilding} / \texttt{deleted} \\
+\texttt{created\_at} & TIMESTAMPTZ & NOT NULL & Date de crÃ©ation \\
+\texttt{updated\_at} & TIMESTAMPTZ & NOT NULL & DerniÃ¨re mise Ã  jour \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}
+\textbf{Contrainte UNIQUE (v1.1) :} \texttt{UNIQUE(name, platform\_id)} --- deux plateformes diffÃ©rentes peuvent avoir un index nommÃ© \texttt{"products"}. L'unicitÃ© est scopÃ©e par plateforme.
+\end{warnbox}
+
+\subsubsection{Table \texttt{index\_schemas}}
+
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{id} & UUID & PK & Identifiant \\
+\texttt{index\_id} & UUID & FK $\rightarrow$ \texttt{indexes\_registry.id} & Index parent \\
+\texttt{field\_name} & VARCHAR(100) & NOT NULL & Nom du champ \\
+\texttt{field\_type} & VARCHAR(20) & NOT NULL & \texttt{text} / \texttt{keyword} / \texttt{number} / \texttt{date} / \texttt{boolean} \\
+\texttt{searchable} & BOOLEAN & NOT NULL & Inclus dans la recherche full-text \\
+\texttt{filterable} & BOOLEAN & NOT NULL & Utilisable comme filtre \\
+\texttt{sortable} & BOOLEAN & NOT NULL & Utilisable comme critÃ¨re de tri \\
+\texttt{autocomplete} & BOOLEAN & NOT NULL & UtilisÃ© pour l'auto-complÃ©tion \\
+\texttt{boost\_weight} & INTEGER & NULL, DEFAULT 1 & Poids dans le score \\
+\texttt{created\_at} & TIMESTAMPTZ & NOT NULL & Date de crÃ©ation \\
+\texttt{updated\_at} & TIMESTAMPTZ & NOT NULL & DerniÃ¨re mise Ã  jour \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{search\_history}}
+
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{id} & BIGSERIAL & PK & Identifiant auto-incrÃ©mentÃ© \\
+\texttt{user\_id} & UUID & NULL & Utilisateur (\texttt{users\_auth.id} = \texttt{sub} du JWT). NULL si anonyme \\
+\texttt{platform\_id} & UUID & NOT NULL & Plateforme (FK logique $\rightarrow$ Auth \texttt{platforms.id}) \\
+\texttt{index\_name} & VARCHAR(100) & NOT NULL & Index interrogÃ© \\
+\texttt{query} & TEXT & NOT NULL & RequÃªte saisie \\
+\texttt{filters\_applied} & JSONB & NULL & Filtres utilisÃ©s (v1.1) \\
+\texttt{result\_count} & INTEGER & NOT NULL & Nombre de rÃ©sultats retournÃ©s \\
+\texttt{took\_ms} & INTEGER & NOT NULL & Temps de rÃ©ponse en ms \\
+\texttt{created\_at} & TIMESTAMPTZ & NOT NULL & Horodatage de la recherche \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{search\_configs}}
+
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{index\_id} & UUID & PK, FK $\rightarrow$ \texttt{indexes\_registry.id} & Index concernÃ© \\
+\texttt{analyzer} & VARCHAR(50) & NOT NULL & Analyseur linguistique (\texttt{french}, \texttt{english}) \\
+\texttt{fuzzy\_enabled} & BOOLEAN & NOT NULL, DEFAULT true & Fuzzy matching activÃ© \\
+\texttt{fuzzy\_distance} & INTEGER & NOT NULL, DEFAULT 1 & Distance d'Ã©dition (1 ou 2) \\
+\texttt{highlight\_enabled} & BOOLEAN & NOT NULL, DEFAULT true & Highlight dans les rÃ©sultats (v1.1) \\
+\texttt{min\_score} & FLOAT & NULL & Seuil de pertinence minimum (v1.1) \\
+\texttt{max\_results} & INTEGER & NOT NULL, DEFAULT 100 & Limite max de rÃ©sultats (v1.1) \\
+\texttt{updated\_at} & TIMESTAMPTZ & NOT NULL & DerniÃ¨re mise Ã  jour \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{synonyms}}
+
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{id} & UUID & PK & Identifiant \\
+\texttt{index\_id} & UUID & FK $\rightarrow$ \texttt{indexes\_registry.id} & Index parent \\
+\texttt{term} & VARCHAR(100) & NOT NULL & Terme source \\
+\texttt{equivalents} & TEXT & NOT NULL & Liste de synonymes (sÃ©parÃ©s par virgule) \\
+\texttt{created\_at} & TIMESTAMPTZ & NOT NULL & Date de crÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+\begin{notebox}
+\textbf{Renommage v1.1 :} la colonne \texttt{synonyms} de la v1.0 est renommÃ©e \texttt{equivalents} pour cohÃ©rence avec le body API et Ã©viter la confusion table/colonne.
+\end{notebox}
+
+\subsubsection{Table \texttt{popular\_searches} (v1.1 --- documentÃ©e)}
+
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+\texttt{id} & UUID & PK & Identifiant \\
+\texttt{index\_name} & VARCHAR(100) & NOT NULL & Index concernÃ© \\
+\texttt{platform\_id} & UUID & NOT NULL & Plateforme (FK logique $\rightarrow$ Auth) \\
+\texttt{term} & VARCHAR(255) & NOT NULL & Terme recherchÃ© (anonymisÃ©) \\
+\texttt{search\_count} & BIGINT & NOT NULL, DEFAULT 0 & Nombre total de recherches \\
+\texttt{last\_searched\_at} & TIMESTAMPTZ & NOT NULL & DerniÃ¨re occurrence \\
+\texttt{updated\_at} & TIMESTAMPTZ & NOT NULL & DerniÃ¨re agrÃ©gation \\
+\bottomrule
+\end{tabularx}
+
+Contrainte : \texttt{UNIQUE(index\_name, platform\_id, term)}.
+
+Cette table est alimentÃ©e par un job Celery pÃ©riodique qui agrÃ¨ge les donnÃ©es de \texttt{search\_history} de maniÃ¨re anonymisÃ©e (sans \texttt{user\_id}). Elle sert Ã  enrichir les suggestions d'auto-complÃ©tion et Ã  alimenter l'endpoint \texttt{GET /api/v1/search/popular}.
+
+% ============================================================
+% 9. CONTRATS D'API
+% ============================================================
+\section{Contrats d'API}
+
+\begin{infobox}[Conventions API]
+Base URL : \texttt{/api/v1}. Tous les endpoints retournent du JSON. Tous les endpoints protÃ©gÃ©s requiÃ¨rent le header \texttt{Authorization: Bearer <token>}, validÃ© via \texttt{GET /auth/verify-token} (Auth v2.1).
+
+\textbf{Isolation multi-tenant (v1.1) :} le \texttt{platform\_id} est extrait du JWT vÃ©rifiÃ©. Toute opÃ©ration est automatiquement scopÃ©e Ã  la plateforme du token. Un index appartenant Ã  une plateforme A n'est jamais accessible via un token de plateforme B.
+
+\textbf{IdentitÃ© utilisateur (v1.1) :} \texttt{user\_id} = \texttt{sub} du JWT = \texttt{users\_auth.id}.
+\end{infobox}
+
+\subsection{Matrice d'autorisation par endpoint (v1.2)}
+\label{sec:auth-matrix}
+
+\begin{small}
+\begin{longtable}{llcccc}
+\toprule
+\textbf{Endpoint} & \textbf{MÃ©thode} & \textbf{Public} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Endpoint} & \textbf{MÃ©thode} & \textbf{Public} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin} \\
+\midrule
+\endhead
+\texttt{/search/health} & GET & $\checkmark$ & & & \\
+\texttt{/search/indexes} & POST & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes} & GET & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}} & GET & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/schema} & PUT & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}} & DELETE & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/reindex} & POST & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/documents} & POST & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/documents/\{d\}} & PUT & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/documents/\{d\}} & DELETE & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/documents/bulk} & POST & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/query} & POST & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/autocomplete} & GET & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/history} & GET & & $\checkmark$ & & \\
+\texttt{/search/history} & DELETE & & $\checkmark$ & & \\
+\texttt{/search/history/by-user/\{id\}} & DELETE & & & $\checkmark$ & \\
+\texttt{/search/popular} & GET & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/no-results} & GET & & & $\checkmark$ & $\checkmark$ \\
+\texttt{/search/indexes/\{n\}/config} & GET & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/config} & PUT & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/indexes/\{n\}/synonyms} & PUT & & $\checkmark$ & $\checkmark$ & \\
+\texttt{/search/stats} & GET & & & $\checkmark$ & $\checkmark$ \\
+\texttt{/search/stats/terms} & GET & & & $\checkmark$ & $\checkmark$ \\
+\bottomrule
+\end{longtable}
+\end{small}
+
+\begin{notebox}
+\textbf{LÃ©gende :}
+\begin{itemize}[nosep]
+  \item \textbf{Public} : aucune authentification requise.
+  \item \textbf{JWT} : token Bearer utilisateur, validÃ© via \texttt{GET /auth/verify-token}. L'accÃ¨s est scopÃ© automatiquement Ã  la plateforme du token.
+  \item \textbf{S2S} : token Service-to-Service, validÃ© via \texttt{POST /auth/s2s/introspect}. UtilisÃ© pour les appels machine-to-machine (indexation automatisÃ©e, purge RGPD, stats).
+  \item \textbf{Admin} : rÃ©servÃ© aux opÃ©rateurs AG Technologies. Authentification S2S + vÃ©rification d'un rÃ´le admin global (vÃ©rifiÃ© via Service Users).
+\end{itemize}
+
+\textbf{RÃ¨gle v1.2 :} les endpoints \texttt{history} (GET, DELETE) sont strictement personnels --- un utilisateur ne voit et ne supprime que son propre historique. La purge RGPD \texttt{by-user/\{id\}} est S2S-only (orchestrÃ©e par Users). Les endpoints \texttt{stats} et \texttt{no-results} sont rÃ©servÃ©s aux tokens S2S ou admin car ils exposent des donnÃ©es agrÃ©gÃ©es cross-utilisateurs.
+\end{notebox}
+
+\subsection{Health Check}
+
+\subsubsection{\texttt{GET /api/v1/search/health}}
+
+VÃ©rifie l'Ã©tat du service et de ses dÃ©pendances. Aucune authentification requise.
+
+\begin{lstlisting}[caption={RÃ©ponse 200 --- Health Check}]
+{
+  "status": "healthy",
+  "database": "ok",
+  "redis": "ok",
+  "elasticsearch": "ok",
+  "version": "1.1.0"
+}
+\end{lstlisting}
+
+Codes : 200 OK, 503 Service Unavailable (si une dÃ©pendance est down).
+
+\subsection{Gestion des Index}
+
+\subsubsection{\texttt{POST /api/v1/search/indexes}}
+
+CrÃ©ation d'un nouvel index. Le \texttt{platform\_id} est extrait automatiquement du JWT.
+
+\begin{lstlisting}[caption={Body POST /api/v1/search/indexes}]
+{
+  "name": "products",
+  "analyzer": "french",
+  "fields": {
+    "title": { "type": "text", "searchable": true,
+      "autocomplete": true, "boost_weight": 3 },
+    "price": { "type": "number", "filterable": true,
+      "sortable": true },
+    "category": { "type": "keyword", "filterable": true }
+  }
+}
+\end{lstlisting}
+
+Codes : 201 Created, 400 Validation error, 401 Unauthorized, 409 Index already exists (pour cette plateforme).
+
+\subsubsection{\texttt{GET /api/v1/search/indexes}}
+
+Liste des index de la plateforme authentifiÃ©e. Codes : 200, 401.
+
+\subsubsection{\texttt{GET /api/v1/search/indexes/\{indexName\}}}
+
+DÃ©tail d'un index (schÃ©ma, config, stats). Codes : 200, 401, 403 (index d'une autre plateforme), 404.
+
+\subsubsection{\texttt{PUT /api/v1/search/indexes/\{indexName\}/schema}}
+
+Ajout de nouveaux champs au schÃ©ma existant. Codes : 200, 400, 401, 403, 404.
+
+\begin{warnbox}
+Seul l'ajout de champs est supportÃ©. La modification du type d'un champ existant nÃ©cessite une rÃ©indexation complÃ¨te via \texttt{POST .../reindex}.
+\end{warnbox}
+
+\subsubsection{\texttt{DELETE /api/v1/search/indexes/\{indexName\}}}
+
+Suppression de l'index et de tous ses documents. Action irrÃ©versible. Codes : 204, 401, 403, 404.
+
+\subsubsection{\texttt{POST /api/v1/search/indexes/\{indexName\}/reindex}}
+\label{sec:reindex}
+
+Reconstruction complÃ¨te de l'index via la stratÃ©gie alias Elasticsearch : crÃ©ation d'un nouvel index physique, migration des donnÃ©es, bascule atomique de l'alias, suppression de l'ancien index. ZÃ©ro downtime.
+
+Codes : 202 Accepted (tÃ¢che Celery lancÃ©e), 401, 403, 404.
+
+\begin{lstlisting}[caption={RÃ©ponse 202 --- Reindex}]
+{
+  "message": "Reindex started",
+  "task_id": "celery-task-uuid",
+  "index": "products",
+  "status": "rebuilding"
+}
+\end{lstlisting}
+
+\subsection{Indexation}
+
+\subsubsection{\texttt{POST /api/v1/search/indexes/\{indexName\}/documents}}
+
+Indexation d'un document (ajout ou mise Ã  jour).
+
+\begin{lstlisting}[caption={Body POST document}]
+{
+  "doc_id": "prod-123",
+  "data": {
+    "title": "Nike Air Max 270",
+    "price": 35000,
+    "category": "Chaussures",
+    "is_boosted": false,
+    "created_at": "2026-01-10T08:00:00Z"
+  }
+}
+\end{lstlisting}
+
+Codes : 201 Created / 200 Updated, 400 Validation error, 401, 403, 404 (index inexistant).
+
+\subsubsection{\texttt{PUT /api/v1/search/indexes/\{indexName\}/documents/\{docId\}}}
+
+Mise Ã  jour complÃ¨te d'un document existant. Codes : 200, 400, 401, 403, 404.
+
+\subsubsection{\texttt{DELETE /api/v1/search/indexes/\{indexName\}/documents/\{docId\}}}
+
+Suppression d'un document de l'index. Codes : 204, 401, 403, 404.
+
+\subsubsection{\texttt{POST /api/v1/search/indexes/\{indexName\}/documents/bulk}}
+
+Indexation en masse.
+
+\begin{lstlisting}[caption={Body POST bulk}]
+{
+  "operations": [
+    { "action": "index", "doc_id": "prod-001",
+      "data": { "title": "Produit A", "price": 5000 } },
+    { "action": "index", "doc_id": "prod-002",
+      "data": { "title": "Produit B", "price": 8000 } },
+    { "action": "delete", "doc_id": "prod-999" }
+  ]
+}
+\end{lstlisting}
+
+RÃ©ponse 207 Multi-Status : rÃ©sumÃ© avec succÃ¨s et erreurs par opÃ©ration.
+
+\begin{lstlisting}[caption={RÃ©ponse 207 --- Bulk}]
+{
+  "total": 3,
+  "succeeded": 2,
+  "failed": 1,
+  "errors": [
+    { "doc_id": "prod-999", "action": "delete",
+      "error": "Document not found" }
+  ]
+}
+\end{lstlisting}
+
+Codes : 207 Multi-Status, 400, 401, 403, 404.
+
+\subsection{Recherche}
+
+\subsubsection{\texttt{POST /api/v1/search/query}}
+
+Recherche full-text principale.
+
+\begin{lstlisting}[caption={Body POST /api/v1/search/query}]
+{
+  "index": "products",
+  "query": "chaussures nike",
+  "search_type": "fulltext",
+  "filters": [
+    { "field": "price", "operator": "range",
+      "min": 5000, "max": 50000 },
+    { "field": "category", "operator": "eq",
+      "value": "Chaussures" }
+  ],
+  "sort": { "field": "rating", "order": "desc" },
+  "page": 1,
+  "limit": 20,
+  "include_facets": true
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={RÃ©ponse 200 --- Search}]
+{
+  "results": [
+    { "doc_id": "prod-123", "score": 4.82,
+      "data": { "title": "Nike Air Max 270",
+                "price": 35000 },
+      "highlights": { "title": "<em>Nike</em> Air Max 270" }
+    }
+  ],
+  "total": 48,
+  "page": 1,
+  "limit": 20,
+  "took_ms": 34,
+  "facets": {
+    "category": { "Chaussures": 28, "Accessoires": 12 },
+    "price_range": { "0-10000": 10, "10000-50000": 30 }
+  }
+}
+\end{lstlisting}
+
+Codes : 200 OK, 400 Validation error (query vide, limit > 100, wildcard interdit), 401, 403, 408 Timeout (query ES > 5s), 429 Rate limited.
+
+\begin{notebox}
+\textbf{v1.1 :} le \texttt{limit} est plafonnÃ© Ã  100 (cf. section~\ref{sec:guardrails}). Les wildcards en dÃ©but de terme sont rejetÃ©s avec une erreur 400.
+\end{notebox}
+
+\subsubsection{\texttt{GET /api/v1/search/autocomplete}}
+
+Auto-complÃ©tion en temps rÃ©el.
+
+Query params : \texttt{index} (obligatoire), \texttt{prefix} (obligatoire), \texttt{limit} (dÃ©faut : 8, max : 20).
+
+\begin{lstlisting}[caption={RÃ©ponse GET /api/v1/search/autocomplete}]
+{
+  "suggestions": [
+    { "text": "chaussures",
+      "highlight": "<em>chau</em>ssures" },
+    { "text": "chaussures de sport",
+      "highlight": "<em>chau</em>ssures de sport" },
+    { "text": "chaussettes",
+      "highlight": "<em>chau</em>ssettes" }
+  ],
+  "took_ms": 12
+}
+\end{lstlisting}
+
+Codes : 200, 400 (prefix manquant), 401, 403, 429.
+
+\subsection{Historique de Recherche}
+
+\subsubsection{\texttt{GET /api/v1/search/history}}
+
+Historique de l'utilisateur authentifiÃ©. Query params : \texttt{page}, \texttt{limit}. Codes : 200, 401.
+
+\subsubsection{\texttt{DELETE /api/v1/search/history}}
+
+Suppression de tout l'historique de l'utilisateur (RGPD). Codes : 204, 401.
+
+\subsubsection{\texttt{DELETE /api/v1/search/history/by-user/\{userId\}} (v1.1 --- S2S)}
+\label{sec:rgpd-endpoint}
+
+Purge RGPD de l'historique d'un utilisateur. \textbf{Token S2S uniquement.} \texttt{userId} = \texttt{users\_auth.id}.
+
+Supprime toutes les entrÃ©es de \texttt{search\_history} oÃ¹ \texttt{user\_id = userId}.
+
+\begin{lstlisting}[caption={RÃ©ponse 200 --- RGPD purge}]
+{
+  "message": "Search history purged",
+  "user_id": "uuid",
+  "entries_deleted": 342
+}
+\end{lstlisting}
+
+Codes : 200, 401, 404, 500.
+
+\subsubsection{\texttt{GET /api/v1/search/popular}}
+
+Recherches populaires agrÃ©gÃ©es et anonymisÃ©es. Query params : \texttt{index} (obligatoire), \texttt{limit} (dÃ©faut : 10). Codes : 200, 400, 401.
+
+\subsubsection{\texttt{GET /api/v1/search/no-results}}
+
+Recherches sans rÃ©sultats (endpoint admin / S2S). Query params : \texttt{index}, \texttt{from}, \texttt{to}. Codes : 200, 400, 401, 403.
+
+\subsection{Configuration}
+
+\subsubsection{\texttt{GET /api/v1/search/indexes/\{indexName\}/config}}
+
+RÃ©cupÃ¨re la configuration d'un index. Codes : 200, 401, 403, 404.
+
+\subsubsection{\texttt{PUT /api/v1/search/indexes/\{indexName\}/config}}
+
+\begin{lstlisting}[caption={Body PUT config}]
+{
+  "analyzer": "french",
+  "fuzzy_enabled": true,
+  "fuzzy_distance": 1,
+  "highlight_enabled": true,
+  "min_score": 0.5,
+  "max_results": 100
+}
+\end{lstlisting}
+
+Codes : 200, 400, 401, 403, 404.
+
+\subsubsection{\texttt{PUT /api/v1/search/indexes/\{indexName\}/synonyms}}
+
+\begin{lstlisting}[caption={Body PUT synonyms}]
+{
+  "synonyms": [
+    { "term": "telephone",
+      "equivalents": ["smartphone", "mobile", "cellulaire"] },
+    { "term": "chaussure",
+      "equivalents": ["basket", "sneaker", "shoe"] }
+  ]
+}
+\end{lstlisting}
+
+Codes : 200, 400, 401, 403, 404.
+
+\subsection{Statistiques}
+
+\subsubsection{\texttt{GET /api/v1/search/stats}}
+
+\begin{lstlisting}[caption={RÃ©ponse GET /api/v1/search/stats}]
+{
+  "total_searches": 125430,
+  "avg_response_ms": 87,
+  "by_index": {
+    "products": { "searches": 98000, "avg_ms": 72 },
+    "faq": { "searches": 27430, "avg_ms": 120 }
+  }
+}
+\end{lstlisting}
+
+Codes : 200, 401.
+
+\subsubsection{\texttt{GET /api/v1/search/stats/terms}}
+
+Termes les plus recherchÃ©s. Query params : \texttt{index} (obligatoire), \texttt{limit}, \texttt{from}, \texttt{to}. Codes : 200, 400, 401.
+
+% ============================================================
+% 10. CONTRATS INTER-SERVICES
+% ============================================================
+\section{Contrats Inter-Services}
+
+\subsection{Recherche $\rightarrow$ Auth (JWT utilisateur)}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{ParamÃ¨tre} & \textbf{Valeur} \\
+\midrule
+Endpoint & \texttt{GET /auth/verify-token} \\
+Auth & \texttt{Authorization: Bearer <access\_token>} \\
+DonnÃ©es extraites & \texttt{user\_id} (\texttt{sub}), \texttt{platform\_id} \\
+Cache & Redis TTL 30s \\
+Comportement en cas d'Ã©chec & Retourner 401 Unauthorized \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Recherche $\rightarrow$ Auth (token S2S)}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{ParamÃ¨tre} & \textbf{Valeur} \\
+\midrule
+Endpoint & \texttt{POST /auth/s2s/introspect} \\
+DonnÃ©es & \texttt{client\_id} (= \texttt{platform\_id}), \texttt{service\_name} \\
+Usage & Appels S2S entrants (ex: indexation automatisÃ©e depuis AGT-Market) \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Users $\rightarrow$ Recherche (Purge RGPD)}
+\label{sec:rgpd-contract}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{ParamÃ¨tre} & \textbf{Valeur} \\
+\midrule
+Endpoint & \texttt{DELETE /api/v1/search/history/by-user/\{userId\}} \\
+Auth & Token S2S \\
+\texttt{userId} & \texttt{users\_auth.id} (convention Ã©cosystÃ¨me) \\
+SÃ©quence & AppelÃ© par Users dans son workflow de purge RGPD, \textbf{avant} l'appel Ã  Auth purge et MÃ©dia purge \\
+DonnÃ©es supprimÃ©es & Toutes les entrÃ©es \texttt{search\_history} oÃ¹ \texttt{user\_id = userId} \\
+TolÃ©rance erreurs & Si Recherche Ã©choue (500), Users conserve le statut \texttt{deletion\_in\_progress} et peut retenter. Un cron de rattrapage peut relancer les purges Ã©chouÃ©es. \\
+\bottomrule
+\end{tabularx}
+
+\begin{notebox}
+\textbf{SÃ©quence RGPD complÃ¨te (orchestrÃ©e par Users) :}
+\begin{enumerate}[nosep]
+  \item Users marque le profil \texttt{status=deletion\_in\_progress}
+  \item Users appelle \textbf{Recherche} purge (\texttt{DELETE .../by-user/\{userId\}})
+  \item Users appelle \textbf{MÃ©dia} purge (\texttt{DELETE /api/v1/media/by-user/\{userId\}})
+  \item Users appelle \textbf{Notification} purge (prÃ©fÃ©rences + historique)
+  \item Users appelle \textbf{Auth} purge (\texttt{DELETE /auth/admin/purge/\{authUserId\}})
+  \item Users finalise son propre hard delete
+\end{enumerate}
+\end{notebox}
+
+\subsection{Contrat d'Ã©vÃ©nements d'indexation}
+\label{sec:event-contract}
+
+Les plateformes consommatrices publient des Ã©vÃ©nements d'indexation sur RabbitMQ. Le Service Recherche consomme ces Ã©vÃ©nements via des workers Celery.
+
+\subsubsection{Format de message standard}
+
+\begin{lstlisting}[caption={Format Ã©vÃ©nement d'indexation}]
+{
+  "event_type": "INDEX | UPDATE | DELETE",
+  "platform_id": "uuid-platform",
+  "index_name": "products",
+  "doc_id": "prod-123",
+  "payload": {
+    "title": "Nike Air Max 270",
+    "price": 35000
+  },
+  "version": 1,
+  "timestamp": "2026-03-21T10:30:00Z",
+  "idempotency_key": "uuid-unique"
+}
+\end{lstlisting}
+
+\subsubsection{RÃ¨gles de traitement}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{RÃ¨gle} & \textbf{Description} \\
+\midrule
+Idempotence & Chaque message contient un \texttt{idempotency\_key} (UUID unique). Les doublons sont ignorÃ©s (vÃ©rification Redis, TTL 24h). \\
+Retry & 3 tentatives avec backoff exponentiel (1s, 5s, 25s) \\
+DLQ (Dead Letter Queue) & AprÃ¨s 3 Ã©checs, le message est routÃ© vers une DLQ pour investigation manuelle \\
+Versioning & Le champ \texttt{version} permet de gÃ©rer l'ordre des mises Ã  jour concurrentes (last-write-wins basÃ© sur version) \\
+Routing key & \texttt{search.index.\{platform\_id\}} --- permet un filtrage par plateforme \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% 11. INFRASTRUCTURE
+% ============================================================
+\section{Infrastructure}
+
+\subsection{Composants d'Infrastructure}
+
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Composant} & \textbf{Phase} & \textbf{DÃ©tails} \\
+\midrule
+Elasticsearch 8.x & MVP & Moteur de recherche, auto-hÃ©bergÃ© dans Docker \\
+PostgreSQL 15+ & MVP & MÃ©tadonnÃ©es, historique, synonymes, configs \\
+Redis 7+ & MVP & Cache auto-complÃ©tion, recherches populaires, rate limiting, idempotency keys \\
+RabbitMQ & MVP & File d'attente pour indexation asynchrone (Celery) \\
+Celery & MVP & Workers de consommation des Ã©vÃ©nements d'indexation \\
+Celery Beat & MVP & Jobs planifiÃ©s (agrÃ©gation popular\_searches, purge) \\
+Docker & MVP & Conteneurisation de l'API et d'Elasticsearch \\
+SSD (stockage) & MVP & RecommandÃ© pour les I/O Elasticsearch \\
+API Embeddings & Futur & Recherche sÃ©mantique vectorielle \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}
+\textbf{Ressources Elasticsearch :} le moteur nÃ©cessite un minimum de 2 GB de RAM dÃ©diÃ©s pour la JVM heap. PrÃ©voir au moins 4 GB de RAM totale sur le serveur hÃ©bergeant Elasticsearch en production.
+\end{warnbox}
+
+\subsection{Variables d'Environnement}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{ELASTICSEARCH\_URL} & URL du cluster Elasticsearch \\
+\texttt{ELASTICSEARCH\_API\_KEY} & ClÃ© d'API Elasticsearch \\
+\texttt{DATABASE\_URL} & URL de connexion PostgreSQL \\
+\texttt{REDIS\_URL} & URL de connexion Redis \\
+\texttt{AUTH\_SERVICE\_URL} & URL du Service Auth \\
+\texttt{BROKER\_URL} & URL RabbitMQ (\texttt{amqp://...}) \\
+\texttt{CELERY\_RESULT\_BACKEND} & Backend de rÃ©sultats Celery (Redis) \\
+\texttt{AUTOCOMPLETE\_CACHE\_TTL} & TTL cache auto-complÃ©tion (secondes) \\
+\texttt{POPULAR\_CACHE\_TTL} & TTL cache recherches populaires (secondes) \\
+\texttt{ES\_HEAP\_SIZE} & Taille heap JVM Elasticsearch (ex : 2g) \\
+\texttt{ES\_QUERY\_TIMEOUT} & Timeout requÃªte ES (dÃ©faut : 5s) \\
+\texttt{SECRET\_KEY} & ClÃ© secrÃ¨te Django \\
+\texttt{RATE\_LIMIT\_SEARCH} & Limite recherche/min/plateforme (dÃ©faut : 600) \\
+\texttt{RATE\_LIMIT\_INDEX} & Limite indexation/min/plateforme (dÃ©faut : 120) \\
+\texttt{MAX\_INDEXES\_PER\_PLATFORM} & Quota max d'index actifs par plateforme (dÃ©faut : 20) \\
+\texttt{MAX\_BULK\_OPERATIONS} & Max opÃ©rations par requÃªte bulk (dÃ©faut : 500) \\
+\texttt{MAX\_BULK\_SIZE\_MB} & Taille max requÃªte bulk en MB (dÃ©faut : 10) \\
+\texttt{MAX\_DOC\_SIZE\_MB} & Taille max d'un document en MB (dÃ©faut : 1) \\
+\texttt{MAX\_FIELDS\_PER\_INDEX} & Max champs par schÃ©ma d'index (dÃ©faut : 100) \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Docker Compose (Extrait)}
+
+\begin{lstlisting}[caption={docker-compose.yml --- Search Service}]
+services:
+  search-service:
+    build: ./search-service
+    ports:
+      - "3004:3004"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - DATABASE_URL=postgresql://...
+      - REDIS_URL=redis://redis:6379
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+    depends_on:
+      - elasticsearch
+      - postgres
+      - redis
+      - rabbitmq
+
+  celery-worker:
+    build: ./search-service
+    command: celery -A search worker -l info -Q indexation
+    environment:
+      - BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+      - DATABASE_URL=postgresql://...
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - rabbitmq
+      - elasticsearch
+
+  celery-beat:
+    build: ./search-service
+    command: celery -A search beat -l info
+    depends_on:
+      - rabbitmq
+
+  elasticsearch:
+    image: elasticsearch:8.13.0
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - xpack.security.enabled=false
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+  postgres:
+    image: postgres:16-alpine
+    volumes:
+      - search_pg_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+volumes:
+  es_data:
+  search_pg_data:
+\end{lstlisting}
+
+% ============================================================
+% 12. RECOMMANDATIONS & Ã‰VOLUTIONS
+% ============================================================
+\section{Recommandations \& Ã‰volutions}
+
+\subsection{RÃ©indexation sans Downtime (Alias Elasticsearch)}
+
+La stratÃ©gie recommandÃ©e utilise les alias Elasticsearch. L'index actif est rÃ©fÃ©rencÃ© par un alias (ex: \texttt{products\_live}). Une rÃ©indexation crÃ©e un nouvel index \texttt{products\_v2}, le peuple entiÃ¨rement, puis bascule l'alias en une opÃ©ration atomique. L'ancien index est supprimÃ© aprÃ¨s validation.
+
+Cette stratÃ©gie est implÃ©mentÃ©e par l'endpoint \texttt{POST /api/v1/search/indexes/\{indexName\}/reindex} et gÃ©rÃ©e en tÃ¢che de fond par Celery.
+
+\subsection{Recherche SÃ©mantique par Embeddings}
+
+Pour la phase future, chaque document est enrichi Ã  l'indexation d'un embedding calculÃ© via l'API OpenAI, stockÃ© dans un champ \texttt{dense\_vector} Elasticsearch. Les requÃªtes sont Ã©galement transformÃ©es en vecteurs, puis la similaritÃ© cosinus retourne les documents sÃ©mantiquement proches.
+
+\subsection{Synonymes Auto-Enrichis}
+
+Les termes recherchÃ©s sans rÃ©sultat sont analysÃ©s pÃ©riodiquement via un job Celery Beat qui identifie les termes rÃ©currents dans \texttt{search\_history} oÃ¹ \texttt{result\_count = 0} et propose des synonymes aux admins de chaque plateforme.
+
+\subsection{Monitoring Elasticsearch}
+
+Surveiller en permanence : santÃ© du cluster (green/yellow/red), taux de rejet (circuit breaker), latence des requÃªtes (P50, P95, P99), espace disque et mÃ©moire heap JVM. Alertes Ã  configurer dÃ¨s que le heap dÃ©passe 85\% ou que le cluster passe en yellow.
+
+\subsection{Suppression : StratÃ©gies}
+
+\begin{tabularx}{\textwidth}{lXX}
+\toprule
+\textbf{StratÃ©gie} & \textbf{Comportement} & \textbf{Usage} \\
+\midrule
+Suppression document & Retrait de l'index ES immÃ©diatement & Mise Ã  jour depuis la plateforme source \\
+Suppression index & Index ES supprimÃ© + registre PostgreSQL mis Ã  jour & DÃ©cision de la plateforme \\
+Suppression historique & Suppression physique des lignes \texttt{search\_history} & Demande utilisateur (RGPD) \\
+Purge RGPD S2S & Suppression de tout l'historique d'un \texttt{user\_id} & OrchestrÃ© par Users \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+% ANNEXE A â€” PLANTUML
+% ============================================================
+\newpage
+\appendix
+\section{Annexe A --- Diagramme de Classes (PlantUML)}
+
+\begin{lstlisting}[caption={Code PlantUML --- Diagramme de Classes Search Service v1.2},basicstyle=\ttfamily\footnotesize]
+@startuml Search Service - Class Diagram v1.2
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "indexes_registry" as idx {
+  * id : UUID <<PK>>
+  --
+  * name : VARCHAR(100)
+  * platform_id : UUID <<FK logique -> Auth platforms.id>>
+  * es_alias : VARCHAR(150) <<UNIQUE>>
+  doc_count : BIGINT = 0
+  * status : VARCHAR(20)
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  UNIQUE(name, platform_id)
+}
+
+entity "index_schemas" as sch {
+  * id : UUID <<PK>>
+  --
+  * index_id : UUID <<FK>>
+  * field_name : VARCHAR(100)
+  * field_type : VARCHAR(20)
+  * searchable : BOOLEAN
+  * filterable : BOOLEAN
+  * sortable : BOOLEAN
+  * autocomplete : BOOLEAN
+  boost_weight : INTEGER = 1
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "search_configs" as cfg {
+  * index_id : UUID <<PK, FK>>
+  --
+  * analyzer : VARCHAR(50)
+  * fuzzy_enabled : BOOLEAN = true
+  * fuzzy_distance : INTEGER = 1
+  * highlight_enabled : BOOLEAN = true
+  min_score : FLOAT
+  * max_results : INTEGER = 100
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "synonyms" as syn {
+  * id : UUID <<PK>>
+  --
+  * index_id : UUID <<FK>>
+  * term : VARCHAR(100)
+  * equivalents : TEXT
+  * created_at : TIMESTAMPTZ
+}
+
+entity "search_history" as hist {
+  * id : BIGSERIAL <<PK>>
+  --
+  user_id : UUID
+  * platform_id : UUID
+  * index_name : VARCHAR(100)
+  * query : TEXT
+  filters_applied : JSONB
+  * result_count : INTEGER
+  * took_ms : INTEGER
+  * created_at : TIMESTAMPTZ
+}
+
+entity "popular_searches" as pop {
+  * id : UUID <<PK>>
+  --
+  * index_name : VARCHAR(100)
+  * platform_id : UUID
+  * term : VARCHAR(255)
+  * search_count : BIGINT = 0
+  * last_searched_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  UNIQUE(index_name, platform_id, term)
+}
+
+class "SearchQuery" as sq {
+  +query : String
+  +index : String
+  +search_type : Enum
+  +filters : List<Filter>
+  +sort : SortOption
+  +page : Integer
+  +limit : Integer
+  +include_facets : Boolean
+  --
+  +execute() : SearchResult
+  +validate() : Boolean
+  +buildESQuery() : JSON
+}
+
+class "SearchResult" as sr {
+  +results : List<Hit>
+  +total : Integer
+  +page : Integer
+  +limit : Integer
+  +took_ms : Integer
+  +facets : Map<String, Map>
+  --
+  +toResponse() : JSON
+}
+
+class "AutocompleteQuery" as aq {
+  +index : String
+  +prefix : String
+  +limit : Integer
+  --
+  +execute() : List<Suggestion>
+}
+
+class "SearchDocument" as doc {
+  +doc_id : String
+  +index_name : String
+  +platform_id : UUID
+  +data : JSON
+  +indexed_at : Timestamp
+  --
+  +index() : void
+  +update() : void
+  +delete() : void
+}
+
+idx ||--o{ sch : "has fields"
+idx ||--|| cfg : "configured by"
+idx ||--o{ syn : "has synonyms"
+idx ||--o{ hist : "logged in"
+sq --> idx : "targets"
+sq --> sr : "produces"
+doc --> idx : "belongs to"
+aq --> idx : "queries"
+
+@enduml
+\end{lstlisting}
+
+% ============================================================
+% GLOSSAIRE
+% ============================================================
+\newpage
+\section{Annexe B --- Glossaire}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Terme} & \textbf{DÃ©finition} \\
+\midrule
+Elasticsearch & Moteur de recherche distribuÃ© basÃ© sur Apache Lucene \\
+Index & Collection de documents structurÃ©s dans Elasticsearch \\
+Mapping & DÃ©finition du schÃ©ma d'un index (types et propriÃ©tÃ©s des champs) \\
+Full-text search & Recherche dans le contenu textuel avec analyse linguistique \\
+Fuzzy matching & TolÃ©rance aux fautes de frappe basÃ©e sur la distance d'Ã©dition \\
+Facette & Compteur de rÃ©sultats par valeur de filtre (ex : catÃ©gorie : 42) \\
+Boost & MÃ©canisme d'Ã©lÃ©vation du score de certains documents \\
+Stemming & RÃ©duction d'un mot Ã  sa racine (chaussures $\rightarrow$ chaussure) \\
+Embedding & ReprÃ©sentation vectorielle d'un texte pour la recherche sÃ©mantique \\
+Alias ES & Pointeur vers un index ES, permet la rÃ©indexation sans downtime \\
+Shard & UnitÃ© de distribution des donnÃ©es dans Elasticsearch \\
+TTL & Time To Live --- durÃ©e de vie d'une entrÃ©e en cache Redis \\
+DLQ & Dead Letter Queue --- file d'attente pour messages en Ã©chec \\
+S2S & Service-to-Service --- communication inter-microservices \\
+Celery & Framework Python de tÃ¢ches asynchrones distribuÃ©es \\
+\bottomrule
+\end{tabularx}
+
+\vfill
+\begin{center}
+\textit{AG Technologies --- Document confidentiel Ã  usage interne exclusivement.}\\
+\textit{Search Service CDC v1.2 --- 21 mars 2026}
+\end{center}
+
+\end{document}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\6.chat.txt =====
+`
+% ============================================================
+%  CAHIER DES CHARGES TECHNIQUE --- SERVICE CHAT v1.2
+%  AG Technologies --- Architecture de Services Partages
+%  Compilable sur Overleaf (pdfLaTeX)
+% ============================================================
+\documentclass[a4paper,12pt]{article}
+
+% --- Encodage & Langue ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% --- Mise en page ---
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{float}
+\usepackage{graphicx}
+
+% --- Couleurs & Graphismes ---
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+\usepackage{mdframed}
+\usepackage{letterspace}
+
+% --- Tableaux ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{colortbl}
+
+% --- Listes ---
+\usepackage{enumitem}
+
+% --- Code & Monospace ---
+\usepackage{listings}
+\usepackage{inconsolata}
+
+% --- Liens ---
+\usepackage[colorlinks=true, linkcolor=AGBlue, urlcolor=AGBlue, citecolor=AGBlue]{hyperref}
+
+% --- Icones ---
+\usepackage{fontawesome5}
+
+% --- Numerotation & Espacement ---
+\usepackage{setspace}
+\usepackage{lastpage}
+
+% ============================================================
+%  PALETTE DE COULEURS AG TECHNOLOGIES
+% ============================================================
+\definecolor{AGBlue}{RGB}{30, 90, 168}
+\definecolor{AGLightBlue}{RGB}{220, 235, 255}
+\definecolor{AGDark}{RGB}{20, 30, 50}
+\definecolor{AGGray}{RGB}{100, 110, 125}
+\definecolor{AGLightGray}{RGB}{245, 247, 250}
+\definecolor{AGGreen}{RGB}{30, 160, 100}
+\definecolor{AGOrange}{RGB}{230, 115, 20}
+\definecolor{AGRed}{RGB}{200, 50, 50}
+\definecolor{AGPurple}{RGB}{100, 60, 180}
+\definecolor{AGTeal}{RGB}{15, 130, 145}
+\definecolor{TableHeader}{RGB}{30, 90, 168}
+\definecolor{TableAlt}{RGB}{240, 245, 255}
+\definecolor{CodeBg}{RGB}{248, 249, 252}
+
+\titleformat{\section}
+  {\color{AGBlue}\Large\bfseries}{\thesection}{1em}{}[\color{AGBlue}\titlerule]
+\titleformat{\subsection}{\color{AGDark}\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\color{AGGray}\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+\titlespacing*{\subsubsection}{0pt}{8pt}{2pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.3pt}
+\fancyhead[L]{\small\color{AGGray}\textbf{AG Technologies} --- Service Chat}
+\fancyhead[R]{\small\color{AGGray}Cahier des Charges Technique}
+\fancyfoot[L]{\small\color{AGGray}Confidentiel --- Usage Interne}
+\fancyfoot[C]{\small\color{AGGray}\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\color{AGGray}v1.2 --- \today}
+
+\lstset{
+  backgroundcolor=\color{CodeBg},
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true, frame=single, framesep=4pt,
+  rulecolor=\color{AGBlue!30},
+  commentstyle=\color{AGGreen},
+  keywordstyle=\color{AGBlue}\bfseries,
+  stringstyle=\color{AGOrange},
+  numbers=left, numberstyle=\tiny\color{AGGray},
+  numbersep=8pt, xleftmargin=16pt, tabsize=2,
+  showstringspaces=false,
+}
+
+\newmdenv[linecolor=AGBlue, linewidth=2pt, leftline=true, rightline=false, topline=false, bottomline=false, backgroundcolor=AGLightBlue, innerleftmargin=12pt, innerrightmargin=8pt, innertopmargin=6pt, innerbottommargin=6pt, skipabove=8pt, skipbelow=8pt]{infobox}
+\newmdenv[linecolor=AGOrange, linewidth=2pt, leftline=true, rightline=false, topline=false, bottomline=false, backgroundcolor=AGOrange!8, innerleftmargin=12pt, innerrightmargin=8pt, innertopmargin=6pt, innerbottommargin=6pt, skipabove=8pt, skipbelow=8pt]{warningbox}
+\newmdenv[linecolor=AGGreen, linewidth=2pt, leftline=true, rightline=false, topline=false, bottomline=false, backgroundcolor=AGGreen!8, innerleftmargin=12pt, innerrightmargin=8pt, innertopmargin=6pt, innerbottommargin=6pt, skipabove=8pt, skipbelow=8pt]{successbox}
+
+\newcommand{\badge}[2]{\tikz[baseline=-2pt]{\node[fill=#1, text=white, rounded corners=3pt, inner sep=3pt, font=\footnotesize\bfseries]{#2};}}
+\newcommand{\httpmethod}[1]{\colorbox{AGBlue!15}{\textcolor{AGBlue}{\ttfamily\footnotesize\bfseries #1}}}
+\newcommand{\wsevent}[1]{\colorbox{AGPurple!15}{\textcolor{AGPurple}{\ttfamily\footnotesize\bfseries #1}}}
+
+\setcounter{tocdepth}{3}
+\renewcommand{\contentsname}{Table des Mati\`eres}
+
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{AGDark}\color{white}
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[AGBlue!50, opacity=0.45](current page.north west) rectangle ([yshift=-3.8cm]current page.north east);
+  \fill[AGBlue!80, opacity=0.20](current page.north west) rectangle ([yshift=-1.0cm]current page.north east);
+  \fill[white, opacity=0.025]([xshift=-1.5cm, yshift=-4.5cm]current page.north east) circle (6.0cm);
+  \fill[AGBlue!70, opacity=0.10]([xshift=2.0cm, yshift=-9.0cm]current page.north east) circle (4.5cm);
+  \fill[AGBlue!40, opacity=0.08]([xshift=3.5cm, yshift=-16cm]current page.north west) circle (3.2cm);
+  \fill[white, opacity=0.015]([xshift=-3cm, yshift=6cm]current page.south west) circle (5.0cm);
+  \fill[AGBlue, opacity=0.55](current page.south west) rectangle ([yshift=0.65cm]current page.south east);
+  \fill[AGBlue!40, opacity=0.30]([yshift=0.65cm]current page.south west) rectangle ([yshift=2.0cm]current page.south east);
+  \node[text=white!40, font=\fontsize{7}{9}\selectfont, anchor=south] at ([yshift=0.18cm]current page.south) {Document confidentiel $\cdot$ R\'eserv\'e \`a l'usage interne d'AG Technologies $\cdot$ v1.2};
+\end{tikzpicture}
+\vspace*{1.2cm}
+\begin{center}
+  {\fontsize{10}{12}\selectfont\textbf{AG\,TECHNOLOGIES} \quad\textcolor{white!60}{$|$}\quad Architecture de Services Partag\'es}\\[0.25cm]
+  {\color{white!80}\rule{10cm}{0.6pt}}
+\end{center}
+\vspace{1.0cm}
+\begin{center}
+\begin{tikzpicture}
+  \fill[AGBlue!20, opacity=0.20] (0,0) circle (3.0cm);
+  \fill[AGBlue!40, opacity=0.22] (0,0) circle (2.3cm);
+  \fill[AGBlue!70, opacity=0.50] (0,0) circle (1.6cm);
+  \fill[AGBlue, opacity=0.80] (0,0) circle (1.15cm);
+  \node[text=white, font=\fontsize{30}{30}\selectfont] at (0, 0) {\faComments};
+\end{tikzpicture}
+\end{center}
+\vspace{0.7cm}
+\begin{center}
+  {\fontsize{9}{11}\selectfont\textls[250]{C A H I E R \ D E S \ C H A R G E S \ T E C H N I Q U E}}\\[0.45cm]
+  \begin{tikzpicture}
+    \fill[AGBlue, opacity=0.70, rounded corners=7pt](-6.5,-0.62) rectangle (6.5,0.62);
+    \node[text=white, font=\LARGE\bfseries] at (0,0) {\faComments\enspace Service Chat};
+  \end{tikzpicture}\\[0.4cm]
+  {\fontsize{10}{12}\selectfont\color{white} Messagerie Temps R\'eel Unifi\'ee --- Chat Service}
+\end{center}
+\vspace{0.8cm}
+\begin{center}{\large\color{AGGreen}\textbf{Statut~: Implementation-ready}}\end{center}
+\vspace{0.4cm}
+\begin{center}
+\begin{tabular}{ll}
+  \toprule \textbf{Attribut} & \textbf{Valeur} \\ \midrule
+  Document & CDC Technique et Fonctionnel \\ Service & Chat Service \\ Version & 1.2 \\
+  Statut & \textbf{Implementation-ready} \\ Classification & Confidentiel --- Usage interne \\
+  Stack & Node.js / Express / Socket.io / PostgreSQL / Redis \\
+  D\'ependances valid\'ees & Auth v2.1, Users v1.0, Notification v1.2, M\'edia v1.4 \\ \bottomrule
+\end{tabular}
+\end{center}
+\nopagecolor
+\end{titlepage}
+
+% === HISTORIQUE ===
+\newpage
+\section*{Historique des R\'evisions}
+\addcontentsline{toc}{section}{Historique des R\'evisions}
+\begin{tabularx}{\textwidth}{|p{1.2cm}|p{2.4cm}|X|p{2.8cm}|}
+  \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Ver.} & \color{white}\textbf{Date} & \color{white}\textbf{Description} & \color{white}\textbf{Auteur} \\ \hline
+  1.0 & 30 mars 2026 & Cr\'eation initiale du document & \'Equipe Ing\'enierie \\ \hline
+  \rowcolor{TableAlt} 1.1 & 30 mars 2026 & Post-audit~: alignement \texttt{platform\_id} UUID Auth. Pr\'efixe \texttt{/api/v1}. Convention identit\'e. PK corrig\'ees. Table \texttt{platform\_capabilities}. \texttt{TIMESTAMPTZ}. Contrats inter-services. Matrice autorisation. Fronti\`ere Chat/Search. Garde-fous scalabilit\'e. PlantUML annexe. & \'Equipe Architecture \\ \hline
+  1.2 & \today & Version finale~: statut \textit{Implementation-ready}. Matrice autorisation en forme canonique. Gouvernance capabilities~: r\^ole admin pr\'ecis\'e via Users. Mapping identit\'e Chat$\rightarrow$Notification. R\`egles op\'erateur transfert verrouill\'ees. & \'Equipe Architecture \\ \hline
+\end{tabularx}
+
+\newpage\tableofcontents\newpage
+
+% === SECTION 1 ===
+\section{Introduction}
+
+\subsection{Objet du Document}
+Ce document constitue le \textbf{Cahier des Charges Technique et Fonctionnel} du \textbf{Service Chat} d'AG Technologies, version~1.2 (\textit{Implementation-ready}). Il d\'efinit les objectifs, fonctionnalit\'es, architecture technique, contrats d'API et contrats inter-services.
+
+\subsection{Destinataires}
+\begin{tabularx}{\textwidth}{|p{3.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Destinataire} & \color{white}\textbf{R\^ole} \\ \hline
+  \'Equipe Backend & D\'eveloppement et maintenance \\ \hline
+  \rowcolor{TableAlt}\'Equipe Frontend & Int\'egration WebSocket, UI chat \\ \hline
+  \'Equipes consommatrices & AGT-Market, AGT-Bot, SALMA, Service Chatbot \\ \hline
+  \rowcolor{TableAlt}Lead Technique & Validation des choix techniques \\ \hline
+  Chef de Projet & Suivi et validation fonctionnelle \\ \hline
+\end{tabularx}
+
+\subsection{P\'erim\`etre du Service}
+\begin{infobox}
+\faInfoCircle\quad \textbf{P\'erim\`etre inclus~:} conversations directes, canaux et transferts bot$\rightarrow$humain~; messagerie temps r\'eel via WebSocket~; r\'eactions emoji~; accus\'es de lecture~; indicateur de saisie~; pr\'esence en ligne~; recherche full-text intra-conversation~; historique pagin\'e~; configuration de capacit\'es par plateforme~; API REST et \'ev\'enements WebSocket complets.
+\end{infobox}
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{Hors p\'erim\`etre~:} authentification (Service Auth v2.1), stockage fichiers (Service M\'edia v1.4), recherche transverse donn\'ees m\'etier (Service Recherche v1.2), logique m\'etier plateformes, facturation, mod\'eration de contenu (futur).
+\end{warningbox}
+
+\subsection{Conventions \'ecosyst\`eme AG Technologies}
+\label{sec:conventions}
+\begin{warningbox}
+\faExclamationTriangle\quad Conventions \textbf{non n\'egociables} (valid\'ees Auth~v2.1, Users~v1.0, Notification~v1.2, M\'edia~v1.4, Recherche~v1.2)~:
+\begin{itemize}[nosep]
+  \item \texttt{platform\_id} = UUID du registre Auth (\texttt{platforms.id})
+  \item Identit\'e utilisateur = \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item JWT valid\'e via \texttt{GET /auth/verify-token}~; token S2S via \texttt{POST /auth/s2s/introspect}
+  \item Pr\'efixe API~: \texttt{/api/v1}
+  \item R\^oles et permissions g\'er\'es par Users, pas par Auth
+  \item RGPD orchestr\'e par Users
+  \item Stack~: Django/DRF pour Auth, Users, Notif, Recherche~; Node.js/NestJS pour M\'edia~; \textbf{Node.js/Express/Socket.io pour Chat} (justification~: section~\ref{sec:stack-justif})
+  \item Timestamps~: \texttt{TIMESTAMPTZ}
+\end{itemize}
+\end{warningbox}
+
+\subsection{Fronti\`ere Chat / Recherche}
+\label{sec:boundary-search}
+\begin{infobox}
+\faInfoCircle\quad \textbf{R\`egle non n\'egociable~:} La recherche full-text intra-conversation reste locale au Service Chat (index GIN PostgreSQL). Le Service Recherche (v1.2) n'indexe jamais de messages de chat.
+\end{infobox}
+
+% === SECTION 2 ===
+\section{Contexte \& Probl\'ematique}
+
+\subsection{Pourquoi Ce Service Existe}
+Dans un \'ecosyst\`eme multi-plateformes, la communication entre utilisateurs est un besoin transverse critique. Sans service centralis\'e~: duplication temps r\'eel, incoh\'erence fonctionnalit\'es, impossibilit\'e transfert bot$\rightarrow$humain, probl\`emes scalabilit\'e WebSocket, absence historique unifi\'e.
+
+\subsection{Probl\`emes R\'esolus}
+\begin{tabularx}{\textwidth}{|p{4.2cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Probl\`eme} & \color{white}\textbf{Solution} \\ \hline
+  WebSocket par plateforme & Gateway centralis\'e avec Redis Adapter \\ \hline
+  \rowcolor{TableAlt}Pas de transfert bot$\rightarrow$humain & Type conversation d\'edi\'e + file d'attente \\ \hline
+  Scalabilit\'e WebSocket & Redis Pub/Sub + Socket.io Adapter multi-instances \\ \hline
+  \rowcolor{TableAlt}Messages perdus hors ligne & Persistance PostgreSQL + livraison \`a la reconnexion \\ \hline
+  Concepts m\'etier cod\'es en dur & Service g\'en\'erique + capacit\'es configurables par plateforme \\ \hline
+\end{tabularx}
+
+\subsection{Positionnement Architecture Globale}
+Le Service Chat d\'epend du Service Auth (v2.1), Users (v1.0), Notification (v1.2) et, \`a terme, M\'edia (v1.4).
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\small},
+  consumer/.style={draw=AGGray,fill=AGLightGray,rounded corners=4pt,minimum width=2.8cm,minimum height=0.7cm,align=center},
+  depnode/.style={draw=AGOrange!80,fill=AGOrange!10,rounded corners=4pt,minimum width=2.8cm,minimum height=0.7cm,align=center},
+  authnode/.style={draw=AGGreen!80,fill=AGGreen!10,rounded corners=4pt,minimum width=2.8cm,minimum height=0.7cm,align=center},
+  chatnode/.style={draw=AGBlue,fill=AGLightBlue,rounded corners=6pt,minimum width=4.2cm,minimum height=1.0cm,align=center,line width=1.5pt}]
+  \node[consumer](market) at (-4.5,0){AGT-Market};
+  \node[consumer](bot) at (-1.5,0){AGT-Bot};
+  \node[consumer](salma) at (1.5,0){SALMA};
+  \node[consumer](chatbot) at (4.5,0){Chatbot};
+  \node[chatnode](chat) at (0,-2){\textbf{\faComments\ Chat Service}};
+  \node[authnode](auth) at (-4.5,-4){Service Auth};
+  \node[depnode](users) at (-1.5,-4){Service Users};
+  \node[depnode](notif) at (1.5,-4){Service Notif.};
+  \node[depnode](media) at (4.5,-4){Service M\'edia};
+  \draw[->,thick,color=AGGray](market)--(chat);
+  \draw[->,thick,color=AGGray](bot)--(chat);
+  \draw[->,thick,color=AGGray](salma)--(chat);
+  \draw[->,thick,color=AGGray](chatbot)--(chat);
+  \draw[->,thick,color=AGGreen](chat)--(auth);
+  \draw[->,thick,color=AGOrange](chat)--(users);
+  \draw[->,thick,color=AGOrange](chat)--(notif);
+  \draw[->,thick,color=AGOrange,dashed](chat)--(media);
+\end{tikzpicture}
+\end{center}
+
+% === SECTION 3 ===
+\section{Vision \& Objectifs}
+
+\subsection{Concept du Service}
+Le Service Chat est le syst\`eme de messagerie temps r\'eel unifi\'e pour toutes les plateformes. Il est g\'en\'erique~: trois types abstraits (directe, canal, transfert), m\'etadonn\'ees libres, capacit\'es activables par plateforme.
+
+\subsection{Objectifs MVP \& Long Terme}
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Phase} & \color{white}\textbf{Objectifs} \\ \hline
+  \textbf{MVP} & Conversations directes/canaux~; reply, edit, soft delete~; accus\'es lecture~; typing~; pr\'esence~; r\'eactions~; transfert bot$\rightarrow$humain~; notifications hors ligne~; capabilities par plateforme~; API REST + WS \\ \hline
+  \rowcolor{TableAlt}\textbf{Long terme} & Pi\`eces jointes M\'edia~; E2E~; archivage~; mod\'eration~; messages vocaux \\ \hline
+\end{tabularx}
+
+\subsection{KPIs}
+\begin{tabularx}{\textwidth}{|X|p{2.2cm}|p{2.8cm}|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{KPI} & \color{white}\textbf{MVP} & \color{white}\textbf{Long Terme} \\ \hline
+  Latence WS & $<$ 200ms & $<$ 100ms \\ \hline
+  \rowcolor{TableAlt}Connexions WS & 1\,000+ & 10\,000+ \\ \hline
+  Disponibilit\'e & $\geq$ 99\% & $\geq$ 99,9\% \\ \hline
+  \rowcolor{TableAlt}Perte messages & 0\% & 0\% \\ \hline
+  Prise en charge transfert & $<$ 5 min & $<$ 2 min \\ \hline
+  \rowcolor{TableAlt}Taux erreur API & $<$ 1\% & $<$ 0,5\% \\ \hline
+\end{tabularx}
+
+% === SECTION 4 ===
+\section{Parties Prenantes}
+\subsection{\'Equipe Technique}
+\begin{tabularx}{\textwidth}{|p{3.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{R\^ole} & \color{white}\textbf{Responsabilit\'es} \\ \hline
+  Ing\'enieur Backend & API REST, conversations, messaging \\ \hline
+  \rowcolor{TableAlt}Ing\'enieur Temps R\'eel & Gateway WS, Socket.io, Redis Pub/Sub \\ \hline
+  Lead Technique & Architecture, scaling, d\'ecisions techniques \\ \hline
+  \rowcolor{TableAlt}Ing\'enieur DevOps & Redis, PostgreSQL, Docker, LB \\ \hline
+  Ing\'enieur Frontend & Int\'egration Socket.io, UI \\ \hline
+\end{tabularx}
+
+\subsection{Services Consommateurs}
+\begin{tabularx}{\textwidth}{|p{3.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Service} & \color{white}\textbf{Usage} \\ \hline
+  AGT-Market & Chat acheteur$\leftrightarrow$vendeur, canaux boutique \\ \hline
+  \rowcolor{TableAlt}AGT-Bot & Conversations user$\leftrightarrow$op\'erateur, transfert bot$\rightarrow$humain \\ \hline
+  SALMA & Chat \'etudiant$\leftrightarrow$formateur, canaux cours \\ \hline
+  \rowcolor{TableAlt}Service Chatbot & Cr\'eation transferts (auth S2S) \\ \hline
+  Service Notification & Alertes push/email hors ligne \\ \hline
+\end{tabularx}
+
+% === SECTION 5 ===
+\section{Besoins Fonctionnels}
+
+\subsection{Module Conversations}
+\subsubsection{Types de Conversations}
+\begin{tabularx}{\textwidth}{|p{2.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Type} & \color{white}\textbf{Caract\'eristiques} \\ \hline
+  \texttt{direct} & 2 participants~; anti-doublon (m\^emes participants + plateforme = m\^eme conversation) \\ \hline
+  \rowcolor{TableAlt}\texttt{canal} & Illimit\'e~; public/priv\'e~; nom, description, propri\'etaire \\ \hline
+  \texttt{transfert} & Via Chatbot (S2S)~; statuts~: \texttt{en\_attente}, \texttt{pris\_en\_charge}, \texttt{cloture} \\ \hline
+\end{tabularx}
+
+\subsubsection{Gestion des Conversations}
+\begin{itemize}[leftmargin=1.5cm]
+  \item Cr\'eation (type, participants, plateforme, m\'etadonn\'ees)
+  \item Listage pagin\'e (filtr\'e type, plateforme)
+  \item D\'etail avec dernier message + non-lus
+  \item Modification canal (nom, description, visibilit\'e)
+  \item Soft delete~; tri par derni\`ere activit\'e
+\end{itemize}
+
+\subsubsection{Gestion des Participants}
+Ajouter/retirer, quitter canal, lister avec pr\'esence.
+
+\subsection{Module Messagerie}
+\subsubsection{Messages}
+\begin{itemize}[leftmargin=1.5cm]
+  \item Envoi texte (chemin principal~: WS~; fallback~: REST)
+  \item Reply, Edit (auteur, d\'elai configurable), Soft delete
+  \item Pagination historique~; recherche full-text (GIN)
+  \item Taille max~: 4\,096 caract\`eres (configurable par plateforme)
+\end{itemize}
+
+\subsubsection{R\'eactions Emoji}
+Ajouter/retirer, UNIQUE \texttt{(message\_id, user\_id, emoji)} en base, compteurs par emoji.
+
+\subsubsection{Accus\'es de Lecture}
+Curseur ``lu jusqu'au message X'', avancement auto, visibilit\'e pour les participants. \textbf{Capacit\'e configurable} (section~\ref{sec:capabilities}).
+
+\subsection{Module Temps R\'eel (WebSocket)}
+\subsubsection{Typing}
+Timeout 3s, Redis-only, capacit\'e configurable.
+\subsubsection{Pr\'esence}
+En ligne / hors ligne / derni\`ere connexion, Redis-only, capacit\'e configurable.
+\subsubsection{Reconnexion}
+Auto-reconnexion, r\'ecup\'eration messages manqu\'es via REST, z\'ero perte (PostgreSQL avant WS).
+
+\subsection{Module Transfert Bot $\rightarrow$ Humain}
+\label{sec:transfer-rules}
+\begin{itemize}[leftmargin=1.5cm]
+  \item Chatbot appelle \texttt{POST /api/v1/chat/conversations/transfer} (S2S)
+  \item Conversation cr\'e\'ee \texttt{en\_attente}~; op\'erateurs re\c{c}oivent \texttt{transfer:new}
+  \item Op\'erateur prend en charge $\rightarrow$ \texttt{pris\_en\_charge}
+  \item Op\'erateur cl\^oture $\rightarrow$ \texttt{cloture}~; bot reprend
+  \item File d'attente~: message automatique si aucun op\'erateur
+  \item Capacit\'e configurable par plateforme
+\end{itemize}
+
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{R\`egles de prise en charge op\'erateur (v1.2)~:}
+\begin{itemize}[nosep]
+  \item \textbf{Qui peut prendre en charge~?} Utilisateurs ayant la permission \texttt{chat:transfer:take} (v\'erifi\'e via \texttt{GET /users/\{id\}/permissions/check}).
+  \item \textbf{Concurrence~:} verrou optimiste (\texttt{UPDATE ... WHERE status = 'en\_attente'}). Deuxi\`eme op\'erateur re\c{c}oit \texttt{409 Conflict}.
+  \item \textbf{Reprise~:} un transfert \texttt{pris\_en\_charge} ne peut pas \^etre repris. Si l'op\'erateur se d\'econnecte sans cl\^oturer, job p\'eriodique remet en \texttt{en\_attente} apr\`es d\'elai configurable (d\'efaut~: 10 min).
+  \item \textbf{Cl\^oture~:} uniquement par l'op\'erateur ayant pris en charge (\texttt{operator\_id = user\_id} du JWT).
+  \item \textbf{Post-cl\^oture~:} conversation lisible en historique, plus de nouveaux messages.
+\end{itemize}
+\end{warningbox}
+
+\subsection{Module Capacit\'es par Plateforme}
+\label{sec:capabilities}
+\begin{infobox}
+\faInfoCircle\quad Le moteur Chat sait tout faire~; chaque plateforme active ce qu'elle veut. Config stock\'ee en PostgreSQL, modifiable via API.
+\end{infobox}
+
+\subsubsection{Capacit\'es optionnelles}
+\begin{tabularx}{\textwidth}{|p{4.5cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Capacit\'e} & \color{white}\textbf{Description} \\ \hline
+  \texttt{direct\_enabled} & Conversations directes 1-to-1 \\ \hline
+  \rowcolor{TableAlt}\texttt{channels\_enabled} & Canaux (groupes) \\ \hline
+  \texttt{read\_receipts\_enabled} & Accus\'es lecture d\'etaill\'es \\ \hline
+  \rowcolor{TableAlt}\texttt{typing\_enabled} & Indicateur saisie \\ \hline
+  \texttt{presence\_enabled} & Pr\'esence en ligne \\ \hline
+  \rowcolor{TableAlt}\texttt{reactions\_enabled} & R\'eactions emoji \\ \hline
+  \texttt{transfer\_enabled} & Transfert bot$\rightarrow$humain \\ \hline
+  \rowcolor{TableAlt}\texttt{message\_edit\_enabled} & \'Edition messages \\ \hline
+  \texttt{message\_delete\_enabled} & Suppression logique \\ \hline
+  \rowcolor{TableAlt}\texttt{message\_search\_enabled} & Recherche full-text \\ \hline
+  \texttt{attachments\_enabled} & Pi\`eces jointes (futur) \\ \hline
+\end{tabularx}
+
+\subsubsection{Capacit\'es structurelles (toujours actives)}
+Auth obligatoire, isolation plateforme, persistance, s\'ecurit\'e, rate limiting, logs, contr\^ole d'acc\`es.
+
+\subsubsection{Comportement d\'esactiv\'e}
+Endpoints $\rightarrow$ \texttt{403 Feature disabled}~; \'ev\'enements WS non \'emis~; co\^ut technique \'evit\'e.
+
+\subsubsection{Gouvernance des capacit\'es (v1.2)}
+\label{sec:capabilities-gov}
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{Qui peut modifier \texttt{platform\_capabilities}~?}
+\begin{itemize}[nosep]
+  \item \textbf{Lecture}~: tout token JWT ou S2S valide de la plateforme.
+  \item \textbf{\'Ecriture}~: r\'eserv\'ee aux \textbf{administrateurs}~:
+    \begin{enumerate}[nosep]
+      \item JWT valid\'e via \texttt{GET /auth/verify-token}.
+      \item Permission v\'erifi\'ee via \texttt{GET /users/\{user\_id\}/permissions/check?platform=\{p\}\&permission=chat:admin}.
+    \end{enumerate}
+  \item La permission \texttt{chat:admin} doit \^etre cr\'e\'ee par chaque plateforme dans le Service Users.
+  \item Alternative~: token S2S avec \texttt{service\_name = "admin"} (gestion automatis\'ee).
+\end{itemize}
+\end{warningbox}
+
+% === SECTION 6 ===
+\section{Besoins Non-Fonctionnels}
+
+\subsection{Performance}
+\begin{tabularx}{\textwidth}{|X|p{3.2cm}|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Exigence} & \color{white}\textbf{Cible} \\ \hline
+  Latence WS & $<$ 200ms \\ \hline
+  \rowcolor{TableAlt}Connexions WS MVP & 1\,000+ \\ \hline
+  Timeout typing & 3s \\ \hline
+  \rowcolor{TableAlt}Chargement historique & $<$ 300ms \\ \hline
+  Cache pr\'esence TTL & Configurable \\ \hline
+  \rowcolor{TableAlt}Taille max message & 4\,096 car. \\ \hline
+\end{tabularx}
+
+\subsection{S\'ecurit\'e}
+\begin{itemize}[leftmargin=1.5cm]
+  \item Auth obligatoire via \texttt{GET /auth/verify-token}
+  \item Isolation conversations par participant + \texttt{platform\_id} du JWT
+  \item Edit/Delete auteur uniquement~; soft delete obligatoire
+  \item Rate limiting via Redis (section~\ref{sec:guardrails})
+\end{itemize}
+
+\subsection{Scalabilit\'e}
+Redis Adapter multi-instances, LB sticky-session, index PostgreSQL, Redis d\'echarge.
+
+\subsection{Garde-fous}
+\label{sec:guardrails}
+\begin{tabularx}{\textwidth}{|p{4.5cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{R\`egle} & \color{white}\textbf{Valeur} \\ \hline
+  Taille max message & 4\,096 car. \\ \hline
+  \rowcolor{TableAlt}Rate limit / utilisateur & 30 msg/min \\ \hline
+  Rate limit / conversation & 100 msg/min \\ \hline
+  \rowcolor{TableAlt}Anti-flood WS & 10 evt/s/client \\ \hline
+  Max membres canal & 500 \\ \hline
+  \rowcolor{TableAlt}Archivage inactif & 12 mois \\ \hline
+  Backpressure WS & Livraison diff\'er\'ee si file surcharg\'ee \\ \hline
+  \rowcolor{TableAlt}Timeout reprise transfert & 10 min \\ \hline
+\end{tabularx}
+
+\subsection{Disponibilit\'e}
+$\geq$ 99,9\%~; persistance PG avant WS~; health check \texttt{GET /api/v1/chat/health}~; rolling updates avec drain WS.
+
+% === SECTION 7 ===
+\section{Architecture Technique}
+
+\subsection{Stack Technique}
+\label{sec:stack-justif}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{2.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Composant} & \color{white}\textbf{Technologie} & \color{white}\textbf{R\^ole} \\ \hline
+  Runtime & Node.js & Boucle \'ev\'enementielle temps r\'eel \\ \hline
+  \rowcolor{TableAlt}Framework API & Express.js & Endpoints REST \\ \hline
+  WebSocket & Socket.io & Temps r\'eel, rooms \\ \hline
+  \rowcolor{TableAlt}WS Adapter & Redis Adapter & Sync multi-instances \\ \hline
+  Base de donn\'ees & PostgreSQL & Donn\'ees durables \\ \hline
+  \rowcolor{TableAlt}Cache & Redis & Pr\'esence, typing, sessions, non-lus \\ \hline
+  Broker & RabbitMQ & Async inter-services \\ \hline
+  \rowcolor{TableAlt}Conteneurisation & Docker & D\'eploiement \\ \hline
+\end{tabularx}
+
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{Justification Node.js~:} Exception document\'ee (comme M\'edia/NestJS). Socket.io = r\'ef\'erence temps r\'eel~; boucle \'ev\'enementielle optimis\'ee pour milliers de connexions~; Redis Adapter natif.
+\end{warningbox}
+
+\subsection{Int\'egrations Externes}
+\begin{tabularx}{\textwidth}{|p{4.0cm}|X|p{1.5cm}|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Service} & \color{white}\textbf{R\^ole} & \color{white}\textbf{Phase} \\ \hline
+  Auth v2.1 & JWT + S2S & MVP \\ \hline
+  \rowcolor{TableAlt}Users v1.0 & Profils, permissions op\'erateur & MVP \\ \hline
+  Notification v1.2 & Alertes hors ligne & MVP \\ \hline
+  \rowcolor{TableAlt}Chatbot & Cr\'eation transferts (S2S) & MVP \\ \hline
+  M\'edia v1.4 & Pi\`eces jointes & Futur \\ \hline
+\end{tabularx}
+
+% === SECTION 8 ===
+\section{Mod\'elisation}
+
+\begin{infobox}
+\faInfoCircle\quad \textbf{Convention d'identit\'e~:} \texttt{user\_id}, \texttt{sender\_id}, \texttt{created\_by}, \texttt{operator\_id} = \texttt{users\_auth.id} (= \texttt{sub} JWT). \texttt{platform\_id} = UUID Auth. Pr\'esence et typing = Redis-only.
+\end{infobox}
+
+\subsection{Table \texttt{conversations}}
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  id & UUID & PK & Identifiant \\ \hline
+  \rowcolor{TableAlt}type & VARCHAR(20) & NOT NULL & direct/canal/transfert \\ \hline
+  platform\_id & UUID & NOT NULL & FK logique $\rightarrow$ Auth \\ \hline
+  \rowcolor{TableAlt}name & VARCHAR(255) & NULL & Nom (canaux) \\ \hline
+  description & TEXT & NULL & Description (canaux) \\ \hline
+  \rowcolor{TableAlt}is\_public & BOOLEAN & NULL & Visibilit\'e (canaux) \\ \hline
+  created\_by & UUID & NOT NULL & \texttt{users\_auth.id} \\ \hline
+  \rowcolor{TableAlt}metadata & JSONB & NULL & M\'etadonn\'ees libres \\ \hline
+  deleted\_at & TIMESTAMPTZ & NULL & Soft delete \\ \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\ \hline
+  updated\_at & TIMESTAMPTZ & NOT NULL & Derni\`ere activit\'e \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{conversation\_participants}}
+PK composite \texttt{(conversation\_id, user\_id)}.
+
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  conversation\_id & UUID & PK, FK & Conversation \\ \hline
+  \rowcolor{TableAlt}user\_id & UUID & PK & Participant \\ \hline
+  role & VARCHAR(20) & NOT NULL & member/admin/owner \\ \hline
+  \rowcolor{TableAlt}joined\_at & TIMESTAMPTZ & NOT NULL & Entr\'ee \\ \hline
+  left\_at & TIMESTAMPTZ & NULL & Sortie \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{messages}}
+Index~: \texttt{(conversation\_id, created\_at DESC)}, GIN sur \texttt{content}.
+
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  id & UUID & PK & Identifiant \\ \hline
+  \rowcolor{TableAlt}conversation\_id & UUID & FK, NN & Conversation \\ \hline
+  sender\_id & UUID & NOT NULL & Auteur \\ \hline
+  \rowcolor{TableAlt}content & TEXT & NULL & Contenu \\ \hline
+  parent\_id & UUID & FK self & Reply \\ \hline
+  \rowcolor{TableAlt}is\_deleted & BOOLEAN & NOT NULL & Soft delete \\ \hline
+  edited\_at & TIMESTAMPTZ & NULL & Modification \\ \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Envoi \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{message\_reactions}}
+PK composite \texttt{(message\_id, user\_id, emoji)}.
+
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  message\_id & UUID & PK, FK & Message \\ \hline
+  \rowcolor{TableAlt}user\_id & UUID & PK & Utilisateur \\ \hline
+  emoji & VARCHAR(10) & PK & Code emoji \\ \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Date \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{read\_cursors}}
+PK composite \texttt{(conversation\_id, user\_id)}.
+
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  conversation\_id & UUID & PK, FK & Conversation \\ \hline
+  \rowcolor{TableAlt}user\_id & UUID & PK & Participant \\ \hline
+  last\_read\_message\_id & UUID & FK & Dernier lu \\ \hline
+  \rowcolor{TableAlt}updated\_at & TIMESTAMPTZ & NOT NULL & MAJ \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{transfers}}
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{3.0cm}|p{2.2cm}|p{1.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  id & UUID & PK & Identifiant \\ \hline
+  \rowcolor{TableAlt}conversation\_id & UUID & FK, UQ & Conversation transfert \\ \hline
+  user\_id & UUID & NOT NULL & Utilisateur transf\'er\'e \\ \hline
+  \rowcolor{TableAlt}operator\_id & UUID & NULL & Op\'erateur \\ \hline
+  status & VARCHAR(20) & NOT NULL & en\_attente/pris\_en\_charge/cloture \\ \hline
+  \rowcolor{TableAlt}bot\_history & JSONB & NOT NULL & Historique bot \\ \hline
+  context & JSONB & NULL & Contexte bot \\ \hline
+  \rowcolor{TableAlt}taken\_at & TIMESTAMPTZ & NULL & Prise en charge \\ \hline
+  closed\_at & TIMESTAMPTZ & NULL & Cl\^oture \\ \hline
+  \rowcolor{TableAlt}created\_at & TIMESTAMPTZ & NOT NULL & Cr\'eation \\ \hline
+\end{tabularx}
+
+\subsection{Table \texttt{platform\_capabilities}}
+\begin{tabularx}{\textwidth}{|>{\ttfamily\small}p{4.2cm}|p{2.0cm}|p{2.2cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Colonne} & \color{white}\textbf{Type} & \color{white}\textbf{Contr.} & \color{white}\textbf{Description} \\ \hline
+  platform\_id & UUID & PK & FK logique Auth \\ \hline
+  \rowcolor{TableAlt}direct\_enabled & BOOLEAN & DEF true & Conv. directes \\ \hline
+  channels\_enabled & BOOLEAN & DEF true & Canaux \\ \hline
+  \rowcolor{TableAlt}read\_receipts\_enabled & BOOLEAN & DEF true & Accus\'es lecture \\ \hline
+  typing\_enabled & BOOLEAN & DEF true & Typing \\ \hline
+  \rowcolor{TableAlt}presence\_enabled & BOOLEAN & DEF true & Pr\'esence \\ \hline
+  reactions\_enabled & BOOLEAN & DEF true & R\'eactions \\ \hline
+  \rowcolor{TableAlt}transfer\_enabled & BOOLEAN & DEF false & Transfert \\ \hline
+  message\_edit\_enabled & BOOLEAN & DEF true & \'Edition \\ \hline
+  \rowcolor{TableAlt}message\_delete\_enabled & BOOLEAN & DEF true & Suppression \\ \hline
+  message\_search\_enabled & BOOLEAN & DEF true & Recherche \\ \hline
+  \rowcolor{TableAlt}attachments\_enabled & BOOLEAN & DEF false & Pi\`eces jointes \\ \hline
+  max\_message\_length & INTEGER & DEF 4096 & Taille max msg \\ \hline
+  \rowcolor{TableAlt}rate\_limit\_per\_user & INTEGER & DEF 30 & Msg/min/user \\ \hline
+  rate\_limit\_per\_conv & INTEGER & DEF 100 & Msg/min/conv \\ \hline
+  \rowcolor{TableAlt}max\_channel\_members & INTEGER & DEF 500 & Max membres \\ \hline
+  updated\_at & TIMESTAMPTZ & NOT NULL & MAJ \\ \hline
+\end{tabularx}
+
+% === SECTION 9 ===
+\section{Contrats d'API}
+
+\begin{infobox}
+\faLock\quad \textbf{Base URL~:} \texttt{/api/v1/chat}. Token valid\'e via Auth v2.1. \texttt{platform\_id} et \texttt{user\_id} extraits du JWT.
+\end{infobox}
+
+\subsection{Matrice d'Autorisation (v1.2)}
+\label{sec:auth-matrix}
+
+\begin{infobox}
+\faInfoCircle\quad \textbf{Pub.}~= public. \textbf{JWT}~= Bearer utilisateur. \textbf{S2S}~= Service-to-Service. \textbf{Adm.}~= JWT + permission \texttt{chat:admin} via Users, ou S2S \texttt{service\_name="admin"}.
+\end{infobox}
+
+\begin{small}
+\begin{longtable}{|p{6.2cm}|p{0.8cm}|c|c|c|c|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Endpoint} & \color{white}\textbf{M.} & \color{white}\textbf{Pub} & \color{white}\textbf{JWT} & \color{white}\textbf{S2S} & \color{white}\textbf{Adm} \\ \hline \endfirsthead
+  \hline \rowcolor{TableHeader}\color{white}\textbf{Endpoint} & \color{white}\textbf{M.} & \color{white}\textbf{Pub} & \color{white}\textbf{JWT} & \color{white}\textbf{S2S} & \color{white}\textbf{Adm} \\ \hline \endhead
+  \texttt{/api/v1/chat/health} & GET & $\checkmark$ &&& \\ \hline
+  \rowcolor{TableAlt}\texttt{/api/v1/chat/conversations} & POST && $\checkmark$ && \\ \hline
+  \texttt{/api/v1/chat/conversations} & GET && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{/api/v1/chat/conversations/\{id\}} & GET && $\checkmark$ && \\ \hline
+  \texttt{/api/v1/chat/conversations/\{id\}} & PUT && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{/api/v1/chat/conversations/\{id\}} & DEL && $\checkmark$ && $\checkmark$ \\ \hline
+  \texttt{.../\{id\}/participants} & POST && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{id\}/participants/\{uid\}} & DEL && $\checkmark$ && \\ \hline
+  \texttt{.../\{id\}/participants} & GET && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{id\}/leave} & POST && $\checkmark$ && \\ \hline
+  \texttt{.../\{id\}/messages} & POST && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{id\}/messages} & GET && $\checkmark$ && \\ \hline
+  \texttt{.../\{id\}/messages/\{msgId\}} & PUT && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{id\}/messages/\{msgId\}} & DEL && $\checkmark$ && \\ \hline
+  \texttt{.../\{id\}/messages/search} & GET && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{msgId\}/reactions} & POST && $\checkmark$ && \\ \hline
+  \texttt{.../\{msgId\}/reactions/\{emoji\}} & DEL && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{msgId\}/reactions} & GET && $\checkmark$ && \\ \hline
+  \texttt{.../\{id\}/read} & POST && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../\{id\}/read-status} & GET && $\checkmark$ && \\ \hline
+  \texttt{/api/v1/chat/conversations/transfer} & POST &&& $\checkmark$ & \\ \hline
+  \rowcolor{TableAlt}\texttt{.../transfers/pending} & GET && $\checkmark$ && \\ \hline
+  \texttt{.../transfers/\{id\}/take} & POST && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../transfers/\{id\}/close} & POST && $\checkmark$ && \\ \hline
+  \texttt{.../platforms/\{p\}/channels} & GET && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{/api/v1/chat/channels/\{id\}/join} & POST && $\checkmark$ && \\ \hline
+  \texttt{.../users/\{uid\}/presence} & GET && $\checkmark$ && \\ \hline
+  \rowcolor{TableAlt}\texttt{.../conversations/stats} & GET &&& $\checkmark$ & $\checkmark$ \\ \hline
+  \texttt{.../transfers/stats} & GET &&& $\checkmark$ & $\checkmark$ \\ \hline
+  \rowcolor{TableAlt}\texttt{.../capabilities/\{p\}} & GET && $\checkmark$ & $\checkmark$ & \\ \hline
+  \texttt{.../capabilities/\{p\}} & PUT &&&& $\checkmark$ \\ \hline
+\end{longtable}
+\end{small}
+
+\textit{Note~: les chemins abr\'eg\'es \texttt{.../} sont relatifs \`a \texttt{/api/v1/chat/conversations} sauf indication contraire.}
+
+\subsection{Endpoints REST}
+Les endpoints sont identiques \`a la v1.1 avec les corrections de chemin canonique. Tous utilisent le pr\'efixe \texttt{/api/v1/chat}. Les endpoints li\'es aux capacit\'es d\'esactiv\'ees retournent \texttt{403 Feature disabled}. Le transfert \texttt{POST .../transfer} est S2S uniquement. Les endpoints \texttt{.../transfers/\{id\}/take} v\'erifient la permission \texttt{chat:transfer:take} via Users et utilisent un verrou optimiste (409 Conflict). D\'etails complets des body/response~: voir v1.1 section~9.
+
+\subsection{\'Ev\'enements WebSocket}
+
+\begin{infobox}
+\faWifi\quad Connexion~: token Bearer $\rightarrow$ validation Auth $\rightarrow$ extraction \texttt{user\_id}/\texttt{platform\_id} $\rightarrow$ chargement capabilities $\rightarrow$ inscription rooms. \'Ev\'enements des capacit\'es d\'esactiv\'ees non \'emis. WS = chemin principal envoi~; REST = fallback. Persistance PG avant \'emission.
+\end{infobox}
+
+\subsubsection{Serveur $\rightarrow$ Client}
+\begin{tabularx}{\textwidth}{|p{3.8cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{\'Ev\'enement} & \color{white}\textbf{Payload \& Condition} \\ \hline
+  \wsevent{message:new} & \texttt{\{message\_id, conversation\_id, sender\_id, content, parent\_id, created\_at\}} \\ \hline
+  \rowcolor{TableAlt}\wsevent{message:updated} & \texttt{\{message\_id, content, edited\_at\}} \\ \hline
+  \wsevent{message:deleted} & \texttt{\{message\_id\}} \\ \hline
+  \rowcolor{TableAlt}\wsevent{typing:start} & si \texttt{typing\_enabled} \\ \hline
+  \wsevent{typing:stop} & si \texttt{typing\_enabled} \\ \hline
+  \rowcolor{TableAlt}\wsevent{read:update} & si \texttt{read\_receipts\_enabled} \\ \hline
+  \wsevent{reaction:new} & si \texttt{reactions\_enabled} \\ \hline
+  \rowcolor{TableAlt}\wsevent{reaction:removed} & si \texttt{reactions\_enabled} \\ \hline
+  \wsevent{participant:online} & si \texttt{presence\_enabled} \\ \hline
+  \rowcolor{TableAlt}\wsevent{participant:offline} & si \texttt{presence\_enabled} \\ \hline
+  \wsevent{transfer:new} & si \texttt{transfer\_enabled} \\ \hline
+  \rowcolor{TableAlt}\wsevent{conversation:updated} & toujours \\ \hline
+\end{tabularx}
+
+\subsubsection{Client $\rightarrow$ Serveur}
+\texttt{message:send}, \texttt{typing:start}, \texttt{typing:stop}, \texttt{message:read}, \texttt{reaction:add}, \texttt{reaction:remove}. Payloads identiques v1.1.
+
+% === SECTION 10 ===
+\section{Contrats Inter-Services}
+
+\subsection{Chat $\rightarrow$ Auth (JWT)}
+Endpoint \texttt{GET /auth/verify-token}. Cache Redis TTL 30s. \'Echec $\rightarrow$ 401.
+
+\subsection{Chat $\rightarrow$ Auth (S2S)}
+Endpoint \texttt{POST /auth/s2s/introspect}. Usage~: Chatbot transfert, admin capabilities.
+
+\subsection{Chat $\rightarrow$ Users}
+\begin{tabularx}{\textwidth}{|p{3.5cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\ \hline
+  Endpoint profil & \texttt{GET /users/\{users\_auth.id\}} \\ \hline
+  \rowcolor{TableAlt}Usage profil & Nom, photo, \texttt{users\_profiles.id} \\ \hline
+  Endpoint permissions & \texttt{GET /users/\{id\}/permissions/check} \\ \hline
+  \rowcolor{TableAlt}Usage permissions & \texttt{chat:transfer:take}, \texttt{chat:admin} \\ \hline
+  Cache & TTL 5 min (profil), 30s (permissions) \\ \hline
+  \rowcolor{TableAlt}Si Users down & Profil~: ``Utilisateur inconnu''. Permissions~: refus (fail-closed). \\ \hline
+\end{tabularx}
+
+\subsection{Chat $\rightarrow$ Notification}
+\begin{tabularx}{\textwidth}{|p{3.5cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Param.} & \color{white}\textbf{Valeur} \\ \hline
+  Endpoint & \texttt{POST /api/v1/notifications/send} \\ \hline
+  \rowcolor{TableAlt}Auth & Token S2S \\ \hline
+  Cat\'egorie & \texttt{transactional}, priorit\'e \texttt{normal} \\ \hline
+  \rowcolor{TableAlt}\'Echec & Log~; ne bloque jamais l'envoi du message \\ \hline
+\end{tabularx}
+
+\begin{warningbox}
+\faExclamationTriangle\quad \textbf{Mapping identit\'e Chat $\rightarrow$ Notification (v1.2)~:}
+
+Chat travaille avec \texttt{users\_auth.id}. Notification attend \texttt{users\_profiles.id}.
+
+\textbf{S\'equence~:}
+\begin{enumerate}[nosep]
+  \item Chat d\'etecte destinataire hors ligne.
+  \item Chat appelle \texttt{GET /users/\{users\_auth.id\}} $\rightarrow$ r\'esout \texttt{users\_profiles.id} (d\'ej\`a en cache Redis TTL 5 min).
+  \item Chat appelle Notification avec \texttt{user\_id = users\_profiles.id}.
+\end{enumerate}
+Chat n'envoie \textbf{jamais} un \texttt{users\_auth.id} brut \`a Notification.
+\end{warningbox}
+
+\subsubsection{Templates Notification pr\'e-requis}
+\begin{tabularx}{\textwidth}{|p{4.2cm}|p{1.2cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Template} & \color{white}\textbf{Canal} & \color{white}\textbf{D\'eclencheur} \\ \hline
+  \texttt{chat\_message\_offline} & push & Message hors ligne \\ \hline
+  \rowcolor{TableAlt}\texttt{chat\_transfer\_new} & push & Nouveau transfert \\ \hline
+  \texttt{chat\_transfer\_assigned} & push & Transfert pris en charge \\ \hline
+  \rowcolor{TableAlt}\texttt{chat\_transfer\_closed} & push & Transfert cl\^otur\'e \\ \hline
+\end{tabularx}
+
+\subsection{Chatbot $\rightarrow$ Chat}
+\texttt{POST /api/v1/chat/conversations/transfer}. Auth S2S. Donn\'ees~: \texttt{user\_id} (\texttt{users\_auth.id}), \texttt{platform\_id}, \texttt{bot\_history}, \texttt{context}.
+
+\subsection{Chat $\rightarrow$ M\'edia (futur)}
+\texttt{GET /api/v1/media/\{id\}}. Quand \texttt{attachments\_enabled = true}. Messages avec \texttt{media\_ids : UUID[]}.
+
+% === SECTION 11 ===
+\section{Infrastructure}
+
+\subsection{Composants}
+PostgreSQL, Redis, Socket.io + Redis Adapter, RabbitMQ, Docker, LB sticky-session, index GIN. Tous MVP.
+
+\subsection{Variables d'Environnement}
+\begin{tabularx}{\textwidth}{|p{5.0cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Variable} & \color{white}\textbf{Description} \\ \hline
+  \texttt{DATABASE\_URL} & PostgreSQL \\ \hline
+  \rowcolor{TableAlt}\texttt{REDIS\_URL} & Redis \\ \hline
+  \texttt{AUTH\_SERVICE\_URL} & Auth v2.1 \\ \hline
+  \rowcolor{TableAlt}\texttt{USERS\_SERVICE\_URL} & Users v1.0 \\ \hline
+  \texttt{NOTIFICATION\_SERVICE\_URL} & Notification v1.2 \\ \hline
+  \rowcolor{TableAlt}\texttt{BROKER\_URL} & RabbitMQ \\ \hline
+  \texttt{SOCKET\_IO\_CORS\_ORIGIN} & Origines WS \\ \hline
+  \rowcolor{TableAlt}\texttt{TYPING\_TIMEOUT\_MS} & D\'efaut 3000 \\ \hline
+  \texttt{MESSAGE\_EDIT\_DELAY\_MIN} & D\'elai edit (min) \\ \hline
+  \rowcolor{TableAlt}\texttt{TRANSFER\_TIMEOUT\_MIN} & D\'efaut 10 \\ \hline
+  \texttt{SECRET\_KEY} & Cl\'e Node.js \\ \hline
+  \rowcolor{TableAlt}\texttt{USERS\_CACHE\_TTL\_SEC} & D\'efaut 300 \\ \hline
+  \texttt{AUTH\_CACHE\_TTL\_SEC} & D\'efaut 30 \\ \hline
+\end{tabularx}
+
+\subsection{Docker Compose}
+\begin{lstlisting}[language=bash, caption=docker-compose.yml]
+services:
+  chat-service:
+    build: ./chat-service
+    ports: ["3005:3005"]
+    environment:
+      - DATABASE_URL=postgresql://...
+      - REDIS_URL=redis://redis:6379
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - USERS_SERVICE_URL=http://user-service:3002
+      - NOTIFICATION_SERVICE_URL=http://notif-service:3004
+      - BROKER_URL=amqp://rabbitmq:5672
+    depends_on: [postgres, redis, rabbitmq]
+  postgres:
+    image: postgres:16-alpine
+    volumes: [chat_pg_data:/var/lib/postgresql/data]
+  redis:
+    image: redis:7-alpine
+  rabbitmq:
+    image: rabbitmq:3-management
+volumes:
+  chat_pg_data:
+\end{lstlisting}
+
+% === SECTION 12 ===
+\section{Recommandations \& \'Evolutions}
+\subsection{Scaling WebSocket}
+Multi-instances Socket.io + LB sticky-session + Redis Adapter.
+\subsection{Pi\`eces Jointes}
+Champ \texttt{media\_ids} via Service M\'edia. Chat ne stocke jamais les fichiers.
+\subsection{E2E}
+Signal Protocol pour conversations directes sensibles.
+\subsection{Archivage}
+Conversations inactives 12 mois+ vers \texttt{messages\_archive}. Job p\'eriodique. Lecture seule.
+\subsection{Suppression}
+Soft delete message (auteur), soft delete conversation (admin), archivage (inactif).
+
+% === ANNEXES ===
+\newpage\appendix
+
+\section{Annexe A --- Diagramme de Classes (PlantUML)}
+\begin{lstlisting}[caption={PlantUML --- Classes Chat Service v1.2},basicstyle=\ttfamily\scriptsize]
+@startuml Chat Service - Class Diagram v1.2
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "conversations" as conv {
+  * id : UUID <<PK>>
+  --
+  * type : VARCHAR(20)
+  * platform_id : UUID <<FK logique -> Auth>>
+  name : VARCHAR(255)
+  description : TEXT
+  is_public : BOOLEAN
+  * created_by : UUID
+  metadata : JSONB
+  deleted_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "conversation_participants" as part {
+  * conversation_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  --
+  * role : VARCHAR(20)
+  * joined_at : TIMESTAMPTZ
+  left_at : TIMESTAMPTZ
+}
+
+entity "messages" as msg {
+  * id : UUID <<PK>>
+  --
+  * conversation_id : UUID <<FK>>
+  * sender_id : UUID
+  content : TEXT
+  parent_id : UUID <<FK self>>
+  * is_deleted : BOOLEAN
+  edited_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+}
+
+entity "message_reactions" as react {
+  * message_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  * emoji : VARCHAR(10) <<PK>>
+  --
+  * created_at : TIMESTAMPTZ
+}
+
+entity "read_cursors" as cursor {
+  * conversation_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  --
+  last_read_message_id : UUID <<FK>>
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "transfers" as xfer {
+  * id : UUID <<PK>>
+  --
+  * conversation_id : UUID <<FK, UNIQUE>>
+  * user_id : UUID
+  operator_id : UUID
+  * status : VARCHAR(20)
+  * bot_history : JSONB
+  context : JSONB
+  taken_at : TIMESTAMPTZ
+  closed_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+}
+
+entity "platform_capabilities" as cap {
+  * platform_id : UUID <<PK>>
+  --
+  direct_enabled : BOOLEAN = true
+  channels_enabled : BOOLEAN = true
+  read_receipts_enabled : BOOLEAN = true
+  typing_enabled : BOOLEAN = true
+  presence_enabled : BOOLEAN = true
+  reactions_enabled : BOOLEAN = true
+  transfer_enabled : BOOLEAN = false
+  message_edit_enabled : BOOLEAN = true
+  message_delete_enabled : BOOLEAN = true
+  message_search_enabled : BOOLEAN = true
+  attachments_enabled : BOOLEAN = false
+  max_message_length : INT = 4096
+  rate_limit_per_user : INT = 30
+  rate_limit_per_conv : INT = 100
+  max_channel_members : INT = 500
+  * updated_at : TIMESTAMPTZ
+}
+
+note as N1
+  <b>Redis-only</b>
+  Presence : user_id, status, last_seen_at
+  Typing : conversation_id, user_id
+end note
+
+conv "1" -- "*" part
+conv "1" -- "*" msg
+conv "1" -- "0..1" xfer
+conv "1" -- "*" cursor
+msg "1" -- "*" react
+msg "0..1" -- "*" msg : parent_id
+@enduml
+\end{lstlisting}
+
+\section{Annexe B --- MLD (PlantUML)}
+\begin{lstlisting}[caption={PlantUML --- MLD Chat Service v1.2},basicstyle=\ttfamily\scriptsize]
+@startuml Chat Service - MLD v1.2
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "conversations" as conv {
+  * id : UUID <<PK>>
+  --
+  * type : VARCHAR(20)
+  * platform_id : UUID
+  name : VARCHAR(255)
+  description : TEXT
+  is_public : BOOLEAN
+  * created_by : UUID
+  metadata : JSONB
+  deleted_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+entity "conversation_participants" as part {
+  * conversation_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  --
+  * role : VARCHAR(20)
+  * joined_at : TIMESTAMPTZ
+  left_at : TIMESTAMPTZ
+}
+entity "messages" as msg {
+  * id : UUID <<PK>>
+  --
+  * conversation_id : UUID <<FK>>
+  * sender_id : UUID
+  content : TEXT
+  parent_id : UUID <<FK self>>
+  * is_deleted : BOOLEAN = false
+  edited_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  ..
+  <<INDEX>> (conversation_id, created_at DESC)
+  <<GIN>> content
+}
+entity "message_reactions" as react {
+  * message_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  * emoji : VARCHAR(10) <<PK>>
+  --
+  * created_at : TIMESTAMPTZ
+}
+entity "read_cursors" as cursor {
+  * conversation_id : UUID <<PK, FK>>
+  * user_id : UUID <<PK>>
+  --
+  last_read_message_id : UUID <<FK>>
+  * updated_at : TIMESTAMPTZ
+}
+entity "transfers" as xfer {
+  * id : UUID <<PK>>
+  --
+  * conversation_id : UUID <<FK, UNIQUE>>
+  * user_id : UUID
+  operator_id : UUID
+  * status : VARCHAR(20)
+  * bot_history : JSONB
+  context : JSONB
+  taken_at : TIMESTAMPTZ
+  closed_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+}
+entity "platform_capabilities" as cap {
+  * platform_id : UUID <<PK>>
+  --
+  (all feature flags + limits)
+  * updated_at : TIMESTAMPTZ
+}
+conv ||--o{ part
+conv ||--o{ msg
+conv ||--o| xfer
+conv ||--o{ cursor
+msg ||--o{ react
+msg |o--o{ msg : parent_id
+@enduml
+\end{lstlisting}
+
+% === GLOSSAIRE ===
+\newpage
+\section*{Annexe C --- Glossaire}
+\addcontentsline{toc}{section}{Annexe C --- Glossaire}
+
+\begin{tabularx}{\textwidth}{|p{3.5cm}|X|} \hline
+  \rowcolor{TableHeader}\color{white}\textbf{Terme} & \color{white}\textbf{D\'efinition} \\ \hline
+  WebSocket & Communication bidirectionnelle persistante sur TCP \\ \hline
+  \rowcolor{TableAlt}Socket.io & Librairie WebSocket avec fallback et rooms \\ \hline
+  Room & Canal virtuel Socket.io par conversation \\ \hline
+  \rowcolor{TableAlt}Redis Adapter & Sync \'ev\'enements entre instances Socket.io \\ \hline
+  Pub/Sub & Diffusion \'ev\'enements Redis inter-processus \\ \hline
+  \rowcolor{TableAlt}Sticky Session & Affinit\'e LB client$\rightarrow$instance \\ \hline
+  S2S & Service-to-Service auth \\ \hline
+  \rowcolor{TableAlt}Feature Flag & Capacit\'e activable/d\'esactivable par plateforme \\ \hline
+  Typing & ``X est en train d'\'ecrire'' \\ \hline
+  \rowcolor{TableAlt}Curseur de lecture & Dernier message lu par participant \\ \hline
+  Transfert & Conversation bot$\rightarrow$humain \\ \hline
+  \rowcolor{TableAlt}Soft delete & Suppression logique \\ \hline
+  E2E & Chiffrement bout en bout \\ \hline
+  \rowcolor{TableAlt}TTL & Dur\'ee de vie cache Redis \\ \hline
+  Backpressure & Contr\^ole flux si surcharge \\ \hline
+  \rowcolor{TableAlt}\texttt{users\_auth.id} & ID technique Auth (= \texttt{sub} JWT) \\ \hline
+  \texttt{users\_profiles.id} & ID profil Users (utilis\'e par Notification) \\ \hline
+  \rowcolor{TableAlt}Verrou optimiste & UPDATE conditionnel (pas de lock) \\ \hline
+\end{tabularx}
+
+\vspace{2cm}
+\begin{center}
+  \color{AGGray}\small
+  \textbf{AG Technologies} --- Document confidentiel \`a usage interne exclusivement.\\
+  \textit{Chat Service CDC v1.2 --- \today}
+\end{center}
+
+\end{document}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\7.chatbot.txt =====
+`
+\documentclass[11pt,a4paper]{article}
+
+% â”€â”€ Encodage & langue â”€â”€
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% â”€â”€ Mise en page â”€â”€
+\usepackage[top=2cm,bottom=2cm,left=1.8cm,right=1.8cm]{geometry}
+\usepackage{parskip}
+\usepackage{setspace}
+\setstretch{1.02}
+
+% â”€â”€ Couleurs â€“ thÃ¨me Chatbot IA (violet / cyan / sarcelle) â”€â”€
+\usepackage[table,dvipsnames]{xcolor}
+\definecolor{aiprimary}{HTML}{7C3AED}      % violet profond
+\definecolor{aisecondary}{HTML}{06B6D4}    % cyan vif
+\definecolor{aiaccent}{HTML}{A78BFA}       % lavande
+\definecolor{aidark}{HTML}{1E1B4B}         % indigo trÃ¨s foncÃ©
+\definecolor{ailight}{HTML}{F3F0FF}        % lavande pÃ¢le
+\definecolor{aigray}{HTML}{64748B}         % gris ardoise
+\definecolor{aicode}{HTML}{F8FAFC}         % fond code
+\definecolor{aiwarn}{HTML}{F59E0B}         % ambre
+\definecolor{aigreen}{HTML}{10B981}        % Ã©meraude
+\definecolor{aitable}{HTML}{EDE9FE}        % fond lignes paires tableau
+
+% â”€â”€ Polices â”€â”€
+
+% â”€â”€ Graphiques & tableaux â”€â”€
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{colortbl}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% â”€â”€ Liens & mÃ©ta â”€â”€
+\usepackage[hidelinks,colorlinks=true,linkcolor=aiprimary,urlcolor=aisecondary,citecolor=aiprimary]{hyperref}
+
+% â”€â”€ Listes â”€â”€
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.4em,itemsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=2pt,parsep=0pt}
+
+% â”€â”€ Code / JSON â”€â”€
+\usepackage{listings}
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  string=[s]{"}{"},
+  stringstyle=\color{aiprimary},
+  comment=[l]{//},
+  commentstyle=\color{aigray}\itshape,
+  morestring=[b]',
+  literate=
+    *{:}{{{\color{aidark}:}}}{1}
+    {,}{{{\color{aidark},}}}{1}
+    {\{}{{{\color{aiprimary}\{}}}{1}
+    {\}}{{{\color{aiprimary}\}}}}{1}
+    {[}{{{\color{aiprimary}[}}}{1}
+    {]}{{{\color{aiprimary}]}}}{1}
+    {true}{{{\color{aigreen}true}}}{4}
+    {false}{{{\color{aiwarn}false}}}{5}
+    {null}{{{\color{aigray}null}}}{4},
+}
+\lstset{
+  language=json,
+  backgroundcolor=\color{aicode},
+  frame=single,
+  rulecolor=\color{aiaccent!40},
+  framesep=6pt,
+  xleftmargin=4pt,
+  xrightmargin=4pt,
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=2,
+  aboveskip=4pt,
+  belowskip=4pt,
+}
+
+% â”€â”€ Sections personnalisÃ©es â”€â”€
+\usepackage{titlesec}
+\titleformat{\section}
+  {\Large\bfseries\color{aiprimary}}
+  {\thesection}{0.8em}{}[\color{aiaccent}\titlerule]
+\titleformat{\subsection}
+  {\large\bfseries\color{aidark}}
+  {\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{aiprimary}}
+  {\thesubsubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{14pt}{6pt}
+\titlespacing*{\subsection}{0pt}{10pt}{3pt}
+\titlespacing*{\subsubsection}{0pt}{6pt}{2pt}
+
+% â”€â”€ En-tÃªte / Pied de page â”€â”€
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{aiprimary}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0.3pt}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{aiaccent!50}\leaders\hrule height \footrulewidth\hfill}}
+\fancyhead[L]{\small\color{aigray}\textbf{AGT â€” Service Chatbot IA}}
+\fancyhead[R]{\small\color{aigray}v1.2 â€” Confidentiel}
+\fancyfoot[C]{\small\color{aigray}\thepage}
+
+% â”€â”€ BoÃ®tes colorÃ©es â”€â”€
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+\newtcolorbox{apibox}[1]{
+  enhanced,breakable,
+  colback=ailight,colframe=aiprimary,
+  coltitle=white,fonttitle=\bfseries\ttfamily,
+  title=#1,
+  boxrule=0.6pt,arc=3pt,
+  top=4pt,bottom=4pt,left=6pt,right=6pt
+}
+
+\newtcolorbox{infobox}[1][]{
+  enhanced,breakable,
+  colback=ailight,colframe=aiaccent,
+  boxrule=0.5pt,arc=3pt,
+  top=4pt,bottom=4pt,left=6pt,right=6pt,
+  fontupper=\small,#1
+}
+
+\newtcolorbox{warnbox}[1][]{
+  enhanced,breakable,
+  colback=aiwarn!8,colframe=aiwarn,
+  boxrule=0.5pt,arc=3pt,
+  top=4pt,bottom=4pt,left=6pt,right=6pt,
+  fontupper=\small,#1
+}
+
+% â”€â”€ Commandes utilitaires â”€â”€
+\newcommand{\httpmethod}[1]{\texttt{\bfseries\color{aiprimary}#1}}
+\newcommand{\endpoint}[1]{\texttt{\color{aidark}#1}}
+\newcommand{\code}[1]{\texttt{\color{aiprimary}#1}}
+\newcommand{\field}[1]{\texttt{\small #1}}
+
+% â”€â”€ TdM â”€â”€
+\usepackage{tocloft}
+\renewcommand{\cftsecfont}{\bfseries\color{aiprimary}}
+\renewcommand{\cftsecpagefont}{\bfseries\color{aiprimary}}
+\renewcommand{\cftsubsecfont}{\color{aidark}}
+\renewcommand{\cfttoctitlefont}{\Large\bfseries\color{aiprimary}}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\begin{document}
+
+% â”€â”€ PAGE DE COUVERTURE â”€â”€
+\thispagestyle{empty}
+\begin{center}
+\vspace*{1.5cm}
+
+% Bande dÃ©corative supÃ©rieure
+\noindent\makebox[\textwidth]{%
+  \colorbox{aiprimary}{\makebox[\textwidth][c]{\rule{0pt}{6pt}}}%
+}
+\vspace{2pt}
+\noindent\makebox[\textwidth]{%
+  \colorbox{aisecondary}{\makebox[\textwidth][c]{\rule{0pt}{3pt}}}%
+}
+
+\vspace{2cm}
+
+{\fontsize{14}{16}\selectfont\color{aigray}\textsc{AGT â€” Architecture de Services PartagÃ©s}}
+
+\vspace{0.8cm}
+
+{\fontsize{28}{34}\selectfont\bfseries\color{aiprimary}Cahier des Charges}
+
+\vspace{0.3cm}
+
+{\fontsize{22}{26}\selectfont\bfseries\color{aidark}Service Chatbot IA CentralisÃ©}
+
+\vspace{0.4cm}
+
+{\fontsize{12}{14}\selectfont\color{aigray}\textit{Le cerveau conversationnel multi-IA de l'Ã©cosystÃ¨me}}
+
+\vspace{0.6cm}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{>{\color{aigray}\bfseries}r @{\hspace{12pt}} l}
+DÃ©pendances validÃ©es & Auth v2.1, Users v1.0, Chat v1.2, Notification v1.2, MÃ©dia v1.4 \\
+Version & 1.2 \\
+Date & Mars 2026 \\
+Statut & Implementation-ready (validÃ© architecture) \\
+Classification & Confidentiel \\
+\end{tabular}
+
+\vspace{2.5cm}
+
+% Bande dÃ©corative infÃ©rieure
+\noindent\makebox[\textwidth]{%
+  \colorbox{aisecondary}{\makebox[\textwidth][c]{\rule{0pt}{3pt}}}%
+}
+\vspace{2pt}
+\noindent\makebox[\textwidth]{%
+  \colorbox{aiprimary}{\makebox[\textwidth][c]{\rule{0pt}{6pt}}}%
+}
+
+\end{center}
+\newpage
+
+% â”€â”€ HISTORIQUE â”€â”€
+\thispagestyle{fancy}
+
+{\Large\bfseries\color{aiprimary}Historique des RÃ©visions}
+\vspace{6pt}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{c c l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Ver.} & \textbf{\color{white}Date} & \textbf{\color{white}Auteur} & \textbf{\color{white}Description} \\
+\midrule
+1.0 & 2026-03-20 & Ã‰quipe Architecture & CrÃ©ation initiale du cahier des charges \\
+1.1 & 2026-03-30 & Ã‰quipe Architecture & Refonte multi-provider, abstraction canaux, pipeline ingestion, transfert humain, persistance analytique, branching conditionnel flows \\
+1.2 & 2026-03-30 & Ã‰quipe Architecture & Conversation Orchestrator formalisÃ©, Action System standardisÃ©, frontiÃ¨re Search Service documentÃ©e, statut Implementation-ready \\
+\bottomrule
+\end{tabularx}
+
+\vspace{1.2cm}
+
+% â”€â”€ TABLE DES MATIÃˆRES â”€â”€
+\tableofcontents
+\newpage
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Introduction}
+
+Ce document constitue le cahier des charges du \textbf{Service Chatbot IA CentralisÃ©} (ci-aprÃ¨s \og Chatbot Service \fg{}) destinÃ© Ã  l'Ã©cosystÃ¨me de plateformes AGT. Il sert de rÃ©fÃ©rence unique pour la conception, le dÃ©veloppement et l'intÃ©gration avec les autres services.
+
+\subsection*{PÃ©rimÃ¨tre}
+
+Le Chatbot Service est le \textbf{cerveau IA conversationnel multi-provider} de l'Ã©cosystÃ¨me. Il gÃ¨re l'ensemble du cycle de traitement des messages : dÃ©tection d'intention, navigation dans des flux conversationnels, gÃ©nÃ©ration de rÃ©ponses par IA, gestion de la mÃ©moire de conversation et dÃ©clenchement d'actions mÃ©tier. Il est conÃ§u comme un service \textbf{gÃ©nÃ©rique, configurable et multi-canal}, sans logique mÃ©tier codÃ©e en dur. Chaque plateforme configure ses propres bots.
+
+\begin{infobox}
+\textbf{Modes d'utilisation :} Le service fonctionne (1) via le Hub Engine (AGT-Bot $\rightarrow$ WhatsApp), (2) en standalone (AGT-Market, SALMA, applications web), et (3) via connecteur externe (agent vocal, Messenger, Telegram, SMS, etc.).
+\end{infobox}
+
+\begin{warnbox}
+\textbf{NouveautÃ©s v1.1 $\rightarrow$ v1.2 :} Conversation Orchestrator formalisÃ© comme composant central, Action System standardisÃ© (contrat, retry, timeout, auth), frontiÃ¨re avec Search Service documentÃ©e (vector search interne justifiÃ©), statut \textit{implementation-ready}.
+\end{warnbox}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Contexte \& ProblÃ©matique}
+
+\subsection{Contexte}
+
+L'organisation dÃ©veloppe plusieurs plateformes indÃ©pendantes nÃ©cessitant des capacitÃ©s conversationnelles intelligentes :
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Plateforme} & \textbf{\color{white}Statut} & \textbf{\color{white}Besoin IA} \\
+\midrule
+AGT-Bot & En dÃ©veloppement & Chatbot WhatsApp multi-tenant via Hub Engine \\
+AGT-Market & En dÃ©veloppement & Assistant achat, support vendeur \\
+SALMA & Migration prÃ©vue & Assistant conversationnel intÃ©grÃ© \\
+Futures & PlanifiÃ© & CapacitÃ©s IA Ã  la demande \\
+\bottomrule
+\end{tabularx}
+
+\subsection{ProblÃ©matique}
+
+Sans service centralisÃ©, chaque plateforme implÃ©menterait sa propre couche IA, entraÃ®nant : duplication des intÃ©grations avec les providers IA (coÃ»ts \& maintenance), incohÃ©rence de l'expÃ©rience conversationnelle, impossibilitÃ© de mutualiser les bases de connaissances, et multiplication des budgets IA sans contrÃ´le.
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Vision \& Objectifs}
+
+\subsection{Vision}
+
+Un service IA conversationnel unique, gÃ©nÃ©rique et configurable, permettant Ã  toute plateforme de l'Ã©cosystÃ¨me de dÃ©ployer des chatbots intelligents en quelques minutes, sans dÃ©veloppement spÃ©cifique.
+
+\subsection{Objectifs}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{c X X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}\#} & \textbf{\color{white}Objectif} & \textbf{\color{white}Indicateur de succÃ¨s} \\
+\midrule
+O1 & Service IA centralisÃ© & Un seul point d'intÃ©gration pour toutes les plateformes \\
+O2 & Architecture multi-couches & 4 couches de traitement (mots-clÃ©s, flux, IA gÃ©nÃ©rative, fallback) \\
+O3 & Bots gÃ©nÃ©riques & Configuration no-code des bots, intentions, flux \\
+O4 & Multi-provider IA & Plusieurs providers par bot, routing par couche, fallback entre providers \\
+O5 & Multi-canal & Abstraction canal (WhatsApp, web, vocal, SMS, Messenger\ldots) avec adapters \\
+O6 & Performance & $<$ 2s couches 1 \& 2, $<$ 5s couche IA \\
+O7 & Multi-langue & FR + EN minimum, dÃ©tection automatique \\
+O8 & Transfert humain & Escalade vers Service Chat avec contexte complet \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Parties Prenantes \& Utilisateurs}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}RÃ´le} & \textbf{\color{white}Type} & \textbf{\color{white}ResponsabilitÃ©} \\
+\midrule
+Product Owner & Interne & Priorisation des fonctionnalitÃ©s IA \\
+Ã‰quipe Backend & Interne & DÃ©veloppement du service Chatbot \\
+Ã‰quipe Frontend & Interne & IntÃ©gration des widgets de chat \\
+Ã‰quipe IA/ML & Interne & Configuration des modÃ¨les et prompts \\
+DevOps & Interne & Infrastructure, monitoring, scaling \\
+Administrateurs & Interne & Configuration des bots, intentions, flux \\
+Utilisateurs finaux & Externe & Interaction avec les chatbots \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Besoins Fonctionnels}
+
+\subsection{Gestion des Bots}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-BOT-01 & CrÃ©ation d'un bot avec nom, avatar, personnalitÃ©, langues, prompt systÃ¨me & Urgent \\
+F-BOT-02 & Configuration des messages (accueil, fallback, transfert humain) & Urgent \\
+F-BOT-03 & Activation / dÃ©sactivation d'un bot & Urgent \\
+F-BOT-04 & Duplication d'un bot existant & Normale \\
+F-BOT-05 & DÃ©finition du seuil de transfert humain (N Ã©checs) & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Architecture IA Multi-Couches}
+
+\begin{warnbox}
+\textbf{RÃ¨gle fondamentale :} Chaque message entrant traverse sÃ©quentiellement 4 couches de traitement. La premiÃ¨re couche renvoyant un rÃ©sultat avec un score de confiance suffisant produit la rÃ©ponse.
+\end{warnbox}
+
+\subsubsection{Couche 1 â€” Mots-clÃ©s / Intentions}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-INT-01 & CRUD des intentions avec mots-clÃ©s associÃ©s & Urgent \\
+F-INT-02 & Mapping mots-clÃ©s $\rightarrow$ intention avec score de confiance & Urgent \\
+F-INT-03 & Configuration du seuil de confiance par bot & Urgent \\
+F-INT-04 & Endpoint de test d'une intention & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Couche 2 â€” Flux Conversationnels}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-FLW-01 & CRUD des flux conversationnels & Urgent \\
+F-FLW-02 & Arbre de dÃ©cision avec nÅ“uds : question, rÃ©ponse, condition, action & Urgent \\
+F-FLW-03 & Configuration no-code friendly des flux & Urgent \\
+F-FLW-04 & Simulation / test d'un flux & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Couche 3 â€” IA GÃ©nÃ©rative}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-GEN-01 & IntÃ©gration multi-provider IA (OpenAI, Anthropic, Google Gemini, etc.) & Urgent \\
+F-GEN-02 & Contexte enrichi : base de connaissances + historique + personnalitÃ© & Urgent \\
+F-GEN-03 & Routing par couche : provider dÃ©diÃ© par usage (RAG, conversation, traduction) & Urgent \\
+F-GEN-04 & Fallback entre providers (si provider A Ã©choue $\rightarrow$ provider B) & Urgent \\
+F-GEN-05 & Configuration prompt systÃ¨me par bot & Urgent \\
+F-GEN-06 & ParamÃ¨tres modÃ¨le (tempÃ©rature, max tokens) configurables par provider & Normale \\
+F-GEN-07 & Circuit breaker par provider (dÃ©sactivation auto si taux d'erreur Ã©levÃ©) & Normale \\
+F-GEN-08 & Health check pÃ©riodique des providers configurÃ©s & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Couche 4 â€” Fallback}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-FBK-01 & Message de fallback configurable par bot & Urgent \\
+F-FBK-02 & Compteur d'Ã©checs consÃ©cutifs par conversation & Urgent \\
+F-FBK-03 & Logging des messages non rÃ©solus (persistance PostgreSQL) & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Base de Connaissances}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-KB-01 & CRUD des entrÃ©es (FAQ, texte libre, documents PDF) & Urgent \\
+F-KB-02 & Import CSV en masse & Normale \\
+F-KB-03 & CatÃ©gorisation des entrÃ©es & Normale \\
+F-KB-04 & Recherche par similaritÃ© (vector search) & Urgent \\
+F-KB-05 & DonnÃ©es dynamiques via API externe & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{MÃ©moire de Conversation}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-MEM-01 & Historique des N derniers messages par conversation & Urgent \\
+F-MEM-02 & Variables de session (contexte utilisateur) & Urgent \\
+F-MEM-03 & TTL configurable (ex : 30 min d'inactivitÃ©) & Urgent \\
+F-MEM-04 & Stockage Redis (pas de persistance long terme) & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Actions \& IntÃ©grations}
+
+Le bot peut dÃ©clencher des actions mÃ©tier via des API internes ou des workflows configurÃ©s :
+
+\begin{itemize}
+\item CrÃ©er une commande (AGT-Market)
+\item Prendre un rendez-vous (SALMA)
+\item Envoyer un lien de paiement
+\item TransfÃ©rer vers un agent humain (Service Chat)
+\item Appeler un webhook externe
+\end{itemize}
+
+\subsection{Multi-langue}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-LNG-01 & Support FR + EN minimum & Urgent \\
+F-LNG-02 & DÃ©tection automatique de la langue & Urgent \\
+F-LNG-03 & RÃ©ponse dans la langue dÃ©tectÃ©e & Urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Canaux / Connecteurs}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-CHN-01 & Enregistrement d'un canal par bot (WhatsApp, web, vocal, SMS, Messenger, API) & Urgent \\
+F-CHN-02 & Configuration par canal : format rÃ©ponse, taille max, mÃ©dias supportÃ©s, rate limit & Urgent \\
+F-CHN-03 & Adapter pattern : normalisation entrÃ©e/sortie par canal & Urgent \\
+F-CHN-04 & Webhook entrant configurable par canal (pour intÃ©grations push) & Normale \\
+F-CHN-05 & Activation / dÃ©sactivation d'un canal sans impacter le bot & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Transfert Humain}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-TRF-01 & DÃ©clenchement automatique aprÃ¨s N fallbacks consÃ©cutifs & Urgent \\
+F-TRF-02 & Appel S2S vers Service Chat \code{POST /api/v1/chat/conversations/transfer} & Urgent \\
+F-TRF-03 & Transmission du contexte (bot\_history, variables session, intent dÃ©tectÃ©) & Urgent \\
+F-TRF-04 & Suivi du statut transfert (en\_attente, pris\_en\_charge, cloture) & Urgent \\
+F-TRF-05 & Reprise automatique par le bot aprÃ¨s clÃ´ture opÃ©rateur & Normale \\
+F-TRF-06 & DÃ©clenchement manuel via action dans un flow & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Ingestion Documentaire}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-ING-01 & Upload de documents (PDF, TXT, DOCX, CSV) via MÃ©dia Service & Urgent \\
+F-ING-02 & Worker asynchrone : extraction texte $\rightarrow$ chunking $\rightarrow$ embedding & Urgent \\
+F-ING-03 & Statut de traitement par document (pending, processing, done, error) & Urgent \\
+F-ING-04 & RÃ©-ingestion manuelle d'un document modifiÃ© & Normale \\
+F-ING-05 & Suppression en cascade des embeddings lors de suppression document & Normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Statistiques}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}FonctionnalitÃ©} & \textbf{\color{white}PrioritÃ©} \\
+\midrule
+F-STA-01 & Volume de messages par bot & Urgent \\
+F-STA-02 & Taux de rÃ©solution (sans fallback) & Urgent \\
+F-STA-03 & Taux de fallback & Urgent \\
+F-STA-04 & Top intentions dÃ©tectÃ©es & Normale \\
+F-STA-05 & Messages non rÃ©pondus & Normale \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Besoins Non-Fonctionnels}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X l}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ID} & \textbf{\color{white}CatÃ©gorie} & \textbf{\color{white}Exigence} & \textbf{\color{white}Cible} \\
+\midrule
+NF-01 & Performance & Temps de rÃ©ponse couches 1 \& 2 & $<$ 2s \\
+NF-02 & Performance & Temps de rÃ©ponse couche IA & $<$ 5s \\
+NF-03 & Performance & Throughput & 200 req/s \\
+NF-04 & DisponibilitÃ© & Uptime & 99.9\% \\
+NF-05 & SÃ©curitÃ© & Authentification Bearer via Service Auth & Obligatoire \\
+NF-06 & SÃ©curitÃ© & Auth S2S pour appels inter-services (transfert, etc.) & Obligatoire \\
+NF-07 & SÃ©curitÃ© & Chiffrement des clÃ©s API IA (AES-256) & Obligatoire \\
+NF-08 & SÃ©curitÃ© & Rate limiting par bot et par canal & Configurable \\
+NF-09 & ScalabilitÃ© & Architecture stateless, multi-instance & Obligatoire \\
+NF-10 & DonnÃ©es & MÃ©moire conversation : Redis TTL (court terme) & Obligatoire \\
+NF-11 & DonnÃ©es & Logs analytiques : PostgreSQL (long terme) & Obligatoire \\
+NF-12 & ObservabilitÃ© & Logs structurÃ©s JSON, request ID, correlation ID & Obligatoire \\
+NF-13 & RÃ©silience & Fallback obligatoire si toutes couches Ã©chouent & Obligatoire \\
+NF-14 & RÃ©silience & Circuit breaker par provider IA & Obligatoire \\
+NF-15 & ExtensibilitÃ© & Multi-provider IA par bot (Strategy + routing) & Obligatoire \\
+NF-16 & ExtensibilitÃ© & Multi-canal via adapter pattern & Obligatoire \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Architecture Technique}
+
+\subsection{Vue d'ensemble}
+
+Le Chatbot Service est un microservice REST stateless, dÃ©ployÃ© en conteneur Docker. Il expose une API JSON consommÃ©e par les plateformes clientes (via Hub Engine ou en direct) et interagit avec les providers IA externes.
+
+\subsection{Architecture IA Multi-Couches â€” Pipeline de traitement}
+
+\begin{infobox}
+\textbf{Pipeline sÃ©quentiel :} Message $\rightarrow$ \textbf{Couche 1} (mots-clÃ©s) $\rightarrow$ \textbf{Couche 2} (flux) $\rightarrow$ \textbf{Couche 3} (IA gÃ©nÃ©rative) $\rightarrow$ \textbf{Couche 4} (fallback). Chaque couche peut court-circuiter le pipeline si le score de confiance dÃ©passe le seuil configurÃ©.
+\end{infobox}
+
+\subsection{Composant Central : Conversation Orchestrator}
+
+Le \textbf{Conversation Orchestrator} est le composant interne qui pilote le cycle de vie complet d'un message entrant. Il n'est pas un microservice sÃ©parÃ© : c'est une classe/module Python central dans le codebase du Chatbot Service.
+
+\subsubsection{ResponsabilitÃ©s}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}ResponsabilitÃ©} & \textbf{\color{white}DÃ©tail} \\
+\midrule
+Channel Validation & VÃ©rifie que le canal est actif pour le bot, charge la config canal (adapter) \\
+Context Loading & Charge le contexte conversation depuis Redis (historique, variables, compteur fallbacks) \\
+Language Detection & DÃ©tecte la langue du message si non fournie \\
+Pipeline Routing & ExÃ©cute sÃ©quentiellement les couches 1 $\rightarrow$ 2 $\rightarrow$ 3 $\rightarrow$ 4, court-circuite dÃ¨s confiance suffisante \\
+Provider Selection & Pour la couche 3, sÃ©lectionne le provider selon \code{purpose} + \code{priority}, applique le circuit breaker \\
+Action Execution & Si une couche ou un flow dÃ©clenche une action, exÃ©cute via l'Action Executor \\
+Transfer Decision & Si \code{consecutive\_fallbacks} $\geq$ \code{human\_transfer\_after}, dÃ©clenche le transfert S2S vers Chat \\
+Response Adaptation & Adapte la rÃ©ponse au canal (taille, format, mÃ©dias) via le Channel Adapter \\
+Context Saving & Sauvegarde le contexte mis Ã  jour dans Redis \\
+Logging & Ã‰crit de maniÃ¨re asynchrone dans \code{conversation\_logs} (fire-and-forget via Celery) \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Flux d'exÃ©cution}
+
+\begin{enumerate}[leftmargin=2em]
+\item \code{POST /chatbot/converse} reÃ§u par le contrÃ´leur Django
+\item Le contrÃ´leur instancie l'\code{Orchestrator} avec le payload
+\item L'Orchestrator charge le bot, valide le canal, charge le contexte Redis
+\item L'Orchestrator exÃ©cute le pipeline :
+  \begin{enumerate}
+  \item \textbf{Couche 1} â€” \code{IntentResolver} : matching mots-clÃ©s $\rightarrow$ si confiance $\geq$ seuil, retourne
+  \item \textbf{Couche 2} â€” \code{FlowEngine} : si un flow est actif ou dÃ©clenchÃ© par intent, exÃ©cute les nÅ“uds (avec branching conditionnel)
+  \item \textbf{Couche 3} â€” \code{AiEngine} : sÃ©lectionne le provider (\code{purpose=conversation}), construit le prompt (system\_prompt + KB context + historique), appelle l'API. Si Ã©chec, tente le fallback provider (\code{priority=1})
+  \item \textbf{Couche 4} â€” \code{FallbackHandler} : retourne le \code{fallback\_message}, incrÃ©mente le compteur, Ã©value le transfert humain
+  \end{enumerate}
+\item L'Orchestrator adapte la rÃ©ponse via le \code{ChannelAdapter}
+\item L'Orchestrator sauvegarde le contexte dans Redis, enqueue le log async
+\item Le contrÃ´leur retourne la rÃ©ponse JSON
+\end{enumerate}
+
+\begin{warnbox}
+\textbf{RÃ¨gle :} L'Orchestrator ne contient AUCUNE logique mÃ©tier. Il orchestre des composants configurables. Toute la ``connaissance'' vient de la base de donnÃ©es (intentions, flows, prompts, actions).
+\end{warnbox}
+
+\subsection{Action System â€” Contrat StandardisÃ©}
+
+Toute action dÃ©clenchÃ©e par un flow node ou par le bot (table \code{bot\_actions}, \code{flow\_actions}) suit un contrat standardisÃ© exÃ©cutÃ© par l'\textbf{Action Executor}, un sous-composant de l'Orchestrator.
+
+\subsubsection{Contrat d'une Action}
+
+\begin{lstlisting}
+{
+  "type": "api_call",
+  "service": "market",
+  "endpoint": "/api/v1/orders",
+  "method": "POST",
+  "auth": "s2s",
+  "headers": {"X-Bot-Id": "{{bot_id}}"},
+  "payload_template": {
+    "user_id": "{{sender_id}}",
+    "product_id": "{{flow_var.product_id}}"
+  },
+  "timeout_ms": 3000,
+  "retry": {
+    "enabled": true,
+    "max_attempts": 2,
+    "backoff_ms": 500
+  },
+  "on_failure": "continue"
+}
+\end{lstlisting}
+
+\subsubsection{Types d'actions supportÃ©s}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Type} & \textbf{\color{white}Auth} & \textbf{\color{white}Description} \\
+\midrule
+\code{api\_call} & S2S / Bearer & Appel REST vers un service interne AGT \\
+\code{webhook} & Custom headers & Appel HTTP vers un endpoint externe \\
+\code{transfer\_human} & S2S & DÃ©clenche un transfert vers le Service Chat \\
+\code{send\_notification} & S2S & Envoie une notification via le Service Notification \\
+\code{set\_variable} & â€” & Modifie une variable de session (Redis) \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{RÃ¨gles d'exÃ©cution}
+
+\begin{itemize}
+\item \textbf{Auth S2S :} utilise le \code{client\_id} / \code{client\_secret} du Chatbot Service enregistrÃ© dans Auth v2.1 (endpoint \code{POST /auth/s2s/token}).
+\item \textbf{Template variables :} les \code{\{\{...\}\}} sont rÃ©solus au runtime depuis le contexte (sender\_id, bot\_id, flow variables, session variables).
+\item \textbf{Timeout :} dÃ©faut 3000ms, configurable par action.
+\item \textbf{Retry :} optionnel, exponential backoff, max 3 tentatives.
+\item \textbf{on\_failure :} \code{continue} (ignore et poursuit le flow) ou \code{abort} (retourne une erreur au user).
+\item \textbf{Logging :} chaque exÃ©cution d'action est loggÃ©e (succÃ¨s/Ã©chec, durÃ©e, HTTP status).
+\end{itemize}
+
+\subsection{FrontiÃ¨re avec le Service Recherche}
+
+\begin{warnbox}
+\textbf{DÃ©cision d'architecture :} Le Chatbot Service possÃ¨de sa \textbf{propre} capacitÃ© de vector search (pgvector) pour la knowledge base interne des bots. Il n'utilise PAS le Service Recherche v1.2 pour cela.
+\end{warnbox}
+
+\subsubsection{Justification}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}CritÃ¨re} & \textbf{\color{white}Service Recherche v1.2} & \textbf{\color{white}Chatbot KB (pgvector)} \\
+\midrule
+PÃ©rimÃ¨tre & DonnÃ©es mÃ©tier plateformes (produits, FAQ, formations) & Knowledge base privÃ©e par bot (RAG) \\
+Technologie & Elasticsearch (full-text + futur dense\_vector) & pgvector (similaritÃ© cosinus native PostgreSQL) \\
+Latence cible & $<$ 200ms & $<$ 100ms (critique pour pipeline temps rÃ©el) \\
+Cycle de vie & Index gÃ©rÃ©s par les plateformes & Embeddings gÃ©rÃ©s par le pipeline d'ingestion interne \\
+SÃ©mantique MVP & Full-text + scoring (embeddings = roadmap future) & Vector search = MVP day 1 \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Point d'intÃ©gration futur}
+
+Quand le Service Recherche v1.2+ implÃ©mentera la recherche sÃ©mantique par embeddings (dense\_vector Elasticsearch), le Chatbot Service pourra optionnellement dÃ©lÃ©guer la recherche KB via un adapter :
+
+\begin{itemize}
+\item \code{search\_backend: "internal"} $\rightarrow$ pgvector (dÃ©faut, MVP)
+\item \code{search\_backend: "search\_service"} $\rightarrow$ appel REST vers Search Service
+\end{itemize}
+
+Ce choix sera configurable par bot via \code{bot\_configs} (\code{config\_key: "search\_backend"}).
+
+\subsection{Stack Technique}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Composant} & \textbf{\color{white}Technologie} \\
+\midrule
+Langage \& Framework & Python 3.11+ / Django REST Framework \\
+Base de donnÃ©es & PostgreSQL 15+ \\
+Cache / Contexte & Redis 7+ (mÃ©moire conversation, sessions, rate limiting) \\
+Recherche vectorielle & pgvector ou Elasticsearch \\
+Providers IA & OpenAI API, Anthropic API (interchangeables) \\
+Message Broker & RabbitMQ ou Redis Streams \\
+Conteneurisation & Docker + Docker Compose \\
+CI/CD & GitHub Actions \\
+\bottomrule
+\end{tabularx}
+
+\subsection{DÃ©pendances Externes \& Services}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Service} & \textbf{\color{white}Type} & \textbf{\color{white}Usage} \\
+\midrule
+Auth Service & Interne & Validation des tokens Bearer + auth S2S (obligatoire) \\
+Chat Service & Interne & Transfert vers agent humain (S2S : \code{POST /api/v1/chat/conversations/transfer}) \\
+User Service & Interne & DonnÃ©es utilisateur pour contexte, rÃ´les admin \\
+Notification Service & Interne & Notifications push liÃ©es aux conversations \\
+MÃ©dia Service & Interne & Gestion des fichiers / images / documents uploadÃ©s \\
+OpenAI / Anthropic / Google & Externe & Providers IA gÃ©nÃ©rative (couche 3) â€” multi-provider par bot \\
+Elasticsearch / pgvector & Interne & Recherche par similaritÃ© (knowledge base) \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}
+\textbf{RÃ¨gle d'architecture :} Le Chatbot Service ne contient aucune logique mÃ©tier en dur. Toute la configuration (intentions, flux, prompts, actions) est stockÃ©e en base et pilotÃ©e par API.
+\end{warnbox}
+
+\subsection{Workers Asynchrones (Celery)}
+
+Le service utilise des workers Celery pour les tÃ¢ches lourdes ou pÃ©riodiques :
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Worker} & \textbf{\color{white}DÃ©clencheur} & \textbf{\color{white}RÃ´le} \\
+\midrule
+\code{ingest\_document} & Event (upload doc) & Extraction texte $\rightarrow$ chunking $\rightarrow$ embedding $\rightarrow$ insertion KB \\
+\code{aggregate\_stats} & Cron (toutes les heures) & AgrÃ¨ge \code{conversation\_logs} $\rightarrow$ insÃ¨re/met Ã  jour \code{bot\_stats} \\
+\code{health\_check\_providers} & Cron (toutes les 5 min) & Ping les providers IA, met Ã  jour circuit breaker \\
+\code{cleanup\_redis\_sessions} & Cron (quotidien) & Purge les sessions expirÃ©es dans Redis \\
+\bottomrule
+\end{tabularx}
+
+\subsection{StratÃ©gie de Persistance}
+
+\begin{infobox}
+\textbf{SÃ©paration mÃ©moire / analytique :}
+\begin{itemize}
+\item \textbf{Redis} (TTL configurable, dÃ©faut 30 min) : contexte conversation en cours, variables de session, compteur fallbacks consÃ©cutifs. Pas de persistance long terme.
+\item \textbf{PostgreSQL} \code{conversation\_logs} : chaque Ã©change est loggÃ© de maniÃ¨re asynchrone (fire-and-forget) pour les analytics, le dashboard stats, et le dataset de fine-tuning.
+\item \textbf{PostgreSQL} \code{bot\_stats} : agrÃ©gation horaire par le worker \code{aggregate\_stats} Ã  partir des \code{conversation\_logs}.
+\end{itemize}
+\end{infobox}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{ModÃ©lisation}
+
+\subsection{Diagramme de Classes}
+
+La figure~\ref{fig:class-diagram} prÃ©sente le diagramme de classes complet du Service Chatbot IA. Il illustre les 13 entitÃ©s principales et leurs relations.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{images/diagramme_classes_chatbot.png}
+  \caption{Diagramme de classes â€” Service Chatbot IA CentralisÃ©}
+  \label{fig:class-diagram}
+\end{figure}
+
+\subsection{MLD â€” ModÃ¨le Logique de DonnÃ©es}
+
+\subsubsection{Table \code{bots}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant unique \\
+platform\_id & UUID & NOT NULL & Plateforme propriÃ©taire \\
+name & VARCHAR(100) & NOT NULL & Nom du bot \\
+slug & VARCHAR(100) & UNIQUE & Slug URL-friendly \\
+avatar\_url & VARCHAR(500) & NULL & URL de l'avatar \\
+personality & TEXT & NULL & Description de la personnalitÃ© \\
+system\_prompt & TEXT & NULL & Prompt systÃ¨me pour l'IA \\
+welcome\_message & TEXT & NULL & Message d'accueil \\
+fallback\_message & TEXT & NULL & Message de fallback \\
+languages & JSONB & DEFAULT '["fr"]' & Langues supportÃ©es \\
+confidence\_threshold & DECIMAL(3,2) & DEFAULT 0.7 & Seuil de confiance \\
+human\_transfer\_after & INT & DEFAULT 3 & Transfert aprÃ¨s N Ã©checs \\
+is\_active & BOOLEAN & DEFAULT true & Bot actif \\
+version & INT & DEFAULT 1 & Version du bot (incrÃ©mentÃ©e Ã  chaque publication) \\
+status & VARCHAR(20) & DEFAULT 'draft' & draft, published, archived \\
+created\_at & TIMESTAMPTZ & NOT NULL & Date de crÃ©ation \\
+updated\_at & TIMESTAMPTZ & NOT NULL & DerniÃ¨re modification \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{bot\_configs}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+config\_key & VARCHAR(100) & NOT NULL & ClÃ© de configuration \\
+config\_value & JSONB & NOT NULL & Valeur \\
+created\_at & TIMESTAMPTZ & NOT NULL & CrÃ©ation \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}
+{\small Contrainte unique : (\field{bot\_id}, \field{config\_key}).}
+
+\subsubsection{Table \code{bot\_channels}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+channel\_type & VARCHAR(30) & NOT NULL & whatsapp, web, vocal, sms, messenger, api \\
+display\_name & VARCHAR(100) & NULL & Nom affichÃ© \\
+config & JSONB & NOT NULL & Config spÃ©cifique canal (max\_length, media\_types, format) \\
+rate\_limit & INT & DEFAULT 60 & RequÃªtes max par minute par canal \\
+is\_active & BOOLEAN & DEFAULT true & Canal actif \\
+created\_at & TIMESTAMPTZ & NOT NULL & CrÃ©ation \\
+updated\_at & TIMESTAMPTZ & NOT NULL & Modification \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}
+{\small Contrainte unique : (\field{bot\_id}, \field{channel\_type}).}
+
+\subsubsection{Table \code{knowledge\_base\_entries}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+category\_id & UUID & FK $\rightarrow$ knowledge\_categories, NULL & CatÃ©gorie \\
+type & VARCHAR(20) & NOT NULL & faq, document, text, api \\
+question & TEXT & NULL & Question (si FAQ) \\
+answer & TEXT & NOT NULL & Contenu / rÃ©ponse \\
+embedding & VECTOR(1536) & NULL & Vecteur pour recherche similaritÃ© \\
+metadata & JSONB & NULL & MÃ©tadonnÃ©es additionnelles \\
+is\_active & BOOLEAN & DEFAULT true & EntrÃ©e active \\
+created\_at & TIMESTAMPTZ & NOT NULL & CrÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{knowledge\_categories}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+name & VARCHAR(100) & NOT NULL & Nom de la catÃ©gorie \\
+created\_at & TIMESTAMPTZ & NOT NULL & CrÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{knowledge\_documents}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+filename & VARCHAR(255) & NOT NULL & Nom du fichier \\
+file\_type & VARCHAR(20) & NOT NULL & pdf, txt, csv \\
+file\_url & VARCHAR(500) & NOT NULL & URL stockage (via MÃ©dia Service) \\
+status & VARCHAR(20) & DEFAULT 'pending' & pending, processing, done, error \\
+chunk\_count & INT & DEFAULT 0 & Nombre de chunks extraits \\
+created\_at & TIMESTAMPTZ & NOT NULL & CrÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{intents}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+name & VARCHAR(100) & NOT NULL & Nom de l'intention \\
+response & TEXT & NOT NULL & RÃ©ponse associÃ©e \\
+is\_active & BOOLEAN & DEFAULT true & Intention active \\
+created\_at & TIMESTAMPTZ & NOT NULL & CrÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{intent\_keywords}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+intent\_id & UUID & FK $\rightarrow$ intents & Intention associÃ©e \\
+keyword & VARCHAR(100) & NOT NULL & Mot-clÃ© \\
+weight & DECIMAL(3,2) & DEFAULT 1.0 & Poids du mot-clÃ© \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{conversation\_flows}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+name & VARCHAR(100) & NOT NULL & Nom du flux \\
+trigger\_intent & VARCHAR(100) & NULL & Intention dÃ©clencheuse \\
+is\_active & BOOLEAN & DEFAULT true & Flux actif \\
+created\_at & TIMESTAMPTZ & NOT NULL & CrÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{flow\_nodes}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+flow\_id & UUID & FK $\rightarrow$ conversation\_flows & Flux parent \\
+type & VARCHAR(20) & NOT NULL & question, response, condition, action \\
+content & JSONB & NOT NULL & Contenu du nÅ“ud \\
+next\_node\_id & UUID & FK $\rightarrow$ flow\_nodes, NULL & NÅ“ud suivant par dÃ©faut \\
+branches & JSONB & NULL & Branching conditionnel : \code{[{"condition":"...", "next\_node\_id":"uuid"}]} \\
+position & INT & NOT NULL & Ordre dans le flux \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{flow\_actions}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+node\_id & UUID & FK $\rightarrow$ flow\_nodes & NÅ“ud associÃ© \\
+action\_type & VARCHAR(50) & NOT NULL & api\_call, webhook, transfer\_human, send\_notification, set\_variable \\
+config & JSONB & NOT NULL & Contrat Action standardisÃ© (voir section Architecture $\rightarrow$ Action System) \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{bot\_actions}}
+
+Actions globales du bot (non liÃ©es Ã  un flow spÃ©cifique). Utilisent le mÃªme contrat standardisÃ© que les \code{flow\_actions}.
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+name & VARCHAR(100) & NOT NULL & Nom de l'action \\
+action\_type & VARCHAR(50) & NOT NULL & api\_call, webhook, transfer\_human, send\_notification, set\_variable \\
+config & JSONB & NOT NULL & Contrat Action standardisÃ© (voir section Architecture $\rightarrow$ Action System) \\
+is\_active & BOOLEAN & DEFAULT true & Action active \\
+created\_at & TIMESTAMPTZ & NOT NULL & CrÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{ai\_provider\_configs}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+provider & VARCHAR(30) & NOT NULL & openai, anthropic, google, mistral, custom \\
+model & VARCHAR(50) & NOT NULL & gpt-4o, claude-sonnet-4-20250514, gemini-pro, etc. \\
+api\_key\_encrypted & TEXT & NOT NULL & ClÃ© API chiffrÃ©e (AES-256) \\
+base\_url & VARCHAR(500) & NULL & URL custom (pour providers self-hosted) \\
+temperature & DECIMAL(3,2) & DEFAULT 0.7 & TempÃ©rature du modÃ¨le \\
+max\_tokens & INT & DEFAULT 1000 & Tokens max par rÃ©ponse \\
+purpose & VARCHAR(30) & NOT NULL & conversation, rag, translation, fallback \\
+priority & INT & DEFAULT 0 & PrioritÃ© (0 = principal, 1+ = fallback) \\
+is\_active & BOOLEAN & DEFAULT true & Provider actif \\
+circuit\_breaker\_threshold & INT & DEFAULT 5 & Ã‰checs consÃ©cutifs avant dÃ©sactivation auto \\
+created\_at & TIMESTAMPTZ & NOT NULL & CrÃ©ation \\
+updated\_at & TIMESTAMPTZ & NOT NULL & Modification \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}
+{\small Contrainte unique : (\field{bot\_id}, \field{provider}, \field{purpose}). Un bot peut avoir OpenAI pour conversation et Gemini pour RAG.}
+
+\subsubsection{Table \code{bot\_stats}}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+date & DATE & NOT NULL & Jour \\
+total\_messages & INT & DEFAULT 0 & Nombre total de messages \\
+resolved\_count & INT & DEFAULT 0 & RÃ©solus sans fallback \\
+fallback\_count & INT & DEFAULT 0 & PassÃ©s en fallback \\
+human\_transfer\_count & INT & DEFAULT 0 & TransfÃ©rÃ©s vers humain \\
+layer1\_count & INT & DEFAULT 0 & RÃ©solus couche 1 \\
+layer2\_count & INT & DEFAULT 0 & RÃ©solus couche 2 \\
+layer3\_count & INT & DEFAULT 0 & RÃ©solus couche 3 \\
+top\_intents & JSONB & NULL & Top intentions du jour \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}
+{\small Contrainte unique : (\field{bot\_id}, \field{date}).}
+
+\subsubsection{Table \code{conversation\_logs}}
+
+Persistance analytique des messages (sÃ©parÃ©e de la mÃ©moire Redis).
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+conversation\_id & UUID & NOT NULL & ID session (mÃªme que Redis) \\
+sender\_id & UUID & NOT NULL & Utilisateur \\
+channel & VARCHAR(30) & NOT NULL & Canal d'origine \\
+user\_message & TEXT & NOT NULL & Message utilisateur \\
+bot\_response & TEXT & NOT NULL & RÃ©ponse du bot \\
+layer\_used & VARCHAR(30) & NOT NULL & layer\_1\_keywords, layer\_2\_flow, layer\_3\_ai, layer\_4\_fallback \\
+intent\_detected & VARCHAR(100) & NULL & Intention dÃ©tectÃ©e \\
+confidence & DECIMAL(3,2) & NULL & Score de confiance \\
+provider\_used & VARCHAR(30) & NULL & Provider IA utilisÃ© (si couche 3) \\
+tokens\_used & INT & NULL & Tokens consommÃ©s \\
+processing\_time\_ms & INT & NOT NULL & Temps de traitement \\
+is\_resolved & BOOLEAN & NOT NULL & RÃ©solu sans fallback \\
+created\_at & TIMESTAMPTZ & NOT NULL & Horodatage \\
+\bottomrule
+\end{tabularx}
+\vspace{2pt}
+{\small Index : (\field{bot\_id}, \field{created\_at} DESC), (\field{bot\_id}, \field{is\_resolved}).}
+
+\subsubsection{Table \code{transfer\_logs}}
+
+Suivi des transferts bot $\rightarrow$ humain cÃ´tÃ© Chatbot.
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+bot\_id & UUID & FK $\rightarrow$ bots & Bot associÃ© \\
+conversation\_id & UUID & NOT NULL & Session chatbot \\
+chat\_transfer\_id & UUID & NULL & ID transfert cÃ´tÃ© Service Chat \\
+user\_id & UUID & NOT NULL & Utilisateur transfÃ©rÃ© \\
+reason & VARCHAR(50) & NOT NULL & max\_fallbacks, manual, flow\_action \\
+bot\_history & JSONB & NOT NULL & Historique transmis au Chat \\
+context & JSONB & NULL & Variables de session transmises \\
+status & VARCHAR(20) & NOT NULL & pending, sent, accepted, closed, error \\
+created\_at & TIMESTAMPTZ & NOT NULL & CrÃ©ation \\
+updated\_at & TIMESTAMPTZ & NOT NULL & DerniÃ¨re MAJ statut \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \code{ingestion\_jobs}}
+
+Pipeline d'ingestion documentaire asynchrone.
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Colonne} & \textbf{\color{white}Type} & \textbf{\color{white}Contrainte} & \textbf{\color{white}Description} \\
+\midrule
+id & UUID & PK & Identifiant \\
+document\_id & UUID & FK $\rightarrow$ knowledge\_documents & Document source \\
+status & VARCHAR(20) & NOT NULL & pending, processing, done, error \\
+chunks\_created & INT & DEFAULT 0 & Nombre de chunks gÃ©nÃ©rÃ©s \\
+error\_message & TEXT & NULL & DÃ©tail erreur si applicable \\
+started\_at & TIMESTAMPTZ & NULL & DÃ©but traitement \\
+completed\_at & TIMESTAMPTZ & NULL & Fin traitement \\
+created\_at & TIMESTAMPTZ & NOT NULL & CrÃ©ation \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Contrats d'API}
+
+Base URL : \code{/api/v1}. Tous les endpoints retournent du JSON. Tous les endpoints requiÃ¨rent un header \code{Authorization: Bearer <token>} validÃ© via le Service Auth.
+
+% â”€â”€ BOTS â”€â”€
+\subsection{Bots}
+
+\begin{apibox}{POST /bots}
+\textbf{Description :} CrÃ©ation d'un nouveau bot.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "Assistant Market",
+  "personality": "Friendly and helpful",
+  "system_prompt": "Tu es un assistant...",
+  "languages": ["fr", "en"],
+  "welcome_message": "Bonjour ! Comment puis-je vous aider ?",
+  "fallback_message": "DÃ©solÃ©, je n'ai pas compris.",
+  "human_transfer_after": 3,
+  "confidence_threshold": 0.7
+}
+\end{lstlisting}
+\textbf{Response 201 :}
+\begin{lstlisting}
+{
+  "id": "uuid",
+  "name": "Assistant Market",
+  "slug": "assistant-market",
+  "is_active": true,
+  "created_at": "2026-03-20T10:00:00Z"
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error, 401 Unauthorized.
+\end{apibox}
+
+\begin{apibox}{GET /bots}
+\textbf{Description :} Liste des bots de la plateforme.\\
+\textbf{Query params :} \code{?platform\_id=uuid\&page=1\&limit=20}\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "id": "uuid",
+      "name": "Assistant Market",
+      "is_active": true,
+      "languages": ["fr", "en"],
+      "created_at": "2026-03-20T10:00:00Z"
+    }
+  ],
+  "total": 1,
+  "page": 1
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}}
+\textbf{Description :} DÃ©tail complet d'un bot.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}}
+\textbf{Description :} Mise Ã  jour d'un bot (mÃªmes champs que POST).\\
+\textbf{Codes :} 200 OK, 400 Validation error, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}}
+\textbf{Description :} Suppression d'un bot et de toutes ses donnÃ©es associÃ©es.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/duplicate}
+\textbf{Description :} Duplication complÃ¨te d'un bot (config, intentions, flux, knowledge base).\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "new_name": "Assistant Market v2"
+}
+\end{lstlisting}
+\textbf{Response 201 :} Retourne le nouveau bot crÃ©Ã©.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/status}
+\textbf{Description :} Activation / dÃ©sactivation d'un bot.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "is_active": false
+}
+\end{lstlisting}
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+% â”€â”€ KNOWLEDGE â”€â”€
+\subsection{Knowledge Base}
+
+\begin{apibox}{POST /bots/\{id\}/knowledge}
+\textbf{Description :} Ajout d'une entrÃ©e dans la base de connaissances.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "type": "faq",
+  "question": "Quels sont vos horaires ?",
+  "answer": "Nous sommes ouverts de 8h a 18h.",
+  "category_id": "uuid"
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/knowledge}
+\textbf{Description :} Liste des entrÃ©es. Query params : \code{?type=faq\&category\_id=uuid\&page=1\&limit=20}\\
+\textbf{Codes :} 200 OK.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/knowledge/\{entryId\}}
+\textbf{Description :} Mise Ã  jour d'une entrÃ©e.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}/knowledge/\{entryId\}}
+\textbf{Description :} Suppression d'une entrÃ©e.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/knowledge/import}
+\textbf{Description :} Import en masse depuis un fichier CSV.\\
+\textbf{Content-Type :} \code{multipart/form-data}\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "imported": 42,
+  "errors": 2,
+  "error_details": [
+    {"line": 15, "reason": "Missing answer field"}
+  ]
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/knowledge/search}
+\textbf{Description :} Recherche par similaritÃ© dans la base de connaissances.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "query": "Comment passer une commande ?",
+  "limit": 5
+}
+\end{lstlisting}
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "results": [
+    {
+      "id": "uuid",
+      "question": "Comment commander ?",
+      "answer": "Rendez-vous sur...",
+      "score": 0.92
+    }
+  ]
+}
+\end{lstlisting}
+\end{apibox}
+
+% â”€â”€ INTENTIONS â”€â”€
+\subsection{Intentions}
+
+\begin{apibox}{POST /bots/\{id\}/intents}
+\textbf{Description :} CrÃ©ation d'une intention avec ses mots-clÃ©s.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "name": "greeting",
+  "response": "Bonjour ! Comment puis-je vous aider ?",
+  "keywords": [
+    {"keyword": "bonjour", "weight": 1.0},
+    {"keyword": "salut", "weight": 0.9},
+    {"keyword": "hello", "weight": 0.8}
+  ]
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/intents}
+\textbf{Description :} Liste des intentions du bot.\\
+\textbf{Codes :} 200 OK.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/intents/\{intentId\}}
+\textbf{Description :} Mise Ã  jour d'une intention et de ses mots-clÃ©s.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}/intents/\{intentId\}}
+\textbf{Description :} Suppression d'une intention.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/intents/test}
+\textbf{Description :} Test de dÃ©tection d'intention sur un message.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "message": "bonjour, je cherche de l'aide"
+}
+\end{lstlisting}
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "detected_intent": "greeting",
+  "confidence": 0.85,
+  "all_matches": [
+    {"intent": "greeting", "confidence": 0.85},
+    {"intent": "help", "confidence": 0.60}
+  ]
+}
+\end{lstlisting}
+\end{apibox}
+
+% â”€â”€ FLUX â”€â”€
+\subsection{Flux Conversationnels}
+
+\begin{apibox}{POST /bots/\{id\}/flows}
+\textbf{Description :} CrÃ©ation d'un flux conversationnel avec ses nÅ“uds.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "name": "Flux commande",
+  "trigger_intent": "order",
+  "nodes": [
+    {
+      "type": "question",
+      "content": {"text": "Quel produit souhaitez-vous ?"},
+      "position": 1
+    },
+    {
+      "type": "action",
+      "content": {"action_type": "api_call", "endpoint": "/orders"},
+      "position": 2
+    }
+  ]
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/flows}
+\textbf{Description :} Liste des flux du bot.\\
+\textbf{Codes :} 200 OK.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/flows/\{flowId\}}
+\textbf{Description :} DÃ©tail d'un flux avec tous ses nÅ“uds et actions.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/flows/\{flowId\}}
+\textbf{Description :} Mise Ã  jour d'un flux.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}/flows/\{flowId\}}
+\textbf{Description :} Suppression d'un flux.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/flows/\{flowId\}/test}
+\textbf{Description :} Simulation d'un flux avec un message de test.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "message": "je veux commander",
+  "session_vars": {"user_name": "Alice"}
+}
+\end{lstlisting}
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "flow_name": "Flux commande",
+  "current_node": {"type": "question", "position": 1},
+  "response": "Quel produit souhaitez-vous ?",
+  "completed": false
+}
+\end{lstlisting}
+\end{apibox}
+
+% â”€â”€ CONVERSATION â”€â”€
+\subsection{Conversation â€” Endpoint Principal}
+
+\begin{apibox}{POST /chatbot/converse}
+\textbf{Description :} Endpoint principal. Envoie un message et reÃ§oit la rÃ©ponse du bot aprÃ¨s traitement par le pipeline multi-couches. Le champ \code{channel} est obligatoire et dÃ©termine l'adapter de sortie.\\[4pt]
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "bot_id": "uuid",
+  "conversation_id": "uuid-or-null",
+  "sender_id": "uuid",
+  "channel": "whatsapp",
+  "message": "Bonjour, je cherche un produit",
+  "language": "fr",
+  "metadata": {
+    "platform": "agt-bot",
+    "source_message_id": "wa-msg-123"
+  }
+}
+\end{lstlisting}
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "response": "Bonjour ! Quel type de produit recherchez-vous ?",
+  "conversation_id": "uuid",
+  "intent_detected": "greeting",
+  "layer_used": "layer_1_keywords",
+  "confidence": 0.88,
+  "provider_used": null,
+  "action": null,
+  "language": "fr",
+  "transfer": null,
+  "metadata": {
+    "processing_time_ms": 145,
+    "fallback": false,
+    "consecutive_fallbacks": 0
+  }
+}
+\end{lstlisting}
+\textbf{Valeurs possibles de \code{layer\_used} :}
+\begin{itemize}
+\item \code{layer\_1\_keywords} â€” RÃ©solu par mots-clÃ©s / intentions
+\item \code{layer\_2\_flow} â€” RÃ©solu par flux conversationnel
+\item \code{layer\_3\_ai} â€” RÃ©solu par IA gÃ©nÃ©rative
+\item \code{layer\_4\_fallback} â€” Fallback (aucune couche n'a rÃ©solu)
+\end{itemize}
+\textbf{Si transfert humain dÃ©clenchÃ©}, le champ \code{transfer} contient :
+\begin{lstlisting}
+{
+  "transfer": {
+    "id": "uuid",
+    "status": "sent",
+    "reason": "max_fallbacks",
+    "chat_transfer_id": "uuid"
+  }
+}
+\end{lstlisting}
+\textbf{Codes :} 200 OK, 400 Validation error, 401 Unauthorized, 404 Bot not found, 429 Rate limited.
+\end{apibox}
+
+\begin{apibox}{DELETE /chatbot/conversations/\{conversationId\}}
+\textbf{Description :} Suppression du contexte d'une conversation (mÃ©moire Redis).\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+% â”€â”€ IA CONFIG â”€â”€
+\subsection{Configuration IA (Multi-Provider)}
+
+\begin{apibox}{POST /bots/\{id\}/ai-providers}
+\textbf{Description :} Ajout d'un provider IA pour un bot. Un bot peut avoir plusieurs providers avec des rÃ´les diffÃ©rents (conversation, RAG, traduction, fallback).\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "provider": "anthropic",
+  "model": "claude-sonnet-4-20250514",
+  "api_key": "sk-ant-...",
+  "purpose": "conversation",
+  "priority": 0,
+  "temperature": 0.5,
+  "max_tokens": 1500
+}
+\end{lstlisting}
+\textbf{Response 201 :}
+\begin{lstlisting}
+{
+  "id": "uuid",
+  "provider": "anthropic",
+  "model": "claude-sonnet-4-20250514",
+  "purpose": "conversation",
+  "priority": 0,
+  "is_active": true,
+  "has_api_key": true
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error, 409 Conflit (provider+purpose dÃ©jÃ  configurÃ©).
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/ai-providers}
+\textbf{Description :} Liste de tous les providers IA configurÃ©s pour un bot.\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "id": "uuid",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-20250514",
+      "purpose": "conversation",
+      "priority": 0,
+      "is_active": true,
+      "has_api_key": true
+    },
+    {
+      "id": "uuid",
+      "provider": "google",
+      "model": "gemini-pro",
+      "purpose": "rag",
+      "priority": 0,
+      "is_active": true,
+      "has_api_key": true
+    }
+  ]
+}
+\end{lstlisting}
+\textbf{Note :} Les clÃ©s API ne sont jamais retournÃ©es en clair.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/ai-providers/\{providerId\}}
+\textbf{Description :} Mise Ã  jour d'un provider IA (modÃ¨le, tempÃ©rature, prioritÃ©, etc.).\\
+\textbf{Codes :} 200 OK, 400 Validation error, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}/ai-providers/\{providerId\}}
+\textbf{Description :} Suppression d'un provider IA.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/ai-providers/\{providerId\}/test}
+\textbf{Description :} Test d'un provider spÃ©cifique avec un message.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "message": "Quelle est votre politique de retour ?"
+}
+\end{lstlisting}
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "response": "Notre politique de retour permet...",
+  "provider": "anthropic",
+  "model": "claude-sonnet-4-20250514",
+  "tokens_used": 234,
+  "processing_time_ms": 1820
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/ai-providers/health}
+\textbf{Description :} Health check de tous les providers IA configurÃ©s pour un bot.\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "providers": [
+    {
+      "id": "uuid",
+      "provider": "anthropic",
+      "purpose": "conversation",
+      "status": "healthy",
+      "last_check": "2026-03-30T10:00:00Z",
+      "consecutive_errors": 0
+    },
+    {
+      "id": "uuid",
+      "provider": "google",
+      "purpose": "rag",
+      "status": "degraded",
+      "last_check": "2026-03-30T10:00:00Z",
+      "consecutive_errors": 3
+    }
+  ]
+}
+\end{lstlisting}
+\end{apibox}
+
+% â”€â”€ STATS â”€â”€
+\subsection{Statistiques}
+
+\begin{apibox}{GET /bots/\{id\}/stats}
+\textbf{Description :} Statistiques agrÃ©gÃ©es d'un bot.\\
+\textbf{Query params :} \code{?from=2026-03-01\&to=2026-03-20}\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "bot_id": "uuid",
+  "period": {"from": "2026-03-01", "to": "2026-03-20"},
+  "total_messages": 12450,
+  "resolution_rate": 0.87,
+  "fallback_rate": 0.08,
+  "human_transfer_rate": 0.05,
+  "by_layer": {
+    "layer_1": 5200,
+    "layer_2": 3800,
+    "layer_3": 2400,
+    "layer_4": 1050
+  },
+  "top_intents": [
+    {"intent": "greeting", "count": 3200},
+    {"intent": "order_status", "count": 1800}
+  ]
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/stats/unanswered}
+\textbf{Description :} Messages non rÃ©solus (passÃ©s en fallback).\\
+\textbf{Query params :} \code{?page=1\&limit=20}\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "message": "Je veux annuler ma commande 12345",
+      "count": 15,
+      "last_seen": "2026-03-20T14:30:00Z"
+    }
+  ],
+  "total": 42
+}
+\end{lstlisting}
+\end{apibox}
+
+% â”€â”€ CANAUX â”€â”€
+\subsection{Canaux / Connecteurs}
+
+\begin{apibox}{POST /bots/\{id\}/channels}
+\textbf{Description :} Enregistrement d'un canal pour un bot.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "channel_type": "whatsapp",
+  "display_name": "WhatsApp AGT-Bot",
+  "config": {
+    "max_response_length": 4096,
+    "supported_media": ["image", "document"],
+    "response_format": "text"
+  },
+  "rate_limit": 120
+}
+\end{lstlisting}
+\textbf{Codes :} 201 Created, 400 Validation error, 409 Canal dÃ©jÃ  configurÃ© pour ce bot.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/channels}
+\textbf{Description :} Liste des canaux configurÃ©s pour un bot.\\
+\textbf{Codes :} 200 OK.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/channels/\{channelId\}}
+\textbf{Description :} Mise Ã  jour de la configuration d'un canal.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{DELETE /bots/\{id\}/channels/\{channelId\}}
+\textbf{Description :} Suppression d'un canal.\\
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+\begin{apibox}{PUT /bots/\{id\}/channels/\{channelId\}/status}
+\textbf{Description :} Activation / dÃ©sactivation d'un canal.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "is_active": false
+}
+\end{lstlisting}
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+% â”€â”€ TRANSFERTS â”€â”€
+\subsection{Transferts Humains}
+
+\begin{apibox}{GET /bots/\{id\}/transfers}
+\textbf{Description :} Liste des transferts bot $\rightarrow$ humain pour un bot.\\
+\textbf{Query params :} \code{?status=pending\&page=1\&limit=20}\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "data": [
+    {
+      "id": "uuid",
+      "conversation_id": "uuid",
+      "user_id": "uuid",
+      "reason": "max_fallbacks",
+      "status": "sent",
+      "chat_transfer_id": "uuid",
+      "created_at": "2026-03-30T10:00:00Z"
+    }
+  ],
+  "total": 5,
+  "page": 1
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{POST /chatbot/transfers/\{transferId\}/callback}
+\textbf{Description :} Callback S2S appelÃ© par le Service Chat lorsque le statut d'un transfert change (pris\_en\_charge, cloture). Permet au chatbot de reprendre la conversation aprÃ¨s clÃ´ture.\\
+\textbf{Auth :} S2S uniquement.\\
+\textbf{Request body :}
+\begin{lstlisting}
+{
+  "status": "cloture",
+  "operator_id": "uuid",
+  "closed_at": "2026-03-30T11:00:00Z"
+}
+\end{lstlisting}
+\textbf{Codes :} 200 OK, 404 Not found.
+\end{apibox}
+
+% â”€â”€ INGESTION â”€â”€
+\subsection{Ingestion Documentaire}
+
+\begin{apibox}{POST /bots/\{id\}/knowledge/documents}
+\textbf{Description :} Upload d'un document pour ingestion dans la knowledge base. Le fichier est stockÃ© via le MÃ©dia Service, puis un job asynchrone extrait, dÃ©coupe et gÃ©nÃ¨re les embeddings.\\
+\textbf{Content-Type :} \code{multipart/form-data}\\
+\textbf{Response 202 Accepted :}
+\begin{lstlisting}
+{
+  "document_id": "uuid",
+  "filename": "politique-retour.pdf",
+  "status": "pending",
+  "job_id": "uuid"
+}
+\end{lstlisting}
+\textbf{Codes :} 202 Accepted, 400 Invalid file type, 413 File too large.
+\end{apibox}
+
+\begin{apibox}{GET /bots/\{id\}/knowledge/documents/\{docId\}/status}
+\textbf{Description :} Statut d'ingestion d'un document.\\
+\textbf{Response 200 :}
+\begin{lstlisting}
+{
+  "document_id": "uuid",
+  "status": "done",
+  "chunks_created": 24,
+  "started_at": "2026-03-30T10:01:00Z",
+  "completed_at": "2026-03-30T10:01:45Z"
+}
+\end{lstlisting}
+\end{apibox}
+
+\begin{apibox}{POST /bots/\{id\}/knowledge/documents/\{docId\}/reprocess}
+\textbf{Description :} Relance l'ingestion d'un document (supprime les anciens chunks et rÃ©-extrait).\\
+\textbf{Codes :} 202 Accepted, 404 Not found.
+\end{apibox}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section{Infrastructure}
+
+\subsection{Composants d'infrastructure}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Service} & \textbf{\color{white}Technologie} & \textbf{\color{white}RÃ´le} \\
+\midrule
+Backend & Python / Django REST & API REST du service Chatbot \\
+Worker Celery & Python / Celery & Ingestion docs, agrÃ©gation stats, health check providers \\
+Base de donnÃ©es & PostgreSQL 15+ & Stockage bots, intentions, flux, KB, stats, logs analytiques \\
+Cache / MÃ©moire & Redis 7+ & Contexte conversation, sessions, rate limiting, circuit breakers \\
+Recherche vectorielle & pgvector / Elasticsearch & Recherche par similaritÃ© (knowledge base) \\
+Providers IA & OpenAI, Anthropic, Google Gemini & IA gÃ©nÃ©rative (couche 3) â€” multi-provider par bot \\
+Message Broker & RabbitMQ / Redis Streams & Jobs asynchrones (ingestion, stats) + events inter-services \\
+Conteneur & Docker + Docker Compose & DÃ©ploiement isolÃ© et reproductible \\
+Reverse Proxy & Nginx / Traefik & TLS, load balancing \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Services externes Ã  prÃ©voir}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}CatÃ©gorie} & \textbf{\color{white}Fournisseurs} & \textbf{\color{white}Facturation} \\
+\midrule
+Providers IA & OpenAI, Anthropic, Google Gemini, Mistral & Pay-per-token (coÃ»t principal du service) \\
+Recherche vectorielle & Elasticsearch Cloud / pgvector & HÃ©bergement ou intÃ©grÃ© Ã  PostgreSQL \\
+HÃ©bergement & AWS, GCP, DigitalOcean & Conteneurs, PostgreSQL, Redis managÃ©s \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section*{Annexes â€” Cas d'Usage}
+
+\subsection*{Cas 1 : WhatsApp via Hub Engine}
+
+\begin{enumerate}
+\item L'utilisateur envoie un message WhatsApp.
+\item AGT-Bot (Hub Engine) reÃ§oit le message et appelle \code{POST /chatbot/converse} avec \code{channel: "whatsapp"}.
+\item Le pipeline vÃ©rifie que le canal \code{whatsapp} est actif pour ce bot, applique l'adapter de sortie (limite taille, format texte).
+\item Le pipeline multi-couches traite le message.
+\item La rÃ©ponse est retournÃ©e au Hub Engine qui l'envoie via WhatsApp.
+\end{enumerate}
+
+\subsection*{Cas 2 : Flux de commande (AGT-Market)}
+
+\begin{enumerate}
+\item L'utilisateur dit \og je veux commander \fg{} via le widget web (\code{channel: "web"}).
+\item Couche 1 dÃ©tecte l'intention \code{order}.
+\item Couche 2 active le flux \og Flux commande \fg{}.
+\item Le bot guide l'utilisateur Ã  travers les nÅ“uds (produit, quantitÃ©, confirmation).
+\item Un nÅ“ud \code{condition} vÃ©rifie la disponibilitÃ© via \code{branches} (si oui $\rightarrow$ confirmation, si non $\rightarrow$ suggestion).
+\item Un nÅ“ud \code{action} appelle l'API de crÃ©ation de commande.
+\end{enumerate}
+
+\subsection*{Cas 3 : Fallback puis transfert humain}
+
+\begin{enumerate}
+\item Le bot ne comprend pas le message (couches 1, 2, 3 Ã©chouent).
+\item Couche 4 envoie le message de fallback. Le compteur \code{consecutive\_fallbacks} s'incrÃ©mente.
+\item Le message est loggÃ© dans \code{conversation\_logs} (persistance PostgreSQL).
+\item AprÃ¨s 3 Ã©checs consÃ©cutifs (\code{human\_transfer\_after}), le bot appelle le Service Chat en S2S : \code{POST /api/v1/chat/conversations/transfer} avec \code{bot\_history} et \code{context}.
+\item Un \code{transfer\_log} est crÃ©Ã© cÃ´tÃ© chatbot avec le statut \code{sent}.
+\item Quand l'opÃ©rateur clÃ´ture, le Service Chat appelle \code{POST /chatbot/transfers/\{id\}/callback} avec \code{status: "cloture"}.
+\item Le bot reprend la conversation.
+\end{enumerate}
+
+\subsection*{Cas 4 : Multi-langue}
+
+\begin{enumerate}
+\item L'utilisateur envoie un message en anglais.
+\item Le service dÃ©tecte la langue (EN).
+\item Le pipeline utilise les intentions et prompts adaptÃ©s Ã  la langue.
+\item La rÃ©ponse est gÃ©nÃ©rÃ©e en anglais (le provider de \code{purpose: "conversation"} est utilisÃ©).
+\end{enumerate}
+
+\subsection*{Cas 5 : Agent vocal externe}
+
+\begin{enumerate}
+\item Un service d'agent vocal externe appelle \code{POST /chatbot/converse} avec \code{channel: "vocal"} et un Bearer token valide.
+\item L'adapter vocal formate la rÃ©ponse (texte court, sans markdown, compatible TTS).
+\item La rÃ©ponse est retournÃ©e au service vocal qui la synthÃ©tise en audio.
+\end{enumerate}
+
+\subsection*{Cas 6 : Ingestion d'un document PDF}
+
+\begin{enumerate}
+\item L'admin uploade un PDF via \code{POST /bots/\{id\}/knowledge/documents}.
+\item Le fichier est stockÃ© via le MÃ©dia Service.
+\item Un job Celery est crÃ©Ã© (\code{ingestion\_jobs}, statut \code{pending}).
+\item Le worker extrait le texte, dÃ©coupe en chunks, gÃ©nÃ¨re les embeddings via le provider de \code{purpose: "rag"}.
+\item Les chunks sont insÃ©rÃ©s dans \code{knowledge\_base\_entries} avec leurs embeddings.
+\item Le statut du job passe Ã  \code{done}.
+\end{enumerate}
+
+\subsection*{Cas 7 : Failover multi-provider}
+
+\begin{enumerate}
+\item Un message arrive en couche 3 (IA gÃ©nÃ©rative).
+\item Le provider principal (\code{priority: 0}, \code{purpose: "conversation"}) est appelÃ©.
+\item L'appel Ã©choue (timeout, erreur 500). Le circuit breaker incrÃ©mente le compteur.
+\item Le service bascule automatiquement sur le provider de \code{priority: 1} (fallback).
+\item Si le provider principal atteint \code{circuit\_breaker\_threshold} erreurs consÃ©cutives, il est temporairement dÃ©sactivÃ©.
+\end{enumerate}
+
+\subsection*{Code Source PlantUML â€” Diagramme de Classes}
+
+Le code ci-dessous permet de rÃ©gÃ©nÃ©rer le diagramme de classes (figure~\ref{fig:class-diagram}) via tout outil compatible PlantUML. \textbf{v1.1} : ajout de \code{BotChannel}, \code{ConversationLog}, \code{TransferLog}, \code{IngestionJob}, refonte \code{AiProviderConfig} (multi-provider), ajout \code{branches} Ã  \code{FlowNode}, ajout \code{version/status} Ã  \code{Bot}.
+
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,rulecolor=\color{aiaccent!40},backgroundcolor=\color{aicode},xleftmargin=4pt,xrightmargin=4pt]
+@startuml
+skinparam classAttributeIconSize 0
+skinparam classFontSize 11
+skinparam classFontColor #000000
+skinparam classHeaderBackgroundColor #7C3AED
+skinparam classHeaderFontColor white
+skinparam classBorderColor #5B21B6
+skinparam classBackgroundColor #F3F0FF
+skinparam arrowColor #6D28D9
+title Diagramme de Classes -- Service Chatbot IA Centralise v1.2
+
+class Bot {
+  id : UUID [PK]
+  platform_id : UUID
+  name : VARCHAR(100)
+  slug : VARCHAR(100) [UQ]
+  avatar_url : VARCHAR(500)
+  personality : TEXT
+  system_prompt : TEXT
+  welcome_message : TEXT
+  fallback_message : TEXT
+  languages : JSONB
+  confidence_threshold : DECIMAL(3,2)
+  human_transfer_after : INT
+  is_active : BOOLEAN
+  version : INT
+  status : VARCHAR(20)
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+class BotConfig {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  config_key : VARCHAR(100)
+  config_value : JSONB
+  created_at : TIMESTAMPTZ
+}
+
+class BotChannel {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  channel_type : VARCHAR(30)
+  display_name : VARCHAR(100)
+  config : JSONB
+  rate_limit : INT
+  is_active : BOOLEAN
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+class KnowledgeCategory {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  name : VARCHAR(100)
+  created_at : TIMESTAMPTZ
+}
+
+class KnowledgeBaseEntry {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  category_id : UUID [FK]
+  type : VARCHAR(20)
+  question : TEXT
+  answer : TEXT
+  embedding : VECTOR(1536)
+  metadata : JSONB
+  is_active : BOOLEAN
+  created_at : TIMESTAMPTZ
+}
+
+class KnowledgeDocument {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  filename : VARCHAR(255)
+  file_type : VARCHAR(20)
+  file_url : VARCHAR(500)
+  status : VARCHAR(20)
+  chunk_count : INT
+  created_at : TIMESTAMPTZ
+}
+
+class IngestionJob {
+  id : UUID [PK]
+  document_id : UUID [FK]
+  status : VARCHAR(20)
+  chunks_created : INT
+  error_message : TEXT
+  started_at : TIMESTAMPTZ
+  completed_at : TIMESTAMPTZ
+  created_at : TIMESTAMPTZ
+}
+
+class Intent {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  name : VARCHAR(100)
+  response : TEXT
+  is_active : BOOLEAN
+  created_at : TIMESTAMPTZ
+}
+
+class IntentKeyword {
+  id : UUID [PK]
+  intent_id : UUID [FK]
+  keyword : VARCHAR(100)
+  weight : DECIMAL(3,2)
+}
+
+class ConversationFlow {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  name : VARCHAR(100)
+  trigger_intent : VARCHAR(100)
+  is_active : BOOLEAN
+  created_at : TIMESTAMPTZ
+}
+
+class FlowNode {
+  id : UUID [PK]
+  flow_id : UUID [FK]
+  type : VARCHAR(20)
+  content : JSONB
+  next_node_id : UUID [FK]
+  branches : JSONB
+  position : INT
+}
+
+class FlowAction {
+  id : UUID [PK]
+  node_id : UUID [FK]
+  action_type : VARCHAR(50)
+  config : JSONB
+}
+
+class BotAction {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  name : VARCHAR(100)
+  action_type : VARCHAR(50)
+  config : JSONB
+  is_active : BOOLEAN
+  created_at : TIMESTAMPTZ
+}
+
+class AiProviderConfig {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  provider : VARCHAR(30)
+  model : VARCHAR(50)
+  api_key_encrypted : TEXT
+  base_url : VARCHAR(500)
+  temperature : DECIMAL(3,2)
+  max_tokens : INT
+  purpose : VARCHAR(30)
+  priority : INT
+  is_active : BOOLEAN
+  circuit_breaker_threshold : INT
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+class BotStats {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  date : DATE
+  total_messages : INT
+  resolved_count : INT
+  fallback_count : INT
+  human_transfer_count : INT
+  layer1_count : INT
+  layer2_count : INT
+  layer3_count : INT
+  top_intents : JSONB
+}
+
+class ConversationLog {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  conversation_id : UUID
+  sender_id : UUID
+  channel : VARCHAR(30)
+  user_message : TEXT
+  bot_response : TEXT
+  layer_used : VARCHAR(30)
+  intent_detected : VARCHAR(100)
+  confidence : DECIMAL(3,2)
+  provider_used : VARCHAR(30)
+  tokens_used : INT
+  processing_time_ms : INT
+  is_resolved : BOOLEAN
+  created_at : TIMESTAMPTZ
+}
+
+class TransferLog {
+  id : UUID [PK]
+  bot_id : UUID [FK]
+  conversation_id : UUID
+  chat_transfer_id : UUID
+  user_id : UUID
+  reason : VARCHAR(50)
+  bot_history : JSONB
+  context : JSONB
+  status : VARCHAR(20)
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+' === Relations ===
+Bot "1" -- "0..*" BotConfig
+Bot "1" -- "0..*" BotChannel
+Bot "1" -- "0..*" KnowledgeCategory
+Bot "1" -- "0..*" KnowledgeBaseEntry
+Bot "1" -- "0..*" KnowledgeDocument
+Bot "1" -- "0..*" Intent
+Bot "1" -- "0..*" ConversationFlow
+Bot "1" -- "0..*" BotAction
+Bot "1" -- "0..*" AiProviderConfig
+Bot "1" -- "0..*" BotStats
+Bot "1" -- "0..*" ConversationLog
+Bot "1" -- "0..*" TransferLog
+KnowledgeCategory "0..1" -- "0..*" KnowledgeBaseEntry
+KnowledgeDocument "1" -- "0..*" IngestionJob
+Intent "1" -- "0..*" IntentKeyword
+ConversationFlow "1" -- "0..*" FlowNode
+FlowNode "1" -- "0..*" FlowAction
+FlowNode "0..1" -- "0..*" FlowNode : next
+@enduml
+\end{lstlisting}
+
+\section*{Conclusion GÃ©nÃ©rale}
+
+Le Service Chatbot IA CentralisÃ© v1.2 est le pilier conversationnel stratÃ©gique de l'Ã©cosystÃ¨me AGT. Son architecture repose sur un \textbf{Conversation Orchestrator} explicite qui pilote un pipeline 4 couches, orchestre des providers IA multiples avec failover, adapte les rÃ©ponses par canal, et exÃ©cute des actions standardisÃ©es vers les services internes.
+
+Les dÃ©cisions structurantes de cette version :
+
+\begin{itemize}
+\item \textbf{Multi-provider} avec routing par \code{purpose} et circuit breaker â€” aucune dÃ©pendance Ã  un fournisseur unique.
+\item \textbf{Multi-canal} via adapter pattern â€” WhatsApp, web, vocal, SMS, API extensible sans toucher au pipeline.
+\item \textbf{Action System standardisÃ©} â€” contrat unique (auth, retry, timeout, template variables) pour toutes les interactions inter-services.
+\item \textbf{Persistance duale} â€” Redis pour la mÃ©moire temps rÃ©el, PostgreSQL pour les analytics et le fine-tuning.
+\item \textbf{FrontiÃ¨re Search Service} documentÃ©e â€” pgvector interne pour le RAG MVP, adapter configurable vers Search Service quand celui-ci supportera les embeddings.
+\item \textbf{Transfert humain bidirectionnel} â€” intÃ©gration S2S complÃ¨te avec le Service Chat v1.2.
+\end{itemize}
+
+Prochaines Ã©tapes : validation Ã©quipe, initialisation des dÃ©veloppements par prioritÃ©, dÃ©ploiement progressif Hub Engine (AGT-Bot) puis extension aux autres canaux.
+
+\vspace{0.5cm}
+\begin{center}
+\textit{\color{aigray}}
+\end{center}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section*{Annexes â€” Bonus / StratÃ©gies AvancÃ©es}
+
+\subsection*{Suggestion automatique des questions non rÃ©pondues}
+
+Le service collecte les messages passÃ©s en fallback et les agrÃ¨ge par similaritÃ©. L'endpoint \code{GET /bots/\{id\}/stats/unanswered} permet aux administrateurs de transformer ces messages en nouvelles intentions ou entrÃ©es de knowledge base.
+
+\subsection*{Gestion du budget IA par bot}
+
+Chaque bot peut avoir un budget mensuel configurable (en tokens ou en montant). Le service tracked la consommation et peut dÃ©sactiver la couche 3 si le budget est Ã©puisÃ©, basculant directement vers le fallback.
+
+\subsection*{A/B Testing des rÃ©ponses}
+
+PossibilitÃ© de configurer plusieurs rÃ©ponses pour une mÃªme intention avec distribution pondÃ©rÃ©e, permettant de mesurer laquelle gÃ©nÃ¨re le meilleur engagement.
+
+\subsection*{StratÃ©gie de fine-tuning}
+
+Les conversations rÃ©ussies (haute confiance, pas de fallback) peuvent Ãªtre exportÃ©es pour constituer un dataset de fine-tuning, amÃ©liorant progressivement les performances de la couche IA.
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\section*{Glossaire}
+
+\rowcolors{2}{aitable}{white}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\rowcolor{aiprimary}
+\textbf{\color{white}Terme} & \textbf{\color{white}DÃ©finition} \\
+\midrule
+Intent (Intention) & Action ou sujet dÃ©tectÃ© dans le message de l'utilisateur via des mots-clÃ©s. \\
+Flow (Flux) & Arbre de dÃ©cision guidant une conversation multi-Ã©tapes. \\
+Knowledge Base & Base de connaissances du bot (FAQ, documents, textes). \\
+Provider IA & Service externe fournissant les capacitÃ©s d'IA gÃ©nÃ©rative (OpenAI, Anthropic, Google). \\
+Strategy Pattern & Patron de conception permettant de changer d'algorithme (provider IA) Ã  l'exÃ©cution. \\
+Circuit Breaker & Pattern de rÃ©silience dÃ©sactivant temporairement un provider dÃ©faillant. \\
+Channel Adapter & Composant normalisant les entrÃ©es/sorties selon le canal (WhatsApp, web, vocal). \\
+Embedding & ReprÃ©sentation vectorielle d'un texte pour la recherche par similaritÃ©. \\
+Chunking & DÃ©coupage d'un document en segments pour l'indexation vectorielle. \\
+Ingestion & Pipeline asynchrone : extraction $\rightarrow$ chunking $\rightarrow$ embedding d'un document. \\
+Fallback & RÃ©ponse par dÃ©faut quand aucune couche ne parvient Ã  rÃ©soudre le message. \\
+TTL & Time To Live â€” durÃ©e de vie d'une donnÃ©e en cache (Redis). \\
+Hub Engine & Composant AGT-Bot gÃ©rant la connexion WhatsApp et routant les messages. \\
+Vector Search & Recherche basÃ©e sur la distance entre vecteurs (similaritÃ© sÃ©mantique). \\
+S2S (Service-to-Service) & Authentification inter-services via client\_id/client\_secret (Auth v2.1). \\
+Celery & Framework Python pour l'exÃ©cution de tÃ¢ches asynchrones (workers). \\
+Conversation Orchestrator & Composant central qui pilote le cycle de vie d'un message (routing pipeline, contexte, actions, adaptation canal). \\
+Action Executor & Sous-composant de l'Orchestrator exÃ©cutant les actions standardisÃ©es (API calls, webhooks, transferts). \\
+Channel Adapter & Composant normalisant les entrÃ©es/sorties selon les contraintes du canal (taille, format, mÃ©dias). \\
+Circuit Breaker & Pattern de rÃ©silience dÃ©sactivant temporairement un provider IA dÃ©faillant aprÃ¨s N erreurs consÃ©cutives. \\
+\bottomrule
+\end{tabularx}
+
+% â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+\vspace{1cm}
+
+\begin{center}
+\noindent\makebox[\textwidth]{%
+  \colorbox{aisecondary}{\makebox[\textwidth][c]{\rule{0pt}{2pt}}}%
+}
+\vspace{4pt}
+
+{\large\bfseries\color{aiprimary}Fin du document â€” AGT Engineering â€” v1.2}
+
+\vspace{4pt}
+\noindent\makebox[\textwidth]{%
+  \colorbox{aiprimary}{\makebox[\textwidth][c]{\rule{0pt}{2pt}}}%
+}
+\end{center}
+
+\end{document}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\8.subscription.txt =====
+`
+\documentclass[11pt,a4paper]{article}
+
+% === Encodage & Langue ===
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% === Mise en page ===
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+% === Tableaux ===
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+
+% === Code & couleurs ===
+\usepackage{listings}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{lastpage}
+
+% === Boites ===
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% === Couleurs AGT ===
+\definecolor{agtblue}{HTML}{1A3A5C}
+\definecolor{agtgray}{HTML}{4A4A4A}
+\definecolor{agtgreen}{HTML}{2E7D32}
+\definecolor{agtred}{HTML}{C62828}
+\definecolor{agtorange}{HTML}{E65100}
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{lightbg}{HTML}{E8EEF4}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=agtblue,
+  urlcolor=agtblue,
+  pdfauthor={AG Technologies},
+  pdftitle={Service Abonnement - CDC v1.2},
+}
+
+% === Listings JSON ===
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  string=[s]{"}{"},
+  stringstyle=\color{agtgreen},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{codebg},
+  rulecolor=\color{gray!30},
+  showstringspaces=false,
+  literate=
+    *{:}{{{\color{agtblue}:}}}{1}
+     {,}{{{\color{agtblue},}}}{1}
+     {\{}{{{\color{agtblue}\{}}}{1}
+     {\}}{{{\color{agtblue}\}}}}{1}
+     {[}{{{\color{agtblue}[}}}{1}
+     {]}{{{\color{agtblue}]}}}{1},
+}
+\lstset{language=json}
+
+% === Boites info/warn ===
+\newtcolorbox{infobox}[1][]{
+  colback=lightbg,colframe=agtblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtblue,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=orange!5,colframe=agtorange,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtorange,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+
+% === Header/Footer ===
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{agtgray}{AGT --- Service Abonnement}}
+\fancyhead[R]{\small\textcolor{agtgray}{v1.2 --- Confidentiel}}
+\fancyfoot[C]{\small\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\textcolor{agtgray}{Avril 2026}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.2pt}
+
+% === Titres ===
+\titleformat{\section}{\Large\bfseries\color{agtblue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{agtblue!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{agtblue!60}}{\thesubsubsection}{1em}{}
+
+% === Commandes ===
+\newcommand{\urgent}{\textcolor{agtred}{\textbf{Urgent}}}
+\newcommand{\normale}{\textcolor{agtorange}{Normale}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+% ============================================================
+%  PAGE DE TITRE
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\Huge\bfseries\textcolor{agtblue}{AG TECHNOLOGIES}\\[0.3cm]}
+{\large\textcolor{agtgray}{Architecture de Services Partag\'es}\\[2cm]}
+\rule{\textwidth}{1.5pt}\\[0.5cm]
+{\LARGE\bfseries Cahier des Charges Technique\\[0.3cm]}
+{\Large Service d'Abonnement Centralis\'e\\[0.3cm]}
+{\large\textit{Subscription Service --- AGT-Subscription}\\[0.5cm]}
+\rule{\textwidth}{1.5pt}\\[2cm]
+\begin{tabular}{ll}
+\textbf{Version}        & 1.2 \\
+\textbf{Date}           & Avril 2026 \\
+\textbf{Statut}         & Implementation-ready \\
+\textbf{Classification} & Confidentiel \\
+\textbf{Auteur}         & \'Equipe Architecture \\
+\textbf{D\'ependances}  & Auth v2.1, Users v1.0, Notification v1.2 \\
+\end{tabular}
+\vfill
+{\small\textcolor{agtgray}{Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies}}
+\end{titlepage}
+
+% ============================================================
+%  HISTORIQUE
+% ============================================================
+\section*{Historique des R\'evisions}
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Ver.} & \textbf{Date} & \textbf{Auteur} & \textbf{Description} \\
+\midrule
+1.0 & 2026-04-03 & \'Equipe Archi. & Cr\'eation initiale. Mod\`ele hybride B2C+B2B via subscriber abstrait. Plans, quotas, cycles, trial, prorata, overage, organisations. Contrats inter-services formalis\'es. Diagramme PlantUML en annexe. \\
+1.1 & 2026-04-03 & \'Equipe Archi. & Post-audit~: quota atomique (reserve/confirm/release). Idempotence \'ev\'enements RabbitMQ (\texttt{event\_id}, \texttt{idempotency\_key}). Strat\'egie fallback/mode d\'egrad\'e (4 niveaux). Retry crons avec backoff exponentiel + dead letter queue. Immutabilit\'e des plans actifs (versioning). Snapshot quota au billing overage. Table \texttt{quota\_reservations}. \\
+1.2 & 2026-04-03 & \'Equipe Archi. & Version finale~: statut \textit{Implementation-ready}. Contrats inter-services align\'es sur reserve/confirm/release pour chemins critiques. R\'esidus documentaires corrig\'es. \\
+\bottomrule
+\end{tabularx}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+Ce document constitue le cahier des charges du \textbf{Service d'Abonnement Centralis\'e} (ci-apr\`es \og~Subscription Service~\fg{}) destin\'e \`a l'\'ecosyst\`eme AGT. Il sert de r\'ef\'erence unique pour la conception, le d\'eveloppement et les d\'ecisions techniques.
+
+\subsection{P\'erim\`etre}
+
+Le service Abonnement couvre la gestion compl\`ete du cycle de vie des abonnements~: d\'efinition de plans avec quotas, souscription, renouvellement, upgrade/downgrade avec prorata, trial, d\'epassement (overage), gr\^ace apr\`es expiration, et v\'erification de quotas en temps r\'eel pour les services consommateurs.
+
+\subsection{Hors p\'erim\`etre}
+
+\begin{itemize}[nosep]
+  \item Authentification (d\'el\'egu\'ee au Service Auth v2.1)
+  \item Profils utilisateur, r\^oles et permissions (d\'el\'egu\'es au Service Users v1.0)
+  \item Ex\'ecution des paiements (d\'el\'egu\'ee au futur Service Paiement)
+  \item Stockage de fichiers (d\'el\'egu\'e au Service M\'edia v1.4)
+  \item Envoi de notifications (d\'el\'egu\'e au Service Notification v1.2)
+  \item Logique m\'etier propre aux plateformes consommatrices
+\end{itemize}
+
+\begin{warnbox}[Convention d'identit\'e]
+Dans tout ce document~:
+\begin{itemize}[nosep]
+  \item \texttt{user\_id} d\'esigne \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item \texttt{platform\_id} d\'esigne un UUID du registre Auth (\texttt{platforms.id})
+  \item Abonnement ne stocke aucune table locale de plateformes ni d'utilisateurs. Il consomme Auth et Users.
+\end{itemize}
+\end{warnbox}
+
+% ============================================================
+\section{Contexte \& Probl\'ematique}
+% ============================================================
+
+\subsection{Contexte}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Plateforme} & \textbf{Statut} & \textbf{Besoin abonnement} \\
+\midrule
+AGT-Bot    & En d\'eveloppement & Plans par nombre de bots, messages IA/mois \\
+AGT-Market & En d\'eveloppement & Plans vendeur par nombre de produits, boosts \\
+MboaMove   & En d\'eveloppement & Plans chauffeur, dispatch prioritaire \\
+SALMA      & Migration pr\'evue & Plans \'etudiant, acc\`es formations \\
+Futures    & Planifi\'e         & Toute plateforme n\'ecessitant une mon\'etisation \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Probl\'ematique}
+
+Sans service centralis\'e, chaque plateforme impl\'ementerait sa propre gestion d'abonnements, entra\^inant~: duplication de la logique de quotas, incoh\'erence dans la gestion des cycles de vie, impossibilit\'e de mutualiser les r\`egles de facturation, et absence de vision unifi\'ee sur les revenus r\'ecurrents.
+
+% ============================================================
+\section{Vision \& Objectifs}
+% ============================================================
+
+\subsection{Vision}
+
+Un service \textbf{g\'en\'erique et abstrait} qui g\`ere les abonnements pour toute plateforme de l'\'ecosyst\`eme. Il ne conna\^it aucun concept m\'etier~: il g\`ere des plans, des quotas, des cycles et des souscriptions.
+
+\begin{infobox}[Principe fondamental]
+Le service Abonnement \textbf{d\'efinit les r\`egles} (qui a droit \`a quoi, en quelle quantit\'e, pendant combien de temps). Il ne facture rien~: c'est le futur Service Paiement qui ex\'ecute les transactions. Abonnement \textbf{d\'ecide}, Paiement \textbf{ex\'ecute}.
+\end{infobox}
+
+\subsection{Concept du subscriber abstrait}
+
+L'abonn\'e n'est pas forc\'ement un individu. Le service mod\'elise un \textbf{subscriber} abstrait~:
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{subscriber\_type} & \textbf{subscriber\_id pointe vers} & \textbf{Exemple} \\
+\midrule
+\texttt{user}         & \texttt{users\_auth.id} & Yannick s'abonne seul au plan Pro AGT-Bot \\
+\texttt{organization} & \texttt{organizations.id} (table locale) & TechCorp s'abonne au plan Enterprise, 15 membres partagent les quotas \\
+\bottomrule
+\end{tabularx}
+
+Chaque plateforme peut utiliser uniquement le mode \texttt{user} au d\'ebut, et activer le mode \texttt{organization} quand elle en a besoin. Aucune obligation.
+
+\subsection{Objectifs}
+
+\begin{tabularx}{\textwidth}{clL}
+\toprule
+\textbf{\#} & \textbf{Objectif} & \textbf{Indicateur} \\
+\midrule
+O1 & Gestion multi-plateforme   & Tout plan est scop\'e \`a une plateforme \\
+O2 & Mod\`ele hybride           & Forfait + d\'epassement configurable par quota \\
+O3 & Subscriber abstrait        & Support B2C (user) et B2B (organization) \\
+O4 & Cycle de vie complet       & Trial, actif, gr\^ace, suspendu, annul\'e, expir\'e \\
+O5 & Prorata                    & Upgrade/downgrade calcul\'e au jour \\
+O6 & V\'erification temps r\'eel & Endpoint quota check < 50ms \\
+O7 & Flexibilit\'e maximale     & Trial, gr\^ace, post-trial, plan gratuit~: tout configurable par plateforme \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Parties Prenantes \& Utilisateurs}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{R\^ole} & \textbf{Type} & \textbf{Responsabilit\'e} \\
+\midrule
+Product Owner       & Interne & Priorisation des fonctionnalit\'es \\
+\'Equipe Backend    & Interne & D\'eveloppement et maintenance \\
+\'Equipe Frontend   & Interne & Int\'egration UI plans, upgrade, quotas \\
+DevOps              & Interne & Infrastructure, monitoring, crons \\
+Admin global AGT    & Interne & Gestion transverse des plans, limites syst\`eme \\
+Admin plateforme    & Interne & Gestion des plans de sa plateforme \\
+Utilisateurs finaux & Externe & Souscription, upgrade, consultation quotas \\
+Services internes   & Interne & Chatbot, M\'edia, Search~: v\'erification quotas \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Fonctionnels}
+% ============================================================
+
+\subsection{Gestion des Plans}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-PLN-01 & Cr\'eation de plan       & Cr\'eer un plan avec nom, prix, cycle, quotas, pour une plateforme & \urgent \\
+F-PLN-02 & Liste des plans          & Lister les plans d'une plateforme (publics et/ou internes) & \urgent \\
+F-PLN-03 & D\'etail d'un plan       & Consulter un plan avec ses quotas et features & \urgent \\
+F-PLN-04 & Modification de plan     & Modifier prix, quotas, features (n'affecte pas les abonnements actifs) & \urgent \\
+F-PLN-05 & Archivage de plan        & D\'esactiver un plan (plus de nouvelles souscriptions, existants maintenus) & \urgent \\
+F-PLN-06 & Plan gratuit par d\'efaut & Configurable par plateforme~: un plan peut \^etre marqu\'e \texttt{is\_default} & \normale \\
+F-PLN-07 & Hi\'erarchie admin       & Admin global peut tout faire~; admin plateforme limit\'e \`a sa plateforme & \urgent \\
+F-PLN-08 & Immutabilit\'e plans actifs & Un plan avec abonnements actifs est immutable sur prix/quotas. Cr\'eer un nouveau plan et archiver l'ancien. & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Versioning des plans (v1.1)]
+\textbf{R\`egle}~: un plan ayant au moins un abonnement actif (statut $\neq$ expired, cancelled) est \textbf{immutable} sur ses champs \texttt{plan\_prices} et \texttt{plan\_quotas}. Seuls \texttt{name}, \texttt{description} et \texttt{metadata} restent modifiables.
+
+Pour changer les prix ou quotas~: cr\'eer un nouveau plan (avec \texttt{tier\_order} identique ou sup\'erieur), archiver l'ancien. Les abonn\'es existants restent sur leur plan jusqu'au renouvellement ou upgrade volontaire. Aucune migration automatique.
+\end{warnbox}
+
+\subsection{Gestion des Quotas}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-QTA-01 & D\'efinition quotas par plan  & Chaque plan d\'efinit N quotas avec cl\'e, limite, et politique (hard/overage) & \urgent \\
+F-QTA-02 & V\'erification quota          & Endpoint S2S~: un service demande \og~cet abonn\'e a-t-il encore du quota X~?\fg{} & \urgent \\
+F-QTA-03 & Incr\'ementation usage        & Endpoint S2S~: un service reporte une consommation sur un quota & \urgent \\
+F-QTA-04 & Consultation usage            & L'abonn\'e consulte sa consommation courante vs limites & \urgent \\
+F-QTA-05 & Reset p\'eriodique            & Les compteurs de quotas cycliques sont remis \`a z\'ero au renouvellement & \urgent \\
+F-QTA-06 & Politique hard limit          & Quota atteint = acc\`es bloqu\'e. Le service appelant re\c{c}oit un refus & \urgent \\
+F-QTA-07 & Politique overage             & Quota atteint = d\'epassement autoris\'e, comptabilis\'e pour facturation & \normale \\
+F-QTA-08 & Quotas libres par plateforme  & Les cl\'es de quotas sont d\'efinies librement (pas de liste cod\'ee en dur) & \urgent \\
+F-QTA-09 & Snapshot fin de cycle         & \`A chaque fin de cycle, snapshot de l'usage et overage persist\'e avant reset. Base de la facturation overage. & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Exemples de cl\'es de quotas]
+\begin{itemize}[nosep]
+  \item AGT-Bot~: \texttt{max\_bots}, \texttt{messages\_per\_month}, \texttt{storage\_mb}
+  \item AGT-Market~: \texttt{max\_products}, \texttt{boosts\_per\_month}
+  \item MboaMove~: \texttt{priority\_dispatch} (bool\'een via quota 0/1)
+  \item SALMA~: \texttt{max\_active\_courses}, \texttt{certifications\_included}
+\end{itemize}
+Les cl\'es sont des \texttt{VARCHAR} libres, scop\'ees par plateforme. Abonnement ne conna\^it pas leur signification m\'etier.
+\end{infobox}
+
+\subsection{Souscription \& Cycle de Vie}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-SUB-01 & Souscription             & Cr\'eer un abonnement (subscriber + plan + cycle) & \urgent \\
+F-SUB-02 & Activation post-paiement & Passer de \texttt{pending\_payment} \`a \texttt{active} sur confirmation Paiement & \urgent \\
+F-SUB-03 & Renouvellement auto      & Cron~: tenter le renouvellement avant expiration via Paiement & \urgent \\
+F-SUB-04 & Expiration               & Cron~: passer en \texttt{grace} puis \texttt{expired} selon config plateforme & \urgent \\
+F-SUB-05 & Annulation               & L'abonn\'e annule~; reste actif jusqu'\`a fin du cycle pay\'e & \urgent \\
+F-SUB-06 & Suspension               & Admin ou syst\`eme suspend un abonnement (impay\'e, abus) & \normale \\
+F-SUB-07 & R\'eactivation           & Reprendre un abonnement suspendu ou expir\'e & \normale \\
+F-SUB-08 & Historique               & Consulter l'historique complet des changements d'\'etat & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Cycle de vie d'un abonnement]
+\begin{verbatim}
+  pending_payment --> active --> [renouvellement OK] --> active
+                       |
+                       +--> cancelled (par l'abonne, actif jusqu'a fin cycle)
+                       |
+                       +--> [expiration] --> grace --> expired --> suspended
+                       |
+                       +--> suspended (par admin/systeme)
+
+  trial --> active (si paiement)
+        --> [selon config plateforme] : downgrade_to_free | suspended | expired
+\end{verbatim}
+\end{warnbox}
+
+\subsection{Trial}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-TRI-01 & Activation trial             & Souscription avec p\'eriode d'essai (dur\'ee configurable par plateforme) & \urgent \\
+F-TRI-02 & Fin de trial                 & Comportement post-trial configurable~: downgrade, suspend, ou expire & \urgent \\
+F-TRI-03 & Conversion trial $\to$ payant & Si paiement re\c{c}u pendant le trial, passage en \texttt{active} & \urgent \\
+F-TRI-04 & Un seul trial par plan       & Un subscriber ne peut pas b\'en\'eficier deux fois du trial sur le m\^eme plan & \normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Upgrade \& Downgrade}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-CHG-01 & Upgrade              & Passage \`a un plan sup\'erieur en cours de cycle avec prorata au jour & \urgent \\
+F-CHG-02 & Downgrade            & Passage \`a un plan inf\'erieur en cours de cycle avec prorata au jour & \urgent \\
+F-CHG-03 & Calcul prorata       & Cr\'edit restant sur l'ancien plan $-$ co\^ut restant sur le nouveau plan & \urgent \\
+F-CHG-04 & Historique changements & Chaque changement de plan est logg\'e avec montants prorata & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Calcul du prorata]
+\textbf{Upgrade}~: jours restants sur l'ancien plan $\times$ prix/jour ancien = cr\'edit. Jours restants $\times$ prix/jour nouveau = d\'ebit. Diff\'erence = montant \`a facturer via Paiement.\\
+\textbf{Downgrade}~: m\^eme logique invers\'ee. Le cr\'edit r\'esiduel est stock\'e et d\'eduit du prochain cycle.
+\end{infobox}
+
+\subsection{Organisations (B2B)}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ORG-01 & Cr\'eation organisation & Cr\'eer une organisation avec nom, owner, plateforme & \urgent \\
+F-ORG-02 & Ajout de membres       & Ajouter un user\_id comme membre d'une organisation & \urgent \\
+F-ORG-03 & Retrait de membres     & Retirer un membre (l'owner ne peut pas \^etre retir\'e) & \urgent \\
+F-ORG-04 & R\^oles organisation   & Owner (admin) et member (consommateur de quotas) & \normale \\
+F-ORG-05 & Quotas partag\'es      & Les quotas de l'abonnement org sont mutualis\'es entre membres & \urgent \\
+F-ORG-06 & Liste membres          & Consulter les membres d'une organisation & \normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Configuration Plateforme}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-CFG-01 & Config trial            & Dur\'ee trial par d\'efaut, comportement post-trial & \urgent \\
+F-CFG-02 & Config gr\^ace          & Dur\'ee du d\'elai de gr\^ace apr\`es expiration & \urgent \\
+F-CFG-03 & Config plan par d\'efaut & Quel plan est assign\'e par d\'efaut (ou aucun) & \normale \\
+F-CFG-04 & Config devise           & Devise des prix pour cette plateforme & \urgent \\
+F-CFG-05 & Config cycles autoris\'es & Quels cycles de facturation sont propos\'es & \normale \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Administration}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ADM-01 & Stats par plateforme    & Nombre d'abonn\'es actifs, MRR, churn, par plan & \normale \\
+F-ADM-02 & Liste abonnements       & Filtrage par plateforme, plan, statut, subscriber & \urgent \\
+F-ADM-03 & Forcer un changement    & Admin peut forcer upgrade, downgrade, suspension, annulation & \urgent \\
+F-ADM-04 & Limites syst\`eme       & Admin global d\'efinit des plafonds & \normale \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Non-Fonctionnels}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{clLc}
+\toprule
+\textbf{ID} & \textbf{Cat\'egorie} & \textbf{Exigence} & \textbf{Cible} \\
+\midrule
+NF-01 & Performance    & V\'erification quota (endpoint check)            & < 50ms (P95) \\
+NF-02 & Performance    & Temps de r\'eponse API                           & < 200ms (P95) \\
+NF-03 & Performance    & Throughput v\'erification quotas                  & 1000 req/s min \\
+NF-04 & Disponibilit\'e & Uptime                                          & 99.9\% \\
+NF-05 & S\'ecurit\'e   & Auth obligatoire                                & JWT ou S2S \\
+NF-06 & S\'ecurit\'e   & Rate limiting                                   & Configurable \\
+NF-07 & Scalabilit\'e  & Horizontal                                      & Stateless, multi-instance \\
+NF-08 & Observabilit\'e & Logs structur\'es                               & JSON, request ID \\
+NF-09 & Observabilit\'e & Health check                                    & \texttt{GET /subscriptions/health} \\
+NF-10 & Donn\'ees      & Cache quotas                                    & Redis TTL 30s \\
+NF-11 & Donn\'ees      & Timestamps                                      & TIMESTAMPTZ \\
+NF-12 & Traitement     & Crons renouvellement/expiration                 & Celery Beat, retry 3x backoff (1min, 5min, 15min), dead letter queue \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Architecture Technique}
+% ============================================================
+
+\subsection{Vue d'ensemble}
+
+Le service Abonnement est un microservice REST stateless, d\'eploy\'e en conteneur Docker. Il expose une API JSON consomm\'ee par les plateformes clientes et les services internes (v\'erification de quotas).
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Composant} & \textbf{Technologie} \\
+\midrule
+Langage \& Framework & Python 3.11+ / Django 5.x \\
+API                  & Django REST Framework (DRF) \\
+Base de donn\'ees    & PostgreSQL 15+ \\
+ORM                  & Django ORM \\
+Migrations           & Django Migrations \\
+Cache                & Redis 7+ (quotas, v\'erifications fr\'equentes) \\
+Scheduler            & Celery + Celery Beat \\
+Message Broker       & RabbitMQ \\
+Validation           & DRF Serializers \\
+Conteneurisation     & Docker + Docker Compose \\
+CI/CD                & GitHub Actions \\
+\bottomrule
+\end{tabularx}
+
+\subsection{D\'ependances \& R\`egles d'Architecture}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Service} & \textbf{Type} & \textbf{Usage} \\
+\midrule
+Service Auth         & Interne & Validation JWT via \texttt{GET /auth/verify-token}. Validation S2S via \texttt{POST /auth/s2s/introspect}. Registre plateformes. \\
+Service Users        & Interne & R\'esolution \texttt{user\_id}, v\'erification statut actif. Cache Redis TTL 60s. \\
+Service Notification & Interne & Alertes~: expiration, renouvellement, fin trial, quota atteint. \\
+Service Paiement     & Interne (futur) & Ex\'ecution paiements. Confirmation via \'ev\'enement RabbitMQ. \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egle stricte de d\'ependance]
+Abonnement ne d\'epend d'aucun service m\'etier. Il est consomm\'e par les plateformes et les services internes (Chatbot, M\'edia, Search) pour la v\'erification de quotas. Le couplage est unidirectionnel~: les services interrogent Abonnement, jamais l'inverse.
+
+\textbf{Exception}~: Abonnement \'emet des \'ev\'enements RabbitMQ consomm\'es par Paiement (demande de facturation) et Notification (alertes cycle de vie).
+\end{warnbox}
+
+\subsection{Strat\'egie de r\'esilience (v1.1)}
+
+Le service Abonnement est sur le \textbf{chemin critique} de tout l'\'ecosyst\`eme (chaque message IA, chaque upload, chaque boost passe par la v\'erification de quotas). Une indisponibilit\'e d'Abonnement bloquerait Chatbot, M\'edia et Search simultan\'ement.
+
+\begin{infobox}[Mode d\'egrad\'e --- Fallback Strategy]
+\textbf{Niveau 1 --- Cache Redis (nominal)}~: les quotas et usages sont cach\'es dans Redis (TTL 30s). 95\% des appels sont servis depuis le cache sans toucher PostgreSQL.
+
+\textbf{Niveau 2 --- Cache local appelant (d\'egrad\'e)}~: chaque service consommateur (Chatbot, M\'edia) \textbf{doit} maintenir un cache local (in-memory, TTL 5 min) du dernier r\'esultat de \texttt{quota/check}. Si Abonnement est injoignable, le service utilise ce cache local.
+
+\textbf{Niveau 3 --- Grace allowance (failover)}~: si le cache local est \'egalement vide (premier appel, red\'emarrage), le service consommateur applique une \textbf{grace allowance} configurable~: il autorise N requ\^etes (d\'efaut~: 10) avant de bloquer. Ces consommations sont report\'ees en batch d\`es qu'Abonnement redevient disponible.
+
+\textbf{Niveau 4 --- Soft enforcement (dernier recours)}~: en cas d'indisponibilit\'e prolong\'ee ($>$ 5 min), les services passent en mode \texttt{soft enforcement}~: les quotas sont logg\'es mais non bloqu\'es. Une alerte critique est envoy\'ee \`a l'\'equipe ops via Notification.
+\end{infobox}
+
+\begin{warnbox}[Contrat de r\'esilience pour les services consommateurs]
+Tout service appelant \texttt{quotas/check} ou \texttt{quotas/reserve} \textbf{doit} impl\'ementer les niveaux 2 et 3. Ce n'est pas optionnel. Le non-respect de cette r\`egle cr\'ee un SPOF sur l'\'ecosyst\`eme.
+\end{warnbox}
+
+\subsection{Diagramme d'architecture}
+
+\begin{verbatim}
+  AGT-Bot   AGT-Market   MboaMove   SALMA   Futures
+     |          |            |         |        |
+     +-----+----+-------+----+----+----+--------+
+           |            |         |
+    Subscription Service (API REST)
+      |         |          |           |
+  Auth(JWT)  Users(status)  Redis    PostgreSQL
+      |
+  RabbitMQ -----> Paiement (futur)
+      |-----> Notification (alertes)
+\end{verbatim}
+
+% ============================================================
+\section{Mod\'elisation}
+% ============================================================
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes complet est fourni en annexe au format PlantUML (voir section~\ref{sec:plantuml}). Il couvre les entit\'es~: \texttt{Plan}, \texttt{PlanPrice}, \texttt{PlanQuota}, \texttt{Organization}, \texttt{OrganizationMember}, \texttt{Subscription}, \texttt{SubscriptionQuotasUsage}, \texttt{QuotaReservation}, \texttt{SubscriptionEvent} et \texttt{PlatformSubscriptionConfig}.
+
+\subsection{MLD --- Mod\`ele Logique de Donn\'ees}
+
+\subsubsection{Table \texttt{plans}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+platform\_id      & UUID          & NOT NULL       & Plateforme (UUID Auth) \\
+name              & VARCHAR(100)  & NOT NULL       & Nom du plan \\
+slug              & VARCHAR(100)  & NOT NULL       & Slug URL-friendly \\
+description       & TEXT          & NULL           & Description \\
+is\_active        & BOOLEAN       & DEFAULT true   & Plan actif \\
+is\_default       & BOOLEAN       & DEFAULT false  & Plan par d\'efaut \\
+is\_free          & BOOLEAN       & DEFAULT false  & Plan gratuit \\
+tier\_order       & INT           & DEFAULT 0      & Ordre hi\'erarchique \\
+metadata          & JSONB         & NULL           & Donn\'ees compl\'ementaires \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere mise \`a jour \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, slug)}.
+
+\subsubsection{Table \texttt{plan\_prices}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+plan\_id          & UUID          & FK $\to$ plans & Plan associ\'e \\
+billing\_cycle    & VARCHAR(20)   & NOT NULL       & monthly, yearly, custom \\
+cycle\_days       & INT           & NULL           & Jours si custom \\
+price             & DECIMAL(12,2) & NOT NULL       & Prix du cycle \\
+currency          & VARCHAR(3)    & NOT NULL       & Devise (XAF, EUR, USD) \\
+is\_active        & BOOLEAN       & DEFAULT true   & Prix actif \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(plan\_id, billing\_cycle, currency)}.
+
+\subsubsection{Table \texttt{plan\_quotas}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                   & UUID          & PK             & Identifiant unique \\
+plan\_id             & UUID          & FK $\to$ plans & Plan associ\'e \\
+quota\_key           & VARCHAR(50)   & NOT NULL       & Cl\'e libre (\texttt{max\_bots}, \texttt{messages\_per\_month}) \\
+limit\_value         & INT           & NOT NULL       & Limite ($-1$ = illimit\'e) \\
+is\_cyclical         & BOOLEAN       & DEFAULT true   & RAZ \`a chaque cycle \\
+overage\_policy      & VARCHAR(10)   & DEFAULT 'hard' & \texttt{hard} ou \texttt{overage} \\
+overage\_unit\_price & DECIMAL(10,2) & DEFAULT 0      & Prix unitaire du d\'epassement \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(plan\_id, quota\_key)}.
+
+\subsubsection{Table \texttt{organizations}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+platform\_id      & UUID          & NOT NULL       & Plateforme \\
+name              & VARCHAR(150)  & NOT NULL       & Nom de l'organisation \\
+owner\_user\_id   & UUID          & NOT NULL       & Propri\'etaire (\texttt{users\_auth.id}) \\
+is\_active        & BOOLEAN       & DEFAULT true   & Active \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, name)}.
+
+\subsubsection{Table \texttt{organization\_members}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+organization\_id  & UUID          & FK $\to$ organizations & Organisation \\
+user\_id          & UUID          & NOT NULL       & Membre (\texttt{users\_auth.id}) \\
+role              & VARCHAR(20)   & DEFAULT 'member' & \texttt{owner} ou \texttt{member} \\
+joined\_at        & TIMESTAMPTZ   & NOT NULL       & Date d'ajout \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(organization\_id, user\_id)}.
+
+\subsubsection{Table \texttt{subscriptions}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                     & UUID          & PK             & Identifiant unique \\
+platform\_id           & UUID          & NOT NULL       & Plateforme \\
+subscriber\_type       & VARCHAR(20)   & NOT NULL       & \texttt{user} ou \texttt{organization} \\
+subscriber\_id         & UUID          & NOT NULL       & user\_id ou organization\_id \\
+plan\_id               & UUID          & FK $\to$ plans & Plan souscrit \\
+plan\_price\_id        & UUID          & FK $\to$ plan\_prices & Prix/cycle choisi \\
+status                 & VARCHAR(20)   & NOT NULL       & pending\_payment, trial, active, grace, expired, suspended, cancelled \\
+current\_period\_start & TIMESTAMPTZ   & NOT NULL       & D\'ebut du cycle courant \\
+current\_period\_end   & TIMESTAMPTZ   & NOT NULL       & Fin du cycle courant \\
+trial\_end             & TIMESTAMPTZ   & NULL           & Fin de la p\'eriode d'essai \\
+grace\_end             & TIMESTAMPTZ   & NULL           & Fin du d\'elai de gr\^ace \\
+cancelled\_at          & TIMESTAMPTZ   & NULL           & Date d'annulation \\
+cancel\_at\_period\_end & BOOLEAN      & DEFAULT false  & Annulation en fin de cycle \\
+created\_at            & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at            & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique partielle~: \texttt{(platform\_id, subscriber\_type, subscriber\_id)} \texttt{WHERE status NOT IN ('expired','cancelled')}.
+
+\begin{infobox}[R\`egle d'unicit\'e]
+Un subscriber ne peut avoir qu'\textbf{un seul abonnement actif} par plateforme. Les abonnements termin\'es (expired, cancelled) restent en base pour l'historique.
+\end{infobox}
+
+\subsubsection{Table \texttt{subscription\_quotas\_usage}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+subscription\_id  & UUID          & FK $\to$ subscriptions & Abonnement \\
+quota\_key        & VARCHAR(50)   & NOT NULL       & Cl\'e du quota \\
+used              & INT           & DEFAULT 0      & Consommation courante \\
+overage           & INT           & DEFAULT 0      & D\'epassement \\
+period\_start     & TIMESTAMPTZ   & NOT NULL       & D\'ebut p\'eriode \\
+period\_end       & TIMESTAMPTZ   & NOT NULL       & Fin p\'eriode \\
+updated\_at       & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(subscription\_id, quota\_key, period\_start)}.
+
+\begin{infobox}[Snapshot de fin de cycle (v1.1)]
+Avant le reset des quotas cycliques, le cron de renouvellement cr\'ee un \texttt{subscription\_event} de type \texttt{cycle\_closed} avec dans \texttt{metadata} un snapshot complet~: \texttt{\{quota\_key, limit, used, overage\}} pour chaque quota. Ce snapshot est la source de v\'erit\'e pour la facturation overage. Le reset n'intervient qu'\textbf{apr\`es} la cr\'eation du snapshot.
+\end{infobox}
+
+\subsubsection{Table \texttt{quota\_reservations} (v1.1)}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique (= reservation\_id) \\
+subscription\_id  & UUID          & FK $\to$ subscriptions & Abonnement \\
+quota\_key        & VARCHAR(50)   & NOT NULL       & Cl\'e du quota \\
+amount            & INT           & NOT NULL       & Quantit\'e r\'eserv\'ee \\
+status            & VARCHAR(20)   & DEFAULT 'pending' & pending, confirmed, released, expired \\
+expires\_at       & TIMESTAMPTZ   & NOT NULL       & Expiration de la r\'eservation \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+resolved\_at      & TIMESTAMPTZ   & NULL           & Date de confirm/release/expiration \\
+\bottomrule
+\end{tabularx}
+
+Index~: \texttt{(subscription\_id, quota\_key, status)} pour lookup rapide des r\'eservations pending.
+
+\subsubsection{Table \texttt{subscription\_events}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+subscription\_id  & UUID          & FK $\to$ subscriptions & Abonnement \\
+event\_type       & VARCHAR(30)   & NOT NULL       & created, activated, renewed, upgraded, downgraded, cancelled, expired, suspended, reactivated, cycle\_closed \\
+from\_plan\_id    & UUID          & NULL           & Plan pr\'ec\'edent \\
+to\_plan\_id      & UUID          & NULL           & Nouveau plan \\
+prorate\_credit   & DECIMAL(12,2) & NULL           & Cr\'edit prorata \\
+prorate\_debit    & DECIMAL(12,2) & NULL           & D\'ebit prorata \\
+metadata          & JSONB         & NULL           & Donn\'ees compl\'ementaires \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Date de l'\'ev\'enement \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{platform\_subscription\_config}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                      & UUID          & PK             & Identifiant unique \\
+platform\_id            & UUID          & UNIQUE, NOT NULL & Plateforme \\
+default\_trial\_days    & INT           & DEFAULT 0      & Dur\'ee trial (0 = pas de trial) \\
+grace\_period\_days     & INT           & DEFAULT 0      & D\'elai de gr\^ace (0 = coupure imm\'ediate) \\
+post\_trial\_behavior   & VARCHAR(20)   & DEFAULT 'suspend' & \texttt{downgrade\_to\_free}, \texttt{suspend}, \texttt{expire} \\
+default\_currency       & VARCHAR(3)    & DEFAULT 'XAF'  & Devise par d\'efaut \\
+allowed\_cycles         & JSONB         & NOT NULL       & Cycles autoris\'es \\
+require\_default\_plan  & BOOLEAN       & DEFAULT false  & Exiger un plan par d\'efaut \\
+created\_at             & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at             & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Contrats d'API}
+% ============================================================
+
+Base URL~: \texttt{/api/v1}. Tous les endpoints retournent du JSON. Les endpoints prot\'eg\'es requi\`erent \texttt{Authorization: Bearer <token>}.
+
+\subsection{Health Check}
+
+\subsubsection{GET /subscriptions/health}
+
+V\'erifie l'\'etat du service. Aucune authentification requise.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "status": "healthy",
+  "database": "ok",
+  "redis": "ok",
+  "version": "1.2.0"
+}
+\end{lstlisting}
+
+\subsection{Plans}
+
+\subsubsection{POST /subscriptions/plans}
+
+Cr\'eation d'un plan. Auth~: Bearer token (admin plateforme ou admin global).
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "Pro",
+  "slug": "pro",
+  "description": "Plan professionnel",
+  "is_free": false,
+  "tier_order": 2,
+  "prices": [
+    { "billing_cycle": "monthly", "price": 15000, "currency": "XAF" },
+    { "billing_cycle": "yearly", "price": 150000, "currency": "XAF" }
+  ],
+  "quotas": [
+    {
+      "quota_key": "max_bots",
+      "limit_value": 5,
+      "is_cyclical": false,
+      "overage_policy": "hard"
+    },
+    {
+      "quota_key": "messages_per_month",
+      "limit_value": 10000,
+      "is_cyclical": true,
+      "overage_policy": "overage",
+      "overage_unit_price": 2
+    }
+  ]
+}
+\end{lstlisting}
+
+Response 201~:
+\begin{lstlisting}
+{
+  "id": "plan-uuid",
+  "platform_id": "uuid",
+  "name": "Pro",
+  "slug": "pro",
+  "message": "Plan created"
+}
+\end{lstlisting}
+
+Codes~: 201 Created, 400 Validation error, 401 Unauthorized, 403 Forbidden, 409 Slug exists.
+
+\subsubsection{GET /subscriptions/plans}
+
+Liste des plans. Query params~: \texttt{?platform\_id=uuid\&is\_active=true\&page=1\&limit=20}.
+
+Codes~: 200 OK, 401 Unauthorized.
+
+\subsubsection{GET /subscriptions/plans/\{planId\}}
+
+D\'etail d'un plan avec prix et quotas. Codes~: 200 OK, 404 Not found.
+
+\subsubsection{PUT /subscriptions/plans/\{planId\}}
+
+Modification. N'affecte pas les abonnements actifs. Codes~: 200 OK, 400, 403, 404.
+
+\subsubsection{POST /subscriptions/plans/\{planId\}/archive}
+
+Archivage (\texttt{is\_active = false}). Codes~: 200 OK, 403, 404.
+
+\subsection{Souscriptions}
+
+\subsubsection{POST /subscriptions}
+
+Cr\'eation d'un abonnement.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "subscriber_type": "user",
+  "subscriber_id": "user-uuid",
+  "plan_id": "plan-uuid",
+  "billing_cycle": "monthly",
+  "with_trial": true
+}
+\end{lstlisting}
+
+Response 201~:
+\begin{lstlisting}
+{
+  "id": "sub-uuid",
+  "status": "trial",
+  "plan": { "id": "plan-uuid", "name": "Pro" },
+  "current_period_start": "2026-04-03T00:00:00Z",
+  "current_period_end": "2026-05-03T00:00:00Z",
+  "trial_end": "2026-04-17T00:00:00Z",
+  "message": "Subscription created"
+}
+\end{lstlisting}
+
+Codes~: 201 Created, 400 Validation, 404 Plan not found, 409 Active sub exists.
+
+\subsubsection{GET /subscriptions/\{subId\}}
+
+D\'etail avec plan, quotas, usage courant. Codes~: 200, 404.
+
+\subsubsection{GET /subscriptions}
+
+Liste. Query params~: \texttt{?platform\_id\&subscriber\_id\&status\&page\&limit}. Codes~: 200, 401.
+
+\subsubsection{POST /subscriptions/\{subId\}/cancel}
+
+Annulation. Actif jusqu'\`a fin du cycle.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "id": "sub-uuid",
+  "status": "active",
+  "cancel_at_period_end": true,
+  "message": "Subscription will be cancelled at period end"
+}
+\end{lstlisting}
+
+Codes~: 200, 404, 409 Already cancelled.
+
+\subsubsection{POST /subscriptions/\{subId\}/reactivate}
+
+R\'eactivation. Codes~: 200, 404, 409 Cannot reactivate.
+
+\subsection{Changement de Plan}
+
+\subsubsection{POST /subscriptions/\{subId\}/change-plan}
+
+Upgrade ou downgrade avec prorata.
+
+Request body~:
+\begin{lstlisting}
+{
+  "new_plan_id": "plan-uuid",
+  "billing_cycle": "monthly"
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "id": "sub-uuid",
+  "old_plan": { "id": "old-uuid", "name": "Free" },
+  "new_plan": { "id": "new-uuid", "name": "Pro" },
+  "prorate_credit": 0,
+  "prorate_debit": 10000,
+  "amount_due": 10000,
+  "message": "Plan changed, payment required"
+}
+\end{lstlisting}
+
+Codes~: 200, 400 Same plan, 404 Plan not found, 409 No active sub.
+
+\subsection{Quotas}
+
+\subsubsection{POST /subscriptions/quotas/check}
+
+\textbf{Endpoint critique S2S.} V\'erifie si un subscriber a du quota disponible. Auth~: S2S token.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "subscriber_type": "user",
+  "subscriber_id": "user-uuid",
+  "quota_key": "messages_per_month",
+  "requested": 1
+}
+\end{lstlisting}
+
+Response 200 (disponible)~:
+\begin{lstlisting}
+{
+  "allowed": true,
+  "quota_key": "messages_per_month",
+  "limit": 10000,
+  "used": 4523,
+  "remaining": 5477,
+  "overage_policy": "overage"
+}
+\end{lstlisting}
+
+Response 200 (\'epuis\'e, hard limit)~:
+\begin{lstlisting}
+{
+  "allowed": false,
+  "quota_key": "max_bots",
+  "limit": 5,
+  "used": 5,
+  "remaining": 0,
+  "overage_policy": "hard",
+  "message": "Quota exceeded"
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 401, 404 No active sub.
+
+\begin{warnbox}[Performance quota check]
+Cet endpoint est sur le chemin critique de tous les services. Il \textbf{doit} r\'epondre en < 50ms. Strat\'egie~: cache Redis avec les quotas/usage du subscriber, TTL 30s, invalid\'e \`a chaque incr\'ementation.
+\end{warnbox}
+
+\subsubsection{POST /subscriptions/quotas/increment}
+
+\textbf{Endpoint S2S.} Reporte une consommation.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "subscriber_type": "user",
+  "subscriber_id": "user-uuid",
+  "quota_key": "messages_per_month",
+  "amount": 1
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "quota_key": "messages_per_month",
+  "used": 4524,
+  "limit": 10000,
+  "overage": 0
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 403 Hard limit exceeded, 404 No active sub.
+
+\begin{warnbox}[Atomicit\'e des quotas (v1.1)]
+Le pattern \texttt{check $\to$ increment} en deux appels s\'epar\'es est vuln\'erable aux race conditions (requ\^etes concurrentes). Le service impl\'emente un mod\`ele \textbf{reserve / confirm / release}~:
+
+\begin{enumerate}[nosep]
+  \item \textbf{Reserve}~: r\'eserve atomiquement N unit\'es (\texttt{UPDATE ... WHERE used + requested <= limit} ou autorise l'overage). Retourne un \texttt{reservation\_id} avec TTL (d\'efaut~: 60s).
+  \item \textbf{Confirm}~: le service appelant confirme la consommation. La r\'eservation devient d\'efinitive.
+  \item \textbf{Release}~: si le traitement \'echoue, lib\'eration de la r\'eservation. Un cron purge les r\'eservations expir\'ees.
+\end{enumerate}
+
+\textbf{Impl\'ementation}~: op\'eration SQL atomique (\texttt{SELECT ... FOR UPDATE} ou \texttt{UPDATE ... RETURNING}). Cache Redis invalid\'e apr\`es chaque reserve/confirm/release.
+
+\textbf{R\'etrocompatibilit\'e}~: \texttt{check} et \texttt{increment} restent disponibles pour les cas simples. Pour les chemins critiques \`a haute concurrence (messages IA, uploads), les services \textbf{doivent} utiliser reserve/confirm/release.
+\end{warnbox}
+
+\subsubsection{POST /subscriptions/quotas/reserve (v1.1)}
+
+\textbf{Endpoint S2S.} R\'eserve atomiquement du quota. Auth~: S2S token.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "subscriber_type": "user",
+  "subscriber_id": "user-uuid",
+  "quota_key": "messages_per_month",
+  "amount": 1,
+  "ttl_seconds": 60
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "reservation_id": "res-uuid",
+  "allowed": true,
+  "quota_key": "messages_per_month",
+  "limit": 10000,
+  "used": 4524,
+  "reserved": 1,
+  "expires_at": "2026-04-03T12:01:00Z"
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 403 Hard limit exceeded, 404 No active sub.
+
+\subsubsection{POST /subscriptions/quotas/confirm (v1.1)}
+
+Confirme une r\'eservation. Auth~: S2S token.
+
+Request body~:
+\begin{lstlisting}
+{
+  "reservation_id": "res-uuid"
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "confirmed": true,
+  "quota_key": "messages_per_month",
+  "used": 4524
+}
+\end{lstlisting}
+
+Codes~: 200, 404 Reservation not found, 410 Reservation expired.
+
+\subsubsection{POST /subscriptions/quotas/release (v1.1)}
+
+Lib\`ere une r\'eservation non utilis\'ee. Auth~: S2S token.
+
+Request body~:
+\begin{lstlisting}
+{
+  "reservation_id": "res-uuid"
+}
+\end{lstlisting}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "released": true,
+  "quota_key": "messages_per_month",
+  "used": 4523
+}
+\end{lstlisting}
+
+Codes~: 200, 404, 410 Already confirmed or expired.
+
+\subsubsection{GET /subscriptions/\{subId\}/usage}
+
+Usage courant de tous les quotas. Codes~: 200, 404.
+
+\subsection{Organisations}
+
+\subsubsection{POST /subscriptions/organizations}
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "name": "TechCorp",
+  "owner_user_id": "user-uuid"
+}
+\end{lstlisting}
+
+Codes~: 201, 400, 409 Name exists.
+
+\subsubsection{POST /subscriptions/organizations/\{orgId\}/members}
+
+Request body~: \texttt{\{"user\_id": "uuid", "role": "member"\}}
+
+Codes~: 201, 404, 409 Already member.
+
+\subsubsection{DELETE /subscriptions/organizations/\{orgId\}/members/\{userId\}}
+
+Codes~: 200, 403 Cannot remove owner, 404.
+
+\subsubsection{GET /subscriptions/organizations/\{orgId\}/members}
+
+Codes~: 200, 404.
+
+\subsection{Configuration Plateforme}
+
+\subsubsection{PUT /subscriptions/config/\{platformId\}}
+
+Auth~: admin global ou admin plateforme.
+
+Request body~:
+\begin{lstlisting}
+{
+  "default_trial_days": 14,
+  "grace_period_days": 7,
+  "post_trial_behavior": "downgrade_to_free",
+  "default_currency": "XAF",
+  "allowed_cycles": ["monthly", "yearly"],
+  "require_default_plan": true
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 403.
+
+\subsubsection{GET /subscriptions/config/\{platformId\}}
+
+Codes~: 200, 404.
+
+\subsection{Administration}
+
+\subsubsection{GET /subscriptions/admin/stats}
+
+Query params~: \texttt{?platform\_id=uuid}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "total_active": 1542,
+  "total_trial": 89,
+  "total_cancelled": 234,
+  "mrr": 12500000,
+  "plans_breakdown": [
+    { "plan": "Free", "count": 980 },
+    { "plan": "Pro", "count": 450 },
+    { "plan": "Enterprise", "count": 112 }
+  ]
+}
+\end{lstlisting}
+
+Codes~: 200, 401, 403.
+
+\subsubsection{POST /subscriptions/admin/\{subId\}/suspend}
+
+Suspension forc\'ee. Codes~: 200, 403, 404.
+
+\subsubsection{POST /subscriptions/admin/\{subId\}/force-change}
+
+Changement de plan forc\'e (sans paiement). Codes~: 200, 403, 404.
+
+\subsubsection{DELETE /subscriptions/by-user/\{userId\}}
+
+\textbf{Purge RGPD.} Auth~: S2S token. Supprime abonnements, usage, events du subscriber.
+
+Codes~: 200, 401, 404.
+
+% ============================================================
+\section{Contrats Inter-Services}
+% ============================================================
+
+\subsection{Abonnement $\to$ Auth (JWT utilisateur)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint           & \texttt{GET /auth/verify-token} \\
+Auth               & \texttt{Authorization: Bearer <access\_token>} \\
+Donn\'ees extraites & \texttt{user\_id} (\texttt{sub}), \texttt{platform\_id} \\
+Cache              & Redis TTL 30s \\
+Comportement \'echec & Retourner 401 Unauthorized \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Abonnement $\to$ Auth (token S2S)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint & \texttt{POST /auth/s2s/introspect} \\
+Donn\'ees & \texttt{client\_id} (= \texttt{platform\_id}), \texttt{service\_name} \\
+Usage    & Appels S2S entrants (quota check depuis Chatbot, M\'edia, etc.) \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Abonnement $\to$ Users (r\'esolution subscriber)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint           & \texttt{GET /api/v1/users/\{userId\}/status} \\
+Usage              & V\'erifier que le user est actif avant souscription \\
+Cache              & Redis TTL 60s \\
+Comportement \'echec & Retourner 400 \og User not found or inactive\fg{} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Abonnement $\to$ Notification (alertes)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Notification d\'eclench\'ee} \\
+\midrule
+Trial expire dans 3 jours        & Email/push~: \og Votre essai expire bient\^ot\fg{} \\
+Renouvellement r\'eussi          & Email~: \og Votre abonnement a \'et\'e renouvel\'e\fg{} \\
+Renouvellement \'echou\'e        & Email/push~: \og \'Echec de paiement, action requise\fg{} \\
+Entr\'ee en gr\^ace              & Email/push~: \og Abonnement expir\'e, d\'elai de gr\^ace de X jours\fg{} \\
+Suspension                        & Email~: \og Votre abonnement a \'et\'e suspendu\fg{} \\
+Quota \`a 80\%                    & Push/in-app~: \og 80\% de votre quota X consomm\'e\fg{} \\
+Quota atteint (hard limit)        & Push/in-app~: \og Quota X atteint, upgradez votre plan\fg{} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Services consommateurs $\to$ Abonnement (v\'erification quotas) (v1.2)}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Service} & \textbf{Endpoint appel\'e} & \textbf{Moment} \\
+\midrule
+Chatbot  & \texttt{POST /quotas/reserve} & Avant chaque r\'eponse IA (chemin critique haute concurrence) \\
+Chatbot  & \texttt{POST /quotas/confirm} & Apr\`es r\'eponse IA r\'eussie \\
+Chatbot  & \texttt{POST /quotas/release} & Si \'echec g\'en\'eration IA \\
+M\'edia  & \texttt{POST /quotas/reserve} & Avant chaque upload (chemin critique haute concurrence) \\
+M\'edia  & \texttt{POST /quotas/confirm} & Apr\`es upload r\'eussi \\
+M\'edia  & \texttt{POST /quotas/release} & Si \'echec upload \\
+Search   & \texttt{POST /quotas/check}   & Avant activation boost (faible concurrence, check suffisant) \\
+AGT-Bot  & \texttt{POST /quotas/check}   & Avant cr\'eation de bot (faible concurrence, check suffisant) \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[R\`egle d'usage (v1.2)]
+\textbf{Chemins critiques} (haute fr\'equence, concurrence \'elev\'ee)~: Chatbot, M\'edia $\to$ \textbf{reserve/confirm/release obligatoire}.\\
+\textbf{Chemins non critiques} (faible fr\'equence, op\'erations ponctuelles)~: Search, AGT-Bot $\to$ \texttt{check} seul suffit.
+\end{infobox}
+
+\subsection{Abonnement $\to$ Paiement (\'ev\'enements RabbitMQ) (v1.1)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement publi\'e} & \textbf{Payload} \\
+\midrule
+\texttt{subscription.payment\_required} & \texttt{event\_id} (UUID unique), \texttt{idempotency\_key} (UUID), \texttt{subscription\_id}, \texttt{amount}, \texttt{currency}, \texttt{subscriber\_type}, \texttt{subscriber\_id}, \texttt{reason} (new, renewal, upgrade), \texttt{timestamp} \\
+\texttt{subscription.overage\_billing}  & \texttt{event\_id}, \texttt{idempotency\_key}, \texttt{subscription\_id}, \texttt{quota\_key}, \texttt{overage\_amount}, \texttt{unit\_price}, \texttt{total}, \texttt{quota\_snapshot} (v1.1), \texttt{timestamp} \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Idempotence (v1.1)]
+\textbf{R\`egle stricte}~: chaque \'ev\'enement porte un \texttt{event\_id} (UUID v4) et un \texttt{idempotency\_key}. Le consommateur (Paiement) \textbf{doit} d\'edupliquer sur \texttt{idempotency\_key} avant traitement.
+
+\textbf{Sc\'enarios couverts}~:
+\begin{itemize}[nosep]
+  \item Retry RabbitMQ apr\`es timeout~: m\^eme \texttt{idempotency\_key} $\to$ ignor\'e par Paiement
+  \item Double \'emission (bug ou crash recovery)~: d\'etect\'e et ignor\'e
+  \item Webhook Paiement doublonn\'e~: Abonnement d\'eduplique sur \texttt{payment\_reference\_id}
+\end{itemize}
+
+\textbf{Stockage}~: table \texttt{processed\_events} c\^ot\'e consommateur avec TTL 72h (index sur \texttt{idempotency\_key}).
+\end{warnbox}
+
+\begin{infobox}[\'Ev\'enements re\c{c}us de Paiement (v1.1)]
+Abonnement \'ecoute les queues \texttt{payment.confirmed} et \texttt{payment.failed}~:
+\begin{itemize}[nosep]
+  \item \texttt{payment.confirmed}~: contient \texttt{payment\_reference\_id}, \texttt{subscription\_id}, \texttt{idempotency\_key}. Abonnement v\'erifie que le \texttt{payment\_reference\_id} n'a pas d\'ej\`a \'et\'e trait\'e (table \texttt{subscription\_events.metadata}). Si nouveau $\to$ activation ou renouvellement.
+  \item \texttt{payment.failed}~: m\^eme structure. D\'eclenche la logique de gr\^ace ou suspension.
+\end{itemize}
+\textbf{D\'eduplication}~: Abonnement stocke chaque \texttt{payment\_reference\_id} trait\'e. Tout doublon est ignor\'e silencieusement (log warning, pas d'erreur).
+\end{infobox}
+
+\subsection{Users $\to$ Abonnement (Purge RGPD)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint          & \texttt{DELETE /api/v1/subscriptions/by-user/\{userId\}} \\
+Auth              & Token S2S \\
+Usage             & Appel\'e par Users dans le workflow de purge RGPD \\
+Donn\'ees supprim\'ees & Abonnements, usage, events du subscriber. Organisations si owner. \\
+S\'equence        & Avant Auth purge et M\'edia purge \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Matrice d'Autorisation}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{lcccc}
+\toprule
+\textbf{Endpoint} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin Plat.} & \textbf{Admin Global} \\
+\midrule
+GET /plans                        & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /plans                       &              &              & $\checkmark$ & $\checkmark$ \\
+PUT /plans/\{id\}                 &              &              & $\checkmark$ & $\checkmark$ \\
+POST /plans/.../archive           &              &              & $\checkmark$ & $\checkmark$ \\
+POST /subscriptions               & $\checkmark$ & $\checkmark$ &              &              \\
+GET /subscriptions/\{id\}         & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /.../cancel                  & $\checkmark$ &              &              & $\checkmark$ \\
+POST /.../change-plan             & $\checkmark$ &              &              & $\checkmark$ \\
+POST /quotas/check                &              & $\checkmark$ &              & $\checkmark$ \\
+POST /quotas/increment            &              & $\checkmark$ &              & $\checkmark$ \\
+POST /quotas/reserve             &              & $\checkmark$ &              & $\checkmark$ \\
+POST /quotas/confirm             &              & $\checkmark$ &              & $\checkmark$ \\
+POST /quotas/release             &              & $\checkmark$ &              & $\checkmark$ \\
+GET /.../usage                    & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /organizations               & $\checkmark$ &              &              & $\checkmark$ \\
+PUT /config/\{platformId\}        &              &              & $\checkmark$ & $\checkmark$ \\
+GET /admin/stats                  &              &              & $\checkmark$ & $\checkmark$ \\
+POST /admin/.../suspend           &              &              & $\checkmark$ & $\checkmark$ \\
+DELETE /by-user/\{userId\}        &              & $\checkmark$ &              & $\checkmark$ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Recommandations \& \'Evolutions}
+% ============================================================
+
+\begin{itemize}
+  \item \textbf{Coupons \& r\'eductions}~: module pour codes promo, remises fid\'elit\'e.
+  \item \textbf{Usage analytics}~: dashboard de consommation par quota, tendances, pr\'edictions.
+  \item \textbf{Webhooks sortants}~: \'ev\'enements cycle de vie vers les plateformes.
+  \item \textbf{Quotas imbriqu\'es}~: quotas par membre d'organisation (en plus des quotas partag\'es).
+  \item \textbf{Multi-abonnement}~: add-ons en compl\'ement du plan principal.
+  \item \textbf{Versioning API}~: pr\'efixe \texttt{/api/v1}. Breaking changes $\to$ \texttt{/api/v2}.
+  \item \textbf{Monitoring}~: m\'etriques Prometheus (souscriptions, quota checks/s, latence P95, taux renouvellement).
+\end{itemize}
+
+% ============================================================
+\section*{Annexes}
+% ============================================================
+
+\subsection*{Glossaire}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Terme} & \textbf{D\'efinition} \\
+\midrule
+Subscriber    & Entit\'e abstraite qui d\'etient un abonnement (user ou organization) \\
+Plan          & Offre nomm\'ee avec prix, quotas et features, scop\'ee \`a une plateforme \\
+Quota         & Limite mesurable associ\'ee \`a un plan \\
+Overage       & D\'epassement d'un quota autoris\'e, factur\'e \`a l'unit\'e \\
+Hard limit    & Quota dont le d\'epassement est interdit \\
+Prorata       & Calcul au jour du cr\'edit/d\'ebit lors d'un changement de plan \\
+Trial         & P\'eriode d'essai gratuite avant activation payante \\
+Grace period  & D\'elai apr\`es expiration o\`u l'acc\`es est maintenu \\
+MRR           & Monthly Recurring Revenue \\
+Billing cycle & P\'eriode de facturation \\
+S2S           & Service-to-Service \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Code PlantUML --- Diagramme de Classes}
+\label{sec:plantuml}
+
+Le code PlantUML ci-dessous correspond au diagramme de classes complet du service Abonnement v1.2. Il peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+@startuml Subscription Service - Class Diagram v1.2
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "plans" as plans {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * name : VARCHAR(100)
+  * slug : VARCHAR(100)
+  description : TEXT
+  is_active : BOOLEAN = true
+  is_default : BOOLEAN = false
+  is_free : BOOLEAN = false
+  * tier_order : INT = 0
+  metadata : JSONB
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, slug)
+}
+
+entity "plan_prices" as prices {
+  * id : UUID <<PK>>
+  --
+  * plan_id : UUID <<FK>>
+  * billing_cycle : VARCHAR(20)
+  cycle_days : INT
+  * price : DECIMAL(12,2)
+  * currency : VARCHAR(3)
+  is_active : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (plan_id, billing_cycle, currency)
+}
+
+entity "plan_quotas" as quotas {
+  * id : UUID <<PK>>
+  --
+  * plan_id : UUID <<FK>>
+  * quota_key : VARCHAR(50)
+  * limit_value : INT
+  is_cyclical : BOOLEAN = true
+  overage_policy : VARCHAR(10) = 'hard'
+  overage_unit_price : DECIMAL(10,2) = 0
+  ..
+  <<UQ>> (plan_id, quota_key)
+}
+
+entity "organizations" as orgs {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * name : VARCHAR(150)
+  * owner_user_id : UUID
+  is_active : BOOLEAN = true
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, name)
+}
+
+entity "organization_members" as members {
+  * id : UUID <<PK>>
+  --
+  * organization_id : UUID <<FK>>
+  * user_id : UUID
+  role : VARCHAR(20) = 'member'
+  * joined_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (organization_id, user_id)
+}
+
+entity "subscriptions" as subs {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * subscriber_type : VARCHAR(20)
+  * subscriber_id : UUID
+  * plan_id : UUID <<FK>>
+  * plan_price_id : UUID <<FK>>
+  * status : VARCHAR(20)
+  * current_period_start : TIMESTAMPTZ
+  * current_period_end : TIMESTAMPTZ
+  trial_end : TIMESTAMPTZ
+  grace_end : TIMESTAMPTZ
+  cancelled_at : TIMESTAMPTZ
+  cancel_at_period_end : BOOLEAN = false
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<PARTIAL UQ>> (platform_id, subscriber_type, subscriber_id)
+  WHERE status NOT IN ('expired','cancelled')
+}
+
+entity "subscription_quotas_usage" as usage {
+  * id : UUID <<PK>>
+  --
+  * subscription_id : UUID <<FK>>
+  * quota_key : VARCHAR(50)
+  used : INT = 0
+  overage : INT = 0
+  * period_start : TIMESTAMPTZ
+  * period_end : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (subscription_id, quota_key, period_start)
+}
+
+entity "quota_reservations" as reservations {
+  * id : UUID <<PK>>
+  --
+  * subscription_id : UUID <<FK>>
+  * quota_key : VARCHAR(50)
+  * amount : INT
+  status : VARCHAR(20) = 'pending'
+  * expires_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  resolved_at : TIMESTAMPTZ
+}
+
+entity "subscription_events" as events {
+  * id : UUID <<PK>>
+  --
+  * subscription_id : UUID <<FK>>
+  * event_type : VARCHAR(30)
+  from_plan_id : UUID
+  to_plan_id : UUID
+  prorate_credit : DECIMAL(12,2)
+  prorate_debit : DECIMAL(12,2)
+  metadata : JSONB
+  * created_at : TIMESTAMPTZ
+}
+
+entity "platform_subscription_config" as config {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID <<UQ>>
+  default_trial_days : INT = 0
+  grace_period_days : INT = 0
+  post_trial_behavior : VARCHAR(20) = 'suspend'
+  default_currency : VARCHAR(3) = 'XAF'
+  * allowed_cycles : JSONB
+  require_default_plan : BOOLEAN = false
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+plans ||--o{ prices   : "1..* prices"
+plans ||--o{ quotas   : "1..* quotas"
+plans ||--o{ subs     : "1..* subscriptions"
+
+prices ||--o{ subs    : "1..* subscriptions"
+
+orgs ||--o{ members   : "1..* members"
+
+subs ||--o{ usage     : "1..* usage"
+subs ||--o{ events    : "1..* events"
+subs ||--o{ reservations : "0..* reservations"
+
+@enduml
+\end{lstlisting}
+
+\vfill
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}\\[0.5em]
+{\small\textcolor{agtgray}{AG Technologies --- Document confidentiel \`a usage interne exclusivement.}}\\
+{\small\textcolor{agtgray}{Subscription Service CDC v1.2 --- Avril 2026}}
+\end{center}
+
+\end{document}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\9.payment.txt =====
+`
+\documentclass[11pt,a4paper]{article}
+
+% === Encodage & Langue ===
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% === Mise en page ===
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+% === Tableaux ===
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+
+% === Code & couleurs ===
+\usepackage{listings}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{lastpage}
+\usepackage{amssymb}
+
+% === Boites ===
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% === Couleurs AGT ===
+\definecolor{agtblue}{HTML}{1A3A5C}
+\definecolor{agtgray}{HTML}{4A4A4A}
+\definecolor{agtgreen}{HTML}{2E7D32}
+\definecolor{agtred}{HTML}{C62828}
+\definecolor{agtorange}{HTML}{E65100}
+\definecolor{codebg}{HTML}{F5F5F5}
+\definecolor{lightbg}{HTML}{E8EEF4}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=agtblue,
+  urlcolor=agtblue,
+  pdfauthor={AG Technologies},
+  pdftitle={Service Paiement - CDC v1.2},
+}
+
+% === Listings JSON ===
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  string=[s]{"}{"},
+  stringstyle=\color{agtgreen},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{codebg},
+  rulecolor=\color{gray!30},
+  showstringspaces=false,
+  literate=
+    *{:}{{{\color{agtblue}:}}}{1}
+     {,}{{{\color{agtblue},}}}{1}
+     {\{}{{{\color{agtblue}\{}}}{1}
+     {\}}{{{\color{agtblue}\}}}}{1}
+     {[}{{{\color{agtblue}[}}}{1}
+     {]}{{{\color{agtblue}]}}}{1},
+}
+\lstset{language=json}
+
+% === Boites info/warn ===
+\newtcolorbox{infobox}[1][]{
+  colback=lightbg,colframe=agtblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtblue,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=orange!5,colframe=agtorange,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,colbacktitle=agtorange,
+  title=#1,boxrule=0.8pt,arc=2mm,
+  breakable
+}
+
+% === Header/Footer ===
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{agtgray}{AGT --- Service Paiement}}
+\fancyhead[R]{\small\textcolor{agtgray}{v1.2 --- Confidentiel}}
+\fancyfoot[C]{\small\thepage\ / \pageref{LastPage}}
+\fancyfoot[R]{\small\textcolor{agtgray}{Avril 2026}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.2pt}
+
+% === Titres ===
+\titleformat{\section}{\Large\bfseries\color{agtblue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{agtblue!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{agtblue!60}}{\thesubsubsection}{1em}{}
+
+% === Commandes ===
+\newcommand{\urgent}{\textcolor{agtred}{\textbf{Urgent}}}
+\newcommand{\normale}{\textcolor{agtorange}{Normale}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+% ============================================================
+%  PAGE DE TITRE
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\Huge\bfseries\textcolor{agtblue}{AG TECHNOLOGIES}\\[0.3cm]}
+{\large\textcolor{agtgray}{Architecture de Services Partag\'es}\\[2cm]}
+\rule{\textwidth}{1.5pt}\\[0.5cm]
+{\LARGE\bfseries Cahier des Charges Technique\\[0.3cm]}
+{\Large Service de Paiement Centralis\'e\\[0.3cm]}
+{\large\textit{Payment Service --- AGT-Payment}\\[0.5cm]}
+\rule{\textwidth}{1.5pt}\\[2cm]
+\begin{tabular}{ll}
+\textbf{Version}        & 1.2 \\
+\textbf{Date}           & Avril 2026 \\
+\textbf{Statut}         & Implementation-ready \\
+\textbf{Classification} & Confidentiel \\
+\textbf{Auteur}         & \'Equipe Architecture \\
+\textbf{D\'ependances}  & Auth v2.1, Users v1.0, Abonnement v1.2, Notification v1.2 \\
+\end{tabular}
+\vfill
+{\small\textcolor{agtgray}{Document confidentiel --- R\'eserv\'e \`a l'usage interne d'AG Technologies}}
+\end{titlepage}
+
+% ============================================================
+%  HISTORIQUE
+% ============================================================
+\section*{Historique des R\'evisions}
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Ver.} & \textbf{Date} & \textbf{Auteur} & \textbf{Description} \\
+\midrule
+1.0 & 2026-04-03 & \'Equipe Archi. & Cr\'eation initiale. Ex\'ecutant pur (event-driven). Providers~: Orange Money, MTN MoMo, Stripe, PayPal. Webhooks normalis\'es. Idempotence. R\'econciliation. Contrats inter-services formalis\'es (Abonnement, Wallet, Notification). Diagramme PlantUML en annexe. \\
+1.1 & 2026-04-04 & \'Equipe Archi. & Post-audit~: machine \`a \'etats formalis\'ee (transitions autoris\'ees). Mod\`ele \texttt{PaymentMethod} abstrait. S\'ecurit\'e webhooks d\'etaill\'ee (HMAC, IP whitelist, replay protection, timestamp validation). Timeout/expiration par provider. Idempotence renforc\'ee (visibilit\'e contractuelle). \\
+1.2 & 2026-04-04 & \'Equipe Archi. & Version finale~: statut \textit{Implementation-ready}. Matrice d'autorisation avec chemins complets. S\'emantique PaymentMethod corrig\'ee (\texttt{external\_wallet} pour PayPal). Propagation compl\`ete du statut \texttt{cancelled} (normalisation, \'ev\'enements, admin). \\
+\bottomrule
+\end{tabularx}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+Ce document constitue le cahier des charges du \textbf{Service de Paiement Centralis\'e} (ci-apr\`es \og~Payment Service~\fg{}) destin\'e \`a l'\'ecosyst\`eme AGT. Il sert de r\'ef\'erence unique pour la conception, le d\'eveloppement et les d\'ecisions techniques.
+
+\subsection{P\'erim\`etre}
+
+Le service Paiement couvre l'\textbf{ex\'ecution des transactions financi\`eres}~: initiation de paiements via providers externes, r\'eception et normalisation des webhooks, confirmation ou \'echec des transactions, tra\c{c}abilit\'e compl\`ete et r\'econciliation.
+
+\begin{infobox}[Principe fondamental]
+Paiement est un \textbf{ex\'ecutant pur}. Il ne d\'ecide pas \textit{quoi} facturer ni \textit{combien}~: c'est le service demandeur (Abonnement, Wallet, ou une plateforme) qui envoie un ordre de paiement. Paiement l'ex\'ecute et confirme le r\'esultat.
+\end{infobox}
+
+\subsection{Hors p\'erim\`etre}
+
+\begin{itemize}[nosep]
+  \item Authentification (d\'el\'egu\'ee au Service Auth v2.1)
+  \item Gestion des abonnements, plans, quotas (Service Abonnement v1.2)
+  \item R\'epartition des fonds, commissions, soldes (futur Service Wallet)
+  \item Profils utilisateur (Service Users v1.0)
+  \item Paiement de courses temps r\'eel MboaMove (g\'er\'e par MboaMove)
+  \item Remboursements (phase 2)
+  \item Logique m\'etier propre aux plateformes
+\end{itemize}
+
+\begin{warnbox}[Convention d'identit\'e]
+Dans tout ce document~:
+\begin{itemize}[nosep]
+  \item \texttt{user\_id} d\'esigne \texttt{users\_auth.id} (= \texttt{sub} du JWT)
+  \item \texttt{platform\_id} d\'esigne un UUID du registre Auth (\texttt{platforms.id})
+  \item Paiement ne stocke aucune table locale de plateformes ni d'utilisateurs.
+\end{itemize}
+\end{warnbox}
+
+% ============================================================
+\section{Contexte \& Probl\'ematique}
+% ============================================================
+
+\subsection{Contexte}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Plateforme} & \textbf{Statut} & \textbf{Besoin paiement} \\
+\midrule
+AGT-Bot    & En d\'eveloppement & Paiement d'abonnements (plans Pro, Enterprise) \\
+AGT-Market & En d\'eveloppement & Paiement de produits/services, commissions vendeurs \\
+MboaMove   & En d\'eveloppement & Cash-in/cash-out wallet chauffeurs et passagers \\
+SALMA      & Migration pr\'evue & Paiement de formations et certifications \\
+Futures    & Planifi\'e         & Toute plateforme n\'ecessitant un encaissement \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Probl\'ematique}
+
+Sans service centralis\'e, chaque plateforme int\'egrerait ses propres providers de paiement, entra\^inant~: duplication des int\'egrations (Orange Money, Stripe, etc.), incoh\'erence dans la gestion des webhooks, absence de r\'econciliation unifi\'ee, risques de s\'ecurit\'e li\'es \`a la manipulation de donn\'ees financi\`eres, et impossibilit\'e de tracer les transactions \`a travers l'\'ecosyst\`eme.
+
+% ============================================================
+\section{Vision \& Objectifs}
+% ============================================================
+
+\subsection{Vision}
+
+Un service \textbf{g\'en\'erique et abstrait} qui encapsule tous les providers de paiement. Les plateformes et services internes ne parlent jamais directement \`a Orange Money, Stripe ou PayPal~: ils envoient un ordre de paiement au Payment Service, qui s'occupe du reste.
+
+\begin{warnbox}[S\'eparation des responsabilit\'es financi\`eres]
+\begin{itemize}[nosep]
+  \item \textbf{Abonnement} d\'ecide quoi facturer (plans, quotas, overage)
+  \item \textbf{Paiement} ex\'ecute la transaction via le provider externe
+  \item \textbf{Wallet} r\'epartit les fonds (commissions, soldes, cr\'edits)
+\end{itemize}
+Aucun de ces services ne doit empi\'eter sur la responsabilit\'e des deux autres.
+\end{warnbox}
+
+\subsection{Objectifs}
+
+\begin{tabularx}{\textwidth}{clL}
+\toprule
+\textbf{\#} & \textbf{Objectif} & \textbf{Indicateur} \\
+\midrule
+O1 & Abstraction providers     & Un seul contrat d'API, quel que soit le provider \\
+O2 & Multi-provider            & Orange Money, MTN MoMo, Stripe, PayPal au MVP \\
+O3 & Idempotence               & Aucune double facturation, m\^eme en cas de retry \\
+O4 & Webhooks normalis\'es     & Tous les providers convergent vers un statut unifi\'e \\
+O5 & Tra\c{c}abilit\'e         & Chaque transaction trac\'ee de bout en bout \\
+O6 & R\'econciliation          & Rapprochement automatique provider $\leftrightarrow$ transactions internes \\
+O7 & Event-driven              & Confirmation/\'echec propag\'es via RabbitMQ \\
+O8 & Multi-devise              & Configurable par plateforme \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Parties Prenantes \& Utilisateurs}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{R\^ole} & \textbf{Type} & \textbf{Responsabilit\'e} \\
+\midrule
+Product Owner       & Interne & Priorisation des fonctionnalit\'es \\
+\'Equipe Backend    & Interne & D\'eveloppement, int\'egration providers \\
+\'Equipe Frontend   & Interne & Int\'egration UI paiement (formulaires, redirections) \\
+DevOps              & Interne & Infrastructure, s\'ecurit\'e, monitoring \\
+Admin global AGT    & Interne & Configuration providers, r\'econciliation \\
+Admin plateforme    & Interne & Consultation transactions de sa plateforme \\
+Services internes   & Interne & Abonnement (d\'eclencheur principal), Wallet (futur) \\
+Utilisateurs finaux & Externe & Paiement via Mobile Money, carte, PayPal \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Fonctionnels}
+% ============================================================
+
+\subsection{Initiation de Paiement}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-PAY-01 & Initier un paiement       & Cr\'eer une transaction avec montant, devise, provider, et r\'ef\'erence externe & \urgent \\
+F-PAY-02 & Choix du provider         & Le demandeur sp\'ecifie le provider ou laisse Paiement choisir selon la config plateforme & \urgent \\
+F-PAY-03 & URL de paiement           & Pour les providers redirect (Stripe, PayPal)~: retourner l'URL de checkout & \urgent \\
+F-PAY-04 & USSD push                 & Pour Mobile Money~: d\'eclencher le push USSD sur le t\'el\'ephone du payeur & \urgent \\
+F-PAY-05 & Idempotence               & Chaque demande porte un \texttt{idempotency\_key}. Doublon = retour du r\'esultat existant & \urgent \\
+F-PAY-06 & M\'etadonn\'ees libres    & Le demandeur attache des \texttt{metadata} (subscription\_id, order\_id, etc.) & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Webhooks \& Confirmation}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-WH-01 & R\'eception webhook       & Endpoint par provider pour recevoir les callbacks & \urgent \\
+F-WH-02 & V\'erification signature  & Valider l'authenticit\'e du webhook (HMAC, IP whitelist, etc.) & \urgent \\
+F-WH-03 & Normalisation statut      & Convertir le statut provider vers le statut interne unifi\'e & \urgent \\
+F-WH-04 & Mise \`a jour transaction & Passer la transaction en \texttt{succeeded}, \texttt{failed}, ou \texttt{expired} & \urgent \\
+F-WH-05 & \'Emission \'ev\'enement  & Publier \texttt{payment.confirmed}, \texttt{payment.failed} ou \texttt{payment.cancelled} sur RabbitMQ & \urgent \\
+F-WH-06 & Idempotence webhook       & Un m\^eme webhook re\c{c}u N fois ne modifie la transaction qu'une fois & \urgent \\
+F-WH-07 & Log brut                  & Stocker le payload brut du webhook pour audit et debug & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Normalisation des statuts]
+Chaque provider a sa propre terminologie. Paiement normalise vers un statut unique~:
+
+\begin{tabularx}{\textwidth}{lllll}
+\toprule
+\textbf{Statut interne} & \textbf{Stripe} & \textbf{Orange Money} & \textbf{MTN MoMo} & \textbf{PayPal} \\
+\midrule
+\texttt{pending}   & payment\_intent.created  & INITIATED  & PENDING    & CREATED \\
+\texttt{processing} & payment\_intent.processing & PENDING & PENDING & APPROVED \\
+\texttt{succeeded} & payment\_intent.succeeded & SUCCESS & SUCCESSFUL & COMPLETED \\
+\texttt{failed}    & payment\_intent.payment\_failed & FAILED & FAILED & VOIDED \\
+\texttt{expired}   & --- & EXPIRED & EXPIRED & EXPIRED \\
+\texttt{cancelled} & payment\_intent.canceled & --- & --- & VOIDED \\
+\bottomrule
+\end{tabularx}
+\end{warnbox}
+
+\begin{warnbox}[Machine \`a \'etats --- Transitions autoris\'ees (v1.1)]
+Toute transition non list\'ee ci-dessous est \textbf{interdite}. Le code doit rejeter les transitions invalides avec une erreur 400.
+
+\begin{verbatim}
+  [creation] --> pending
+  pending    --> processing       (provider a accuse reception)
+  pending    --> succeeded        (confirmation instantanee, ex: carte)
+  pending    --> failed           (rejet immediat provider)
+  pending    --> expired          (TTL depasse sans reponse)
+  pending    --> cancelled        (annulation avant traitement)
+  processing --> succeeded        (webhook confirmation)
+  processing --> failed           (webhook echec)
+  processing --> expired          (TTL depasse en cours de traitement)
+\end{verbatim}
+
+\textbf{\'Etats terminaux} (aucune transition sortante)~: \texttt{succeeded}, \texttt{failed}, \texttt{expired}, \texttt{cancelled}.
+
+\textbf{Exception admin}~: un admin global peut forcer \texttt{pending $\to$ succeeded} ou \texttt{pending $\to$ failed} via \texttt{force-status}, uniquement apr\`es v\'erification manuelle. Cette action est logg\'ee dans \texttt{transaction\_status\_history} avec \texttt{trigger = admin\_manual}.
+\end{warnbox}
+
+\begin{infobox}[Mod\`ele PaymentMethod abstrait (v1.1)]
+Le demandeur d'un paiement sp\'ecifie un \texttt{payment\_method} qui abstrait le type et le provider~:
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{type} & \textbf{provider} & \textbf{Donn\'ees requises} \\
+\midrule
+\texttt{mobile\_money} & orange\_money & \texttt{phone\_number} \\
+\texttt{mobile\_money} & mtn\_momo     & \texttt{phone\_number} \\
+\texttt{card}          & stripe        & Aucune (redirect vers Stripe Checkout) \\
+\texttt{external\_wallet} & paypal        & Aucune (redirect vers PayPal). Distinct du futur Wallet AGT. \\
+\bottomrule
+\end{tabularx}
+
+Si le demandeur ne sp\'ecifie que le \texttt{type} (ex~: \texttt{mobile\_money}) sans pr\'eciser le provider, Paiement choisit automatiquement le provider de plus haute priorit\'e pour ce type dans la config plateforme.
+\end{infobox}
+
+\subsection{Gestion des Providers}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-PRV-01 & Configuration provider    & Cr\'eer/modifier un provider avec credentials chiffr\'ees (AES-256) & \urgent \\
+F-PRV-02 & Providers par plateforme  & Chaque plateforme configure ses providers actifs et leur priorit\'e & \urgent \\
+F-PRV-03 & Fallback provider         & Si le provider principal \'echoue, tenter le suivant dans l'ordre de priorit\'e & \normale \\
+F-PRV-04 & Circuit breaker           & D\'esactiver temporairement un provider en cas d'\'echecs r\'ep\'et\'es & \normale \\
+F-PRV-05 & Health check provider     & V\'erifier p\'eriodiquement la disponibilit\'e de chaque provider & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Architecture provider --- Strategy Pattern]
+Chaque provider est impl\'ement\'e comme un \textbf{adapter} derri\`ere une interface commune~:
+\begin{itemize}[nosep]
+  \item \texttt{initiate\_payment(amount, currency, metadata)} $\to$ \texttt{PaymentResult}
+  \item \texttt{verify\_webhook(headers, payload)} $\to$ \texttt{bool}
+  \item \texttt{normalize\_status(raw\_status)} $\to$ \texttt{InternalStatus}
+  \item \texttt{get\_payment\_url()} $\to$ \texttt{str | None}
+\end{itemize}
+Ajouter un nouveau provider = ajouter un adapter, z\'ero modification du code m\'etier.
+\end{infobox}
+
+\subsection{Transactions \& Tra\c{c}abilit\'e}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-TRX-01 & D\'etail transaction      & Consulter une transaction avec son historique de statuts & \urgent \\
+F-TRX-02 & Liste transactions        & Filtrer par plateforme, statut, provider, date, user & \urgent \\
+F-TRX-03 & Historique de statuts     & Chaque changement de statut est logg\'e avec timestamp & \urgent \\
+F-TRX-04 & R\'ef\'erence crois\'ee   & Chaque transaction porte la r\'ef\'erence provider ET la r\'ef\'erence interne du demandeur & \urgent \\
+\bottomrule
+\end{tabularx}
+
+\subsection{R\'econciliation}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-REC-01 & R\'econciliation auto     & Cron~: comparer les transactions internes avec les relev\'es providers & \urgent \\
+F-REC-02 & D\'etection anomalies     & Identifier les transactions pay\'ees chez le provider mais non confirm\'ees en interne (et inversement) & \urgent \\
+F-REC-03 & Rapport de r\'econciliation & G\'en\'erer un rapport par provider et par p\'eriode & \normale \\
+F-REC-04 & R\'esolution manuelle     & Interface admin pour r\'esoudre les anomalies & \normale \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Sc\'enarios de r\'econciliation]
+\begin{itemize}[nosep]
+  \item \textbf{Paiement confirm\'e chez le provider, pending en interne}~: webhook perdu. Le cron de r\'econciliation interroge l'API du provider et met \`a jour.
+  \item \textbf{Transaction interne succeeded, absente chez le provider}~: anomalie critique. Alerte admin imm\'ediate.
+  \item \textbf{Montant diff\'erent}~: anomalie. Transaction flag\'ee pour r\'esolution manuelle.
+\end{itemize}
+Fr\'equence~: toutes les 6 heures pour les transactions des derni\`eres 48h.
+\end{warnbox}
+
+\subsection{Administration}
+
+\begin{tabularx}{\textwidth}{llLc}
+\toprule
+\textbf{ID} & \textbf{Fonctionnalit\'e} & \textbf{Description} & \textbf{Priorit\'e} \\
+\midrule
+F-ADM-01 & Stats par plateforme      & Volume, montant total, taux de succ\`es, par provider & \normale \\
+F-ADM-02 & Stats par provider        & Latence, taux d'\'echec, disponibilit\'e & \normale \\
+F-ADM-03 & Forcer un statut          & Admin peut forcer \texttt{succeeded} ou \texttt{failed} apr\`es v\'erification manuelle & \urgent \\
+F-ADM-04 & Rejouer un webhook        & Resoumettre un webhook en cas de traitement \'echou\'e & \normale \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Besoins Non-Fonctionnels}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{clLc}
+\toprule
+\textbf{ID} & \textbf{Cat\'egorie} & \textbf{Exigence} & \textbf{Cible} \\
+\midrule
+NF-01 & Performance    & Temps d'initiation paiement          & < 500ms (P95) hors latence provider \\
+NF-02 & Performance    & Traitement webhook                   & < 200ms (P95) \\
+NF-03 & Disponibilit\'e & Uptime                              & 99.9\% \\
+NF-04 & S\'ecurit\'e   & Credentials providers chiffr\'es     & AES-256 \\
+NF-05 & S\'ecurit\'e   & Webhooks v\'erifi\'es                & Signature HMAC ou IP whitelist \\
+NF-06 & S\'ecurit\'e   & Auth obligatoire                     & JWT ou S2S \\
+NF-07 & S\'ecurit\'e   & PCI-DSS                              & Aucune donn\'ee carte stock\'ee (d\'el\'egu\'e \`a Stripe) \\
+NF-08 & S\'ecurit\'e   & Rate limiting                        & Configurable par endpoint \\
+NF-09 & Scalabilit\'e  & Horizontal                           & Stateless, multi-instance \\
+NF-10 & Observabilit\'e & Logs structur\'es                   & JSON, request ID, masquage donn\'ees sensibles \\
+NF-11 & Observabilit\'e & Health check                        & \texttt{GET /payments/health} \\
+NF-12 & Donn\'ees      & Timestamps                           & TIMESTAMPTZ \\
+NF-13 & Traitement     & Crons r\'econciliation               & Celery Beat, retry 3x backoff (1min, 5min, 15min), DLQ \\
+NF-14 & Fiabilit\'e    & Idempotence                          & Sur initiation ET sur webhook \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Architecture Technique}
+% ============================================================
+
+\subsection{Vue d'ensemble}
+
+Le service Paiement est un microservice REST stateless, d\'eploy\'e en conteneur Docker. Il expose une API JSON consomm\'ee par les services internes (Abonnement, Wallet) et les plateformes clientes. Il re\c{c}oit les webhooks des providers externes sur des endpoints d\'edi\'es.
+
+\subsection{Stack Technique}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Composant} & \textbf{Technologie} \\
+\midrule
+Langage \& Framework & Python 3.11+ / Django 5.x \\
+API                  & Django REST Framework (DRF) \\
+Base de donn\'ees    & PostgreSQL 15+ \\
+ORM                  & Django ORM \\
+Migrations           & Django Migrations \\
+Cache                & Redis 7+ (idempotence, circuit breaker) \\
+Scheduler            & Celery + Celery Beat (r\'econciliation, relance) \\
+Message Broker       & RabbitMQ (\'ev\'enements sortants) \\
+Chiffrement          & AES-256 pour credentials providers \\
+Validation           & DRF Serializers \\
+Conteneurisation     & Docker + Docker Compose \\
+CI/CD                & GitHub Actions \\
+\bottomrule
+\end{tabularx}
+
+\subsection{D\'ependances \& R\`egles d'Architecture}
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Service} & \textbf{Type} & \textbf{Usage} \\
+\midrule
+Service Auth          & Interne  & Validation JWT via \texttt{GET /auth/verify-token}. Validation S2S via \texttt{POST /auth/s2s/introspect}. \\
+Service Users         & Interne  & R\'esolution \texttt{user\_id}, v\'erification statut actif avant paiement. \\
+Service Abonnement    & Interne  & Consommateur principal. \'Emet \texttt{subscription.payment\_required}. Re\c{c}oit \texttt{payment.confirmed/failed/cancelled}. \\
+Service Wallet        & Interne (futur) & Cash-in/cash-out. Re\c{c}oit \texttt{payment.confirmed} pour cr\'editer les wallets. \\
+Service Notification  & Interne  & Alertes~: paiement r\'eussi, \'echou\'e, re\c{c}u de paiement. \\
+Orange Money API      & Externe  & Provider Mobile Money Orange Cameroun \\
+MTN MoMo API          & Externe  & Provider Mobile Money MTN Cameroun \\
+Stripe API            & Externe  & Provider carte bancaire (Visa, Mastercard) \\
+PayPal API            & Externe  & Provider paiement international \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[R\`egle stricte de d\'ependance]
+Paiement ne d\'epend d'aucun service m\'etier. Il est \textbf{consomm\'e} par Abonnement et Wallet via RabbitMQ (event-driven) ou par les plateformes via API REST. Paiement ne conna\^it pas la nature de ce qui est pay\'e~: il re\c{c}oit un montant, une devise, un provider et des metadata opaques.
+
+\textbf{Flux principal}~:
+\begin{enumerate}[nosep]
+  \item Abonnement \'emet \texttt{subscription.payment\_required}
+  \item Paiement consomme l'\'ev\'enement, initie la transaction chez le provider
+  \item Provider confirme (webhook)
+  \item Paiement \'emet \texttt{payment.confirmed}
+  \item Abonnement consomme et active l'abonnement
+\end{enumerate}
+\end{warnbox}
+
+\subsection{Strat\'egie de r\'esilience}
+
+\begin{infobox}[Fallback et circuit breaker]
+\textbf{Fallback provider}~: si le provider principal \'echoue (timeout, 5xx, indisponibilit\'e), Paiement tente le provider suivant dans l'ordre de priorit\'e configur\'e par la plateforme. Le fallback ne s'applique qu'aux erreurs techniques, pas aux refus de paiement (fonds insuffisants, carte refus\'ee).
+
+\textbf{Circuit breaker}~: si un provider accumule $>$ 50\% d'\'echecs techniques sur les 100 derni\`eres requ\^etes (fen\^etre glissante), il est automatiquement d\'esactiv\'e pour 5 minutes. Apr\`es la p\'eriode de cooldown, un appel de test est envoy\'e. Si succ\`es, le circuit se referme. \'Etat stock\'e dans Redis.
+
+\textbf{Webhook retry}~: si le traitement interne d'un webhook \'echoue (erreur applicative, DB down), le webhook brut est persist\'e dans \texttt{webhook\_logs} et un cron de rattrapage le retraite dans les 15 minutes.
+\end{infobox}
+
+\begin{warnbox}[Timeout et expiration par provider (v1.1)]
+Chaque provider a un comportement temporel diff\'erent. Paiement g\`ere les TTL suivants~:
+
+\begin{tabularx}{\textwidth}{llL}
+\toprule
+\textbf{Provider} & \textbf{TTL par d\'efaut} & \textbf{Comportement \`a expiration} \\
+\midrule
+Orange Money & 5 minutes & Le push USSD expire. Transaction $\to$ \texttt{expired}. \\
+MTN MoMo     & 5 minutes & Idem. \\
+Stripe       & 30 minutes & La session Checkout expire. Transaction $\to$ \texttt{expired}. \\
+PayPal       & 60 minutes & Le lien de paiement expire. Transaction $\to$ \texttt{expired}. \\
+\bottomrule
+\end{tabularx}
+
+\textbf{Impl\'ementation}~: \`a la cr\'eation de la transaction, \texttt{expires\_at} est calcul\'e selon le provider. Un cron Celery Beat (toutes les minutes) passe les transactions \texttt{pending} dont \texttt{expires\_at < now()} en statut \texttt{expired} et \'emet \texttt{payment.failed} avec \texttt{failure\_reason = "expired"}.
+
+\textbf{Annulation}~: un utilisateur peut annuler un paiement \texttt{pending} via l'API (\texttt{POST /payments/\{id\}/cancel}). La transaction passe en \texttt{cancelled}. Si le provider supporte l'annulation, elle est propag\'ee.
+\end{warnbox}
+
+\subsection{Diagramme d'architecture}
+
+\begin{verbatim}
+  Abonnement       Wallet (futur)      Plateformes
+      |                 |                   |
+  [RabbitMQ]        [RabbitMQ]          [REST API]
+      |                 |                   |
+      +--------+--------+-------+-----------+
+               |                |
+        Payment Service (API REST + Workers)
+          |        |        |        |
+      Orange    MTN MoMo  Stripe   PayPal
+      Money
+          |        |        |        |
+          +---[webhooks]----+--------+
+                   |
+           Payment Service
+                   |
+        [RabbitMQ: payment.confirmed / failed / cancelled]
+                   |
+           +-------+-------+
+           |               |
+       Abonnement       Wallet
+\end{verbatim}
+
+% ============================================================
+\section{Mod\'elisation}
+% ============================================================
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes complet est fourni en annexe au format PlantUML (voir section~\ref{sec:plantuml}). Il couvre les entit\'es~: \texttt{Transaction}, \texttt{TransactionStatusHistory}, \texttt{WebhookLog}, \texttt{ProviderConfig}, \texttt{PlatformPaymentConfig} et \texttt{ReconciliationReport}.
+
+\subsection{MLD --- Mod\`ele Logique de Donn\'ees}
+
+\subsubsection{Table \texttt{transactions}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                     & UUID          & PK             & Identifiant unique \\
+platform\_id           & UUID          & NOT NULL       & Plateforme (UUID Auth) \\
+user\_id               & UUID          & NULL           & Payeur (\texttt{users\_auth.id}). NULL si paiement S2S sans user. \\
+provider               & VARCHAR(30)   & NOT NULL       & orange\_money, mtn\_momo, stripe, paypal \\
+provider\_tx\_id       & VARCHAR(255)  & NULL           & Identifiant de la transaction chez le provider \\
+idempotency\_key       & UUID          & UNIQUE, NOT NULL & Cl\'e d'idempotence fournie par le demandeur \\
+amount                 & DECIMAL(12,2) & NOT NULL       & Montant \\
+currency               & VARCHAR(3)    & NOT NULL       & Devise (XAF, EUR, USD) \\
+status                 & VARCHAR(20)   & NOT NULL       & pending, processing, succeeded, failed, expired, cancelled \\
+source                 & VARCHAR(30)   & NOT NULL       & Origine~: subscription, wallet, platform\_direct \\
+source\_reference\_id  & UUID          & NULL           & R\'ef\'erence du demandeur (subscription\_id, order\_id, etc.) \\
+metadata               & JSONB         & NULL           & Donn\'ees opaques du demandeur \\
+payment\_url           & TEXT          & NULL           & URL de checkout (Stripe, PayPal) \\
+phone\_number          & VARCHAR(20)   & NULL           & Num\'ero pour Mobile Money (masqu\'e dans les logs) \\
+failure\_reason        & TEXT          & NULL           & Raison de l'\'echec (normalis\'ee) \\
+provider\_raw\_status  & VARCHAR(50)   & NULL           & Statut brut du provider \\
+expires\_at            & TIMESTAMPTZ   & NULL           & Expiration de la transaction (si applicable) \\
+confirmed\_at          & TIMESTAMPTZ   & NULL           & Date de confirmation \\
+created\_at            & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at            & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Index~: \texttt{(platform\_id, status)}, \texttt{(user\_id)}, \texttt{(provider\_tx\_id)}, \texttt{(source, source\_reference\_id)}.
+
+\subsubsection{Table \texttt{transaction\_status\_history}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+transaction\_id   & UUID          & FK $\to$ transactions & Transaction \\
+from\_status      & VARCHAR(20)   & NULL           & Statut pr\'ec\'edent (NULL si cr\'eation) \\
+to\_status        & VARCHAR(20)   & NOT NULL       & Nouveau statut \\
+trigger           & VARCHAR(30)   & NOT NULL       & webhook, cron\_reconciliation, admin\_manual, api\_call \\
+provider\_raw     & JSONB         & NULL           & Donn\'ees brutes du provider au moment du changement \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Date du changement \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Table \texttt{webhook\_logs}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                & UUID          & PK             & Identifiant unique \\
+provider          & VARCHAR(30)   & NOT NULL       & Provider source \\
+event\_type       & VARCHAR(50)   & NOT NULL       & Type d'\'ev\'enement provider \\
+payload           & JSONB         & NOT NULL       & Payload brut (donn\'ees sensibles masqu\'ees) \\
+headers           & JSONB         & NULL           & Headers de la requ\^ete \\
+signature\_valid  & BOOLEAN       & NOT NULL       & Signature v\'erifi\'ee \\
+transaction\_id   & UUID          & FK $\to$ transactions, NULL & Transaction associ\'ee (NULL si non trouv\'ee) \\
+processing\_status & VARCHAR(20)  & DEFAULT 'pending' & pending, processed, failed, ignored \\
+error\_message    & TEXT          & NULL           & Erreur de traitement \\
+created\_at       & TIMESTAMPTZ   & NOT NULL       & Date de r\'eception \\
+processed\_at     & TIMESTAMPTZ   & NULL           & Date de traitement \\
+\bottomrule
+\end{tabularx}
+
+Index~: \texttt{(provider, processing\_status)} pour le cron de rattrapage.
+
+\subsubsection{Table \texttt{provider\_configs}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                    & UUID          & PK             & Identifiant unique \\
+provider              & VARCHAR(30)   & NOT NULL       & orange\_money, mtn\_momo, stripe, paypal \\
+display\_name         & VARCHAR(100)  & NOT NULL       & Nom affich\'e \\
+is\_active            & BOOLEAN       & DEFAULT true   & Provider actif globalement \\
+credentials\_encrypted & TEXT         & NOT NULL       & Credentials chiffr\'ees AES-256 \\
+api\_base\_url        & VARCHAR(255)  & NOT NULL       & URL de base de l'API provider \\
+webhook\_secret\_encrypted & TEXT     & NULL           & Secret de v\'erification webhook (chiffr\'e) \\
+supported\_currencies & JSONB         & NOT NULL       & Devises support\'ees \\
+config                & JSONB         & NULL           & Config sp\'ecifique (timeout, options) \\
+created\_at           & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at           & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(provider)}.
+
+\subsubsection{Table \texttt{platform\_payment\_configs}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                    & UUID          & PK             & Identifiant unique \\
+platform\_id          & UUID          & NOT NULL       & Plateforme (UUID Auth) \\
+provider              & VARCHAR(30)   & NOT NULL       & Provider \\
+is\_active            & BOOLEAN       & DEFAULT true   & Actif pour cette plateforme \\
+priority              & INT           & DEFAULT 0      & Ordre de priorit\'e (fallback) \\
+default\_currency     & VARCHAR(3)    & DEFAULT 'XAF'  & Devise par d\'efaut \\
+config\_overrides     & JSONB         & NULL           & Surcharges de config sp\'ecifiques \`a la plateforme \\
+created\_at           & TIMESTAMPTZ   & NOT NULL       & Cr\'eation \\
+updated\_at           & TIMESTAMPTZ   & NOT NULL       & Derni\`ere MAJ \\
+\bottomrule
+\end{tabularx}
+
+Contrainte unique~: \texttt{(platform\_id, provider)}.
+
+\subsubsection{Table \texttt{reconciliation\_reports}}
+
+\begin{tabularx}{\textwidth}{llcL}
+\toprule
+\textbf{Colonne} & \textbf{Type} & \textbf{Contrainte} & \textbf{Description} \\
+\midrule
+id                    & UUID          & PK             & Identifiant unique \\
+provider              & VARCHAR(30)   & NOT NULL       & Provider concern\'e \\
+period\_start         & TIMESTAMPTZ   & NOT NULL       & D\'ebut de la p\'eriode \\
+period\_end           & TIMESTAMPTZ   & NOT NULL       & Fin de la p\'eriode \\
+total\_internal       & INT           & NOT NULL       & Nombre de transactions internes \\
+total\_provider       & INT           & NOT NULL       & Nombre de transactions provider \\
+matched               & INT           & NOT NULL       & Transactions concordantes \\
+mismatched            & INT           & NOT NULL       & Anomalies d\'etect\'ees \\
+missing\_internal     & INT           & NOT NULL       & Pr\'esentes chez provider, absentes en interne \\
+missing\_provider     & INT           & NOT NULL       & Pr\'esentes en interne, absentes chez provider \\
+details               & JSONB         & NULL           & D\'etail des anomalies \\
+status                & VARCHAR(20)   & NOT NULL       & completed, failed \\
+created\_at           & TIMESTAMPTZ   & NOT NULL       & Date du rapport \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Contrats d'API}
+% ============================================================
+
+Base URL~: \texttt{/api/v1}. Tous les endpoints retournent du JSON. Les endpoints prot\'eg\'es requi\`erent \texttt{Authorization: Bearer <token>}.
+
+\subsection{Health Check}
+
+\subsubsection{GET /payments/health}
+
+V\'erifie l'\'etat du service. Aucune authentification requise.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "status": "healthy",
+  "database": "ok",
+  "redis": "ok",
+  "rabbitmq": "ok",
+  "version": "1.2.0"
+}
+\end{lstlisting}
+
+\subsection{Initiation de Paiement}
+
+\subsubsection{POST /payments/initiate}
+
+Initie une transaction. Auth~: Bearer token ou S2S.
+
+Request body~:
+\begin{lstlisting}
+{
+  "platform_id": "uuid",
+  "user_id": "user-uuid",
+  "provider": "orange_money",
+  "amount": 15000,
+  "currency": "XAF",
+  "source": "subscription",
+  "source_reference_id": "sub-uuid",
+  "idempotency_key": "unique-uuid",
+  "phone_number": "+237600000000",
+  "metadata": {
+    "subscription_id": "sub-uuid",
+    "plan_name": "Pro",
+    "reason": "renewal"
+  }
+}
+\end{lstlisting}
+
+Response 201 (Mobile Money --- USSD push d\'eclench\'e)~:
+\begin{lstlisting}
+{
+  "transaction_id": "tx-uuid",
+  "status": "pending",
+  "provider": "orange_money",
+  "amount": 15000,
+  "currency": "XAF",
+  "message": "USSD push sent, waiting for user confirmation"
+}
+\end{lstlisting}
+
+Response 201 (Stripe/PayPal --- URL de checkout)~:
+\begin{lstlisting}
+{
+  "transaction_id": "tx-uuid",
+  "status": "pending",
+  "provider": "stripe",
+  "amount": 15000,
+  "currency": "XAF",
+  "payment_url": "https://checkout.stripe.com/pay/cs_xxx",
+  "message": "Redirect user to payment_url"
+}
+\end{lstlisting}
+
+Response 200 (idempotence --- transaction d\'ej\`a cr\'e\'ee)~:
+\begin{lstlisting}
+{
+  "transaction_id": "tx-uuid-existing",
+  "status": "pending",
+  "message": "Idempotent request, returning existing transaction"
+}
+\end{lstlisting}
+
+Codes~: 201 Created, 200 Idempotent hit, 400 Validation error, 401 Unauthorized, 404 Provider not found, 422 Provider rejected, 503 Provider unavailable.
+
+\begin{warnbox}[Contrat d'idempotence (v1.1)]
+\textbf{R\`egle contractuelle}~: le champ \texttt{idempotency\_key} est \textbf{obligatoire} sur \texttt{POST /payments/initiate}. C'est une contrainte \texttt{UNIQUE NOT NULL} en base.
+
+\textbf{Comportement}~:
+\begin{itemize}[nosep]
+  \item Premi\`ere requ\^ete avec une cl\'e donn\'ee $\to$ 201 Created, transaction cr\'e\'ee
+  \item Requ\^ete identique (m\^eme cl\'e) $\to$ 200 OK, transaction existante retourn\'ee sans modification ni double envoi au provider
+  \item Requ\^ete avec m\^eme cl\'e mais payload diff\'erent $\to$ 409 Conflict
+\end{itemize}
+
+\textbf{Responsabilit\'e du demandeur}~: g\'en\'erer un UUID v4 unique par intention de paiement. Le m\^eme UUID doit \^etre renvoy\'e en cas de retry r\'eseau. Cela couvre~: double-clic frontend, retry RabbitMQ, timeout HTTP avec relance.
+
+\textbf{TTL}~: les cl\'es d'idempotence sont conserv\'ees en base ind\'efiniment (li\'ees \`a la transaction). Pas de TTL~: une transaction existe pour toujours.
+\end{warnbox}
+
+\subsubsection{GET /payments/\{transactionId\}}
+
+D\'etail d'une transaction avec historique de statuts.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "id": "tx-uuid",
+  "platform_id": "uuid",
+  "user_id": "user-uuid",
+  "provider": "orange_money",
+  "amount": 15000,
+  "currency": "XAF",
+  "status": "succeeded",
+  "source": "subscription",
+  "source_reference_id": "sub-uuid",
+  "provider_tx_id": "OM-123456",
+  "confirmed_at": "2026-04-03T12:05:00Z",
+  "created_at": "2026-04-03T12:00:00Z",
+  "status_history": [
+    { "from": null, "to": "pending", "trigger": "api_call", "at": "..." },
+    { "from": "pending", "to": "succeeded", "trigger": "webhook", "at": "..." }
+  ]
+}
+\end{lstlisting}
+
+Codes~: 200, 404.
+
+\subsubsection{GET /payments}
+
+Liste des transactions. Query params~: \texttt{?platform\_id\&user\_id\&status\&provider\&source\&from\_date\&to\_date\&page\&limit}.
+
+Codes~: 200, 401.
+
+\subsubsection{POST /payments/\{transactionId\}/cancel (v1.1)}
+
+Annulation d'un paiement \texttt{pending}. Auth~: Bearer token ou S2S.
+
+Response 200~:
+\begin{lstlisting}
+{
+  "transaction_id": "tx-uuid",
+  "status": "cancelled",
+  "message": "Payment cancelled"
+}
+\end{lstlisting}
+
+Codes~: 200, 400 Transaction not in pending state, 404.
+
+\subsection{Webhooks Providers}
+
+\subsubsection{POST /payments/webhooks/orange-money}
+\subsubsection{POST /payments/webhooks/mtn-momo}
+\subsubsection{POST /payments/webhooks/stripe}
+\subsubsection{POST /payments/webhooks/paypal}
+
+Chaque endpoint re\c{c}oit le callback du provider. \textbf{Aucune authentification JWT}~: la v\'erification se fait par signature HMAC ou IP whitelist selon le provider.
+
+\textbf{Comportement commun}~:
+\begin{enumerate}[nosep]
+  \item V\'erifier la signature du webhook
+  \item Stocker le payload brut dans \texttt{webhook\_logs}
+  \item Identifier la transaction via \texttt{provider\_tx\_id}
+  \item Normaliser le statut
+  \item Mettre \`a jour la transaction si le statut est un \'etat terminal (\texttt{succeeded}, \texttt{failed})
+  \item \'Emettre l'\'ev\'enement RabbitMQ correspondant
+\end{enumerate}
+
+Response~: 200 OK (toujours, m\^eme en cas d'erreur interne, pour \'eviter les retries provider inutiles). Les erreurs sont g\'er\'ees en interne via le cron de rattrapage.
+
+\begin{warnbox}[S\'ecurit\'e des webhooks (v1.1)]
+\textbf{4 couches de protection}~:
+
+\begin{enumerate}[nosep]
+  \item \textbf{Signature HMAC}~: chaque provider signe ses webhooks (Stripe~: \texttt{Stripe-Signature} HMAC-SHA256, Orange/MTN~: header propri\'etaire). Le secret est stock\'e chiffr\'e dans \texttt{provider\_configs.webhook\_secret\_encrypted}. Toute signature invalide $\to$ log + rejet silencieux (200 OK retourn\'e pour ne pas r\'ev\'eler l'erreur).
+  \item \textbf{IP whitelist}~: pour les providers Mobile Money qui ne signent pas syst\'ematiquement, filtrage par IP source. Liste configurable dans \texttt{provider\_configs.config}.
+  \item \textbf{Replay protection}~: chaque webhook porte un identifiant unique (ex~: \texttt{event\_id} Stripe). Paiement stocke les IDs trait\'es dans Redis (TTL 72h). Tout doublon est ignor\'e.
+  \item \textbf{Timestamp validation}~: si le webhook contient un timestamp, rejeter s'il date de plus de 5 minutes (protection contre les attaques par replay diff\'er\'e).
+\end{enumerate}
+\end{warnbox}
+
+\subsection{Configuration Providers}
+
+\subsubsection{POST /payments/providers}
+
+Cr\'eation d'un provider. Auth~: admin global.
+
+Request body~:
+\begin{lstlisting}
+{
+  "provider": "orange_money",
+  "display_name": "Orange Money Cameroun",
+  "credentials": { "api_key": "xxx", "api_secret": "yyy" },
+  "api_base_url": "https://api.orange.com/...",
+  "webhook_secret": "whsec_xxx",
+  "supported_currencies": ["XAF"]
+}
+\end{lstlisting}
+
+Codes~: 201, 400, 409 Provider already exists.
+
+\textit{Note~: \texttt{credentials} et \texttt{webhook\_secret} sont chiffr\'es AES-256 avant stockage. Le secret brut n'est jamais retourn\'e.}
+
+\subsubsection{PUT /payments/providers/\{provider\}}
+
+Modification. Codes~: 200, 400, 404.
+
+\subsubsection{PUT /payments/platforms/\{platformId\}/providers}
+
+Configuration des providers pour une plateforme (priorit\'e, devise, overrides).
+
+Request body~:
+\begin{lstlisting}
+{
+  "providers": [
+    { "provider": "orange_money", "priority": 1, "is_active": true },
+    { "provider": "mtn_momo", "priority": 2, "is_active": true },
+    { "provider": "stripe", "priority": 3, "is_active": true }
+  ],
+  "default_currency": "XAF"
+}
+\end{lstlisting}
+
+Codes~: 200, 400, 403.
+
+\subsection{Administration}
+
+\subsubsection{GET /payments/admin/stats}
+
+Query params~: \texttt{?platform\_id\&provider\&from\_date\&to\_date}
+
+Response 200~:
+\begin{lstlisting}
+{
+  "total_transactions": 12450,
+  "total_amount": 185000000,
+  "currency": "XAF",
+  "success_rate": 94.2,
+  "by_provider": [
+    { "provider": "orange_money", "count": 8200, "success_rate": 95.1 },
+    { "provider": "stripe", "count": 3100, "success_rate": 93.8 },
+    { "provider": "mtn_momo", "count": 1150, "success_rate": 91.5 }
+  ]
+}
+\end{lstlisting}
+
+Codes~: 200, 403.
+
+\subsubsection{POST /payments/admin/\{transactionId\}/force-status}
+
+Forcer un statut apr\`es v\'erification manuelle. Auth~: admin global.
+
+Request body~:
+\begin{lstlisting}
+{
+  "status": "succeeded",
+  "reason": "Verified manually via Orange Money dashboard"
+}
+\end{lstlisting}
+
+Codes~: 200, 400 Invalid status transition, 403, 404.
+
+\subsubsection{GET /payments/admin/reconciliation}
+
+Liste des rapports de r\'econciliation. Query params~: \texttt{?provider\&from\_date\&to\_date}.
+
+Codes~: 200, 403.
+
+\subsubsection{DELETE /payments/by-user/\{userId\}}
+
+\textbf{Purge RGPD.} Auth~: S2S token. Anonymise les donn\'ees personnelles des transactions (phone\_number, user\_id) sans supprimer les transactions (obligation comptable).
+
+Codes~: 200, 401, 404.
+
+% ============================================================
+\section{Contrats Inter-Services}
+% ============================================================
+
+\subsection{Paiement $\to$ Auth (JWT utilisateur)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint           & \texttt{GET /auth/verify-token} \\
+Auth               & \texttt{Authorization: Bearer <access\_token>} \\
+Donn\'ees extraites & \texttt{user\_id} (\texttt{sub}), \texttt{platform\_id} \\
+Cache              & Redis TTL 30s \\
+Comportement \'echec & Retourner 401 Unauthorized \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Paiement $\to$ Auth (token S2S)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint & \texttt{POST /auth/s2s/introspect} \\
+Donn\'ees & \texttt{client\_id}, \texttt{service\_name} \\
+Usage    & Appels S2S entrants (Abonnement d\'eclenchant un paiement) \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Abonnement $\to$ Paiement (\'ev\'enements RabbitMQ entrants)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement consomm\'e} & \textbf{Action Paiement} \\
+\midrule
+\texttt{subscription.payment\_required} & Initier une transaction. Payload contient~: \texttt{idempotency\_key}, \texttt{subscription\_id}, \texttt{amount}, \texttt{currency}, \texttt{subscriber\_type}, \texttt{subscriber\_id}, \texttt{reason}. Paiement r\'esout le provider via la config plateforme. \\
+\texttt{subscription.overage\_billing}  & Initier une transaction pour facturation overage. Payload contient~: \texttt{idempotency\_key}, \texttt{quota\_snapshot}. \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[Idempotence \'ev\'enements entrants]
+Paiement d\'eduplique sur \texttt{idempotency\_key}. Si une transaction existe d\'ej\`a pour cette cl\'e, l'\'ev\'enement est ignor\'e (log info). Cela couvre les retries RabbitMQ et les doubles \'emissions.
+\end{warnbox}
+
+\subsection{Paiement $\to$ Abonnement / Wallet (\'ev\'enements RabbitMQ sortants)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement publi\'e} & \textbf{Payload} \\
+\midrule
+\texttt{payment.confirmed} & \texttt{event\_id} (UUID), \texttt{payment\_reference\_id} (= transaction.id), \texttt{idempotency\_key}, \texttt{amount}, \texttt{currency}, \texttt{provider}, \texttt{source}, \texttt{source\_reference\_id}, \texttt{metadata}, \texttt{confirmed\_at} \\
+\texttt{payment.failed}    & \texttt{event\_id}, \texttt{payment\_reference\_id}, \texttt{idempotency\_key}, \texttt{amount}, \texttt{currency}, \texttt{provider}, \texttt{source}, \texttt{source\_reference\_id}, \texttt{failure\_reason}, \texttt{failed\_at} \\
+\texttt{payment.cancelled} & \texttt{event\_id}, \texttt{payment\_reference\_id}, \texttt{idempotency\_key}, \texttt{source}, \texttt{source\_reference\_id}, \texttt{cancelled\_at} \\
+\texttt{payment.cancelled} & \texttt{event\_id}, \texttt{payment\_reference\_id}, \texttt{idempotency\_key}, \texttt{source}, \texttt{source\_reference\_id}, \texttt{cancelled\_at} \\
+\bottomrule
+\end{tabularx}
+
+\begin{infobox}[Routage des \'ev\'enements]
+Les \'ev\'enements sont publi\'es sur un exchange RabbitMQ de type \texttt{topic}. Les consommateurs s'abonnent selon leur besoin~:
+\begin{itemize}[nosep]
+  \item Abonnement \'ecoute \texttt{payment.confirmed} et \texttt{payment.cancelled} o\`u \texttt{source = subscription}
+  \item Wallet \'ecoutera \texttt{payment.confirmed} o\`u \texttt{source = wallet}
+  \item Notification \'ecoute \texttt{payment.confirmed}, \texttt{payment.failed} et \texttt{payment.cancelled} pour envoyer les alertes
+\end{itemize}
+\end{infobox}
+
+\subsection{Paiement $\to$ Notification (alertes)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{\'Ev\'enement} & \textbf{Notification d\'eclench\'ee} \\
+\midrule
+Transaction succeeded  & Email/push~: \og Paiement de X FCFA re\c{c}u\fg{} + re\c{c}u \\
+Transaction failed    & Email/push~: \og \'Echec du paiement, veuillez r\'eessayer\fg{} \\
+Transaction cancelled & Push~: \og Votre paiement a \'et\'e annul\'e\fg{} \\
+Transaction expired   & Push~: \og Votre paiement a expir\'e\fg{} \\
+Transaction cancelled & Push~: \og Votre paiement a \'et\'e annul\'e\fg{} \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Users $\to$ Paiement (Purge RGPD)}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Param\`etre} & \textbf{Valeur} \\
+\midrule
+Endpoint          & \texttt{DELETE /api/v1/payments/by-user/\{userId\}} \\
+Auth              & Token S2S \\
+Usage             & Appel\'e par Users dans le workflow de purge RGPD \\
+Donn\'ees anonymis\'ees & \texttt{user\_id} $\to$ NULL, \texttt{phone\_number} $\to$ NULL. Transactions conserv\'ees (obligation comptable). \\
+S\'equence        & Avant Auth purge \\
+\bottomrule
+\end{tabularx}
+
+\begin{warnbox}[RGPD --- obligation comptable]
+Les transactions ne sont \textbf{jamais supprim\'ees} physiquement. La purge RGPD \textbf{anonymise} les donn\'ees personnelles (\texttt{user\_id}, \texttt{phone\_number}) tout en conservant les montants, dates et r\'ef\'erences pour la tra\c{c}abilit\'e comptable l\'egale.
+\end{warnbox}
+
+% ============================================================
+\section{Matrice d'Autorisation}
+% ============================================================
+
+\begin{tabularx}{\textwidth}{lcccc}
+\toprule
+\textbf{Endpoint} & \textbf{JWT} & \textbf{S2S} & \textbf{Admin Plat.} & \textbf{Admin Global} \\
+\midrule
+POST /payments/initiate                              & $\checkmark$ & $\checkmark$ &              &              \\
+GET /payments/\{id\}                                 & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+GET /payments                                        & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+POST /payments/\{id\}/cancel                         & $\checkmark$ & $\checkmark$ &              & $\checkmark$ \\
+POST /payments/webhooks/*                            & \multicolumn{4}{c}{\textit{Signature provider (pas de JWT)}} \\
+POST /payments/providers                             &              &              &              & $\checkmark$ \\
+PUT /payments/providers/\{provider\}                 &              &              &              & $\checkmark$ \\
+PUT /payments/platforms/\{platformId\}/providers     &              &              & $\checkmark$ & $\checkmark$ \\
+GET /payments/admin/stats                            &              &              & $\checkmark$ & $\checkmark$ \\
+POST /payments/admin/\{id\}/force-status             &              &              &              & $\checkmark$ \\
+GET /payments/admin/reconciliation                   &              &              &              & $\checkmark$ \\
+DELETE /payments/by-user/\{userId\}                  &              & $\checkmark$ &              & $\checkmark$ \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Recommandations \& \'Evolutions}
+% ============================================================
+
+\begin{itemize}
+  \item \textbf{Remboursements (phase 2)}~: endpoint \texttt{POST /payments/\{id\}/refund} avec montant partiel ou total, propag\'e vers le provider.
+  \item \textbf{Nouveaux providers}~: CinetPay, Campay, Flutterwave via le pattern adapter.
+  \item \textbf{Paiement r\'ecurrent natif}~: certains providers (Stripe) supportent la r\'ecurrence native. Possibilit\'e de d\'el\'eguer la r\'ecurrence au provider pour r\'eduire la charge sur Abonnement.
+  \item \textbf{3D Secure}~: gestion du challenge d'authentification carte.
+  \item \textbf{Monitoring}~: m\'etriques Prometheus (transactions/s, latence par provider, taux de succ\`es, circuit breaker state).
+  \item \textbf{Versioning API}~: pr\'efixe \texttt{/api/v1}. Breaking changes $\to$ \texttt{/api/v2}.
+  \item \textbf{Dashboard financier}~: vue consolid\'ee cross-plateforme pour la direction.
+\end{itemize}
+
+% ============================================================
+\section*{Annexes}
+% ============================================================
+
+\subsection*{Glossaire}
+
+\begin{tabularx}{\textwidth}{lL}
+\toprule
+\textbf{Terme} & \textbf{D\'efinition} \\
+\midrule
+Provider        & Fournisseur de paiement externe (Orange Money, Stripe, etc.) \\
+Transaction     & Unit\'e de paiement trac\'ee de l'initiation \`a la confirmation \\
+Webhook         & Callback HTTP envoy\'e par le provider pour notifier un changement de statut \\
+Idempotence     & Garantie qu'une op\'eration ex\'ecut\'ee N fois produit le m\^eme r\'esultat \\
+Circuit breaker & M\'ecanisme de protection qui d\'esactive un provider d\'efaillant temporairement \\
+R\'econciliation & Rapprochement entre les transactions internes et les relev\'es du provider \\
+USSD push       & Notification envoy\'ee sur le t\'el\'ephone du payeur pour confirmer un paiement Mobile Money \\
+PCI-DSS         & Norme de s\'ecurit\'e pour le traitement des donn\'ees de carte bancaire \\
+DLQ             & Dead Letter Queue --- file d'attente pour les messages non trait\'es \\
+S2S             & Service-to-Service --- communication entre microservices \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Code PlantUML --- Diagramme de Classes}
+\label{sec:plantuml}
+
+Le code PlantUML ci-dessous correspond au diagramme de classes complet du service Paiement v1.2. Il peut \^etre rendu sur \texttt{plantuml.com} ou tout outil compatible.
+
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,backgroundcolor=\color{codebg}]
+@startuml Payment Service - Class Diagram v1.2
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+entity "transactions" as tx {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  user_id : UUID
+  * provider : VARCHAR(30)
+  provider_tx_id : VARCHAR(255)
+  * idempotency_key : UUID <<UQ>>
+  * amount : DECIMAL(12,2)
+  * currency : VARCHAR(3)
+  * status : VARCHAR(20)
+  * source : VARCHAR(30)
+  source_reference_id : UUID
+  metadata : JSONB
+  payment_url : TEXT
+  phone_number : VARCHAR(20)
+  failure_reason : TEXT
+  provider_raw_status : VARCHAR(50)
+  expires_at : TIMESTAMPTZ
+  confirmed_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "transaction_status_history" as history {
+  * id : UUID <<PK>>
+  --
+  * transaction_id : UUID <<FK>>
+  from_status : VARCHAR(20)
+  * to_status : VARCHAR(20)
+  * trigger : VARCHAR(30)
+  provider_raw : JSONB
+  * created_at : TIMESTAMPTZ
+}
+
+entity "webhook_logs" as whlogs {
+  * id : UUID <<PK>>
+  --
+  * provider : VARCHAR(30)
+  * event_type : VARCHAR(50)
+  * payload : JSONB
+  headers : JSONB
+  * signature_valid : BOOLEAN
+  transaction_id : UUID <<FK>>
+  processing_status : VARCHAR(20) = 'pending'
+  error_message : TEXT
+  * created_at : TIMESTAMPTZ
+  processed_at : TIMESTAMPTZ
+}
+
+entity "provider_configs" as providers {
+  * id : UUID <<PK>>
+  --
+  * provider : VARCHAR(30) <<UQ>>
+  * display_name : VARCHAR(100)
+  is_active : BOOLEAN = true
+  * credentials_encrypted : TEXT
+  * api_base_url : VARCHAR(255)
+  webhook_secret_encrypted : TEXT
+  * supported_currencies : JSONB
+  config : JSONB
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+}
+
+entity "platform_payment_configs" as platconfigs {
+  * id : UUID <<PK>>
+  --
+  * platform_id : UUID
+  * provider : VARCHAR(30)
+  is_active : BOOLEAN = true
+  priority : INT = 0
+  default_currency : VARCHAR(3) = 'XAF'
+  config_overrides : JSONB
+  * created_at : TIMESTAMPTZ
+  * updated_at : TIMESTAMPTZ
+  ..
+  <<UQ>> (platform_id, provider)
+}
+
+entity "reconciliation_reports" as recon {
+  * id : UUID <<PK>>
+  --
+  * provider : VARCHAR(30)
+  * period_start : TIMESTAMPTZ
+  * period_end : TIMESTAMPTZ
+  * total_internal : INT
+  * total_provider : INT
+  * matched : INT
+  * mismatched : INT
+  * missing_internal : INT
+  * missing_provider : INT
+  details : JSONB
+  * status : VARCHAR(20)
+  * created_at : TIMESTAMPTZ
+}
+
+tx ||--o{ history    : "1..* status changes"
+tx ||--o{ whlogs     : "0..* webhook logs"
+
+@enduml
+\end{lstlisting}
+
+\vfill
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}\\[0.5em]
+{\small\textcolor{agtgray}{AG Technologies --- Document confidentiel \`a usage interne exclusivement.}}\\
+{\small\textcolor{agtgray}{Payment Service CDC v1.2 --- Avril 2026}}
+\end{center}
+
+\end{document}
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\instructions.md =====
 `
 Tu es mon pair-programmer principal pour AG Technologies.
 
@@ -18524,85 +35085,146 @@ Tu avances avec moi, Ã  mon rythme, Ã©tape par Ã©tape.
 `
 ===== FILE END =====
 
-===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\next\prompt_todo.md =====
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\prompt_task.md =====
 `
-Nous allons travailler ensemble sur les prochaines Ã©tapes de mon architecture AG Technologies.
+Nous commenÃ§ons maintenant la tÃ¢che x : prÃ©parer x.
 
-Contexte :
+Travaille uniquement sur cette tÃ¢che.
 
-* 8 services sur 11 sont dÃ©jÃ  faits en 1.0
-* lâ€™architecture actuelle est alignÃ©e correctement
-* jâ€™ai les CDC, le code existant et une mini documentation
-* les 2 prochaines prioritÃ©s sont :
+Je veux que tu suives exactement cette mÃ©thode :
 
-  1. coder les simulateurs des services restants en respectant lâ€™architecture actuelle
-  2. implÃ©menter le backend template
+1. analyse de lâ€™existant
+2. conception fonctionnelle
+3. conception technique
+4. mise en place / implÃ©mentation
+5. tests
 
-Je veux dâ€™abord que tu mâ€™aides Ã  produire un fichier todo.md simple, souple et exploitable.
+Pour lâ€™instant, fais seulement :
 
-Contraintes pour cette todo :
+* lâ€™analyse de lâ€™existant
+* puis la conception fonctionnelle
 
-* elle doit rester simple
-* elle ne doit pas Ãªtre trop dÃ©taillÃ©e
-* elle doit montrer les grandes lignes du travail
-* elle doit inclure notre dÃ©marche de travail pour chaque tÃ¢che :
+Ne code rien encore.
+Sois concret et respecte strictement lâ€™architecture actuelle.
 
-  * analyse de lâ€™existant
-  * conception fonctionnelle
-  * conception technique
-  * mise en place / implÃ©mentation
-  * tests
+`
+===== FILE END =====
 
-Je veux que tu me proposes le contenu complet du fichier todo.md en markdown, prÃªt Ã  copier.
-Ne code rien dâ€™autre pour lâ€™instant.
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\end_session.md =====
+`
+Nous allons bientÃ´t changer de session. GÃ©nÃ¨re-moi un 'Handoff Report' (RÃ©sumÃ© de passation) trÃ¨s concis. Il doit contenir :
 
+Ce qui a Ã©tÃ© complÃ©tÃ© avec succÃ¨s aujourd'hui.
+Ce qui est actuellement en cours (avec le fichier exact et la ligne si possible).
+La prochaine Ã©tape immÃ©diate selon notre mÃ©thode en 5 Ã©tapes.
+Les Ã©ventuels points d'attention ou bugs laissÃ©s en suspens. Ne gÃ©nÃ¨re pas de code, juste ce rapport en markdown.
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\init_session.md =====
+`
+Tu es mon pair-programmer principal pour AG Technologies. Tu mâ€™accompagnes dans la mise en place de mon architecture microservices et de mon backend template.
+
+RÃˆGLES ABSOLUES :
+
+Tu travailles une seule tÃ¢che Ã  la fois.
+Tu respectes l'architecture existante et les conventions (Auth v2.1, Users v1.0, etc.).
+Tu ne codes jamais avant d'avoir clarifiÃ© la conception.
+MÃ‰THODE OBLIGATOIRE EN 5 Ã‰TAPES :
+
+Analyse de lâ€™existant
+Conception fonctionnelle
+Conception technique
+Mise en place / implÃ©mentation
+Tests
+Je vais te fournir le contexte (fichiers, todo.md, et Ã©ventuellement un Handoff Report). Attends mes instructions.
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\sync.md =====
+`
+Voici le contexte actuel de notre projet (fichiers et roadmap.md). Attention : il est possible que j'aie oubliÃ© de cocher certaines cases ou mÃªme cocher d'autres par erreur dans le roadmap.md.
+
+Ta premiÃ¨re mission, AVANT de faire quoi que ce soit d'autre :
+
+Scanne le roadmap.md et l'Ã©tat des fichiers fournis.
+DÃ©duis exactement oÃ¹ nous en sommes arrÃªtÃ©s.
+Dis-moi quelle est la prochaine sous-tÃ¢che logique Ã  attaquer et comment restaurern ma roadmap.md si nÃ©cessaire.
+PrÃ©cise Ã  quelle Ã©tape de notre mÃ©thode (1. Analyse, 2. Fonctionnel, 3. Technique, 4. Code, 5. Test) nous nous trouvons pour cette sous-tÃ¢che.
+NE PROPOSE AUCUN CODE. Pose-moi simplement la question : 'Est-ce bien cela que nous devons attaquer maintenant ?' et attends ma validation.
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\t.md =====
+`
+C'est une excellente initiative. Anticiper la perte de contexte et la limite de tokens est une vraie bonne pratique d'ingÃ©nierie, surtout sur une architecture aussi vaste.
+
+Pour garantir une transition fluide entre deux sessions (ou deux IA) sans perte de contexte, je te propose de crÃ©er **3 outils de Prompt Engineering** (Ã  sauvegarder par exemple dans un dossier `docs/prompts/`).
+
+Voici ce que je te propose, prÃªt Ã  Ãªtre utilisÃ©.
 
 ---
-# Exemple de todo qui peut em plaire 
 
-# TODO â€” AGT Microservices Suite
+### Outil 1 : Le Prompt de "Handoff" (Fin de session)
+*Ã€ utiliser quand tu sens que la session fatigue ou que tu vas bientÃ´t couper.*
 
-## Objectif gÃ©nÃ©ral
-Avancer proprement sur les prochaines Ã©tapes de lâ€™architecture AG Technologies en travaillant une tÃ¢che Ã  la fois, avec une dÃ©marche rigoureuse et rÃ©utilisable.
-
-## MÃ©thode de travail
-Pour chaque tÃ¢che :
-- [ ] Analyse de lâ€™existant
-- [ ] Conception fonctionnelle
-- [ ] Conception technique
-- [ ] Mise en place / implÃ©mentation
-- [ ] Tests
+**Prompt Ã  copier-coller :**
+> "Nous allons bientÃ´t changer de session. GÃ©nÃ¨re-moi un 'Handoff Report' (RÃ©sumÃ© de passation) trÃ¨s concis. 
+> Il doit contenir :
+> 1. Ce qui a Ã©tÃ© complÃ©tÃ© avec succÃ¨s aujourd'hui.
+> 2. Ce qui est actuellement en cours (avec le fichier exact et la ligne si possible).
+> 3. La prochaine Ã©tape immÃ©diate selon notre mÃ©thode en 5 Ã©tapes.
+> 4. Les Ã©ventuels points d'attention ou bugs laissÃ©s en suspens.
+> Ne gÃ©nÃ¨re pas de code, juste ce rapport en markdown."
 
 ---
 
-## 1. PrÃ©parer les simulateurs des services restants
-- [ ] Identifier prÃ©cisÃ©ment les services restants Ã  simuler
-- [ ] DÃ©finir le rÃ´le de chaque simulateur dans lâ€™architecture actuelle
-- [ ] Concevoir le comportement fonctionnel minimal attendu
-- [ ] Concevoir la structure technique et les fichiers concernÃ©s
-- [ ] ImplÃ©menter les simulateurs
-- [ ] Tester localement les simulateurs
+### Outil 2 : Le Prompt SystÃ¨me (Initialisation Nouvelle Session)
+*C'est le prompt racine que tu me donneras au dÃ©but de chaque nouvelle session pour me recadrer.*
 
-## 2. Mettre en place le backend template
-- [ ] Analyser lâ€™architecture actuelle pour en extraire les briques communes
-- [ ] DÃ©finir le pÃ©rimÃ¨tre fonctionnel du backend template
-- [ ] DÃ©finir la structure technique du template
-- [ ] ImplÃ©menter le backend template
-- [ ] Ajouter les tests de base
-- [ ] Valider le template en local
+**Prompt Ã  copier-coller :**
+> "Tu es mon pair-programmer principal pour AG Technologies.
+> Tu mâ€™accompagnes dans la mise en place de mon architecture microservices et de mon backend template.
+> 
+> RÃˆGLES ABSOLUES :
+> - Tu travailles une seule tÃ¢che Ã  la fois.
+> - Tu respectes l'architecture existante et les conventions (Auth v2.1, Users v1.0, etc.).
+> - Tu ne codes jamais avant d'avoir clarifiÃ© la conception.
+> 
+> MÃ‰THODE OBLIGATOIRE EN 5 Ã‰TAPES :
+> 1. Analyse de lâ€™existant
+> 2. Conception fonctionnelle
+> 3. Conception technique
+> 4. Mise en place / implÃ©mentation
+> 5. Tests
+> 
+> Je vais te fournir le contexte (fichiers, todo.md, et Ã©ventuellement un Handoff Report). Attends mes instructions."
 
-## 3. PrÃ©parer le terrain pour AGT-Bot
-- [ ] Identifier ce que le backend template doit couvrir pour AGT-Bot
-- [ ] VÃ©rifier les dÃ©pendances nÃ©cessaires
-- [ ] PrÃ©parer lâ€™intÃ©gration future avec le dashboard de gÃ©nÃ©ration
+---
 
-## 4. Documentation progressive
-- [ ] Mettre Ã  jour la documentation au fur et Ã  mesure
-- [ ] Garder une trace claire des choix fonctionnels et techniques
-- [ ] Documenter les commandes et les Ã©tapes de test local
+### Outil 3 : Le Prompt de Reprise (Synchronisation)
+*Ã€ utiliser juste aprÃ¨s avoir fourni le contexte dans la nouvelle session, pour forcer l'IA Ã  deviner oÃ¹ nous en sommes et demander validation.*
+
+**Prompt Ã  copier-coller :**
+> "Voici le contexte actuel de notre projet (fichiers et `todo.md`). 
+> Attention : il est possible que j'aie oubliÃ© de cocher certaines cases dans le `todo.md`.
+> 
+> Ta premiÃ¨re mission, AVANT de faire quoi que ce soit d'autre :
+> 1. Scanne le `todo.md` et l'Ã©tat des fichiers fournis.
+> 2. DÃ©duis exactement oÃ¹ nous en sommes arrÃªtÃ©s.
+> 3. Dis-moi quelle est la prochaine sous-tÃ¢che logique Ã  attaquer.
+> 4. PrÃ©cise Ã  quelle Ã©tape de notre mÃ©thode (1. Analyse, 2. Fonctionnel, 3. Technique, 4. Code, 5. Test) nous nous trouvons pour cette sous-tÃ¢che.
+> 
+> NE PROPOSE AUCUN CODE. Pose-moi simplement la question : 'Est-ce bien cela que nous devons attaquer maintenant ?' et attends ma validation."
+
+---
+
+### Comment valides-tu cette approche ?
+Si ces 3 outils te conviennent, tu peux les sauvegarder de ton cÃ´tÃ©. 
+DÃ¨s que tu me donnes ton feu vert, nous pouvons officiellement dÃ©marrer la **TÃ¢che 1 : Simuler les microservices restants et le gateway**, en appliquant notre Ã©tape 1 : **Analyse de l'existant**.
 `
 ===== FILE END =====
 
 ## SUMMARY
-- Total files: 261
+- Total files: 295
 

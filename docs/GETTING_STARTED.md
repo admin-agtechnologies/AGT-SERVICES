@@ -1,194 +1,174 @@
-# AGT Microservices - Getting Started
+# AGT Microservices - Getting Started (Guide de Démarrage)
 
-> Guide de demarrage rapide pour l'ecosysteme AGT. Ordre de lancement, premiers pas, et FAQ.
+Bienvenue dans l'écosystème microservices d'AG Technologies. Ce guide vous accompagne pas à pas pour lancer, configurer et comprendre l'environnement de développement local (MVP).
 
-## Ordre de demarrage
+---
 
-Les services ont des dependances. Respectez cet ordre :
+## 1. Architecture du MVP (Minimum Viable Product)
 
-```
-1. Auth      (port 7000) - en premier, genere les cles RSA
-2. Users     (port 7001) - depend de la cle publique Auth
-3. Notification (port 7002) - depend de la cle publique Auth
-4. Subscription (port 7004) - depend de la cle publique Auth
-5. Payment   (port 7005) - depend de la cle publique Auth
-```
+Pour développer et tester les flux de base (Inscription, Profil, Fichiers), nous déployons un sous-ensemble de l'architecture complète. Le **MVP** se compose de :
 
-Les services 4+ (Payment, Wallet...) viendront ensuite.
+### Services Métier
+*   **Auth (7000) :** Gère l'identité, les tokens JWT, la sécurité (2FA) et le registre des plateformes.
+*   **Users (7001) :** Gère les profils étendus, les rôles (RBAC) et les documents KYC.
+*   **Notification (7002) :** Orchestre l'envoi des emails, SMS et push via des files d'attente.
+*   **Média (7003) :** Gère l'upload, le traitement et le stockage des fichiers. *(Note : Le service final en NestJS n'étant pas encore terminé, nous utilisons un simulateur léger pour le MVP afin de ne pas bloquer les autres services).*
 
-## Demarrage complet (Windows)
+### Infrastructure Partagée
+*   **API Gateway (Nginx) :** Point d'entrée unique de l'écosystème sur le port `80`.
+*   **RabbitMQ :** Bus de messages pour la communication asynchrone entre les services.
+*   **Mailpit :** Serveur SMTP local de développement. Il intercepte tous les emails envoyés par le service Notification pour éviter de spammer de vraies adresses. Accessible sur `http://localhost:8025`.
+*   **PostgreSQL & Redis :** Chaque service métier possède sa propre base de données et son propre cache, isolés des autres.
 
+---
+
+## 2. Configuration Initiale
+
+Avant de lancer les services, configurez la clé d'administration globale :
+
+1. Allez dans le dossier `agt-auth/`.
+2. Copiez `.env.example` vers `.env` (si ce n'est pas déjà fait).
+3. Ouvrez `agt-auth/.env` et modifiez la variable `ADMIN_API_KEY` :
+   ```env
+   ADMIN_API_KEY=votre-cle-secrete-admin-123
+   ```
+   *Cette clé sera utilisée pour les opérations sensibles (création de plateforme, blocage d'utilisateur).*
+
+---
+
+## 3. Lancement du MVP
+
+Des scripts automatisés à la racine du projet orchestrent le démarrage (respect des dépendances et partage des clés RSA).
+
+**Sur Windows (PowerShell en administrateur) :**
 ```powershell
-# 0. Ouvrir Docker Desktop et attendre qu'il soit pret
-
-# 1. Auth
-cd agt-auth
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
-
-# 2. Users (nouveau terminal PowerShell)
-cd agt-users
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
-
-# 3. Notification (nouveau terminal PowerShell)
-cd agt-notification
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
-
-# 4. Subscription (nouveau terminal PowerShell)
-cd agt-subscription
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
+.\deploy_mvp.ps1
 ```
 
-## Demarrage complet (Linux/macOS)
-
+**Sur Linux / macOS :**
 ```bash
-cd agt-auth && bash scripts/setup.sh && cd ..
-cd agt-users && bash scripts/setup.sh && cd ..
-cd agt-notification && bash scripts/setup.sh && cd ..
-cd agt-subscription && bash scripts/setup.sh && cd ..
-```
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
-
-# 3. Notification (nouveau terminal PowerShell)
-cd agt-notification
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
+bash deploy_mvp.sh
 ```
 
-## Demarrage complet (Linux/macOS)
+Vérifiez que tout fonctionne avec `docker ps`. Tous les conteneurs doivent avoir le statut `Up` et `(healthy)`.
 
+---
+
+## 4. Génération et Application des Migrations
+
+Lors du premier lancement, les bases de données sont vides. Il faut générer et appliquer les schémas de base de données.
+
+Exécutez ces commandes dans votre terminal :
+
+**Pour Auth :**
 ```bash
-cd agt-auth && bash scripts/setup.sh && cd ..
-cd agt-users && bash scripts/setup.sh && cd ..
-cd agt-notification && bash scripts/setup.sh && cd ..
+docker exec -it agt_auth_service python manage.py makemigrations authentication platforms
+docker exec -it agt_auth_service python manage.py migrate
 ```
 
-## Verification
-
+**Pour Users :**
 ```bash
-curl http://localhost:7000/api/v1/auth/health
-curl http://localhost:7001/api/v1/health
-curl http://localhost:7002/api/v1/health
+docker exec -it agt_users_service python manage.py makemigrations users roles documents
+docker exec -it agt_users_service python manage.py migrate
 ```
 
-Les 3 doivent repondre `{"status": "healthy", ...}`.
-
-## Premier flux complet
-
-### 1. Creer une plateforme (sur Auth)
-
+**Pour Notification :**
 ```bash
-curl -X POST http://localhost:7000/api/v1/auth/platforms \
-  -H "Content-Type: application/json" \
-  -H "X-Admin-API-Key: change-me-admin-api-key-very-secret" \
-  -d '{"name": "AGT Market", "slug": "agt-market", "allowed_auth_methods": ["email"]}'
+docker exec -it agt_notif_service python manage.py makemigrations notifications templates_mgr campaigns devices
+docker exec -it agt_notif_service python manage.py migrate
 ```
 
-Notez le `id` (UUID) et le `client_secret` retournes.
+---
 
-### 2. Inscrire un utilisateur
+## 5. Premier Flux Complet : Comprendre les Microservices
 
+Nous allons créer une plateforme, inscrire un utilisateur, et valider son email. Tout se fait via le **Swagger UI**.
+
+### Étape A : Créer la plateforme
+1. Ouvrez le Swagger Auth : `http://localhost:7000/api/v1/docs/`
+2. Allez sur `POST /api/v1/auth/platforms` et cliquez sur **Try it out**.
+3. Header `X-Admin-API-Key` : mettez la clé définie à l'étape 2.
+4. Body :
+   ```json
+   {
+     "name": "AGT Market",
+     "slug": "agt-market",
+     "allowed_auth_methods": ["email", "phone", "magic_link"],
+     "allowed_redirect_urls": ["http://localhost:3000/callback"]
+   }
+   ```
+5. **Execute**. Copiez l'UUID du champ `"id"` dans la réponse. C'est votre `platform_id`.
+
+> **Que se passe-t-il sous le capot ?**
+> Le service Auth valide votre clé Admin, génère un `client_secret` chiffré, et enregistre la plateforme dans sa base de données `agt_auth_db`. Cette plateforme est désormais reconnue par tout l'écosystème.
+
+### Étape B : Inscrire un utilisateur
+1. Sur le Swagger Auth, allez sur `POST /api/v1/auth/register` et cliquez sur **Try it out**.
+2. Header `X-Platform-Id` : collez l'UUID copié à l'étape A.
+3. Body :
+   ```json
+   {
+     "email": "test@agt.com",
+     "password": "Password123!",
+     "method": "email"
+   }
+   ```
+4. **Execute**. Vous obtenez un `201 Created`.
+
+> **Que se passe-t-il sous le capot ? (Chorégraphie inter-services)**
+> 1. **Auth** hache le mot de passe et crée l'utilisateur dans sa base.
+> 2. **Auth** fait un appel HTTP (S2S) au service **Users** (`POST /api/v1/users`) pour lui dire : *"Un nouvel utilisateur s'est inscrit, provisionne son profil"*. Users crée le profil dans sa propre base.
+> 3. **Auth** génère un token de vérification, puis fait un appel HTTP au service **Notification** pour demander l'envoi de l'email de bienvenue.
+> 4. **Notification** enregistre la demande en base, la place dans **RabbitMQ**, et un **Worker Celery** la consomme pour envoyer l'email vers **Mailpit**.
+
+### Étape C : Vérifier l'email via Mailpit
+1. Ouvrez Mailpit : `http://localhost:8025`
+2. Ouvrez l'email "Vérifiez votre email - AGT Market".
+3. Copiez le `token` présent dans le lien.
+
+### Étape D : Valider l'email
+1. Sur le Swagger Auth, allez sur `POST /api/v1/auth/verify-email`.
+2. Body : `{"token": "le-token-copie"}`
+3. **Execute**. Réponse `200 OK`.
+
+> **Que se passe-t-il sous le capot ?**
+> Auth vérifie le hash du token dans sa base. S'il est valide et non expiré, il passe le champ `email_verified` à `true` et marque le token comme utilisé.
+
+---
+
+## 6. Commandes Utiles (Debug & Reset)
+
+**Voir les logs en direct (très utile pour le debug) :**
 ```bash
-curl -X POST http://localhost:7000/api/v1/auth/register \
-  -H "Content-Type: application/json" \
-  -H "X-Platform-Id: <UUID-plateforme>" \
-  -d '{"email": "test@agt.com", "password": "Test1234!", "method": "email"}'
+docker logs --tail 50 -f agt_gateway          # Logs du routeur Nginx
+docker logs --tail 50 -f agt_auth_service     # Logs de l'API Auth
+docker logs --tail 50 -f agt_users_service    # Logs de l'API Users
+docker logs --tail 50 -f agt_notif_service    # Logs de l'API Notification
+docker logs --tail 50 -f agt_notif_worker     # Logs des envois d'emails/SMS (Celery)
+docker logs --tail 50 -f agt_media_simulator  # Logs des uploads de fichiers
 ```
 
-Auth cree le compte ET provisionne automatiquement le profil dans Users.
-
-### 3. Se connecter
-
+**Arrêter l'environnement :**
 ```bash
-curl -X POST http://localhost:7000/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email": "test@agt.com", "password": "Test1234!", "platform_id": "<UUID>"}'
+docker stop $(docker ps -aq)
 ```
 
-Copiez l'`access_token` de la reponse.
-
-### 4. Consulter le profil (sur Users)
-
+**Réinitialiser complètement (Attention : supprime bases de données et réseaux) :**
 ```bash
-curl http://localhost:7001/api/v1/users/by-auth/<auth-user-id> \
-  -H "Authorization: Bearer <token>"
+docker rm -f $(docker ps -aq)
+docker volume rm $(docker volume ls -q)
+docker network prune -f
 ```
 
-### 5. Envoyer une notification (sur Notification)
+---
 
-```bash
-curl -X POST http://localhost:7002/api/v1/notifications/send \
-  -H "Authorization: Bearer <token>" \
-  -H "Content-Type: application/json" \
-  -d '{"user_id": "<user-id>", "channels": ["in_app"], "template_name": "auth_verify_email", "variables": {"verification_url": "http://test.com", "expires_in_minutes": 60, "platform_name": "AGT Market"}}'
-```
+## 7. Prochaines Étapes
 
-Note : creez d'abord le template (voir GUIDE_NOTIFICATION.md section 3.1).
+Maintenant que l'infrastructure de base est comprise, vous pouvez approfondir chaque domaine :
 
-### 6. Souscrire a un plan (sur Subscription)
-
-```bash
-# D'abord creer un plan (voir GUIDE_SUBSCRIPTION.md section 3.3)
-# Puis souscrire
-curl -X POST http://localhost:7004/api/v1/subscriptions \
-  -H "Authorization: Bearer <token>" \
-  -H "Content-Type: application/json" \
-  -d '{"platform_id": "<UUID>", "subscriber_type": "user", "subscriber_id": "<auth-user-id>", "plan_id": "<plan-id>", "billing_cycle": "monthly"}'
-```
-
-## Ports
-
-| Service | Port API | PostgreSQL | Redis | Autre |
-|---------|----------|-----------|-------|-------|
-| Auth | 7000 | 5432 | 6379 | - |
-| Users | 7001 | 5433 | 6380 | - |
-| Notification | 7002 | 5434 | 6381 | RabbitMQ 5672/15672 |
-| Subscription | 7004 | 5435 | 6382 | - |
-| Payment | 7005 | 5436 | 6383 | - |
-
-## Documentation API (Swagger)
-
-| Service | Swagger UI |
-|---------|-----------|
-| Auth | http://localhost:7000/api/v1/docs/ |
-| Users | http://localhost:7001/api/v1/docs/ |
-| Notification | http://localhost:7002/api/v1/docs/ |
-| Subscription | http://localhost:7004/api/v1/docs/ |
-| Subscription | http://localhost:7004/api/v1/docs/ |
-| Payment | http://localhost:7005/api/v1/docs/ |
-
-## FAQ
-
-**Q: Docker dit "pipe not found" ou "unable to get image"**
-A: Docker Desktop n'est pas demarre. Ouvrez-le et attendez l'icone verte.
-
-**Q: "openssl n'est pas reconnu"**
-A: Normal sur Windows. Le script genere les cles via Docker a la place.
-
-**Q: Le service Users dit "AUTH_PUBLIC_KEY non configure"**
-A: Copiez la cle publique : `copy ..\agt-auth\keys\public.pem keys\auth_public.pem`
-
-**Q: L'inscription ne cree pas le profil Users**
-A: Normal si Users n'est pas demarre. Auth log un warning mais l'inscription reussit. Demarrez Users et le provisioning fonctionnera pour les prochaines inscriptions.
-
-**Q: Les emails/SMS ne s'envoient pas**
-A: Normal en dev. Les providers (SendGrid, Twilio) ne sont pas configures. Les notifications sont creees en base avec status=failed. Utilisez le canal `in_app` pour tester.
-
-**Q: Comment voir les logs ?**
-A: `docker compose logs -f <service-name>` (auth, users, notification, celery-worker, etc.)
-
-**Q: Comment tout arreter ?**
-A: `docker compose down` dans chaque dossier service. Ajoutez `-v` pour supprimer les donnees.
-
-## Guides detailles
-
-- [GUIDE_AUTH.md](./GUIDE_AUTH.md) - Configuration et utilisation Auth
-- [GUIDE_USERS.md](./GUIDE_USERS.md) - Configuration et utilisation Users
-- [GUIDE_NOTIFICATION.md](./GUIDE_NOTIFICATION.md) - Configuration et utilisation Notification
-- [GUIDE_SUBSCRIPTION.md](./GUIDE_SUBSCRIPTION.md) - Configuration et utilisation Subscription
-- [GUIDE_SUBSCRIPTION.md](./GUIDE_SUBSCRIPTION.md) - Configuration et utilisation Subscription
-- [GUIDE_PAYMENT.md](./GUIDE_PAYMENT.md) - Configuration et utilisation Payment (a venir)
+*   **Approfondir l'Authentification :** Testez le login, le refresh token via les cookies, et la sécurité 2FA. $\rightarrow$ [Voir le Guide Auth](./GUIDE_AUTH.md)
+*   **Gestion du Profil et RBAC :** Connectez-vous, récupérez votre JWT, et utilisez le Swagger Users (`http://localhost:7001/api/v1/docs/`) pour modifier votre profil ou créer des rôles dynamiques. $\rightarrow$[Voir le Guide Users](./GUIDE_USERS.md)
+*   **Gestion des Notifications :** Créez des templates dynamiques avec variables et testez les notifications In-App. $\rightarrow$ [Voir le Guide Notification](./GUIDE_NOTIFICATION.md)
+*   **Gestion des Abonnements :** Découvrez comment créer des plans, des quotas et gérer le cycle de vie B2B/B2C. $\rightarrow$ [Voir le Guide Subscription](./GUIDE_SUBSCRIPTION.md)
+*   **Gestion des Médias :** Testez l'upload d'une photo de profil via le simulateur Média sur le port `7003`.

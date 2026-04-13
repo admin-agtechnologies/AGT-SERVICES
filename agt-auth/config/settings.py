@@ -148,28 +148,33 @@ REST_FRAMEWORK = {
 # ─── Swagger / OpenAPI (drf-spectacular) ──────────────────────────────────────
 SPECTACULAR_SETTINGS = {
     "TITLE": "AGT Auth Service API",
-    "DESCRIPTION": "Service d'authentification centralise de l'ecosysteme AG Technologies.\n\nJWT RS256, OAuth Google/Facebook, 2FA TOTP, sessions, S2S tokens.",
+    "DESCRIPTION": "Service d'authentification centralise de l'ecosysteme AG Technologies.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
-    "CONTACT": {"name": "AGT Engineering", "email": "engineering@agt.com"},
-    "LICENSE": {"name": "Proprietary"},
-    "TAGS": [
-        {"name": "Health", "description": "Etat du service"},
-        {"name": "Register", "description": "Inscription et verification"},
-        {"name": "Login", "description": "Connexion (email, phone, magic link)"},
-        {"name": "OAuth", "description": "Authentification sociale (Google, Facebook)"},
-        {"name": "Password", "description": "Oubli, reset, changement de mot de passe"},
-        {"name": "2FA", "description": "Authentification a double facteur (TOTP)"},
-        {"name": "Sessions", "description": "Gestion sessions et tokens"},
-        {"name": "Profile", "description": "Profil identite et audit"},
-        {"name": "Admin", "description": "Administration (block, deactivate, purge)"},
-        {"name": "Platforms", "description": "CRUD plateformes (admin)"},
-        {"name": "S2S", "description": "Tokens inter-services (machine-to-machine)"},
-    ],
     "COMPONENT_SPLIT_REQUEST": True,
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "X-Admin-API-Key",
+                "description": "Clé secrète pour les opérations d'administration"
+            },
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            }
+        }
+    },
+    "SECURITY": [
+        {"ApiKeyAuth": []},
+        {"BearerAuth": []}
+    ],
     "SWAGGER_UI_SETTINGS": {
         "deepLinking": True,
         "persistAuthorization": True,
+        "displayOperationId": False,
     },
 }
 
