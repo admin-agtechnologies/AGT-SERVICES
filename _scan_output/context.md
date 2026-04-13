@@ -14,15 +14,24 @@
 \agt-users
 \agt-wallet
 \docs
+\gateway
 \prompt
 \_scan_output
-\Docker compose.infra.yml
-\nginx.conf
+\deploy_all.ps1
+\deploy_all.sh
+\deploy_mvp.ps1
+\deploy_mvp.sh
+\docker-compose.infra.yml
 \notes.md
 \README.md
+\reset_all.ps1
+\reset_all.sh
+\reset_mvp.ps1
+\reset_mvp.sh
 \roadmap.md
 \scanner.ps1
 \standards.md
+\test.txt
 \todo.md
 \agt-auth\apps
 \agt-auth\common
@@ -170,6 +179,7 @@
 \agt-notification\apps\notifications\exceptions.py
 \agt-notification\apps\notifications\models.py
 \agt-notification\apps\notifications\pagination.py
+\agt-notification\apps\notifications\serializers.py
 \agt-notification\apps\notifications\services.py
 \agt-notification\apps\notifications\urls.py
 \agt-notification\apps\notifications\views.py
@@ -428,6 +438,7 @@
 \docs\cdc\8.subscription.txt
 \docs\cdc\9.payment.pdf
 \docs\cdc\9.payment.txt
+\gateway\nginx.conf
 \prompt\save_context
 \prompt\instructions.md
 \prompt\prompt_task.md
@@ -440,17 +451,17 @@
 `
 
 ## FILES
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\Docker compose.infra.yml (2.32 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\nginx.conf (10.55 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\notes.md (2.47 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docker-compose.infra.yml (2.67 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\notes.md (2.06 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\README.md (10.49 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\roadmap.md (4.38 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\roadmap.md (4.43 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\standards.md (11.65 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\test.txt (1.06 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\todo.md (15.57 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\.env (3.52 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\.env.example (3.52 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\.env (4.37 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\.env.example (4.37 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\CDC_v1.0.md (3.63 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\docker-compose.yml (2.99 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\docker-compose.yml (3.47 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\Dockerfile (0.81 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\manage.py (0.48 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\README.md (4.99 KB)
@@ -463,7 +474,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\permissions.py (0.63 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\serializers.py (4.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\services.py (9.57 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\swagger.py (7.53 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\swagger.py (9.06 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\urls.py (4.07 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\utils.py (1.6 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\views_admin.py (16.12 KB)
@@ -482,7 +493,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\platforms\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\common\middleware.py (3.47 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\common\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\config\settings.py (9.69 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\config\settings.py (9.19 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\config\settings_test.py (1.21 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\config\urls.py (0.54 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\config\wsgi.py (0.16 KB)
@@ -530,10 +541,10 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\package.json (0.29 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\README.md (1.94 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\server.js (2.48 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env (1.16 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env.example (1.16 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env (3.43 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env.example (3.43 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\CDC_v1.0.md (2.6 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\docker-compose.yml (4.28 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\docker-compose.yml (5.1 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\Dockerfile (0.58 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\manage.py (0.26 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\README.md (3.5 KB)
@@ -541,34 +552,35 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\campaigns\models.py (2.05 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\campaigns\urls.py (0.54 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\campaigns\views.py (4.33 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\campaigns\views.py (4.52 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\campaigns\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\devices\models.py (1.08 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\devices\urls.py (0.35 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\devices\views.py (2.13 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\devices\views.py (2.28 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\devices\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\authentication.py (1.66 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\exceptions.py (0.53 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\models.py (6.43 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\pagination.py (0.44 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\serializers.py (5.28 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\services.py (1.68 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\urls.py (1.49 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\views.py (12.87 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\views.py (13.47 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\tests\test_all.py (5.74 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\tests\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\templates_mgr\models.py (3.22 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\templates_mgr\urls.py (0.55 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\templates_mgr\views.py (5.28 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\templates_mgr\views.py (5.55 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\templates_mgr\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\common\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\celery.py (0.22 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\settings.py (4.1 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\settings.py (4.93 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\settings_test.py (1.04 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\urls.py (0.62 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\wsgi.py (0.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\providers\providers.py (4.39 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\providers\providers.py (5.79 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\providers\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\workers\tasks.py (6.15 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\workers\__init__.py (0 KB)
@@ -651,11 +663,11 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\config\urls.py (0.46 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\config\wsgi.py (0.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\config\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\.env (0.98 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\.env.example (0.98 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\.env (1.25 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\.env.example (1.25 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\CDC_v1.0.md (4.21 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\docker-compose.yml (2.33 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\Dockerfile (0.48 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\docker-compose.yml (3.31 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\Dockerfile (0.81 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\manage.py (0.26 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\README.md (3.7 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\requirements.txt (0.58 KB)
@@ -675,13 +687,13 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\apps\users\serializers.py (3.56 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\apps\users\services.py (4.25 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\apps\users\urls.py (1.94 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\apps\users\views.py (19.81 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\apps\users\views.py (20.52 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\apps\users\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\apps\users\tests\test_all.py (7.12 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\apps\users\tests\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\common\middleware.py (0.1 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\common\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\config\settings.py (4.25 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\config\settings.py (4.85 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\config\settings_test.py (0.87 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\config\urls.py (0.58 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\config\wsgi.py (0.16 KB)
@@ -712,7 +724,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\config\urls.py (0.45 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\config\wsgi.py (0.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\config\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GETTING_STARTED.md (6.32 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GETTING_STARTED.md (7.56 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_AUTH.md (5.14 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_NOTIFICATION.md (8.46 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_SUBSCRIPTION.md (6.73 KB)
@@ -728,17 +740,18 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\7.chatbot.txt (83.91 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\8.subscription.txt (63.1 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\9.payment.txt (57.34 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\gateway\nginx.conf (10.55 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\instructions.md (2.22 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\prompt_task.md (0.47 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\end_session.md (0.44 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\init_session.md (0.63 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\sync.md (0.76 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\t.md (3.24 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\_scan_output\context.md (724.17 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\_scan_output\context.md (1424.61 KB)
 
 ## CODE CONTEXT
 
-===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\Docker compose.infra.yml =====
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docker-compose.infra.yml =====
 `
 # ============================================================
 # AG TECHNOLOGIES â€” Infrastructure partagÃ©e
@@ -805,6 +818,17 @@ services:
     networks:
       - agt_network
 
+  # â”€â”€ Mailpit (SMTP local pour dev) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  mailpit:
+    image: axllent/mailpit
+    container_name: agt_mailpit
+    restart: unless-stopped
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - agt_network
+
 volumes:
   rabbitmq_data:
     driver: local
@@ -815,274 +839,6 @@ networks:
   agt_network:
     name: agt_network
     driver: bridge
-`
-===== FILE END =====
-
-===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\nginx.conf =====
-`
-# ============================================================
-# AG TECHNOLOGIES â€” API Gateway (Nginx)
-# Reverse proxy unifiÃ© pour tout l'Ã©cosystÃ¨me.
-# Chaque service est accessible via /api/v1/<service>/...
-# ============================================================
-
-events {
-    worker_connections 1024;
-}
-
-http {
-    # â”€â”€ Logging â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    log_format json_log escape=json '{'
-        '"time":"$time_iso8601",'
-        '"remote_addr":"$remote_addr",'
-        '"method":"$request_method",'
-        '"uri":"$request_uri",'
-        '"status":$status,'
-        '"upstream":"$upstream_addr",'
-        '"response_time":$request_time'
-    '}';
-    access_log /var/log/nginx/access.log json_log;
-
-    # â”€â”€ Rate limiting global â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    limit_req_zone $binary_remote_addr zone=global:10m rate=100r/m;
-
-    # â”€â”€ CORS headers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    map $http_origin $cors_origin {
-        default "";
-        "~^https?://localhost(:[0-9]+)?$" "$http_origin";
-        "~^https?://.*\.agt\.com$" "$http_origin";
-    }
-
-    # â”€â”€ Upstreams â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
-    upstream auth {
-        server host.docker.internal:7000;
-    }
-
-    upstream users {
-        server host.docker.internal:7001;
-    }
-
-    upstream notification {
-        server host.docker.internal:7002;
-    }
-
-    upstream media {
-        server host.docker.internal:7003;
-    }
-
-    upstream subscription {
-        server host.docker.internal:7004;
-    }
-
-    upstream payment {
-        server host.docker.internal:7005;
-    }
-
-    upstream wallet {
-        server host.docker.internal:7006;
-    }
-
-    upstream search {
-        server host.docker.internal:7007;
-    }
-
-    upstream chat {
-        server host.docker.internal:7008;
-    }
-
-    upstream geoloc {
-        server host.docker.internal:7009;
-    }
-
-    upstream chatbot {
-        server host.docker.internal:7010;
-    }
-
-    # â”€â”€ Server â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
-    server {
-        listen 80;
-        server_name localhost;
-
-        # CORS
-        add_header Access-Control-Allow-Origin $cors_origin always;
-        add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
-        add_header Access-Control-Allow-Headers "Authorization, Content-Type, X-Platform-Id, X-Admin-API-Key, X-Requested-With" always;
-        add_header Access-Control-Allow-Credentials "true" always;
-
-        if ($request_method = OPTIONS) {
-            return 204;
-        }
-
-        # Rate limiting
-        limit_req zone=global burst=20 nodelay;
-
-        # â”€â”€ Auth Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /api/v1/auth/ {
-            proxy_pass http://auth/api/v1/auth/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # â”€â”€ Users Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /api/v1/users {
-            proxy_pass http://users/api/v1/users;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        location /api/v1/platforms/ {
-            proxy_pass http://users/api/v1/platforms/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # â”€â”€ Notification Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /api/v1/notifications/ {
-            proxy_pass http://notification/api/v1/notifications/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        location /api/v1/templates/ {
-            proxy_pass http://notification/api/v1/templates/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        location /api/v1/campaigns/ {
-            proxy_pass http://notification/api/v1/campaigns/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # â”€â”€ Media Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /api/v1/media/ {
-            proxy_pass http://media/api/v1/media/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            client_max_body_size 100M;
-        }
-
-        # â”€â”€ Subscription Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /api/v1/subscriptions/ {
-            proxy_pass http://subscription/api/v1/subscriptions/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        location /api/v1/plans/ {
-            proxy_pass http://subscription/api/v1/plans/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        location /api/v1/quotas/ {
-            proxy_pass http://subscription/api/v1/quotas/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # â”€â”€ Payment Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /api/v1/payments/ {
-            proxy_pass http://payment/api/v1/payments/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # â”€â”€ Wallet Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /api/v1/wallets/ {
-            proxy_pass http://wallet/api/v1/wallets/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # â”€â”€ Search Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /api/v1/search/ {
-            proxy_pass http://search/api/v1/search/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        location /api/v1/indexes/ {
-            proxy_pass http://search/api/v1/indexes/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # â”€â”€ Chat Service (REST) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /api/v1/chat/ {
-            proxy_pass http://chat/api/v1/chat/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # â”€â”€ Chat Service (WebSocket) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /socket.io/ {
-            proxy_pass http://chat/socket.io/;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "upgrade";
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-        }
-
-        # â”€â”€ Geoloc Service (REST) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /api/v1/geoloc/ {
-            proxy_pass http://geoloc/api/v1/geoloc/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # â”€â”€ Geoloc Service (WebSocket) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /geoloc/socket.io/ {
-            proxy_pass http://geoloc/socket.io/;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "upgrade";
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-        }
-
-        # â”€â”€ Chatbot Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /api/v1/chatbot/ {
-            proxy_pass http://chatbot/api/v1/chatbot/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        location /api/v1/bots/ {
-            proxy_pass http://chatbot/api/v1/bots/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # â”€â”€ Health global â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        location /health {
-            return 200 '{"status":"gateway_ok"}';
-            add_header Content-Type application/json;
-        }
-    }
-}
 `
 ===== FILE END =====
 
@@ -1110,19 +866,7 @@ celÃ  m'a poussÃ© Ã  me poser les questions suivantes pour les services Ã
 
 ## Service users
 
-En plus de me poser les mÃªmes questions que pour le service auth, aprÃ¨s avoir dÃ©marrÃ© le service users, j'ai remarquÃ© plusieurs manquements sur le swagger :
-
-les groupes de routes
-- Health
-Etat du service
-- Profile
-CRUD profil utilisateur
-- Sync
-Synchronisation depuis Auth
-- Addresses
-CRUD adresses
-
-ne sont pas testables ur le swagger car ces derniers n'exposent aucune route, juste le dropwon vide avec la description de cahque groupe comme mentionnÃ© Ã§i haut
+Je me pose les mÃªmes questions que pour le service auth
 
 # Services notifications
 AprÃ¨s avoir lancÃ© ce service, je me suis posÃ© les mÃªmes questions que pour le service auth, mais j'ai trouvÃ© que ici le swagger semble complet. Par ailleurs; j'ai aussi vu le lien vers rabitmq, mais on me demande un mot de passe et un username pour y accÃ©der, Ã§a relance la question de guiude d'utilisation  persiste donc Ã  ce niveau                     
@@ -1304,9 +1048,9 @@ Pour chaque tÃ¢che ou sous-tÃ¢che technique, nous appliquerons strictement c
 *Objectif : MaÃ®triser chaque service individuellement avant d'analyser les flux globaux.*
 
 #### 2.1 Service Auth
-- [ ] Analyser le CDC, le code et le `README.md` du service Auth
-- [ ] Configurer et lancer le service en isolation
-- [ ] Tester les endpoints clÃ©s (register, login, refresh, /me) via Swagger/Postman
+- [x] Analyser le CDC, le code et le `README.md` du service Auth
+- [ ] Configurer et lancer le service en isolation avec les services dont il dÃ©pend Ã  partir du script deploy_mvp
+- [ ] Tester les endpoints clÃ©s (register, login, refresh, /me) via Swagger
 - [ ] RÃ©diger un guide d'utilisation simple `GUIDE_AUTH.md`
 
 #### 2.2 Service Users
@@ -1816,6 +1560,53 @@ Chaque service DOIT avoir un README contenant :
 `
 ===== FILE END =====
 
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\test.txt =====
+`
+plateforme:
+request:
+{
+  "name": "Platform Test",
+  "slug": "platform-test",
+  "allowed_auth_methods": ["email", "phone", "magic_link"],
+  "allowed_redirect_urls": ["http://localhost:3000/callback"]
+}
+response:{
+  "id": "7a81bc81-e434-4f34-a8eb-9e849bca20de",
+  "name": "Platform Test",
+  "slug": "platform-test",
+  "allowed_auth_methods": [
+    "email",
+    "phone",
+    "magic_link"
+  ],
+  "allowed_redirect_urls": [
+    "http://localhost:3000/callback"
+  ],
+  "is_active": true,
+  "created_at": "2026-04-13T04:16:37.831026-05:00",
+  "updated_at": "2026-04-13T04:16:37.831489-05:00",
+  "client_secret": "_mbVqFjsZvm5PpfG4Klc5aGd8L_SvFQCAPiuA04_bZDB3VooRNUYXer_O1_LI-Of"
+}
+
+register user:
+request:
+{
+  "email": "gabriel@agt.com",
+  "password": "Password123!",
+  "method": "email"
+}
+response:
+{
+  "id": "d544ab7d-5abd-4bcd-a0ff-d66c1229c970",
+  "email": "gabriel@agt.com",
+  "email_verified": false,
+  "registration_method": "email",
+  "registration_platform_id": "7a81bc81-e434-4f34-a8eb-9e849bca20de",
+  "message": "Verification email sent"
+}
+`
+===== FILE END =====
+
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\todo.md =====
 `
 # AG TECHNOLOGIES â€” PLAN DE MISE EN PLACE v1.0
@@ -2218,18 +2009,20 @@ Chaque service DOIT avoir un README contenant :
 # AGT Auth Service v1.0 â€” Variables d'environnement
 # ============================================================
 
-# â”€â”€â”€ Django â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Django â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SECRET_KEY=change-me-in-production-use-a-long-random-string
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_auth_service
 
-# â”€â”€â”€ Base de donnÃ©es â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-DATABASE_URL=postgresql://agt_user:agt_password@db:5432/agt_auth_db
+# â”€â”€â”€ Base de donnÃ©es â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Correction : l'hÃ´te est le container_name 'agt_auth_db'
+DATABASE_URL=postgresql://agt_user:agt_password@agt_auth_db:5432/agt_auth_db
 
-# â”€â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-REDIS_URL=redis://redis:6379/0
+# â”€â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Correction : l'hÃ´te est le container_name 'agt_auth_redis'
+REDIS_URL=redis://agt_auth_redis:6379/0
 
-# â”€â”€â”€ JWT (RS256) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ JWT (RS256) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 JWT_PRIVATE_KEY_PATH=/app/keys/private.pem
 JWT_PUBLIC_KEY_PATH=/app/keys/public.pem
 JWT_ACCESS_TTL=900
@@ -2237,45 +2030,45 @@ JWT_REFRESH_TTL=604800
 JWT_ISSUER=agt-auth
 JWT_AUDIENCE=agt-ecosystem
 
-# â”€â”€â”€ Bcrypt â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Bcrypt â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 BCRYPT_ROUNDS=12
 
-# â”€â”€â”€ Admin â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Admin â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 ADMIN_API_KEY=change-me-admin-api-key-very-secret
 
-# â”€â”€â”€ Services inter-microservices â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-NOTIFICATION_SERVICE_URL=http://notification-service:7002/api/v1
-USERS_SERVICE_URL=http://users-service:7001/api/v1
+# â”€â”€â”€ Services inter-microservices â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Correction : Utilisation des container_names globaux
+NOTIFICATION_SERVICE_URL=http://agt_notif_service:7002/api/v1
+USERS_SERVICE_URL=http://agt_users_service:7001/api/v1
 
-# â”€â”€â”€ OAuth Google â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ OAuth Google â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:7000/api/v1/auth/oauth/google/callback
 
-# â”€â”€â”€ OAuth Facebook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ OAuth Facebook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 FACEBOOK_APP_ID=your-facebook-app-id
 FACEBOOK_APP_SECRET=your-facebook-app-secret
 FACEBOOK_REDIRECT_URI=http://localhost:7000/api/v1/auth/oauth/facebook/callback
 
-# â”€â”€â”€ OTP / Magic Link â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ OTP / Magic Link â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 OTP_TTL=300
 MAGIC_LINK_TTL=600
 
-# â”€â”€â”€ Rate Limiting â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Rate Limiting â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 RATE_LIMIT_LOGIN=10
 BRUTE_FORCE_MAX=5
 BRUTE_FORCE_LOCKOUT=900
 
-# â”€â”€â”€ Tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 MAX_REFRESH_TOKENS=5
 
-# â”€â”€â”€ Cookies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Cookies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 COOKIE_SECURE=False
 COOKIE_SAMESITE=Lax
 
-# â”€â”€â”€ CORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ CORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
-
 `
 ===== FILE END =====
 
@@ -2285,18 +2078,20 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
 # AGT Auth Service v1.0 â€” Variables d'environnement
 # ============================================================
 
-# â”€â”€â”€ Django â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Django â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SECRET_KEY=change-me-in-production-use-a-long-random-string
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_auth_service
 
-# â”€â”€â”€ Base de donnÃ©es â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-DATABASE_URL=postgresql://agt_user:agt_password@db:5432/agt_auth_db
+# â”€â”€â”€ Base de donnÃ©es â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Correction : l'hÃ´te est le container_name 'agt_auth_db'
+DATABASE_URL=postgresql://agt_user:agt_password@agt_auth_db:5432/agt_auth_db
 
-# â”€â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-REDIS_URL=redis://redis:6379/0
+# â”€â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Correction : l'hÃ´te est le container_name 'agt_auth_redis'
+REDIS_URL=redis://agt_auth_redis:6379/0
 
-# â”€â”€â”€ JWT (RS256) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ JWT (RS256) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 JWT_PRIVATE_KEY_PATH=/app/keys/private.pem
 JWT_PUBLIC_KEY_PATH=/app/keys/public.pem
 JWT_ACCESS_TTL=900
@@ -2304,45 +2099,45 @@ JWT_REFRESH_TTL=604800
 JWT_ISSUER=agt-auth
 JWT_AUDIENCE=agt-ecosystem
 
-# â”€â”€â”€ Bcrypt â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Bcrypt â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 BCRYPT_ROUNDS=12
 
-# â”€â”€â”€ Admin â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Admin â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 ADMIN_API_KEY=change-me-admin-api-key-very-secret
 
-# â”€â”€â”€ Services inter-microservices â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-NOTIFICATION_SERVICE_URL=http://notification-service:7002/api/v1
-USERS_SERVICE_URL=http://users-service:7001/api/v1
+# â”€â”€â”€ Services inter-microservices â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Correction : Utilisation des container_names globaux
+NOTIFICATION_SERVICE_URL=http://agt_notif_service:7002/api/v1
+USERS_SERVICE_URL=http://agt_users_service:7001/api/v1
 
-# â”€â”€â”€ OAuth Google â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ OAuth Google â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:7000/api/v1/auth/oauth/google/callback
 
-# â”€â”€â”€ OAuth Facebook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ OAuth Facebook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 FACEBOOK_APP_ID=your-facebook-app-id
 FACEBOOK_APP_SECRET=your-facebook-app-secret
 FACEBOOK_REDIRECT_URI=http://localhost:7000/api/v1/auth/oauth/facebook/callback
 
-# â”€â”€â”€ OTP / Magic Link â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ OTP / Magic Link â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 OTP_TTL=300
 MAGIC_LINK_TTL=600
 
-# â”€â”€â”€ Rate Limiting â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Rate Limiting â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 RATE_LIMIT_LOGIN=10
 BRUTE_FORCE_MAX=5
 BRUTE_FORCE_LOCKOUT=900
 
-# â”€â”€â”€ Tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 MAX_REFRESH_TOKENS=5
 
-# â”€â”€â”€ Cookies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ Cookies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 COOKIE_SECURE=False
 COOKIE_SAMESITE=Lax
 
-# â”€â”€â”€ CORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# â”€â”€â”€ CORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
-
 `
 ===== FILE END =====
 
@@ -2478,7 +2273,7 @@ Service : **7000**
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\docker-compose.yml =====
 `
 services:
-  # â”€â”€ PostgreSQL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  # â”€â”€ PostgreSQL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   db:
     image: postgres:15-alpine
     container_name: agt_auth_db
@@ -2496,8 +2291,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
 
-  # â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  # â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   redis:
     image: redis:7-alpine
     container_name: agt_auth_redis
@@ -2512,8 +2309,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
 
-  # â”€â”€ Auth Service (production) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  # â”€â”€ Auth Service (production) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   auth:
     build:
       context: .
@@ -2523,8 +2322,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://agt_user:agt_password@db:5432/agt_auth_db
-      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql://agt_user:agt_password@agt_auth_db:5432/agt_auth_db # Mis Ã  jour agt_auth_db
+      REDIS_URL: redis://agt_auth_redis:6379/0 # Mis Ã  jour agt_auth_redis
       JWT_PRIVATE_KEY_PATH: /app/keys/private.pem
       JWT_PUBLIC_KEY_PATH: /app/keys/public.pem
     volumes:
@@ -2542,8 +2341,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - agt_network
 
-  # â”€â”€ Auth Service (dev â€” hot reload) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  # â”€â”€ Auth Service (dev â€” hot reload) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   auth-dev:
     build:
       context: .
@@ -2556,8 +2357,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://agt_user:agt_password@db:5432/agt_auth_db
-      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql://agt_user:agt_password@agt_auth_db:5432/agt_auth_db # Mis Ã  jour agt_auth_db
+      REDIS_URL: redis://agt_auth_redis:6379/0 # Mis Ã  jour agt_auth_redis
       DEBUG: "True"
       JWT_PRIVATE_KEY_PATH: /app/keys/private.pem
       JWT_PUBLIC_KEY_PATH: /app/keys/public.pem
@@ -2574,6 +2375,8 @@ services:
         condition: service_healthy
     profiles:
       - dev
+    networks:
+      - agt_network
 
 volumes:
   postgres_data:
@@ -2581,27 +2384,39 @@ volumes:
   redis_data:
     driver: local
 
+networks:
+  agt_network:
+    external: true
+    name: agt_network
 `
 ===== FILE END =====
 
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\Dockerfile =====
 `
-# â”€â”€ Builder â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# --------------------
+# Builder
+# --------------------
 FROM python:3.11-slim AS builder
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# â”€â”€ Production â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# --------------------
+# Production
+# --------------------
 FROM python:3.11-slim AS production
 WORKDIR /app
+
+# ---- FIX: Installer curl pour le health check Docker ----
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+# ---------------------------------------------------------
+
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 COPY . .
 RUN python manage.py collectstatic --noinput 2>/dev/null || true
 EXPOSE 7000
 CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:7000", "--workers", "4"]
-
 `
 ===== FILE END =====
 
@@ -3653,6 +3468,17 @@ Importer et appliquer via @extend_schema sur chaque view.
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample, OpenApiResponse
 from drf_spectacular.types import OpenApiTypes
 
+# --- NOUVEAUX IMPORTS ---
+from apps.authentication.serializers import (
+    RegisterSerializer, VerifyEmailSerializer, VerifyOTPSerializer,
+    LoginSerializer, LoginPhoneSerializer, MagicLinkSerializer,
+    ForgotPasswordSerializer, ResetPasswordSerializer, ChangePasswordSerializer,
+    DeactivateAccountSerializer, TwoFAConfirmSerializer, TwoFAVerifySerializer,
+    TwoFADisableSerializer, SessionResponseSerializer, LoginHistoryResponseSerializer,
+    UserAuthResponseSerializer
+)
+from apps.platforms.serializers import PlatformCreateSerializer, PlatformUpdateSerializer, PlatformResponseSerializer
+# ------------------------
 
 # --- Health ---
 health_schema = extend_schema(
@@ -3676,12 +3502,7 @@ register_schema = extend_schema(
     summary="Inscription (email ou telephone)",
     description="Cree un nouveau compte. Header X-Platform-Id obligatoire. Le flux OAuth ne passe pas par cet endpoint.",
     parameters=[OpenApiParameter(name="X-Platform-Id", location=OpenApiParameter.HEADER, required=True, type=str, description="UUID de la plateforme")],
-    request={"type": "object", "properties": {
-        "email": {"type": "string", "format": "email"},
-        "phone": {"type": "string", "example": "+237600000000"},
-        "password": {"type": "string", "minLength": 8},
-        "method": {"type": "string", "enum": ["email", "phone"]},
-    }, "required": ["method"]},
+    request=RegisterSerializer, # <-- CORRECTION ICI
     responses={201: {"description": "Compte cree"}, 400: {"description": "Validation error"}, 409: {"description": "Email/phone deja utilise"}},
 )
 
@@ -3690,6 +3511,7 @@ login_schema = extend_schema(
     tags=["Login"],
     summary="Connexion email + mot de passe",
     description="Retourne un access_token JWT. Le refresh_token est pose en cookie HttpOnly.",
+    request=LoginSerializer, # <-- CORRECTION ICI
     responses={200: {"description": "Connexion reussie"}, 401: {"description": "Identifiants invalides"}, 403: {"description": "Compte bloque/desactive"}, 429: {"description": "Rate limited"}},
 )
 
@@ -3697,12 +3519,14 @@ login_phone_schema = extend_schema(
     tags=["Login"],
     summary="Demande OTP par SMS",
     description="Envoie un code OTP au numero. Le client soumet ensuite via POST /auth/verify-otp.",
+    request=LoginPhoneSerializer, # <-- CORRECTION ICI
 )
 
 magic_link_schema = extend_schema(
     tags=["Login"],
     summary="Envoi magic link par email",
     description="Envoie un lien de connexion. Le clic redirige vers le callback qui pose les cookies.",
+    request=MagicLinkSerializer, # <-- CORRECTION ICI
 )
 
 magic_link_callback_schema = extend_schema(
@@ -3717,12 +3541,14 @@ magic_link_callback_schema = extend_schema(
 verify_email_schema = extend_schema(
     tags=["Register"],
     summary="Verification email via token",
+    request=VerifyEmailSerializer, # <-- CORRECTION ICI
 )
 
 verify_otp_schema = extend_schema(
     tags=["Register"],
     summary="Verification OTP telephone",
     description="Contexte 'registration' = verification. Contexte 'login' = connexion avec tokens retournes.",
+    request=VerifyOTPSerializer, # <-- CORRECTION ICI
 )
 
 # --- Password ---
@@ -3730,25 +3556,28 @@ forgot_password_schema = extend_schema(
     tags=["Password"],
     summary="Envoi lien de reinitialisation",
     description="Reponse generique meme si l'email n'existe pas (securite).",
+    request=ForgotPasswordSerializer, # <-- CORRECTION ICI
 )
 
 reset_password_schema = extend_schema(
     tags=["Password"],
     summary="Reinitialisation via token",
     description="Reinitialise le mot de passe et revoque toutes les sessions.",
+    request=ResetPasswordSerializer, # <-- CORRECTION ICI
 )
 
 change_password_schema = extend_schema(
     tags=["Password"],
     summary="Changement avec ancien mot de passe",
     description="Revoque toutes les sessions sauf la courante.",
+    request=ChangePasswordSerializer, # <-- CORRECTION ICI
 )
 
 # --- 2FA ---
 twofa_enable_schema = extend_schema(tags=["2FA"], summary="Activer 2FA - generer secret + QR code")
-twofa_confirm_schema = extend_schema(tags=["2FA"], summary="Confirmer activation 2FA")
-twofa_verify_schema = extend_schema(tags=["2FA"], summary="Challenge 2FA au login", description="Appele quand requires_2fa=true. Echange le temp_token + code contre un access_token.")
-twofa_disable_schema = extend_schema(tags=["2FA"], summary="Desactiver 2FA")
+twofa_confirm_schema = extend_schema(tags=["2FA"], summary="Confirmer activation 2FA", request=TwoFAConfirmSerializer)
+twofa_verify_schema = extend_schema(tags=["2FA"], summary="Challenge 2FA au login", description="Appele quand requires_2fa=true. Echange le temp_token + code contre un access_token.", request=TwoFAVerifySerializer)
+twofa_disable_schema = extend_schema(tags=["2FA"], summary="Desactiver 2FA", request=TwoFADisableSerializer)
 
 # --- Sessions ---
 refresh_schema = extend_schema(
@@ -3759,7 +3588,7 @@ refresh_schema = extend_schema(
 
 logout_schema = extend_schema(tags=["Sessions"], summary="Deconnexion", description="Revoque la session courante et supprime le cookie refresh_token.")
 
-session_list_schema = extend_schema(tags=["Sessions"], summary="Lister sessions actives")
+session_list_schema = extend_schema(tags=["Sessions"], summary="Lister sessions actives", responses={200: SessionResponseSerializer(many=True)})
 session_revoke_schema = extend_schema(tags=["Sessions"], summary="Revoquer une session")
 
 verify_token_schema = extend_schema(
@@ -3776,14 +3605,14 @@ token_exchange_schema = extend_schema(
 )
 
 # --- Profile ---
-me_schema = extend_schema(tags=["Profile"], summary="Profil identite (sans roles)", description="Retourne l'identite pure. Les roles sont dans le Service Users.")
-login_history_schema = extend_schema(tags=["Profile"], summary="Historique des connexions")
+me_schema = extend_schema(tags=["Profile"], summary="Profil identite (sans roles)", description="Retourne l'identite pure. Les roles sont dans le Service Users.", responses={200: UserAuthResponseSerializer})
+login_history_schema = extend_schema(tags=["Profile"], summary="Historique des connexions", responses={200: LoginHistoryResponseSerializer(many=True)})
 user_stats_schema = extend_schema(tags=["Profile"], summary="Statistiques utilisateur")
 
 # --- Admin ---
 block_schema = extend_schema(tags=["Admin"], summary="Bloquer un utilisateur", description="Revoque toutes les sessions. Ne modifie pas le statut Users.")
 unblock_schema = extend_schema(tags=["Admin"], summary="Debloquer un utilisateur")
-deactivate_self_schema = extend_schema(tags=["Admin"], summary="Desactiver son propre compte", description="Mot de passe requis. Propage status-sync vers Users.")
+deactivate_self_schema = extend_schema(tags=["Admin"], summary="Desactiver son propre compte", description="Mot de passe requis. Propage status-sync vers Users.", request=DeactivateAccountSerializer)
 deactivate_admin_schema = extend_schema(tags=["Admin"], summary="Desactivation S2S (inter-service)", description="Appele par Users pour soft delete global sans mot de passe.")
 purge_schema = extend_schema(tags=["Admin"], summary="Purge RGPD", description="Suppression physique irreversible. Transactionnel.")
 
@@ -3797,13 +3626,32 @@ oauth_facebook_init_schema = extend_schema(tags=["OAuth"], summary="Initier OAut
 oauth_facebook_callback_schema = extend_schema(tags=["OAuth"], summary="Callback OAuth Facebook")
 
 # --- Platforms ---
-platform_list_create_schema = extend_schema(tags=["Platforms"], summary="Creer ou lister les plateformes")
-platform_detail_schema = extend_schema(tags=["Platforms"], summary="Modifier ou desactiver une plateforme")
+platform_list_create_schema = extend_schema(
+    tags=["Platforms"], 
+    summary="Creer ou lister les plateformes", 
+    request=PlatformCreateSerializer, 
+    responses={201: PlatformResponseSerializer, 200: PlatformResponseSerializer(many=True)}
+)
+platform_detail_schema = extend_schema(
+    tags=["Platforms"], 
+    summary="Modifier ou desactiver une plateforme",
+    request=PlatformUpdateSerializer,
+    responses={200: PlatformResponseSerializer}
+)
 
 # --- S2S ---
-s2s_token_schema = extend_schema(tags=["S2S"], summary="Generer token S2S", description="Flux Client Credentials. Retourne un JWT S2S valide 1h.")
-s2s_introspect_schema = extend_schema(tags=["S2S"], summary="Valider token S2S", description="Permet a un service de verifier la validite d'un token S2S plateforme.")
-
+s2s_token_schema = extend_schema(
+    tags=["S2S"], 
+    summary="Generer token S2S", 
+    description="Flux Client Credentials. Retourne un JWT S2S valide 1h.",
+    request={"type": "object", "properties": {"client_id": {"type": "string"}, "client_secret": {"type": "string"}}}
+)
+s2s_introspect_schema = extend_schema(
+    tags=["S2S"], 
+    summary="Valider token S2S", 
+    description="Permet a un service de verifier la validite d'un token S2S plateforme.",
+    request={"type": "object", "properties": {"token": {"type": "string"}}}
+)
 `
 ===== FILE END =====
 
@@ -6005,28 +5853,33 @@ REST_FRAMEWORK = {
 # â”€â”€â”€ Swagger / OpenAPI (drf-spectacular) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SPECTACULAR_SETTINGS = {
     "TITLE": "AGT Auth Service API",
-    "DESCRIPTION": "Service d'authentification centralise de l'ecosysteme AG Technologies.\n\nJWT RS256, OAuth Google/Facebook, 2FA TOTP, sessions, S2S tokens.",
+    "DESCRIPTION": "Service d'authentification centralise de l'ecosysteme AG Technologies.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
-    "CONTACT": {"name": "AGT Engineering", "email": "engineering@agt.com"},
-    "LICENSE": {"name": "Proprietary"},
-    "TAGS": [
-        {"name": "Health", "description": "Etat du service"},
-        {"name": "Register", "description": "Inscription et verification"},
-        {"name": "Login", "description": "Connexion (email, phone, magic link)"},
-        {"name": "OAuth", "description": "Authentification sociale (Google, Facebook)"},
-        {"name": "Password", "description": "Oubli, reset, changement de mot de passe"},
-        {"name": "2FA", "description": "Authentification a double facteur (TOTP)"},
-        {"name": "Sessions", "description": "Gestion sessions et tokens"},
-        {"name": "Profile", "description": "Profil identite et audit"},
-        {"name": "Admin", "description": "Administration (block, deactivate, purge)"},
-        {"name": "Platforms", "description": "CRUD plateformes (admin)"},
-        {"name": "S2S", "description": "Tokens inter-services (machine-to-machine)"},
-    ],
     "COMPONENT_SPLIT_REQUEST": True,
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "X-Admin-API-Key",
+                "description": "ClÃ© secrÃ¨te pour les opÃ©rations d'administration"
+            },
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            }
+        }
+    },
+    "SECURITY": [
+        {"ApiKeyAuth": []},
+        {"BearerAuth": []}
+    ],
     "SWAGGER_UI_SETTINGS": {
         "deepLinking": True,
         "persistAuthorization": True,
+        "displayOperationId": False,
     },
 }
 
@@ -7896,49 +7749,57 @@ app.listen(PORT, () => {
 # AGT Notification Service v1.0 - Variables d'environnement
 # ============================================================
 
-# --- Django ---
+# â”€â”€â”€ Django â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SECRET_KEY=change-me-in-production
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_notif_service
 
-# --- Base de donnees ---
-DATABASE_URL=postgresql://notif_user:notif_password@db:5432/agt_notification_db
+# â”€â”€â”€ Base de donnÃ©es â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# HÃ´te : agt_notif_db (dÃ©fini dans docker-compose.yml)
+DATABASE_URL=postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
 
-# --- Redis ---
-REDIS_URL=redis://redis:6379/2
+# â”€â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# HÃ´te : agt_notif_redis
+REDIS_URL=redis://agt_notif_redis:6379/2
 
-# --- RabbitMQ (Celery broker) ---
-RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672//
-CELERY_RESULT_BACKEND=redis://redis:6379/3
+# â”€â”€â”€ RabbitMQ (Broker Celery partagÃ©) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# HÃ´te : agt_rabbitmq (dÃ©fini dans Docker compose.infra.yml)
+RABBITMQ_URL=amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
+CELERY_RESULT_BACKEND=redis://agt_notif_redis:6379/3
 
-# --- Auth (validation JWT) ---
-AUTH_SERVICE_URL=http://auth-service:7000/api/v1
+# â”€â”€â”€ Auth (Validation JWT) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# HÃ´te : agt_auth_service
+AUTH_SERVICE_URL=http://agt_auth_service:7000/api/v1
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
 
-# --- Users (resolution coordonnees) ---
-USERS_SERVICE_URL=http://users-service:7001/api/v1
+# â”€â”€â”€ Users (RÃ©solution coordonnÃ©es) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# HÃ´te : agt_users_service
+USERS_SERVICE_URL=http://agt_users_service:7001/api/v1
 
-# --- Cache TTL ---
+# â”€â”€â”€ Cache TTL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 USER_CACHE_TTL=300
 IDEMPOTENCY_TTL=86400
 
-# --- Providers Email ---
+# â”€â”€â”€ Email (DÃ©veloppement via Mailpit) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+DEFAULT_FROM_EMAIL=noreply@agtechnologies.com
+EMAIL_HOST=agt_mailpit
+EMAIL_PORT=1025
+
+# â”€â”€â”€ Providers Email (Production uniquement) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SENDGRID_API_KEY=
 MAILGUN_API_KEY=
 MAILGUN_DOMAIN=
-DEFAULT_FROM_EMAIL=noreply@agtechnologies.com
 
-# --- Providers SMS ---
+# â”€â”€â”€ Providers SMS (Production uniquement) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
 TWILIO_FROM_NUMBER=
 
-# --- Push ---
+# â”€â”€â”€ Push (Production uniquement) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 FCM_SERVER_KEY=
 
-# --- CORS ---
+# â”€â”€â”€ CORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
-
 `
 ===== FILE END =====
 
@@ -7948,49 +7809,57 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
 # AGT Notification Service v1.0 - Variables d'environnement
 # ============================================================
 
-# --- Django ---
+# â”€â”€â”€ Django â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SECRET_KEY=change-me-in-production
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_notif_service
 
-# --- Base de donnees ---
-DATABASE_URL=postgresql://notif_user:notif_password@db:5432/agt_notification_db
+# â”€â”€â”€ Base de donnÃ©es â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# HÃ´te : agt_notif_db (dÃ©fini dans docker-compose.yml)
+DATABASE_URL=postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
 
-# --- Redis ---
-REDIS_URL=redis://redis:6379/2
+# â”€â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# HÃ´te : agt_notif_redis
+REDIS_URL=redis://agt_notif_redis:6379/2
 
-# --- RabbitMQ (Celery broker) ---
-RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672//
-CELERY_RESULT_BACKEND=redis://redis:6379/3
+# â”€â”€â”€ RabbitMQ (Broker Celery partagÃ©) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# HÃ´te : agt_rabbitmq (dÃ©fini dans Docker compose.infra.yml)
+RABBITMQ_URL=amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
+CELERY_RESULT_BACKEND=redis://agt_notif_redis:6379/3
 
-# --- Auth (validation JWT) ---
-AUTH_SERVICE_URL=http://auth-service:7000/api/v1
+# â”€â”€â”€ Auth (Validation JWT) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# HÃ´te : agt_auth_service
+AUTH_SERVICE_URL=http://agt_auth_service:7000/api/v1
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
 
-# --- Users (resolution coordonnees) ---
-USERS_SERVICE_URL=http://users-service:7001/api/v1
+# â”€â”€â”€ Users (RÃ©solution coordonnÃ©es) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# HÃ´te : agt_users_service
+USERS_SERVICE_URL=http://agt_users_service:7001/api/v1
 
-# --- Cache TTL ---
+# â”€â”€â”€ Cache TTL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 USER_CACHE_TTL=300
 IDEMPOTENCY_TTL=86400
 
-# --- Providers Email ---
+# â”€â”€â”€ Email (DÃ©veloppement via Mailpit) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+DEFAULT_FROM_EMAIL=noreply@agtechnologies.com
+EMAIL_HOST=agt_mailpit
+EMAIL_PORT=1025
+
+# â”€â”€â”€ Providers Email (Production uniquement) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SENDGRID_API_KEY=
 MAILGUN_API_KEY=
 MAILGUN_DOMAIN=
-DEFAULT_FROM_EMAIL=noreply@agtechnologies.com
 
-# --- Providers SMS ---
+# â”€â”€â”€ Providers SMS (Production uniquement) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
 TWILIO_FROM_NUMBER=
 
-# --- Push ---
+# â”€â”€â”€ Push (Production uniquement) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 FCM_SERVER_KEY=
 
-# --- CORS ---
+# â”€â”€â”€ CORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
-
 `
 ===== FILE END =====
 
@@ -8089,6 +7958,7 @@ Service : **7002** | RabbitMQ Management : **15672**
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\docker-compose.yml =====
 `
 services:
+  # â”€â”€ PostgreSQL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   db:
     image: postgres:15-alpine
     container_name: agt_notif_db
@@ -8106,7 +7976,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
 
+  # â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   redis:
     image: redis:7-alpine
     container_name: agt_notif_redis
@@ -8121,25 +7994,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
 
-  rabbitmq:
-    image: rabbitmq:3.13-management-alpine
-    container_name: agt_notif_rabbitmq
-    restart: unless-stopped
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 15s
-      timeout: 10s
-      retries: 5
-
+  # â”€â”€ Notification Service (API Production) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   notification:
     build:
       context: .
@@ -8149,10 +8007,10 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
-      REDIS_URL: redis://redis:6379/2
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
-      CELERY_RESULT_BACKEND: redis://redis:6379/3
+      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
+      REDIS_URL: redis://agt_notif_redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
+      CELERY_RESULT_BACKEND: redis://agt_notif_redis:6379/3
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
       - ./keys:/app/keys:ro
@@ -8163,59 +8021,16 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:7002/api/v1/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - agt_network
 
-  celery-worker:
-    build:
-      context: .
-      target: production
-    container_name: agt_notif_worker
-    restart: unless-stopped
-    command: celery -A config.celery worker -l info -c 4
-    env_file:
-      - .env
-    environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
-      REDIS_URL: redis://redis:6379/2
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
-      CELERY_RESULT_BACKEND: redis://redis:6379/3
-      AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
-    volumes:
-      - ./keys:/app/keys:ro
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-
-  celery-beat:
-    build:
-      context: .
-      target: production
-    container_name: agt_notif_beat
-    restart: unless-stopped
-    command: celery -A config.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    env_file:
-      - .env
-    environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
-      REDIS_URL: redis://redis:6379/2
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
-    depends_on:
-      db:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-
+  # â”€â”€ Notification Service (API Dev â€” hot reload) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   notification-dev:
     build:
       context: .
@@ -8228,9 +8043,9 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@db:5432/agt_notification_db
-      REDIS_URL: redis://redis:6379/2
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
+      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
+      REDIS_URL: redis://agt_notif_redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
       DEBUG: "True"
       DJANGO_SETTINGS_MODULE: config.settings
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
@@ -8244,16 +8059,65 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
     profiles:
       - dev
+    networks:
+      - agt_network
+
+  # â”€â”€ Celery Worker (Traitement asynchrone) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  celery-worker:
+    build:
+      context: .
+      target: production
+    container_name: agt_notif_worker
+    restart: unless-stopped
+    command: celery -A config.celery worker -l info -c 4
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
+      REDIS_URL: redis://agt_notif_redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
+      CELERY_RESULT_BACKEND: redis://agt_notif_redis:6379/3
+      AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
+    volumes:
+      - ./keys:/app/keys:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - agt_network
+
+  # â”€â”€ Celery Beat (Planification) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  celery-beat:
+    build:
+      context: .
+      target: production
+    container_name: agt_notif_beat
+    restart: unless-stopped
+    command: celery -A config.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
+      REDIS_URL: redis://agt_notif_redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - agt_network
 
 volumes:
   postgres_data:
   redis_data:
-  rabbitmq_data:
 
+networks:
+  agt_network:
+    external: true
+    name: agt_network
 `
 ===== FILE END =====
 
@@ -8546,13 +8410,15 @@ from drf_spectacular.utils import extend_schema
 from apps.campaigns.models import Campaign, CampaignRecipient
 from apps.notifications.pagination import StandardPagination
 
+from apps.notifications.serializers import CampaignCreateSerializer
+
 logger = logging.getLogger(__name__)
 
 
 class CampaignListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Campaigns"], summary="Creer une campagne")
+    @extend_schema(tags=["Campaigns"], summary="Creer une campagne", request=CampaignCreateSerializer)
     def post(self, request):
         from apps.templates_mgr.models import Template
         from workers.tasks import process_campaign_task
@@ -8692,13 +8558,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
+from apps.notifications.serializers import DeviceTokenCreateSerializer
 from apps.devices.models import DeviceToken
 
 
 class DeviceTokenListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Devices"], summary="Enregistrer un device token")
+    @extend_schema(tags=["Devices"], summary="Enregistrer un device token", request=DeviceTokenCreateSerializer)
     def post(self, request, user_id):
         token = request.data.get("token")
         device_type = request.data.get("device_type")
@@ -8999,6 +8866,117 @@ class StandardPagination(PageNumberPagination):
 `
 ===== FILE END =====
 
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\serializers.py =====
+`
+"""
+AGT Notification Service v1.0 - Serializers pour Swagger/OpenAPI.
+Ces serializers servent uniquement Ã  documenter les body des requÃªtes POST/PUT
+dans Swagger via @extend_schema(request=...). La logique mÃ©tier utilise request.data.
+"""
+from rest_framework import serializers
+
+
+# --- Send ---
+
+class SendNotificationSerializer(serializers.Serializer):
+    """Body pour POST /notifications/send"""
+    user_id = serializers.UUIDField(help_text="UUID de l'utilisateur destinataire")
+    channels = serializers.ListField(
+        child=serializers.ChoiceField(choices=["email", "sms", "push", "whatsapp", "in_app"]),
+        help_text="Canaux d'envoi (ex: ['email', 'in_app'])"
+    )
+    template_name = serializers.CharField(help_text="Nom du template Ã  utiliser")
+    variables = serializers.DictField(required=False, default={}, help_text="Variables du template (ex: {'verification_url': '...'})")
+    locale = serializers.CharField(required=False, default="fr", help_text="Langue du template")
+    priority = serializers.ChoiceField(choices=["low", "normal", "high", "critical"], required=False, default="normal")
+    category = serializers.ChoiceField(choices=["transactional", "marketing", "security"], required=False, default="transactional")
+    idempotency_key = serializers.UUIDField(required=False, help_text="ClÃ© d'idempotence (optionnel)")
+
+
+class SendBulkNotificationSerializer(serializers.Serializer):
+    """Body pour POST /notifications/send-bulk"""
+    user_ids = serializers.ListField(child=serializers.UUIDField(), help_text="Liste des UUIDs destinataires (max 100)")
+    channels = serializers.ListField(child=serializers.ChoiceField(choices=["email", "sms", "push", "whatsapp", "in_app"]))
+    template_name = serializers.CharField()
+    variables = serializers.DictField(required=False, default={})
+    locale = serializers.CharField(required=False, default="fr")
+    category = serializers.ChoiceField(choices=["transactional", "marketing", "security"], required=False, default="transactional")
+
+
+# --- Templates ---
+
+class TemplateCreateSerializer(serializers.Serializer):
+    """Body pour POST /templates"""
+    name = serializers.CharField(help_text="Nom unique du template (ex: auth_verify_email)")
+    channel = serializers.ChoiceField(choices=["email", "sms", "push", "whatsapp", "in_app"])
+    body = serializers.CharField(help_text="Corps du template (supporte Jinja2 : {{ variable }})")
+    subject = serializers.CharField(required=False, help_text="Sujet (email uniquement)")
+    category = serializers.ChoiceField(choices=["transactional", "marketing", "security"], required=False, default="transactional")
+    platform_id = serializers.UUIDField(required=False, help_text="UUID plateforme (null = global)")
+    locale = serializers.CharField(required=False, default="fr")
+
+
+class TemplateUpdateSerializer(serializers.Serializer):
+    """Body pour PUT /templates/{id}"""
+    body = serializers.CharField(help_text="Nouveau corps du template")
+    subject = serializers.CharField(required=False)
+    locale = serializers.CharField(required=False, default="fr")
+
+
+class TemplatePreviewSerializer(serializers.Serializer):
+    """Body pour POST /templates/{id}/preview"""
+    variables = serializers.DictField(required=False, default={}, help_text="Variables pour le rendu")
+    locale = serializers.CharField(required=False, default="fr")
+
+
+# --- Preferences ---
+
+class PreferenceUpdateSerializer(serializers.Serializer):
+    """Body pour PUT /users/{id}/notification-preferences"""
+    channels = serializers.DictField(
+        required=False,
+        help_text="Canaux actifs (ex: {'email': true, 'sms': false, 'push': true, 'whatsapp': true, 'in_app': true})"
+    )
+    categories = serializers.DictField(
+        required=False,
+        help_text="CatÃ©gories actives (ex: {'transactional': true, 'marketing': false}). Security est toujours true."
+    )
+
+
+# --- Campaigns ---
+
+class CampaignCreateSerializer(serializers.Serializer):
+    """Body pour POST /campaigns"""
+    name = serializers.CharField(help_text="Nom de la campagne")
+    template_name = serializers.CharField(help_text="Nom du template")
+    channel = serializers.ChoiceField(choices=["email", "sms", "push", "whatsapp", "in_app"])
+    user_ids = serializers.ListField(child=serializers.UUIDField(), help_text="Liste des destinataires")
+    variables = serializers.DictField(required=False, default={})
+    throttle_per_second = serializers.IntegerField(required=False, default=10)
+
+
+# --- Device Tokens ---
+
+class DeviceTokenCreateSerializer(serializers.Serializer):
+    """Body pour POST /users/{id}/device-tokens"""
+    token = serializers.CharField(help_text="Token FCM/APNs du device")
+    device_type = serializers.ChoiceField(choices=["android", "ios", "web"])
+    device_name = serializers.CharField(required=False, help_text="Nom du device (ex: 'iPhone 15')")
+
+
+# --- Channel Config ---
+
+class ChannelConfigUpdateSerializer(serializers.Serializer):
+    """Body pour PUT /platforms/{id}/channels-priority"""
+    priority_order = serializers.ListField(
+        child=serializers.ChoiceField(choices=["email", "sms", "push", "whatsapp", "in_app"]),
+        required=False,
+        help_text="Ordre de prioritÃ© des canaux"
+    )
+    fallback_enabled = serializers.BooleanField(required=False)
+`
+===== FILE END =====
+
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\services.py =====
 `
 """AGT Notification Service v1.0 - Services : cache user, preferences, idempotency."""
@@ -9103,6 +9081,11 @@ from apps.notifications.models import (
 from apps.notifications.pagination import StandardPagination
 from apps.notifications.services import UserResolverService, PreferenceService, IdempotencyService
 
+from apps.notifications.serializers import (
+    SendNotificationSerializer, SendBulkNotificationSerializer,
+    PreferenceUpdateSerializer, ChannelConfigUpdateSerializer,
+)
+
 logger = logging.getLogger(__name__)
 VALID_CHANNELS = [c.value for c in ChannelChoice]
 VALID_CATEGORIES = [c.value for c in CategoryChoice]
@@ -9141,7 +9124,7 @@ class HealthCheckView(APIView):
 class SendNotificationView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Send"], summary="Envoi mono ou multi-canal")
+    @extend_schema(tags=["Send"], summary="Envoi mono ou multi-canal", request=SendNotificationSerializer)
     def post(self, request):
         from workers.tasks import send_notification_task
         from apps.templates_mgr.models import Template
@@ -9199,7 +9182,7 @@ class SendNotificationView(APIView):
 class SendBulkNotificationView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Send"], summary="Envoi en masse (max 100)")
+    @extend_schema(tags=["Send"], summary="Envoi en masse (max 100)", request=SendBulkNotificationSerializer)
     def post(self, request):
         from workers.tasks import send_notification_task
         from apps.templates_mgr.models import Template
@@ -9253,7 +9236,7 @@ class PreferenceView(APIView):
             return Response({"channels": {"email": True, "sms": True, "push": True, "whatsapp": True, "in_app": True},
                              "categories": {"transactional": True, "marketing": False, "security": True}})
 
-    @extend_schema(tags=["Preferences"], summary="Modifier les preferences")
+    @extend_schema(tags=["Preferences"], summary="Modifier les preferences", request=PreferenceUpdateSerializer)
     def put(self, request, user_id):
         platform_id = str(getattr(request.user, "platform_id", "") or "")
         pref, _ = UserPreference.objects.get_or_create(user_id=user_id, platform_id=platform_id)
@@ -9359,7 +9342,7 @@ class ChannelConfigView(APIView):
         config = PlatformChannelConfig.get_for_platform(str(platform_id))
         return Response({"platform_id": str(platform_id), "priority_order": config.priority_order, "fallback_enabled": config.fallback_enabled})
 
-    @extend_schema(tags=["Config"], summary="Modifier config canaux")
+    @extend_schema(tags=["Config"], summary="Modifier config canaux", request=ChannelConfigUpdateSerializer)
     def put(self, request, platform_id):
         config, _ = PlatformChannelConfig.objects.get_or_create(platform_id=platform_id, defaults={"priority_order": PlatformChannelConfig.DEFAULT_ORDER})
         if "priority_order" in request.data:
@@ -9635,13 +9618,17 @@ from drf_spectacular.utils import extend_schema
 from apps.templates_mgr.models import Template, TemplateVersion
 from apps.notifications.pagination import StandardPagination
 
+from apps.notifications.serializers import (
+    TemplateCreateSerializer, TemplateUpdateSerializer, TemplatePreviewSerializer,
+)
+
 logger = logging.getLogger(__name__)
 
 
 class TemplateListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Templates"], summary="Creer un template")
+    @extend_schema(tags=["Templates"], summary="Creer un template", request=TemplateCreateSerializer)
     def post(self, request):
         data = request.data
         name, channel, body = data.get("name"), data.get("channel"), data.get("body", "")
@@ -9825,6 +9812,13 @@ TWILIO_ACCOUNT_SID = config("TWILIO_ACCOUNT_SID", default="")
 TWILIO_AUTH_TOKEN = config("TWILIO_AUTH_TOKEN", default="")
 TWILIO_FROM_NUMBER = config("TWILIO_FROM_NUMBER", default="")
 FCM_SERVER_KEY = config("FCM_SERVER_KEY", default="")
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST', default='mailpit')
+EMAIL_PORT = config('EMAIL_PORT', default=1025, cast=int)
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["apps.notifications.authentication.JWTAuthentication"],
@@ -9844,6 +9838,23 @@ SPECTACULAR_SETTINGS = {
         {"name": "Templates"}, {"name": "Campaigns"}, {"name": "Preferences"},
         {"name": "In-App"}, {"name": "Devices"}, {"name": "Stats"}, {"name": "Config"},
     ],
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            }
+        }
+    },
+    "SECURITY": [{"BearerAuth": []}],
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": False,
+    },
 }
 
 CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="http://localhost:3000").split(",")
@@ -9924,6 +9935,7 @@ application = get_wsgi_application()
 import logging
 from dataclasses import dataclass
 from typing import List
+from django.core.mail import send_mail
 
 logger = logging.getLogger(__name__)
 
@@ -10042,6 +10054,44 @@ class WhatsAppProvider(BaseProvider):
         logger.info(f"[MOCK] WhatsApp send to {(user_data or {}).get('phone')}")
         return False
 
+class SMTPProvider(BaseProvider):
+    """Envoie des emails via le serveur SMTP local (Mailpit)."""
+    name = "smtp_local"
+
+    def send(self, notification, user_data):
+        email = (user_data or {}).get("email")
+        if not email: return False
+        try:
+            send_mail(
+                subject=notification.subject or "Notification",
+                message=notification.body, # Version texte brut
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                html_message=notification.body, # Version HTML
+                fail_silently=False,
+            )
+            return True
+        except Exception as e:
+            logger.error(f"SMTP Error: {e}")
+            return False
+
+class ConsoleSMSProvider(BaseProvider):
+    """Affiche le SMS dans les logs (Console) pour le dev."""
+    name = "console_sms"
+
+    def send(self, notification, user_data):
+        phone = (user_data or {}).get("phone")
+        print(f"\n--- [SMS CONSOLE] To: {phone} ---\n{notification.body}\n---------------------------\n")
+        return True
+
+# --- MODIFIE LA PROVIDER_MAP ---
+PROVIDER_MAP = {
+    "email": [SMTPProvider(), SendGridProvider()], # SMTP en premier pour le dev
+    "sms": [ConsoleSMSProvider(), TwilioProvider()], # Console en premier
+    "push": [FCMProvider()],
+    "whatsapp": [WhatsAppProvider()],
+    "in_app": [],
+}
 
 PROVIDER_MAP = {
     "email": [SendGridProvider(), MailgunProvider()],
@@ -14274,24 +14324,29 @@ application = get_wsgi_application()
 # --- Django ---
 SECRET_KEY=change-me-in-production
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_users_service
 
 # --- Base de donnees ---
-DATABASE_URL=postgresql://users_user:users_password@db:5432/agt_users_db
+# Correction : l'hÃ´te est 'agt_users_db'
+DATABASE_URL=postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
 
 # --- Redis ---
-REDIS_URL=redis://redis:6379/1
+# Correction : l'hÃ´te est 'agt_users_redis'
+REDIS_URL=redis://agt_users_redis:6379/1
 
 # --- Service Auth (validation JWT) ---
-AUTH_SERVICE_URL=http://auth-service:7000/api/v1
+# Correction : l'hÃ´te est 'agt_auth_service'
+AUTH_SERVICE_URL=http://agt_auth_service:7000/api/v1
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
-AUTH_ADMIN_API_KEY=change-me-same-as-auth-admin-key
+AUTH_ADMIN_API_KEY=change-me-admin-api-key-very-secret
 
 # --- Service Media ---
-MEDIA_SERVICE_URL=http://media-service:7003/api/v1
+# Correction : l'hÃ´te est 'agt_media_simulator'
+MEDIA_SERVICE_URL=http://agt_media_simulator:7003/api/v1
 
 # --- Service Notification ---
-NOTIFICATION_SERVICE_URL=http://notification-service:7002/api/v1
+# Correction : l'hÃ´te est 'agt_notif_service'
+NOTIFICATION_SERVICE_URL=http://agt_notif_service:7002/api/v1
 
 # --- Cache TTL ---
 PERMISSION_CACHE_TTL=300
@@ -14302,7 +14357,6 @@ DEFAULT_HARD_DELETE_DELAY_DAYS=30
 
 # --- CORS ---
 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
-
 `
 ===== FILE END =====
 
@@ -14315,24 +14369,29 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
 # --- Django ---
 SECRET_KEY=change-me-in-production
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_users_service
 
 # --- Base de donnees ---
-DATABASE_URL=postgresql://users_user:users_password@db:5432/agt_users_db
+# Correction : l'hÃ´te est 'agt_users_db'
+DATABASE_URL=postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
 
 # --- Redis ---
-REDIS_URL=redis://redis:6379/1
+# Correction : l'hÃ´te est 'agt_users_redis'
+REDIS_URL=redis://agt_users_redis:6379/1
 
 # --- Service Auth (validation JWT) ---
-AUTH_SERVICE_URL=http://auth-service:7000/api/v1
+# Correction : l'hÃ´te est 'agt_auth_service'
+AUTH_SERVICE_URL=http://agt_auth_service:7000/api/v1
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
-AUTH_ADMIN_API_KEY=change-me-same-as-auth-admin-key
+AUTH_ADMIN_API_KEY=change-me-admin-api-key-very-secret
 
 # --- Service Media ---
-MEDIA_SERVICE_URL=http://media-service:7003/api/v1
+# Correction : l'hÃ´te est 'agt_media_simulator'
+MEDIA_SERVICE_URL=http://agt_media_simulator:7003/api/v1
 
 # --- Service Notification ---
-NOTIFICATION_SERVICE_URL=http://notification-service:7002/api/v1
+# Correction : l'hÃ´te est 'agt_notif_service'
+NOTIFICATION_SERVICE_URL=http://agt_notif_service:7002/api/v1
 
 # --- Cache TTL ---
 PERMISSION_CACHE_TTL=300
@@ -14343,7 +14402,6 @@ DEFAULT_HARD_DELETE_DELAY_DAYS=30
 
 # --- CORS ---
 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
-
 `
 ===== FILE END =====
 
@@ -14470,6 +14528,7 @@ Service : **7001**
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\docker-compose.yml =====
 `
 services:
+  # â”€â”€ PostgreSQL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   db:
     image: postgres:15-alpine
     container_name: agt_users_db
@@ -14487,7 +14546,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
 
+  # â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   redis:
     image: redis:7-alpine
     container_name: agt_users_redis
@@ -14502,7 +14564,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
 
+  # â”€â”€ Users Service (production) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   users:
     build:
       context: .
@@ -14512,8 +14577,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://users_user:users_password@db:5432/agt_users_db
-      REDIS_URL: redis://redis:6379/1
+      DATABASE_URL: postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
+      REDIS_URL: redis://agt_users_redis:6379/1
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
       - ./keys:/app/keys:ro
@@ -14530,7 +14595,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - agt_network
 
+  # â”€â”€ Users Service (dev â€” hot reload) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   users-dev:
     build:
       context: .
@@ -14543,8 +14611,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://users_user:users_password@db:5432/agt_users_db
-      REDIS_URL: redis://redis:6379/1
+      DATABASE_URL: postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
+      REDIS_URL: redis://agt_users_redis:6379/1
       DEBUG: "True"
       DJANGO_SETTINGS_MODULE: config.settings
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
@@ -14560,6 +14628,8 @@ services:
         condition: service_healthy
     profiles:
       - dev
+    networks:
+      - agt_network
 
 volumes:
   postgres_data:
@@ -14567,25 +14637,39 @@ volumes:
   redis_data:
     driver: local
 
+networks:
+  agt_network:
+    external: true
+    name: agt_network
 `
 ===== FILE END =====
 
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\Dockerfile =====
 `
+# --------------------
+# Builder
+# --------------------
 FROM python:3.11-slim AS builder
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# --------------------
+# Production
+# --------------------
 FROM python:3.11-slim AS production
 WORKDIR /app
+
+# ---- FIX: Installer curl pour le health check Docker ----
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+# ---------------------------------------------------------
+
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 COPY . .
 RUN python manage.py collectstatic --noinput 2>/dev/null || true
 EXPOSE 7001
 CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:7001", "--workers", "4"]
-
 `
 ===== FILE END =====
 
@@ -15930,7 +16014,7 @@ class HealthCheckView(APIView):
 class UserListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Profile"], summary="Provisioning profil (par Auth)")
+    @extend_schema(tags=["Profile"], summary="Provisioning profil (par Auth)", request=UserProfileCreateSerializer)
     def post(self, request):
         """POST /users - Provisioning (appele par Auth apres inscription)."""
         serializer = UserProfileCreateSerializer(data=request.data)
@@ -15994,7 +16078,7 @@ class UserDetailView(APIView):
         ProfileCacheService.set(str(user_id), data)
         return Response(data)
 
-    @extend_schema(tags=["Profile"], summary="Mise a jour profil (email/phone read-only)")
+    @extend_schema(tags=["Profile"], summary="Mise a jour profil (email/phone read-only)", request=UserProfileUpdateSerializer)
     def put(self, request, user_id):
         """PUT /users/{id} - email/phone NON modifiables (CDC v2.1)."""
         try:
@@ -16134,7 +16218,7 @@ class UserPermanentDeleteView(APIView):
 class UserPhotoView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Profile"], summary="Mise a jour photo profil")
+    @extend_schema(tags=["Profile"], summary="Mise a jour photo profil", request=PhotoUpdateSerializer)
     def put(self, request, user_id):
         try:
             user = UserProfile.objects.get(id=user_id)
@@ -16194,7 +16278,7 @@ class UserStatsView(APIView):
 class StatusSyncView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Sync"], summary="Sync statut depuis Auth")
+    @extend_schema(tags=["Sync"], summary="Sync statut depuis Auth", request=StatusSyncSerializer)
     def post(self, request):
         serializer = StatusSyncSerializer(data=request.data)
         if not serializer.is_valid():
@@ -16223,7 +16307,7 @@ class StatusSyncView(APIView):
 class CredentialsSyncView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Sync"], summary="Sync email/phone depuis Auth")
+    @extend_schema(tags=["Sync"], summary="Sync email/phone depuis Auth", request=CredentialsSyncSerializer)
     def post(self, request):
         serializer = CredentialsSyncSerializer(data=request.data)
         if not serializer.is_valid():
@@ -16255,7 +16339,7 @@ class CredentialsSyncView(APIView):
 class AddressListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Addresses"], summary="Ajouter une adresse")
+    @extend_schema(tags=["Addresses"], summary="Ajouter une adresse", request=AddressCreateSerializer)
     def post(self, request, user_id):
         try:
             user = UserProfile.objects.get(id=user_id)
@@ -16285,7 +16369,7 @@ class AddressListCreateView(APIView):
 class AddressDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Addresses"], summary="Modifier une adresse")
+    @extend_schema(tags=["Addresses"], summary="Modifier une adresse", request=AddressUpdateSerializer)
     def put(self, request, user_id, address_id):
         try:
             address = Address.objects.get(id=address_id, user_id=user_id)
@@ -16712,6 +16796,23 @@ SPECTACULAR_SETTINGS = {
         {"name": "Documents", "description": "Documents KYC et workflow validation"},
         {"name": "Metadata", "description": "Metadonnees cle-valeur par plateforme"},
     ],
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            }
+        }
+    },
+    "SECURITY": [{"BearerAuth": []}],
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": False,
+    },
 }
 
 CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="http://localhost:3000").split(",")
@@ -18033,200 +18134,180 @@ application = get_wsgi_application()
 
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GETTING_STARTED.md =====
 `
-# AGT Microservices - Getting Started
+# AGT Microservices - Getting Started (Guide de DÃ©marrage)
 
-> Guide de demarrage rapide pour l'ecosysteme AGT. Ordre de lancement, premiers pas, et FAQ.
+Bienvenue dans l'Ã©cosystÃ¨me microservices d'AG Technologies. Ce guide vous accompagne pas Ã  pas pour lancer, configurer et comprendre l'environnement de dÃ©veloppement local (MVP).
 
-## Ordre de demarrage
+---
 
-Les services ont des dependances. Respectez cet ordre :
+## 1. Architecture du MVP (Minimum Viable Product)
 
-```
-1. Auth      (port 7000) - en premier, genere les cles RSA
-2. Users     (port 7001) - depend de la cle publique Auth
-3. Notification (port 7002) - depend de la cle publique Auth
-4. Subscription (port 7004) - depend de la cle publique Auth
-5. Payment   (port 7005) - depend de la cle publique Auth
-```
+Pour dÃ©velopper et tester les flux de base (Inscription, Profil, Fichiers), nous dÃ©ployons un sous-ensemble de l'architecture complÃ¨te. Le **MVP** se compose de :
 
-Les services 4+ (Payment, Wallet...) viendront ensuite.
+### Services MÃ©tier
+*   **Auth (7000) :** GÃ¨re l'identitÃ©, les tokens JWT, la sÃ©curitÃ© (2FA) et le registre des plateformes.
+*   **Users (7001) :** GÃ¨re les profils Ã©tendus, les rÃ´les (RBAC) et les documents KYC.
+*   **Notification (7002) :** Orchestre l'envoi des emails, SMS et push via des files d'attente.
+*   **MÃ©dia (7003) :** GÃ¨re l'upload, le traitement et le stockage des fichiers. *(Note : Le service final en NestJS n'Ã©tant pas encore terminÃ©, nous utilisons un simulateur lÃ©ger pour le MVP afin de ne pas bloquer les autres services).*
 
-## Demarrage complet (Windows)
+### Infrastructure PartagÃ©e
+*   **API Gateway (Nginx) :** Point d'entrÃ©e unique de l'Ã©cosystÃ¨me sur le port `80`.
+*   **RabbitMQ :** Bus de messages pour la communication asynchrone entre les services.
+*   **Mailpit :** Serveur SMTP local de dÃ©veloppement. Il intercepte tous les emails envoyÃ©s par le service Notification pour Ã©viter de spammer de vraies adresses. Accessible sur `http://localhost:8025`.
+*   **PostgreSQL & Redis :** Chaque service mÃ©tier possÃ¨de sa propre base de donnÃ©es et son propre cache, isolÃ©s des autres.
 
+---
+
+## 2. Configuration Initiale
+
+Avant de lancer les services, configurez la clÃ© d'administration globale :
+
+1. Allez dans le dossier `agt-auth/`.
+2. Copiez `.env.example` vers `.env` (si ce n'est pas dÃ©jÃ  fait).
+3. Ouvrez `agt-auth/.env` et modifiez la variable `ADMIN_API_KEY` :
+   ```env
+   ADMIN_API_KEY=votre-cle-secrete-admin-123
+   ```
+   *Cette clÃ© sera utilisÃ©e pour les opÃ©rations sensibles (crÃ©ation de plateforme, blocage d'utilisateur).*
+
+---
+
+## 3. Lancement du MVP
+
+Des scripts automatisÃ©s Ã  la racine du projet orchestrent le dÃ©marrage (respect des dÃ©pendances et partage des clÃ©s RSA).
+
+**Sur Windows (PowerShell en administrateur) :**
 ```powershell
-# 0. Ouvrir Docker Desktop et attendre qu'il soit pret
-
-# 1. Auth
-cd agt-auth
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
-
-# 2. Users (nouveau terminal PowerShell)
-cd agt-users
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
-
-# 3. Notification (nouveau terminal PowerShell)
-cd agt-notification
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
-
-# 4. Subscription (nouveau terminal PowerShell)
-cd agt-subscription
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
+.\deploy_mvp.ps1
 ```
 
-## Demarrage complet (Linux/macOS)
-
+**Sur Linux / macOS :**
 ```bash
-cd agt-auth && bash scripts/setup.sh && cd ..
-cd agt-users && bash scripts/setup.sh && cd ..
-cd agt-notification && bash scripts/setup.sh && cd ..
-cd agt-subscription && bash scripts/setup.sh && cd ..
-```
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
-
-# 3. Notification (nouveau terminal PowerShell)
-cd agt-notification
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
+bash deploy_mvp.sh
 ```
 
-## Demarrage complet (Linux/macOS)
+VÃ©rifiez que tout fonctionne avec `docker ps`. Tous les conteneurs doivent avoir le statut `Up` et `(healthy)`.
 
+---
+
+## 4. GÃ©nÃ©ration et Application des Migrations
+
+Lors du premier lancement, les bases de donnÃ©es sont vides. Il faut gÃ©nÃ©rer et appliquer les schÃ©mas de base de donnÃ©es.
+
+ExÃ©cutez ces commandes dans votre terminal :
+
+**Pour Auth :**
 ```bash
-cd agt-auth && bash scripts/setup.sh && cd ..
-cd agt-users && bash scripts/setup.sh && cd ..
-cd agt-notification && bash scripts/setup.sh && cd ..
+docker exec -it agt_auth_service python manage.py makemigrations authentication platforms
+docker exec -it agt_auth_service python manage.py migrate
 ```
 
-## Verification
-
+**Pour Users :**
 ```bash
-curl http://localhost:7000/api/v1/auth/health
-curl http://localhost:7001/api/v1/health
-curl http://localhost:7002/api/v1/health
+docker exec -it agt_users_service python manage.py makemigrations users roles documents
+docker exec -it agt_users_service python manage.py migrate
 ```
 
-Les 3 doivent repondre `{"status": "healthy", ...}`.
-
-## Premier flux complet
-
-### 1. Creer une plateforme (sur Auth)
-
+**Pour Notification :**
 ```bash
-curl -X POST http://localhost:7000/api/v1/auth/platforms \
-  -H "Content-Type: application/json" \
-  -H "X-Admin-API-Key: change-me-admin-api-key-very-secret" \
-  -d '{"name": "AGT Market", "slug": "agt-market", "allowed_auth_methods": ["email"]}'
+docker exec -it agt_notif_service python manage.py makemigrations notifications templates_mgr campaigns devices
+docker exec -it agt_notif_service python manage.py migrate
 ```
 
-Notez le `id` (UUID) et le `client_secret` retournes.
+---
 
-### 2. Inscrire un utilisateur
+## 5. Premier Flux Complet : Comprendre les Microservices
 
+Nous allons crÃ©er une plateforme, inscrire un utilisateur, et valider son email. Tout se fait via le **Swagger UI**.
+
+### Ã‰tape A : CrÃ©er la plateforme
+1. Ouvrez le Swagger Auth : `http://localhost:7000/api/v1/docs/`
+2. Allez sur `POST /api/v1/auth/platforms` et cliquez sur **Try it out**.
+3. Header `X-Admin-API-Key` : mettez la clÃ© dÃ©finie Ã  l'Ã©tape 2.
+4. Body :
+   ```json
+   {
+     "name": "AGT Market",
+     "slug": "agt-market",
+     "allowed_auth_methods": ["email", "phone", "magic_link"],
+     "allowed_redirect_urls": ["http://localhost:3000/callback"]
+   }
+   ```
+5. **Execute**. Copiez l'UUID du champ `"id"` dans la rÃ©ponse. C'est votre `platform_id`.
+
+> **Que se passe-t-il sous le capot ?**
+> Le service Auth valide votre clÃ© Admin, gÃ©nÃ¨re un `client_secret` chiffrÃ©, et enregistre la plateforme dans sa base de donnÃ©es `agt_auth_db`. Cette plateforme est dÃ©sormais reconnue par tout l'Ã©cosystÃ¨me.
+
+### Ã‰tape B : Inscrire un utilisateur
+1. Sur le Swagger Auth, allez sur `POST /api/v1/auth/register` et cliquez sur **Try it out**.
+2. Header `X-Platform-Id` : collez l'UUID copiÃ© Ã  l'Ã©tape A.
+3. Body :
+   ```json
+   {
+     "email": "test@agt.com",
+     "password": "Password123!",
+     "method": "email"
+   }
+   ```
+4. **Execute**. Vous obtenez un `201 Created`.
+
+> **Que se passe-t-il sous le capot ? (ChorÃ©graphie inter-services)**
+> 1. **Auth** hache le mot de passe et crÃ©e l'utilisateur dans sa base.
+> 2. **Auth** fait un appel HTTP (S2S) au service **Users** (`POST /api/v1/users`) pour lui dire : *"Un nouvel utilisateur s'est inscrit, provisionne son profil"*. Users crÃ©e le profil dans sa propre base.
+> 3. **Auth** gÃ©nÃ¨re un token de vÃ©rification, puis fait un appel HTTP au service **Notification** pour demander l'envoi de l'email de bienvenue.
+> 4. **Notification** enregistre la demande en base, la place dans **RabbitMQ**, et un **Worker Celery** la consomme pour envoyer l'email vers **Mailpit**.
+
+### Ã‰tape C : VÃ©rifier l'email via Mailpit
+1. Ouvrez Mailpit : `http://localhost:8025`
+2. Ouvrez l'email "VÃ©rifiez votre email - AGT Market".
+3. Copiez le `token` prÃ©sent dans le lien.
+
+### Ã‰tape D : Valider l'email
+1. Sur le Swagger Auth, allez sur `POST /api/v1/auth/verify-email`.
+2. Body : `{"token": "le-token-copie"}`
+3. **Execute**. RÃ©ponse `200 OK`.
+
+> **Que se passe-t-il sous le capot ?**
+> Auth vÃ©rifie le hash du token dans sa base. S'il est valide et non expirÃ©, il passe le champ `email_verified` Ã  `true` et marque le token comme utilisÃ©.
+
+---
+
+## 6. Commandes Utiles (Debug & Reset)
+
+**Voir les logs en direct (trÃ¨s utile pour le debug) :**
 ```bash
-curl -X POST http://localhost:7000/api/v1/auth/register \
-  -H "Content-Type: application/json" \
-  -H "X-Platform-Id: <UUID-plateforme>" \
-  -d '{"email": "test@agt.com", "password": "Test1234!", "method": "email"}'
+docker logs --tail 50 -f agt_gateway          # Logs du routeur Nginx
+docker logs --tail 50 -f agt_auth_service     # Logs de l'API Auth
+docker logs --tail 50 -f agt_users_service    # Logs de l'API Users
+docker logs --tail 50 -f agt_notif_service    # Logs de l'API Notification
+docker logs --tail 50 -f agt_notif_worker     # Logs des envois d'emails/SMS (Celery)
+docker logs --tail 50 -f agt_media_simulator  # Logs des uploads de fichiers
 ```
 
-Auth cree le compte ET provisionne automatiquement le profil dans Users.
-
-### 3. Se connecter
-
+**ArrÃªter l'environnement :**
 ```bash
-curl -X POST http://localhost:7000/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email": "test@agt.com", "password": "Test1234!", "platform_id": "<UUID>"}'
+docker stop $(docker ps -aq)
 ```
 
-Copiez l'`access_token` de la reponse.
-
-### 4. Consulter le profil (sur Users)
-
+**RÃ©initialiser complÃ¨tement (Attention : supprime bases de donnÃ©es et rÃ©seaux) :**
 ```bash
-curl http://localhost:7001/api/v1/users/by-auth/<auth-user-id> \
-  -H "Authorization: Bearer <token>"
+docker rm -f $(docker ps -aq)
+docker volume rm $(docker volume ls -q)
+docker network prune -f
 ```
 
-### 5. Envoyer une notification (sur Notification)
+---
 
-```bash
-curl -X POST http://localhost:7002/api/v1/notifications/send \
-  -H "Authorization: Bearer <token>" \
-  -H "Content-Type: application/json" \
-  -d '{"user_id": "<user-id>", "channels": ["in_app"], "template_name": "auth_verify_email", "variables": {"verification_url": "http://test.com", "expires_in_minutes": 60, "platform_name": "AGT Market"}}'
-```
+## 7. Prochaines Ã‰tapes
 
-Note : creez d'abord le template (voir GUIDE_NOTIFICATION.md section 3.1).
+Maintenant que l'infrastructure de base est comprise, vous pouvez approfondir chaque domaine :
 
-### 6. Souscrire a un plan (sur Subscription)
-
-```bash
-# D'abord creer un plan (voir GUIDE_SUBSCRIPTION.md section 3.3)
-# Puis souscrire
-curl -X POST http://localhost:7004/api/v1/subscriptions \
-  -H "Authorization: Bearer <token>" \
-  -H "Content-Type: application/json" \
-  -d '{"platform_id": "<UUID>", "subscriber_type": "user", "subscriber_id": "<auth-user-id>", "plan_id": "<plan-id>", "billing_cycle": "monthly"}'
-```
-
-## Ports
-
-| Service | Port API | PostgreSQL | Redis | Autre |
-|---------|----------|-----------|-------|-------|
-| Auth | 7000 | 5432 | 6379 | - |
-| Users | 7001 | 5433 | 6380 | - |
-| Notification | 7002 | 5434 | 6381 | RabbitMQ 5672/15672 |
-| Subscription | 7004 | 5435 | 6382 | - |
-| Payment | 7005 | 5436 | 6383 | - |
-
-## Documentation API (Swagger)
-
-| Service | Swagger UI |
-|---------|-----------|
-| Auth | http://localhost:7000/api/v1/docs/ |
-| Users | http://localhost:7001/api/v1/docs/ |
-| Notification | http://localhost:7002/api/v1/docs/ |
-| Subscription | http://localhost:7004/api/v1/docs/ |
-| Subscription | http://localhost:7004/api/v1/docs/ |
-| Payment | http://localhost:7005/api/v1/docs/ |
-
-## FAQ
-
-**Q: Docker dit "pipe not found" ou "unable to get image"**
-A: Docker Desktop n'est pas demarre. Ouvrez-le et attendez l'icone verte.
-
-**Q: "openssl n'est pas reconnu"**
-A: Normal sur Windows. Le script genere les cles via Docker a la place.
-
-**Q: Le service Users dit "AUTH_PUBLIC_KEY non configure"**
-A: Copiez la cle publique : `copy ..\agt-auth\keys\public.pem keys\auth_public.pem`
-
-**Q: L'inscription ne cree pas le profil Users**
-A: Normal si Users n'est pas demarre. Auth log un warning mais l'inscription reussit. Demarrez Users et le provisioning fonctionnera pour les prochaines inscriptions.
-
-**Q: Les emails/SMS ne s'envoient pas**
-A: Normal en dev. Les providers (SendGrid, Twilio) ne sont pas configures. Les notifications sont creees en base avec status=failed. Utilisez le canal `in_app` pour tester.
-
-**Q: Comment voir les logs ?**
-A: `docker compose logs -f <service-name>` (auth, users, notification, celery-worker, etc.)
-
-**Q: Comment tout arreter ?**
-A: `docker compose down` dans chaque dossier service. Ajoutez `-v` pour supprimer les donnees.
-
-## Guides detailles
-
-- [GUIDE_AUTH.md](./GUIDE_AUTH.md) - Configuration et utilisation Auth
-- [GUIDE_USERS.md](./GUIDE_USERS.md) - Configuration et utilisation Users
-- [GUIDE_NOTIFICATION.md](./GUIDE_NOTIFICATION.md) - Configuration et utilisation Notification
-- [GUIDE_SUBSCRIPTION.md](./GUIDE_SUBSCRIPTION.md) - Configuration et utilisation Subscription
-- [GUIDE_SUBSCRIPTION.md](./GUIDE_SUBSCRIPTION.md) - Configuration et utilisation Subscription
-- [GUIDE_PAYMENT.md](./GUIDE_PAYMENT.md) - Configuration et utilisation Payment (a venir)
+*   **Approfondir l'Authentification :** Testez le login, le refresh token via les cookies, et la sÃ©curitÃ© 2FA. $\rightarrow$ [Voir le Guide Auth](./GUIDE_AUTH.md)
+*   **Gestion du Profil et RBAC :** Connectez-vous, rÃ©cupÃ©rez votre JWT, et utilisez le Swagger Users (`http://localhost:7001/api/v1/docs/`) pour modifier votre profil ou crÃ©er des rÃ´les dynamiques. $\rightarrow$[Voir le Guide Users](./GUIDE_USERS.md)
+*   **Gestion des Notifications :** CrÃ©ez des templates dynamiques avec variables et testez les notifications In-App. $\rightarrow$ [Voir le Guide Notification](./GUIDE_NOTIFICATION.md)
+*   **Gestion des Abonnements :** DÃ©couvrez comment crÃ©er des plans, des quotas et gÃ©rer le cycle de vie B2B/B2C. $\rightarrow$ [Voir le Guide Subscription](./GUIDE_SUBSCRIPTION.md)
+*   **Gestion des MÃ©dias :** Testez l'upload d'une photo de profil via le simulateur MÃ©dia sur le port `7003`.
 
 `
 ===== FILE END =====
@@ -35005,6 +35086,274 @@ tx ||--o{ whlogs     : "0..* webhook logs"
 `
 ===== FILE END =====
 
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\gateway\nginx.conf =====
+`
+# ============================================================
+# AG TECHNOLOGIES â€” API Gateway (Nginx)
+# Reverse proxy unifiÃ© pour tout l'Ã©cosystÃ¨me.
+# Chaque service est accessible via /api/v1/<service>/...
+# ============================================================
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    # â”€â”€ Logging â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    log_format json_log escape=json '{'
+        '"time":"$time_iso8601",'
+        '"remote_addr":"$remote_addr",'
+        '"method":"$request_method",'
+        '"uri":"$request_uri",'
+        '"status":$status,'
+        '"upstream":"$upstream_addr",'
+        '"response_time":$request_time'
+    '}';
+    access_log /var/log/nginx/access.log json_log;
+
+    # â”€â”€ Rate limiting global â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    limit_req_zone $binary_remote_addr zone=global:10m rate=100r/m;
+
+    # â”€â”€ CORS headers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    map $http_origin $cors_origin {
+        default "";
+        "~^https?://localhost(:[0-9]+)?$" "$http_origin";
+        "~^https?://.*\.agt\.com$" "$http_origin";
+    }
+
+    # â”€â”€ Upstreams â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+    upstream auth {
+        server host.docker.internal:7000;
+    }
+
+    upstream users {
+        server host.docker.internal:7001;
+    }
+
+    upstream notification {
+        server host.docker.internal:7002;
+    }
+
+    upstream media {
+        server host.docker.internal:7003;
+    }
+
+    upstream subscription {
+        server host.docker.internal:7004;
+    }
+
+    upstream payment {
+        server host.docker.internal:7005;
+    }
+
+    upstream wallet {
+        server host.docker.internal:7006;
+    }
+
+    upstream search {
+        server host.docker.internal:7007;
+    }
+
+    upstream chat {
+        server host.docker.internal:7008;
+    }
+
+    upstream geoloc {
+        server host.docker.internal:7009;
+    }
+
+    upstream chatbot {
+        server host.docker.internal:7010;
+    }
+
+    # â”€â”€ Server â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+    server {
+        listen 80;
+        server_name localhost;
+
+        # CORS
+        add_header Access-Control-Allow-Origin $cors_origin always;
+        add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
+        add_header Access-Control-Allow-Headers "Authorization, Content-Type, X-Platform-Id, X-Admin-API-Key, X-Requested-With" always;
+        add_header Access-Control-Allow-Credentials "true" always;
+
+        if ($request_method = OPTIONS) {
+            return 204;
+        }
+
+        # Rate limiting
+        limit_req zone=global burst=20 nodelay;
+
+        # â”€â”€ Auth Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /api/v1/auth/ {
+            proxy_pass http://auth/api/v1/auth/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # â”€â”€ Users Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /api/v1/users {
+            proxy_pass http://users/api/v1/users;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location /api/v1/platforms/ {
+            proxy_pass http://users/api/v1/platforms/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # â”€â”€ Notification Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /api/v1/notifications/ {
+            proxy_pass http://notification/api/v1/notifications/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location /api/v1/templates/ {
+            proxy_pass http://notification/api/v1/templates/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location /api/v1/campaigns/ {
+            proxy_pass http://notification/api/v1/campaigns/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # â”€â”€ Media Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /api/v1/media/ {
+            proxy_pass http://media/api/v1/media/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            client_max_body_size 100M;
+        }
+
+        # â”€â”€ Subscription Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /api/v1/subscriptions/ {
+            proxy_pass http://subscription/api/v1/subscriptions/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location /api/v1/plans/ {
+            proxy_pass http://subscription/api/v1/plans/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location /api/v1/quotas/ {
+            proxy_pass http://subscription/api/v1/quotas/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # â”€â”€ Payment Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /api/v1/payments/ {
+            proxy_pass http://payment/api/v1/payments/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # â”€â”€ Wallet Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /api/v1/wallets/ {
+            proxy_pass http://wallet/api/v1/wallets/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # â”€â”€ Search Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /api/v1/search/ {
+            proxy_pass http://search/api/v1/search/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location /api/v1/indexes/ {
+            proxy_pass http://search/api/v1/indexes/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # â”€â”€ Chat Service (REST) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /api/v1/chat/ {
+            proxy_pass http://chat/api/v1/chat/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # â”€â”€ Chat Service (WebSocket) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /socket.io/ {
+            proxy_pass http://chat/socket.io/;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+
+        # â”€â”€ Geoloc Service (REST) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /api/v1/geoloc/ {
+            proxy_pass http://geoloc/api/v1/geoloc/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # â”€â”€ Geoloc Service (WebSocket) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /geoloc/socket.io/ {
+            proxy_pass http://geoloc/socket.io/;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+
+        # â”€â”€ Chatbot Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /api/v1/chatbot/ {
+            proxy_pass http://chatbot/api/v1/chatbot/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location /api/v1/bots/ {
+            proxy_pass http://chatbot/api/v1/bots/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # â”€â”€ Health global â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        location /health {
+            return 200 '{"status":"gateway_ok"}';
+            add_header Content-Type application/json;
+        }
+    }
+}
+`
+===== FILE END =====
+
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\instructions.md =====
 `
 Tu es mon pair-programmer principal pour AG Technologies.
@@ -35226,5 +35575,5 @@ DÃ¨s que tu me donnes ton feu vert, nous pouvons officiellement dÃ©marrer la
 ===== FILE END =====
 
 ## SUMMARY
-- Total files: 295
+- Total files: 297
 

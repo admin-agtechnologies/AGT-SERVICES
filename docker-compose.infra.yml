@@ -82,5 +82,4 @@ volumes:
 
 networks:
   agt_network:
-    name: agt_network
-    driver: bridge
+    external: true
