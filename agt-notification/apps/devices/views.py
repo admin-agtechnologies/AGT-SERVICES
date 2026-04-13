@@ -4,13 +4,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
+from apps.notifications.serializers import DeviceTokenCreateSerializer
 from apps.devices.models import DeviceToken
 
 
 class DeviceTokenListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Devices"], summary="Enregistrer un device token")
+    @extend_schema(tags=["Devices"], summary="Enregistrer un device token", request=DeviceTokenCreateSerializer)
     def post(self, request, user_id):
         token = request.data.get("token")
         device_type = request.data.get("device_type")

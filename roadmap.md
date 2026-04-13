@@ -27,9 +27,9 @@ Pour chaque tâche ou sous-tâche technique, nous appliquerons strictement ce cy
 *Objectif : Maîtriser chaque service individuellement avant d'analyser les flux globaux.*
 
 #### 2.1 Service Auth
-- [ ] Analyser le CDC, le code et le `README.md` du service Auth
-- [ ] Configurer et lancer le service en isolation
-- [ ] Tester les endpoints clés (register, login, refresh, /me) via Swagger/Postman
+- [x] Analyser le CDC, le code et le `README.md` du service Auth
+- [ ] Configurer et lancer le service en isolation avec les services dont il dépend à partir du script deploy_mvp
+- [ ] Tester les endpoints clés (register, login, refresh, /me) via Swagger
 - [ ] Rédiger un guide d'utilisation simple `GUIDE_AUTH.md`
 
 #### 2.2 Service Users

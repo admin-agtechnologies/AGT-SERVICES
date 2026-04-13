@@ -9,13 +9,17 @@ from drf_spectacular.utils import extend_schema
 from apps.templates_mgr.models import Template, TemplateVersion
 from apps.notifications.pagination import StandardPagination
 
+from apps.notifications.serializers import (
+    TemplateCreateSerializer, TemplateUpdateSerializer, TemplatePreviewSerializer,
+)
+
 logger = logging.getLogger(__name__)
 
 
 class TemplateListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Templates"], summary="Creer un template")
+    @extend_schema(tags=["Templates"], summary="Creer un template", request=TemplateCreateSerializer)
     def post(self, request):
         data = request.data
         name, channel, body = data.get("name"), data.get("channel"), data.get("body", "")

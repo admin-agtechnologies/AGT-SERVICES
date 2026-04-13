@@ -9,13 +9,15 @@ from drf_spectacular.utils import extend_schema
 from apps.campaigns.models import Campaign, CampaignRecipient
 from apps.notifications.pagination import StandardPagination
 
+from apps.notifications.serializers import CampaignCreateSerializer
+
 logger = logging.getLogger(__name__)
 
 
 class CampaignListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Campaigns"], summary="Creer une campagne")
+    @extend_schema(tags=["Campaigns"], summary="Creer une campagne", request=CampaignCreateSerializer)
     def post(self, request):
         from apps.templates_mgr.models import Template
         from workers.tasks import process_campaign_task

@@ -58,7 +58,7 @@ class HealthCheckView(APIView):
 class UserListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Profile"], summary="Provisioning profil (par Auth)")
+    @extend_schema(tags=["Profile"], summary="Provisioning profil (par Auth)", request=UserProfileCreateSerializer)
     def post(self, request):
         """POST /users - Provisioning (appele par Auth apres inscription)."""
         serializer = UserProfileCreateSerializer(data=request.data)
@@ -122,7 +122,7 @@ class UserDetailView(APIView):
         ProfileCacheService.set(str(user_id), data)
         return Response(data)
 
-    @extend_schema(tags=["Profile"], summary="Mise a jour profil (email/phone read-only)")
+    @extend_schema(tags=["Profile"], summary="Mise a jour profil (email/phone read-only)", request=UserProfileUpdateSerializer)
     def put(self, request, user_id):
         """PUT /users/{id} - email/phone NON modifiables (CDC v2.1)."""
         try:
@@ -262,7 +262,7 @@ class UserPermanentDeleteView(APIView):
 class UserPhotoView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Profile"], summary="Mise a jour photo profil")
+    @extend_schema(tags=["Profile"], summary="Mise a jour photo profil", request=PhotoUpdateSerializer)
     def put(self, request, user_id):
         try:
             user = UserProfile.objects.get(id=user_id)
@@ -322,7 +322,7 @@ class UserStatsView(APIView):
 class StatusSyncView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Sync"], summary="Sync statut depuis Auth")
+    @extend_schema(tags=["Sync"], summary="Sync statut depuis Auth", request=StatusSyncSerializer)
     def post(self, request):
         serializer = StatusSyncSerializer(data=request.data)
         if not serializer.is_valid():
@@ -351,7 +351,7 @@ class StatusSyncView(APIView):
 class CredentialsSyncView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Sync"], summary="Sync email/phone depuis Auth")
+    @extend_schema(tags=["Sync"], summary="Sync email/phone depuis Auth", request=CredentialsSyncSerializer)
     def post(self, request):
         serializer = CredentialsSyncSerializer(data=request.data)
         if not serializer.is_valid():
@@ -383,7 +383,7 @@ class CredentialsSyncView(APIView):
 class AddressListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Addresses"], summary="Ajouter une adresse")
+    @extend_schema(tags=["Addresses"], summary="Ajouter une adresse", request=AddressCreateSerializer)
     def post(self, request, user_id):
         try:
             user = UserProfile.objects.get(id=user_id)
@@ -413,7 +413,7 @@ class AddressListCreateView(APIView):
 class AddressDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Addresses"], summary="Modifier une adresse")
+    @extend_schema(tags=["Addresses"], summary="Modifier une adresse", request=AddressUpdateSerializer)
     def put(self, request, user_id, address_id):
         try:
             address = Address.objects.get(id=address_id, user_id=user_id)

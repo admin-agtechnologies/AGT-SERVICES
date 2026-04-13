@@ -15,6 +15,11 @@ from apps.notifications.models import (
 from apps.notifications.pagination import StandardPagination
 from apps.notifications.services import UserResolverService, PreferenceService, IdempotencyService
 
+from apps.notifications.serializers import (
+    SendNotificationSerializer, SendBulkNotificationSerializer,
+    PreferenceUpdateSerializer, ChannelConfigUpdateSerializer,
+)
+
 logger = logging.getLogger(__name__)
 VALID_CHANNELS = [c.value for c in ChannelChoice]
 VALID_CATEGORIES = [c.value for c in CategoryChoice]
@@ -53,7 +58,7 @@ class HealthCheckView(APIView):
 class SendNotificationView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Send"], summary="Envoi mono ou multi-canal")
+    @extend_schema(tags=["Send"], summary="Envoi mono ou multi-canal", request=SendNotificationSerializer)
     def post(self, request):
         from workers.tasks import send_notification_task
         from apps.templates_mgr.models import Template
@@ -111,7 +116,7 @@ class SendNotificationView(APIView):
 class SendBulkNotificationView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Send"], summary="Envoi en masse (max 100)")
+    @extend_schema(tags=["Send"], summary="Envoi en masse (max 100)", request=SendBulkNotificationSerializer)
     def post(self, request):
         from workers.tasks import send_notification_task
         from apps.templates_mgr.models import Template
@@ -165,7 +170,7 @@ class PreferenceView(APIView):
             return Response({"channels": {"email": True, "sms": True, "push": True, "whatsapp": True, "in_app": True},
                              "categories": {"transactional": True, "marketing": False, "security": True}})
 
-    @extend_schema(tags=["Preferences"], summary="Modifier les preferences")
+    @extend_schema(tags=["Preferences"], summary="Modifier les preferences", request=PreferenceUpdateSerializer)
     def put(self, request, user_id):
         platform_id = str(getattr(request.user, "platform_id", "") or "")
         pref, _ = UserPreference.objects.get_or_create(user_id=user_id, platform_id=platform_id)
@@ -271,7 +276,7 @@ class ChannelConfigView(APIView):
         config = PlatformChannelConfig.get_for_platform(str(platform_id))
         return Response({"platform_id": str(platform_id), "priority_order": config.priority_order, "fallback_enabled": config.fallback_enabled})
 
-    @extend_schema(tags=["Config"], summary="Modifier config canaux")
+    @extend_schema(tags=["Config"], summary="Modifier config canaux", request=ChannelConfigUpdateSerializer)
     def put(self, request, platform_id):
         config, _ = PlatformChannelConfig.objects.get_or_create(platform_id=platform_id, defaults={"priority_order": PlatformChannelConfig.DEFAULT_ORDER})
         if "priority_order" in request.data:
