@@ -305,7 +305,7 @@ Pour déléguer le travail sur un service à un membre de l'équipe :
 3. Précisez-lui le service sur lequel travailler
 4. Demandez-lui de fournir à Claude :
    - Ce prompt
-   - Le fichier `_scan_output/context.md` (contexte complet du projet)
+   - Le fichier `_scan_output/context.md` (contexte complet du projet) à scanner à partir du script scanner.ps1 ou scanner.sh
    - Le Handoff Report de la session précédente si disponible
 5. À la fin de chaque session, récupérez le Handoff Report et commitez
 
