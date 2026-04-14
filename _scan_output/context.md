@@ -30,7 +30,6 @@
 \reset_mvp.ps1
 \reset_mvp.sh
 \roadmap.md
-\run.py
 \scanner.ps1
 \standards.md
 \test.txt
@@ -454,11 +453,10 @@
 
 ## FILES
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docker-compose.infra.yml (2.64 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\hanover_report.md (5.91 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\hanover_report.md (3.9 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\notes.md (2.06 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\README.md (10.49 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\roadmap.md (4.43 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\run.py (6.27 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\standards.md (11.65 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\test.txt (3.87 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\todo.md (15.57 KB)
@@ -477,12 +475,12 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\pagination.py (0.47 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\permissions.py (0.63 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\serializers.py (4.51 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\services.py (9.57 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\services.py (10.72 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\swagger.py (9.01 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\urls.py (4.07 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\utils.py (1.6 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\views_admin.py (16.12 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\views_auth.py (17.26 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\views_auth.py (17.48 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\views_sessions.py (16.41 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\management\__init__.py (0 KB)
@@ -545,7 +543,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\package.json (0.29 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\README.md (1.94 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\server.js (2.48 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env (3.49 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env (3.7 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env.example (3.49 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\CDC_v1.0.md (2.6 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\docker-compose.yml (5.26 KB)
@@ -562,12 +560,12 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\devices\urls.py (0.35 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\devices\views.py (2.28 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\devices\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\authentication.py (1.66 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\authentication.py (1.92 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\exceptions.py (0.53 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\models.py (6.43 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\pagination.py (0.44 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\serializers.py (5.28 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\services.py (1.68 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\services.py (3.57 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\urls.py (1.49 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\views.py (13.47 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\notifications\__init__.py (0 KB)
@@ -578,13 +576,13 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\templates_mgr\views.py (5.55 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\apps\templates_mgr\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\common\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\celery.py (0.22 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\settings.py (4.93 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\celery.py (0.3 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\settings.py (5.09 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\settings_test.py (1.04 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\urls.py (0.62 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\wsgi.py (0.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\config\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\providers\providers.py (5.79 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\providers\providers.py (5.61 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\providers\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\workers\tasks.py (6.15 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\workers\__init__.py (0 KB)
@@ -751,7 +749,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\init_session.md (0.63 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\sync.md (0.76 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\t.md (3.24 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\_scan_output\context.md (1459.22 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\_scan_output\context.md (1476.47 KB)
 
 ## CODE CONTEXT
 
@@ -847,128 +845,81 @@ networks:
 
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\hanover_report.md =====
 `
-# HANDOFF REPORT â€” Session du 13 avril 2026
+# HANDOFF REPORT â€” Session du 14 avril 2026
 
 > **Projet** : AG Technologies â€” Architecture Microservices
-> **Pair-programmer** : Claude (Anthropic)
 > **MÃ©thode** : 5 Ã©tapes (Analyse â†’ Fonctionnel â†’ Technique â†’ ImplÃ©mentation â†’ Tests)
 
 ---
 
 ## 1. CE QUI A Ã‰TÃ‰ COMPLÃ‰TÃ‰ AVEC SUCCÃˆS
 
-### 1.1 Scripts de dÃ©ploiement (Phase A â€” TERMINÃ‰ âœ…)
+### Flux MVP complet â€” TERMINÃ‰ âœ…
 
-CrÃ©Ã©/corrigÃ© **8 scripts** : `deploy_mvp.ps1/.sh`, `deploy_all.ps1/.sh`, `reset_mvp.ps1/.sh`, `reset_all.ps1/.sh`. Flag `--clean` pour purger les volumes. Filtrage par pattern AGT. Health check avec retry. RenommÃ© fichier infra. RetirÃ© MÃ©dia du MVP. RÃ©solu le conflit labels rÃ©seau `agt_network` via `external: true`.
+Le flux `register â†’ email de vÃ©rification dans Mailpit` fonctionne end-to-end.
 
-### 1.2 Corrections Swagger (TERMINÃ‰ âœ…)
+**Fixes appliquÃ©s :**
 
-AjoutÃ© `COMPONENT_SPLIT_REQUEST`, `APPEND_COMPONENTS`, `SECURITY`, `SWAGGER_UI_SETTINGS` dans Users et Notification. CrÃ©Ã© serializers Notification. CorrigÃ© S2S Auth avec `S2STokenRequestSerializer`.
+1. `agt-auth/apps/authentication/services.py` â€” Ajout header `Authorization Bearer` S2S sur tous les appels inter-services (`NotificationClient`, `UsersServiceClient`). Auto-gÃ©nÃ©ration du token S2S interne avec le bon `platform_id`.
+2. `agt-auth/apps/authentication/views_auth.py` â€” Ajout `user_id` et `platform_id` dans `recipient` sur tous les appels `NotificationClient.send`.
+3. `agt-notification/apps/notifications/authentication.py` â€” Fix `platform_id` pour tokens S2S (lecture depuis `sub`) + ajout `is_authenticated = True`.
+4. `agt-notification/apps/notifications/services.py` â€” Ajout `S2STokenService` (obtention et cache Redis du token S2S via `POST /auth/s2s/token`) + `UserResolverService` mis Ã  jour pour utiliser ce token.
+5. `agt-notification/config/settings.py` â€” DÃ©claration des variables `S2S_AUTH_URL`, `S2S_CLIENT_ID`, `S2S_CLIENT_SECRET`.
+6. `agt-notification/.env` â€” Ajout credentials S2S de la plateforme `agt-notification` (crÃ©Ã©e dans Auth).
+7. `agt-notification/providers/providers.py` â€” SMTP (Mailpit) en premier dans `PROVIDER_MAP`, suppression du double `PROVIDER_MAP` qui Ã©crasait le bon.
+8. `agt-notification/config/celery.py` â€” Ajout `app.conf.imports = ["workers.tasks"]` pour dÃ©couvrir la tÃ¢che `notifications.send_notification`.
+9. `agt-auth/apps/authentication/services.py` â€” Suppression de `first_name` et `last_name` vides dans le payload `provision_user` (causait 400 sur Users).
 
-**âš ï¸ VÃ©rifier** : `fix_swagger_notif.py` a Ã©tÃ© gÃ©nÃ©rÃ©, confirmer que les POST Notification ont bien un body aprÃ¨s rebuild.
+### Plateformes S2S crÃ©Ã©es dans Auth
 
-### 1.3 Migrations (TERMINÃ‰ âœ… â€” Ã  relancer aprÃ¨s reset --clean)
-
-```bash
-# Auth (depuis agt-auth/)
-docker compose exec auth python manage.py makemigrations authentication platforms
-docker compose exec auth python manage.py migrate
-# Users (depuis agt-users/)
-docker compose exec users python manage.py makemigrations users roles documents
-docker compose exec users python manage.py migrate
-# Notification (depuis agt-notification/)
-docker compose exec notification python manage.py makemigrations notifications templates_mgr campaigns devices
-docker compose exec notification python manage.py migrate
-```
-
-### 1.4 Configuration flux MVP (FAIT â€” Ã  refaire aprÃ¨s reset --clean)
-
-**Plateforme** : `POST /auth/platforms` avec `X-Admin-API-Key: change-me-admin-api-key-very-secret`
-```json
-{"name": "AGT Market", "slug": "agt-market", "allowed_auth_methods": ["email"]}
-```
-
-**Token S2S** : `POST /auth/s2s/token` avec `client_id` (platform UUID) + `client_secret`
-
-**4 templates** crÃ©Ã©s via `POST /templates` (Notification Swagger, Bearer S2S) :
-
-| Template | Canal | Variables clÃ©s |
+| Service | client_id | Statut |
 |---|---|---|
-| `auth_verify_email` | email | `verification_url`, `expires_in_minutes`, `platform_name` |
-| `auth_reset_password` | email | `reset_url`, `expires_in_minutes`, `platform_name` |
-| `auth_magic_link` | email | `magic_link_url`, `expires_in_minutes`, `platform_name` |
-| `auth_otp_sms` | sms | `otp_code`, `expires_in_minutes`, `platform_name` |
+| AGT Market | c87d50a1-e954-4249-ad3e-04e3f07271c7 | âœ… |
+| AGT Notification | d3aa237c-726e-4cae-b250-30db70357623 | âœ… |
 
-### 1.5 Script renommage container_name (GÃ‰NÃ‰RÃ‰ âœ… â€” Ã€ EXÃ‰CUTER)
-
-**ProblÃ¨me** : `container_name` avec underscores (`agt_users_service`) â†’ Django 4.2+ rejette car RFC 1034/1035 interdit les underscores dans les hostnames HTTP. Tous les appels inter-services (Auth â†’ Users, Auth â†’ Notification) Ã©chouent avec `DisallowedHost` / `400 Bad Request`.
-
-**Script** : `fix_container_names.py` â€” search-and-replace `agt_xxx_yyy` â†’ `agt-xxx-yyy` dans ~15 fichiers. Le rÃ©seau `agt_network` n'est PAS touchÃ©.
+### RÃ¨gle architecture Ã©tablie
+> Tout microservice qui appelle d'autres services doit avoir sa propre plateforme S2S dans Auth. Les plateformes S2S des microservices doivent Ãªtre crÃ©Ã©es **avant** les plateformes applicatives au premier dÃ©marrage.
 
 ---
 
-## 2. PROCHAINE ACTION IMMÃ‰DIATE
+## 2. Ã‰TAT ACTUEL
 
-```powershell
-# 1. ExÃ©cuter le renommage
-python fix_container_names.py
-
-# 2. Tout arrÃªter et rebuild
-docker stop $(docker ps -aq)
-docker rm $(docker ps -aq)
-.\reset_mvp.ps1 --clean
-
-# 3. Migrations (depuis chaque dossier service)
-cd agt-auth && docker compose exec auth python manage.py makemigrations authentication platforms && docker compose exec auth python manage.py migrate && cd ..
-cd agt-users && docker compose exec users python manage.py makemigrations users roles documents && docker compose exec users python manage.py migrate && cd ..
-cd agt-notification && docker compose exec notification python manage.py makemigrations notifications templates_mgr campaigns devices && docker compose exec notification python manage.py migrate && cd ..
-
-# 4. RecrÃ©er plateforme (Swagger Auth â†’ POST /auth/platforms)
-# 5. Obtenir token S2S (POST /auth/s2s/token)
-# 6. RecrÃ©er 4 templates (Swagger Notification â†’ POST /templates Ã— 4)
-# 7. Tester inscription (POST /auth/register)
-# 8. VÃ©rifier Mailpit (http://localhost:8025) + profil Users
-```
+Tous les containers MVP sont up et healthy :
+- Auth : http://localhost:7000
+- Users : http://localhost:7001
+- Notification : http://localhost:7002
+- Mailpit : http://localhost:8025
+- RabbitMQ : http://localhost:15672
 
 ---
 
-## 3. PLAN GLOBAL RESTANT
+## 3. PROCHAINE Ã‰TAPE IMMÃ‰DIATE
 
-| Phase | Description | Statut |
+**Phase B â€” Finaliser `GETTING_STARTED.md`**
+
+Le guide doit documenter le flux de dÃ©marrage complet incluant :
+1. Lancer `deploy_mvp.ps1`
+2. CrÃ©er les plateformes S2S des microservices (agt-notification, etc.)
+3. CrÃ©er les plateformes applicatives (AGT Market, etc.)
+4. CrÃ©er les templates de notification
+5. Tester le flux register â†’ email
+
+---
+
+## 4. POINTS D'ATTENTION
+
+| # | Point | Statut |
 |---|---|---|
-| **B** | GETTING_STARTED.md (progressif, ensemble) | ðŸ”„ En cours |
-| **C** | Guides par service (Auth, Users, Notification) | â¬œ |
-| **D** | IntÃ©gration Subscription â†’ Payment â†’ Wallet â†’ Search â†’ Chatbot | â¬œ |
-| **E** | GÃ©nÃ©ration vrais services (MÃ©dia, Chat, Geoloc) | â¬œ |
-| **F** | Backend template | â¬œ |
+| 1 | Token S2S Notification expire aprÃ¨s 1h â†’ renouvelÃ© automatiquement via Redis | âœ… GÃ©rÃ© |
+| 2 | `first_name`/`last_name` non envoyÃ©s au provisioning Users | âœ… CorrigÃ© |
+| 3 | `PROVIDER_MAP` dupliquÃ© dans providers.py | âœ… CorrigÃ© |
+| 4 | Variables S2S manquantes dans settings.py Notification | âœ… CorrigÃ© |
+| 5 | Body de l'email = template brut sans rendu Jinja2 | âš ï¸ Ã€ amÃ©liorer |
+| 6 | `run.py` (fix container_names) â€” encodage UTF-16 sur certains fichiers | âš ï¸ Connu |
 
 ---
 
-## 4. DIFFICULTÃ‰S ET RÃ‰SOLUTIONS
-
-| # | ProblÃ¨me | RÃ©solution | Statut |
-|---|---|---|---|
-| 1 | Scripts reset tuaient tout Docker | Filtrage par pattern AGT | âœ… |
-| 2 | Conflit labels rÃ©seau | `external: true` + crÃ©ation idempotente | âœ… |
-| 3 | Swagger sans Authorize/body | `APPEND_COMPONENTS` + serializers | âœ… |
-| 4 | S2S Swagger : additionalProp | Serializers dÃ©diÃ©s | âœ… |
-| 5 | Tables inexistantes | makemigrations + migrate | âœ… |
-| 6 | RFC 1034 underscores hostnames | `fix_container_names.py` | âœ… GÃ©nÃ©rÃ© |
-| 7 | Docker Desktop ne s'ouvre plus | Non bloquant, CLI fonctionne | âš ï¸ Connu |
-
----
-
-## 5. CONVENTIONS
-
-- **MÃ©thode 5 Ã©tapes** : Analyse â†’ Fonctionnel â†’ Technique â†’ ImplÃ©mentation â†’ Tests
-- **CDC > Code**
-- **GETTING_STARTED.md construit ensemble**, pas gÃ©nÃ©rÃ© en bloc
-- **Solutions propres pour la prod**, pas de quick fixes
-- **Scripts sÃ©parÃ©s** : deploy_mvp, deploy_all, reset_mvp, reset_all
-
----
-
-## 6. PORTS
+## 5. PORTS
 
 | Service | Port | Swagger |
 |---|---|---|
@@ -976,11 +927,11 @@ cd agt-notification && docker compose exec notification python manage.py makemig
 | Users | 7001 | http://localhost:7001/api/v1/docs/ |
 | Notification | 7002 | http://localhost:7002/api/v1/docs/ |
 | Mailpit | 8025 | http://localhost:8025 |
-| RabbitMQ | 15672 | http://localhost:15672 (agt_rabbit / agt_rabbit_password) |
+| RabbitMQ | 15672 | http://localhost:15672 |
 
 ---
 
-*AG Technologies â€” Handoff Report â€” 13 avril 2026*
+*AG Technologies â€” Handoff Report â€” 14 avril 2026*
 `
 ===== FILE END =====
 
@@ -1237,210 +1188,6 @@ Pour chaque tÃ¢che ou sous-tÃ¢che technique, nous appliquerons strictement c
 - [ ] RÃ©diger la documentation du gÃ©nÃ©rateur (`README.md` du template)
 - [ ] Tester en gÃ©nÃ©rant un nouveau service de test Ã  partir de zÃ©ro
 - [ ] **Commit : `feat(template): create backend scaffolding generator`**
-`
-===== FILE END =====
-
-===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\run.py =====
-`
-"""
-AGT Technologies â€” Renommage container_name : underscores â†’ tirets
-Corrige le problÃ¨me Django RFC 1034/1035 (underscores invalides dans les hostnames HTTP).
-
-Remplace agt_xxx_yyy â†’ agt-xxx-yyy dans tous les fichiers impactÃ©s.
-Le rÃ©seau agt_network n'est PAS touchÃ© (ce n'est pas un hostname HTTP).
-
-Usage : python fix_container_names.py (depuis la racine AGT-SERVICES/)
-"""
-import os
-import re
-
-# =============================================================================
-# Mapping des renommages
-# =============================================================================
-
-# Format : (ancien, nouveau)
-# On ne touche PAS Ã  agt_network (rÃ©seau Docker, pas un hostname HTTP)
-CONTAINER_RENAMES = [
-    # Infra
-    ("agt_gateway", "agt-gateway"),
-    ("agt_rabbitmq", "agt-rabbitmq"),
-    ("agt_mailpit", "agt-mailpit"),
-    ("agt_elasticsearch", "agt-elasticsearch"),
-    # Auth
-    ("agt_auth_service", "agt-auth-service"),
-    ("agt_auth_db", "agt-auth-db"),
-    ("agt_auth_redis", "agt-auth-redis"),
-    ("agt_auth_dev", "agt-auth-dev"),
-    # Users
-    ("agt_users_service", "agt-users-service"),
-    ("agt_users_db", "agt-users-db"),
-    ("agt_users_redis", "agt-users-redis"),
-    ("agt_users_dev", "agt-users-dev"),
-    # Notification
-    ("agt_notif_service", "agt-notif-service"),
-    ("agt_notif_db", "agt-notif-db"),
-    ("agt_notif_redis", "agt-notif-redis"),
-    ("agt_notif_worker", "agt-notif-worker"),
-    ("agt_notif_beat", "agt-notif-beat"),
-    ("agt_notif_dev", "agt-notif-dev"),
-    # Subscription
-    ("agt_sub_service", "agt-sub-service"),
-    ("agt_sub_db", "agt-sub-db"),
-    ("agt_sub_redis", "agt-sub-redis"),
-    ("agt_sub_dev", "agt-sub-dev"),
-    # Payment
-    ("agt_pay_service", "agt-pay-service"),
-    ("agt_pay_db", "agt-pay-db"),
-    ("agt_pay_redis", "agt-pay-redis"),
-    ("agt_pay_dev", "agt-pay-dev"),
-    # Wallet
-    ("agt_wallet_service", "agt-wallet-service"),
-    ("agt_wallet_db", "agt-wallet-db"),
-    ("agt_wallet_redis", "agt-wallet-redis"),
-    ("agt_wallet_dev", "agt-wallet-dev"),
-    # Search
-    ("agt_search_service", "agt-search-service"),
-    ("agt_search_db", "agt-search-db"),
-    ("agt_search_redis", "agt-search-redis"),
-    ("agt_search_dev", "agt-search-dev"),
-    # Chatbot
-    ("agt_chatbot_service", "agt-chatbot-service"),
-    ("agt_chatbot_db", "agt-chatbot-db"),
-    ("agt_chatbot_redis", "agt-chatbot-redis"),
-    ("agt_chatbot_dev", "agt-chatbot-dev"),
-    # Simulateurs
-    ("agt_media_simulator", "agt-media-simulator"),
-    ("agt_media_service", "agt-media-service"),
-    ("agt_chat_simulator", "agt-chat-simulator"),
-    ("agt_chat_service", "agt-chat-service"),
-    ("agt_geoloc_simulator", "agt-geoloc-simulator"),
-    ("agt_geoloc_service", "agt-geoloc-service"),
-]
-
-# Fichiers Ã  traiter
-FILES_TO_PROCESS = [
-    # Infra
-    "docker-compose.infra.yml",
-    # Auth
-    "agt-auth/docker-compose.yml",
-    "agt-auth/.env.example",
-    "agt-auth/.env",
-    # Users
-    "agt-users/docker-compose.yml",
-    "agt-users/.env.example",
-    "agt-users/.env",
-    # Notification
-    "agt-notification/docker-compose.yml",
-    "agt-notification/.env.example",
-    "agt-notification/.env",
-    # Subscription
-    "agt-subscription/docker-compose.yml",
-    "agt-subscription/.env.example",
-    "agt-subscription/.env",
-    # Payment
-    "agt-payment/docker-compose.yml",
-    "agt-payment/.env.example",
-    "agt-payment/.env",
-    # Wallet
-    "agt-wallet/docker-compose.yml",
-    "agt-wallet/.env.example",
-    "agt-wallet/.env",
-    # Search
-    "agt-search/docker-compose.yml",
-    "agt-search/.env.example",
-    "agt-search/.env",
-    # Chatbot
-    "agt-chatbot/docker-compose.yml",
-    "agt-chatbot/.env.example",
-    "agt-chatbot/.env",
-    # Simulateurs
-    "agt-media/docker-compose.yml",
-    "agt-chat/docker-compose.yml",
-    "agt-geoloc/docker-compose.yml",
-    # Scripts deploy/reset
-    "deploy_mvp.ps1",
-    "deploy_mvp.sh",
-    "deploy_all.ps1",
-    "deploy_all.sh",
-    "reset_mvp.ps1",
-    "reset_mvp.sh",
-    "reset_all.ps1",
-    "reset_all.sh",
-    # Gateway
-    "gateway/nginx.conf",
-    # Standards & docs
-    "STANDARDS.md",
-    "standards.md",
-    "README.md",
-]
-
-
-def process_file(filepath):
-    """Applique tous les renommages sur un fichier."""
-    if not os.path.exists(filepath):
-        return None  # Fichier absent, on skip silencieusement
-
-    with open(filepath, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    original = content
-    changes = []
-
-    for old_name, new_name in CONTAINER_RENAMES:
-        if old_name in content:
-            count = content.count(old_name)
-            content = content.replace(old_name, new_name)
-            changes.append(f"    {old_name} â†’ {new_name} ({count}x)")
-
-    if content != original:
-        with open(filepath, "w", encoding="utf-8") as f:
-            f.write(content)
-        return changes
-    return []
-
-
-def main():
-    print("=" * 60)
-    print("AGT Technologies â€” Fix container_name (underscores â†’ tirets)")
-    print("=" * 60)
-
-    if not os.path.isdir("agt-auth"):
-        print("[ERROR] Lancez ce script depuis la racine AGT-SERVICES/")
-        return
-
-    total_files = 0
-    total_changes = 0
-
-    for filepath in FILES_TO_PROCESS:
-        result = process_file(filepath)
-        if result is None:
-            continue  # Fichier absent
-        elif len(result) > 0:
-            total_files += 1
-            total_changes += len(result)
-            print(f"\n  [OK] {filepath}")
-            for change in result:
-                print(change)
-        # Fichier existant mais rien Ã  changer = on ne dit rien
-
-    # RÃ©sumÃ©
-    print(f"\n{'=' * 60}")
-    print(f"  {total_files} fichier(s) modifiÃ©(s), {total_changes} remplacement(s)")
-    print(f"{'=' * 60}")
-    print()
-    print("Prochaines Ã©tapes :")
-    print("  1. docker stop $(docker ps -aq) && docker rm $(docker ps -aq)")
-    print("  2. .\\reset_mvp.ps1 --clean")
-    print("  3. Relancer les migrations (makemigrations + migrate)")
-    print("  4. RecrÃ©er la plateforme + templates")
-    print("  5. Tester l'inscription")
-    print()
-    print("IMPORTANT : le rÃ©seau agt_network n'a PAS Ã©tÃ© touchÃ©.")
-    print("=" * 60)
-
-
-if __name__ == "__main__":
-    main()
 `
 ===== FILE END =====
 
@@ -3793,9 +3540,15 @@ class SessionService:
         RefreshToken.objects.filter(session=session).update(is_revoked=True)
         session.is_active = False
         session.save(update_fields=["is_active"])
-
-
 class NotificationClient:
+    @staticmethod
+    def _get_s2s_token(platform_id: str = "agt-auth-internal") -> str:
+        """GÃ©nÃ¨re un token S2S signÃ© avec le platform_id de la plateforme appelante."""
+        return JWTService.generate_s2s_token(
+            platform_id=platform_id,
+            platform_name="agt-auth"
+        )
+
     @staticmethod
     def send(notification_type: str, recipient: dict, template: str, data: dict, priority: str = "normal") -> bool:
         import httpx
@@ -3803,22 +3556,40 @@ class NotificationClient:
         if not url:
             logger.warning("NOTIFICATION_SERVICE_URL non configurÃ© â€” notification ignorÃ©e.")
             return False
+
+        user_id = recipient.get("user_id")
+        platform_id = recipient.get("platform_id", "agt-auth-internal")
+
+        if not user_id:
+            logger.warning("NotificationClient.send: user_id manquant dans recipient.")
+            return False
+
         try:
+            # Le token S2S doit porter le platform_id pour que Notification resolve le bon template
+            token = NotificationClient._get_s2s_token(platform_id=platform_id)
             resp = httpx.post(f"{url}/notifications/send", json={
-                "type": notification_type,
-                "recipient": recipient,
-                "template": template,
+                "user_id": user_id,
+                "channels": ["email"],
+                "template_name": template,
                 "data": data,
-                "priority": priority,
                 "idempotency_key": str(uuid.uuid4()),
-            }, timeout=5.0)
+            }, headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
+            if resp.status_code >= 400:
+                logger.error(f"Notification Ã©chouÃ©e ({resp.status_code}): {resp.text}")
             return resp.status_code < 400
         except Exception as e:
             logger.error(f"Notification Ã©chouÃ©e: {e}")
             return False
 
-
 class UsersServiceClient:
+    @staticmethod
+    def _get_s2s_token() -> str:
+        """GÃ©nÃ¨re un token S2S interne signÃ© par Auth pour appeler les autres services."""
+        return JWTService.generate_s2s_token(
+            platform_id="agt-auth-internal",
+            platform_name="agt-auth"
+        )
+
     @staticmethod
     def provision_user(auth_user_id: str, email: str = None, phone: str = None, first_name: str = "", last_name: str = "") -> bool:
         import httpx
@@ -3827,13 +3598,12 @@ class UsersServiceClient:
             logger.warning("USERS_SERVICE_URL non configurÃ© â€” provisioning ignorÃ©.")
             return False
         try:
+            token = UsersServiceClient._get_s2s_token()
             resp = httpx.post(f"{url}/users", json={
-                "auth_user_id": auth_user_id,
-                "first_name": first_name,
-                "last_name": last_name,
-                "email": email,
-                "phone": phone,
-            }, timeout=5.0)
+    "auth_user_id": auth_user_id,
+    "email": email,
+    "phone": phone,
+}, headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
             return resp.status_code < 400
         except Exception as e:
             logger.error(f"Provisioning Users Ã©chouÃ©: {e}")
@@ -3841,16 +3611,16 @@ class UsersServiceClient:
 
     @staticmethod
     def sync_status(auth_user_id: str, status: str) -> bool:
-        """Pousse un changement de statut vers Users (CDC: POST /api/v1/users/status-sync)."""
         import httpx
         url = getattr(settings, "USERS_SERVICE_URL", "")
         if not url:
             return False
         try:
+            token = UsersServiceClient._get_s2s_token()
             resp = httpx.post(f"{url}/users/status-sync", json={
                 "auth_user_id": auth_user_id,
                 "status": status,
-            }, timeout=5.0)
+            }, headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
             return resp.status_code < 400
         except Exception as e:
             logger.error(f"Status sync Users Ã©chouÃ©: {e}")
@@ -3858,7 +3628,6 @@ class UsersServiceClient:
 
     @staticmethod
     def sync_credentials(auth_user_id: str, email: str = None, phone: str = None) -> bool:
-        """Pousse un changement email/phone vers Users (CDC: POST /api/v1/users/sync)."""
         import httpx
         url = getattr(settings, "USERS_SERVICE_URL", "")
         if not url:
@@ -3869,12 +3638,13 @@ class UsersServiceClient:
         if phone:
             payload["phone"] = phone
         try:
-            resp = httpx.post(f"{url}/users/sync", json=payload, timeout=5.0)
+            token = UsersServiceClient._get_s2s_token()
+            resp = httpx.post(f"{url}/users/sync", json=payload,
+                              headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
             return resp.status_code < 400
         except Exception as e:
             logger.error(f"Credentials sync Users Ã©chouÃ©: {e}")
             return False
-
 `
 ===== FILE END =====
 
@@ -4714,7 +4484,7 @@ class RegisterView(APIView):
 
             NotificationClient.send(
                 notification_type="email_verification",
-                recipient={"email": user.email, "phone": None},
+                recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
                 template="auth_verify_email",
                 data={"verification_url": f"{request.scheme}://{request.get_host()}/api/v1/auth/verify-email?token={raw_token}", "expires_in_minutes": 60, "platform_name": platform.name},
                 priority="high",
@@ -4742,7 +4512,7 @@ class RegisterView(APIView):
 
             NotificationClient.send(
                 notification_type="phone_otp",
-                recipient={"email": None, "phone": user.phone},
+                recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
                 template="auth_otp_sms",
                 data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60, "platform_name": platform.name},
                 priority="critical",
@@ -4914,7 +4684,7 @@ class LoginPhoneView(APIView):
 
         NotificationClient.send(
             notification_type="phone_otp",
-            recipient={"email": None, "phone": user.phone},
+            recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
             template="auth_otp_sms",
             data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60},
             priority="critical",
@@ -4961,7 +4731,7 @@ class MagicLinkRequestView(APIView):
 
         NotificationClient.send(
             notification_type="magic_link",
-            recipient={"email": user.email, "phone": None},
+            recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
             template="auth_magic_link",
             data={"magic_link_url": callback_url, "expires_in_minutes": settings.MAGIC_LINK_TTL // 60, "platform_name": platform.name},
             priority="high",
@@ -8219,6 +7989,10 @@ FCM_SERVER_KEY=
 
 # â”€â”€â”€ CORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
+# --- S2S Auth credentials ---
+S2S_CLIENT_ID=d3aa237c-726e-4cae-b250-30db70357623
+S2S_CLIENT_SECRET=eCBoxzf4bS0b6sUNiaiQ0uo-AqQskW4-zQtAr0Aty3nwioRiXDHzHJEn_XTmW_Tk
+S2S_AUTH_URL=http://agt-auth-service:7000/api/v1
 `
 ===== FILE END =====
 
@@ -9043,9 +8817,14 @@ class JWTPayload:
         self.payload = payload
         self.id = payload.get("sub")
         self.auth_user_id = payload.get("sub")
-        self.platform_id = payload.get("platform_id")
+        # Pour les tokens S2S, platform_id est dans "sub"
+        # Pour les tokens user, platform_id est dans "platform_id"
         self.is_authenticated = True
-
+        token_type = payload.get("type", "")
+        if token_type == "s2s":
+            self.platform_id = payload.get("sub")
+        else:
+            self.platform_id = payload.get("platform_id")
 
 class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
@@ -9406,7 +9185,53 @@ from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
+class S2STokenService:
+    """
+    GÃ¨re l'obtention et le renouvellement du token S2S de Notification.
+    Le token est mis en cache Redis avec une marge de sÃ©curitÃ© avant expiration.
+    """
+    CACHE_KEY = "notif_s2s_token"
+    MARGIN_SECONDS = 60  # renouveler 60s avant expiration
 
+    @staticmethod
+    def get_token() -> str:
+        # 1. VÃ©rifier le cache Redis
+        cached = cache.get(S2STokenService.CACHE_KEY)
+        if cached:
+            return cached
+
+        # 2. Appeler Auth pour obtenir un nouveau token
+        auth_url = getattr(settings, "S2S_AUTH_URL", "")
+        client_id = getattr(settings, "S2S_CLIENT_ID", "")
+        client_secret = getattr(settings, "S2S_CLIENT_SECRET", "")
+
+        if not all([auth_url, client_id, client_secret]):
+            logger.error("S2S credentials manquants dans la config Notification.")
+            return ""
+
+        try:
+            resp = httpx.post(f"{auth_url}/auth/s2s/token", json={
+                "client_id": client_id,
+                "client_secret": client_secret,
+            }, timeout=5.0)
+
+            if resp.status_code != 200:
+                logger.error(f"S2S token refresh Ã©chouÃ© ({resp.status_code}): {resp.text}")
+                return ""
+
+            data = resp.json()
+            token = data.get("access_token", "")
+            expires_in = data.get("expires_in", 3600)
+
+            # Mettre en cache avec marge de sÃ©curitÃ©
+            ttl = max(expires_in - S2STokenService.MARGIN_SECONDS, 60)
+            cache.set(S2STokenService.CACHE_KEY, token, timeout=ttl)
+
+            return token
+
+        except Exception as e:
+            logger.error(f"S2S token refresh exception: {e}")
+            return ""
 class UserResolverService:
     @staticmethod
     def get_user(user_id):
@@ -9414,19 +9239,23 @@ class UserResolverService:
         cached = cache.get(cache_key)
         if cached:
             return cached
+
         url = getattr(settings, "USERS_SERVICE_URL", "")
         if not url:
             return None
+
         try:
-            resp = httpx.get(f"{url}/users/by-auth/{user_id}", timeout=5.0)
+            token = S2STokenService.get_token()
+            headers = {"Authorization": f"Bearer {token}"} if token else {}
+            resp = httpx.get(f"{url}/users/by-auth/{user_id}", headers=headers, timeout=5.0)
             if resp.status_code == 200:
                 data = resp.json()
                 cache.set(cache_key, data, timeout=getattr(settings, "USER_CACHE_TTL", 300))
                 return data
+            logger.warning(f"UserResolver: {resp.status_code} pour user {user_id}")
         except Exception as e:
             logger.error(f"User resolve failed: {e}")
         return None
-
 
 class PreferenceService:
     @staticmethod
@@ -10162,10 +9991,11 @@ import os
 from celery import Celery
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+
 app = Celery("agt_notification")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
-
+app.conf.imports = ["workers.tasks"]  # import explicite du module workers
 `
 ===== FILE END =====
 
@@ -10221,6 +10051,9 @@ def _read_key(path):
 AUTH_PUBLIC_KEY = _read_key(config("AUTH_SERVICE_PUBLIC_KEY_PATH", default=str(BASE_DIR / "keys/auth_public.pem")))
 AUTH_SERVICE_URL = config("AUTH_SERVICE_URL", default="")
 USERS_SERVICE_URL = config("USERS_SERVICE_URL", default="")
+S2S_AUTH_URL = config("S2S_AUTH_URL", default="")
+S2S_CLIENT_ID = config("S2S_CLIENT_ID", default="")
+S2S_CLIENT_SECRET = config("S2S_CLIENT_SECRET", default="")
 USER_CACHE_TTL = config("USER_CACHE_TTL", default=300, cast=int)
 IDEMPOTENCY_TTL = config("IDEMPOTENCY_TTL", default=86400, cast=int)
 
@@ -10474,19 +10307,21 @@ class WhatsAppProvider(BaseProvider):
         return False
 
 class SMTPProvider(BaseProvider):
-    """Envoie des emails via le serveur SMTP local (Mailpit)."""
+    """Envoie des emails via le serveur SMTP local (Mailpit en dev)."""
     name = "smtp_local"
 
     def send(self, notification, user_data):
+        from django.conf import settings
         email = (user_data or {}).get("email")
-        if not email: return False
+        if not email:
+            return False
         try:
             send_mail(
                 subject=notification.subject or "Notification",
-                message=notification.body, # Version texte brut
+                message=notification.body,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[email],
-                html_message=notification.body, # Version HTML
+                html_message=notification.body,
                 fail_silently=False,
             )
             return True
@@ -10507,14 +10342,6 @@ class ConsoleSMSProvider(BaseProvider):
 PROVIDER_MAP = {
     "email": [SMTPProvider(), SendGridProvider()], # SMTP en premier pour le dev
     "sms": [ConsoleSMSProvider(), TwilioProvider()], # Console en premier
-    "push": [FCMProvider()],
-    "whatsapp": [WhatsAppProvider()],
-    "in_app": [],
-}
-
-PROVIDER_MAP = {
-    "email": [SendGridProvider(), MailgunProvider()],
-    "sms": [TwilioProvider(), VonageProvider()],
     "push": [FCMProvider()],
     "whatsapp": [WhatsAppProvider()],
     "in_app": [],
@@ -35994,5 +35821,5 @@ DÃ¨s que tu me donnes ton feu vert, nous pouvons officiellement dÃ©marrer la
 ===== FILE END =====
 
 ## SUMMARY
-- Total files: 299
+- Total files: 298
 
