@@ -122,19 +122,21 @@ class WhatsAppProvider(BaseProvider):
         return False
 
 class SMTPProvider(BaseProvider):
-    """Envoie des emails via le serveur SMTP local (Mailpit)."""
+    """Envoie des emails via le serveur SMTP local (Mailpit en dev)."""
     name = "smtp_local"
 
     def send(self, notification, user_data):
+        from django.conf import settings
         email = (user_data or {}).get("email")
-        if not email: return False
+        if not email:
+            return False
         try:
             send_mail(
                 subject=notification.subject or "Notification",
-                message=notification.body, # Version texte brut
+                message=notification.body,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[email],
-                html_message=notification.body, # Version HTML
+                html_message=notification.body,
                 fail_silently=False,
             )
             return True
@@ -155,14 +157,6 @@ class ConsoleSMSProvider(BaseProvider):
 PROVIDER_MAP = {
     "email": [SMTPProvider(), SendGridProvider()], # SMTP en premier pour le dev
     "sms": [ConsoleSMSProvider(), TwilioProvider()], # Console en premier
-    "push": [FCMProvider()],
-    "whatsapp": [WhatsAppProvider()],
-    "in_app": [],
-}
-
-PROVIDER_MAP = {
-    "email": [SendGridProvider(), MailgunProvider()],
-    "sms": [TwilioProvider(), VonageProvider()],
     "push": [FCMProvider()],
     "whatsapp": [WhatsAppProvider()],
     "in_app": [],

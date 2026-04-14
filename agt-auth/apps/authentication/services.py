@@ -177,9 +177,15 @@ class SessionService:
         RefreshToken.objects.filter(session=session).update(is_revoked=True)
         session.is_active = False
         session.save(update_fields=["is_active"])
-
-
 class NotificationClient:
+    @staticmethod
+    def _get_s2s_token(platform_id: str = "agt-auth-internal") -> str:
+        """Génère un token S2S signé avec le platform_id de la plateforme appelante."""
+        return JWTService.generate_s2s_token(
+            platform_id=platform_id,
+            platform_name="agt-auth"
+        )
+
     @staticmethod
     def send(notification_type: str, recipient: dict, template: str, data: dict, priority: str = "normal") -> bool:
         import httpx
@@ -187,22 +193,40 @@ class NotificationClient:
         if not url:
             logger.warning("NOTIFICATION_SERVICE_URL non configuré — notification ignorée.")
             return False
+
+        user_id = recipient.get("user_id")
+        platform_id = recipient.get("platform_id", "agt-auth-internal")
+
+        if not user_id:
+            logger.warning("NotificationClient.send: user_id manquant dans recipient.")
+            return False
+
         try:
+            # Le token S2S doit porter le platform_id pour que Notification resolve le bon template
+            token = NotificationClient._get_s2s_token(platform_id=platform_id)
             resp = httpx.post(f"{url}/notifications/send", json={
-                "type": notification_type,
-                "recipient": recipient,
-                "template": template,
+                "user_id": user_id,
+                "channels": ["email"],
+                "template_name": template,
                 "data": data,
-                "priority": priority,
                 "idempotency_key": str(uuid.uuid4()),
-            }, timeout=5.0)
+            }, headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
+            if resp.status_code >= 400:
+                logger.error(f"Notification échouée ({resp.status_code}): {resp.text}")
             return resp.status_code < 400
         except Exception as e:
             logger.error(f"Notification échouée: {e}")
             return False
 
-
 class UsersServiceClient:
+    @staticmethod
+    def _get_s2s_token() -> str:
+        """Génère un token S2S interne signé par Auth pour appeler les autres services."""
+        return JWTService.generate_s2s_token(
+            platform_id="agt-auth-internal",
+            platform_name="agt-auth"
+        )
+
     @staticmethod
     def provision_user(auth_user_id: str, email: str = None, phone: str = None, first_name: str = "", last_name: str = "") -> bool:
         import httpx
@@ -211,13 +235,12 @@ class UsersServiceClient:
             logger.warning("USERS_SERVICE_URL non configuré — provisioning ignoré.")
             return False
         try:
+            token = UsersServiceClient._get_s2s_token()
             resp = httpx.post(f"{url}/users", json={
-                "auth_user_id": auth_user_id,
-                "first_name": first_name,
-                "last_name": last_name,
-                "email": email,
-                "phone": phone,
-            }, timeout=5.0)
+    "auth_user_id": auth_user_id,
+    "email": email,
+    "phone": phone,
+}, headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
             return resp.status_code < 400
         except Exception as e:
             logger.error(f"Provisioning Users échoué: {e}")
@@ -225,16 +248,16 @@ class UsersServiceClient:
 
     @staticmethod
     def sync_status(auth_user_id: str, status: str) -> bool:
-        """Pousse un changement de statut vers Users (CDC: POST /api/v1/users/status-sync)."""
         import httpx
         url = getattr(settings, "USERS_SERVICE_URL", "")
         if not url:
             return False
         try:
+            token = UsersServiceClient._get_s2s_token()
             resp = httpx.post(f"{url}/users/status-sync", json={
                 "auth_user_id": auth_user_id,
                 "status": status,
-            }, timeout=5.0)
+            }, headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
             return resp.status_code < 400
         except Exception as e:
             logger.error(f"Status sync Users échoué: {e}")
@@ -242,7 +265,6 @@ class UsersServiceClient:
 
     @staticmethod
     def sync_credentials(auth_user_id: str, email: str = None, phone: str = None) -> bool:
-        """Pousse un changement email/phone vers Users (CDC: POST /api/v1/users/sync)."""
         import httpx
         url = getattr(settings, "USERS_SERVICE_URL", "")
         if not url:
@@ -253,7 +275,9 @@ class UsersServiceClient:
         if phone:
             payload["phone"] = phone
         try:
-            resp = httpx.post(f"{url}/users/sync", json=payload, timeout=5.0)
+            token = UsersServiceClient._get_s2s_token()
+            resp = httpx.post(f"{url}/users/sync", json=payload,
+                              headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
             return resp.status_code < 400
         except Exception as e:
             logger.error(f"Credentials sync Users échoué: {e}")

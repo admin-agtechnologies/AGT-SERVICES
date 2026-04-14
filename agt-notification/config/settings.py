@@ -48,6 +48,9 @@ def _read_key(path):
 AUTH_PUBLIC_KEY = _read_key(config("AUTH_SERVICE_PUBLIC_KEY_PATH", default=str(BASE_DIR / "keys/auth_public.pem")))
 AUTH_SERVICE_URL = config("AUTH_SERVICE_URL", default="")
 USERS_SERVICE_URL = config("USERS_SERVICE_URL", default="")
+S2S_AUTH_URL = config("S2S_AUTH_URL", default="")
+S2S_CLIENT_ID = config("S2S_CLIENT_ID", default="")
+S2S_CLIENT_SECRET = config("S2S_CLIENT_SECRET", default="")
 USER_CACHE_TTL = config("USER_CACHE_TTL", default=300, cast=int)
 IDEMPOTENCY_TTL = config("IDEMPOTENCY_TTL", default=86400, cast=int)
 

@@ -108,7 +108,7 @@ class RegisterView(APIView):
 
             NotificationClient.send(
                 notification_type="email_verification",
-                recipient={"email": user.email, "phone": None},
+                recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
                 template="auth_verify_email",
                 data={"verification_url": f"{request.scheme}://{request.get_host()}/api/v1/auth/verify-email?token={raw_token}", "expires_in_minutes": 60, "platform_name": platform.name},
                 priority="high",
@@ -136,7 +136,7 @@ class RegisterView(APIView):
 
             NotificationClient.send(
                 notification_type="phone_otp",
-                recipient={"email": None, "phone": user.phone},
+                recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
                 template="auth_otp_sms",
                 data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60, "platform_name": platform.name},
                 priority="critical",
@@ -308,7 +308,7 @@ class LoginPhoneView(APIView):
 
         NotificationClient.send(
             notification_type="phone_otp",
-            recipient={"email": None, "phone": user.phone},
+            recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
             template="auth_otp_sms",
             data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60},
             priority="critical",
@@ -355,7 +355,7 @@ class MagicLinkRequestView(APIView):
 
         NotificationClient.send(
             notification_type="magic_link",
-            recipient={"email": user.email, "phone": None},
+            recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
             template="auth_magic_link",
             data={"magic_link_url": callback_url, "expires_in_minutes": settings.MAGIC_LINK_TTL // 60, "platform_name": platform.name},
             priority="high",

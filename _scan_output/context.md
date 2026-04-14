@@ -22,6 +22,7 @@
 \deploy_mvp.ps1
 \deploy_mvp.sh
 \docker-compose.infra.yml
+\hanover_report.md
 \notes.md
 \README.md
 \reset_all.ps1
@@ -29,6 +30,7 @@
 \reset_mvp.ps1
 \reset_mvp.sh
 \roadmap.md
+\run.py
 \scanner.ps1
 \standards.md
 \test.txt
@@ -451,17 +453,19 @@
 `
 
 ## FILES
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docker-compose.infra.yml (2.67 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docker-compose.infra.yml (2.64 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\hanover_report.md (5.91 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\notes.md (2.06 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\README.md (10.49 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\roadmap.md (4.43 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\run.py (6.27 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\standards.md (11.65 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\test.txt (1.06 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\test.txt (3.87 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\todo.md (15.57 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\.env (4.37 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\.env.example (4.37 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\.env (4.43 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\.env.example (4.43 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\CDC_v1.0.md (3.63 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\docker-compose.yml (3.47 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\docker-compose.yml (3.58 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\Dockerfile (0.81 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\manage.py (0.48 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\README.md (4.99 KB)
@@ -472,9 +476,9 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\models.py (9.44 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\pagination.py (0.47 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\permissions.py (0.63 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\serializers.py (4.16 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\serializers.py (4.51 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\services.py (9.57 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\swagger.py (9.06 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\swagger.py (9.01 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\urls.py (4.07 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\utils.py (1.6 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\views_admin.py (16.12 KB)
@@ -506,7 +510,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chat\server.js (3.49 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\.env.example (0.28 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\CDC_v1.0.md (0.62 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\docker-compose.yml (2.07 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\docker-compose.yml (2.15 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\Dockerfile (0.52 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\manage.py (0.25 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-chatbot\README.md (0.9 KB)
@@ -541,10 +545,10 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\package.json (0.29 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\README.md (1.94 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\server.js (2.48 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env (3.43 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env.example (3.43 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env (3.49 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env.example (3.49 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\CDC_v1.0.md (2.6 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\docker-compose.yml (5.1 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\docker-compose.yml (5.26 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\Dockerfile (0.58 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\manage.py (0.26 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\README.md (3.5 KB)
@@ -587,7 +591,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-payment\.env (0.29 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-payment\.env.example (0.29 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-payment\CDC_v1.0.md (0.94 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-payment\docker-compose.yml (2.11 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-payment\docker-compose.yml (2.19 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-payment\Dockerfile (0.58 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-payment\manage.py (0.25 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-payment\README.md (1.16 KB)
@@ -613,7 +617,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-search\.env (0.32 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-search\.env.example (0.32 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-search\CDC_v1.0.md (0.66 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-search\docker-compose.yml (2.75 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-search\docker-compose.yml (2.85 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-search\Dockerfile (0.58 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-search\manage.py (0.25 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-search\README.md (1.03 KB)
@@ -637,7 +641,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\.env (0.41 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\.env.example (0.41 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\CDC_v1.0.md (0.66 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\docker-compose.yml (2.17 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\docker-compose.yml (2.25 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\Dockerfile (0.58 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\manage.py (0.26 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\README.md (1.25 KB)
@@ -663,10 +667,10 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\config\urls.py (0.46 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\config\wsgi.py (0.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-subscription\config\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\.env (1.25 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\.env.example (1.25 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\.env (1.29 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\.env.example (1.29 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\CDC_v1.0.md (4.21 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\docker-compose.yml (3.31 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\docker-compose.yml (3.42 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\Dockerfile (0.81 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\manage.py (0.26 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\README.md (3.7 KB)
@@ -698,10 +702,10 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\config\urls.py (0.58 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\config\wsgi.py (0.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-users\config\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\.env (0.27 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\.env.example (0.27 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\.env (0.28 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\.env.example (0.28 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\CDC_v1.0.md (0.68 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\docker-compose.yml (2.13 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\docker-compose.yml (2.21 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\Dockerfile (0.58 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\manage.py (0.25 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\README.md (1.29 KB)
@@ -747,7 +751,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\init_session.md (0.63 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\sync.md (0.76 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\t.md (3.24 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\_scan_output\context.md (1424.61 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\_scan_output\context.md (1459.22 KB)
 
 ## CODE CONTEXT
 
@@ -765,7 +769,7 @@ services:
   # â”€â”€ API Gateway (Nginx reverse proxy) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   gateway:
     image: nginx:alpine
-    container_name: agt_gateway
+    container_name: agt-gateway
     restart: unless-stopped
     ports:
       - "80:80"
@@ -779,7 +783,7 @@ services:
   # â”€â”€ RabbitMQ (Message Broker partagÃ©) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
-    container_name: agt_rabbitmq
+    container_name: agt-rabbitmq
     restart: unless-stopped
     environment:
       RABBITMQ_DEFAULT_USER: agt_rabbit
@@ -800,7 +804,7 @@ services:
   # â”€â”€ Elasticsearch (Search Service) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
-    container_name: agt_elasticsearch
+    container_name: agt-elasticsearch
     restart: unless-stopped
     environment:
       - discovery.type=single-node
@@ -821,7 +825,7 @@ services:
   # â”€â”€ Mailpit (SMTP local pour dev) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   mailpit:
     image: axllent/mailpit
-    container_name: agt_mailpit
+    container_name: agt-mailpit
     restart: unless-stopped
     ports:
       - "8025:8025"
@@ -837,8 +841,146 @@ volumes:
 
 networks:
   agt_network:
-    name: agt_network
-    driver: bridge
+    external: true
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\hanover_report.md =====
+`
+# HANDOFF REPORT â€” Session du 13 avril 2026
+
+> **Projet** : AG Technologies â€” Architecture Microservices
+> **Pair-programmer** : Claude (Anthropic)
+> **MÃ©thode** : 5 Ã©tapes (Analyse â†’ Fonctionnel â†’ Technique â†’ ImplÃ©mentation â†’ Tests)
+
+---
+
+## 1. CE QUI A Ã‰TÃ‰ COMPLÃ‰TÃ‰ AVEC SUCCÃˆS
+
+### 1.1 Scripts de dÃ©ploiement (Phase A â€” TERMINÃ‰ âœ…)
+
+CrÃ©Ã©/corrigÃ© **8 scripts** : `deploy_mvp.ps1/.sh`, `deploy_all.ps1/.sh`, `reset_mvp.ps1/.sh`, `reset_all.ps1/.sh`. Flag `--clean` pour purger les volumes. Filtrage par pattern AGT. Health check avec retry. RenommÃ© fichier infra. RetirÃ© MÃ©dia du MVP. RÃ©solu le conflit labels rÃ©seau `agt_network` via `external: true`.
+
+### 1.2 Corrections Swagger (TERMINÃ‰ âœ…)
+
+AjoutÃ© `COMPONENT_SPLIT_REQUEST`, `APPEND_COMPONENTS`, `SECURITY`, `SWAGGER_UI_SETTINGS` dans Users et Notification. CrÃ©Ã© serializers Notification. CorrigÃ© S2S Auth avec `S2STokenRequestSerializer`.
+
+**âš ï¸ VÃ©rifier** : `fix_swagger_notif.py` a Ã©tÃ© gÃ©nÃ©rÃ©, confirmer que les POST Notification ont bien un body aprÃ¨s rebuild.
+
+### 1.3 Migrations (TERMINÃ‰ âœ… â€” Ã  relancer aprÃ¨s reset --clean)
+
+```bash
+# Auth (depuis agt-auth/)
+docker compose exec auth python manage.py makemigrations authentication platforms
+docker compose exec auth python manage.py migrate
+# Users (depuis agt-users/)
+docker compose exec users python manage.py makemigrations users roles documents
+docker compose exec users python manage.py migrate
+# Notification (depuis agt-notification/)
+docker compose exec notification python manage.py makemigrations notifications templates_mgr campaigns devices
+docker compose exec notification python manage.py migrate
+```
+
+### 1.4 Configuration flux MVP (FAIT â€” Ã  refaire aprÃ¨s reset --clean)
+
+**Plateforme** : `POST /auth/platforms` avec `X-Admin-API-Key: change-me-admin-api-key-very-secret`
+```json
+{"name": "AGT Market", "slug": "agt-market", "allowed_auth_methods": ["email"]}
+```
+
+**Token S2S** : `POST /auth/s2s/token` avec `client_id` (platform UUID) + `client_secret`
+
+**4 templates** crÃ©Ã©s via `POST /templates` (Notification Swagger, Bearer S2S) :
+
+| Template | Canal | Variables clÃ©s |
+|---|---|---|
+| `auth_verify_email` | email | `verification_url`, `expires_in_minutes`, `platform_name` |
+| `auth_reset_password` | email | `reset_url`, `expires_in_minutes`, `platform_name` |
+| `auth_magic_link` | email | `magic_link_url`, `expires_in_minutes`, `platform_name` |
+| `auth_otp_sms` | sms | `otp_code`, `expires_in_minutes`, `platform_name` |
+
+### 1.5 Script renommage container_name (GÃ‰NÃ‰RÃ‰ âœ… â€” Ã€ EXÃ‰CUTER)
+
+**ProblÃ¨me** : `container_name` avec underscores (`agt_users_service`) â†’ Django 4.2+ rejette car RFC 1034/1035 interdit les underscores dans les hostnames HTTP. Tous les appels inter-services (Auth â†’ Users, Auth â†’ Notification) Ã©chouent avec `DisallowedHost` / `400 Bad Request`.
+
+**Script** : `fix_container_names.py` â€” search-and-replace `agt_xxx_yyy` â†’ `agt-xxx-yyy` dans ~15 fichiers. Le rÃ©seau `agt_network` n'est PAS touchÃ©.
+
+---
+
+## 2. PROCHAINE ACTION IMMÃ‰DIATE
+
+```powershell
+# 1. ExÃ©cuter le renommage
+python fix_container_names.py
+
+# 2. Tout arrÃªter et rebuild
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+.\reset_mvp.ps1 --clean
+
+# 3. Migrations (depuis chaque dossier service)
+cd agt-auth && docker compose exec auth python manage.py makemigrations authentication platforms && docker compose exec auth python manage.py migrate && cd ..
+cd agt-users && docker compose exec users python manage.py makemigrations users roles documents && docker compose exec users python manage.py migrate && cd ..
+cd agt-notification && docker compose exec notification python manage.py makemigrations notifications templates_mgr campaigns devices && docker compose exec notification python manage.py migrate && cd ..
+
+# 4. RecrÃ©er plateforme (Swagger Auth â†’ POST /auth/platforms)
+# 5. Obtenir token S2S (POST /auth/s2s/token)
+# 6. RecrÃ©er 4 templates (Swagger Notification â†’ POST /templates Ã— 4)
+# 7. Tester inscription (POST /auth/register)
+# 8. VÃ©rifier Mailpit (http://localhost:8025) + profil Users
+```
+
+---
+
+## 3. PLAN GLOBAL RESTANT
+
+| Phase | Description | Statut |
+|---|---|---|
+| **B** | GETTING_STARTED.md (progressif, ensemble) | ðŸ”„ En cours |
+| **C** | Guides par service (Auth, Users, Notification) | â¬œ |
+| **D** | IntÃ©gration Subscription â†’ Payment â†’ Wallet â†’ Search â†’ Chatbot | â¬œ |
+| **E** | GÃ©nÃ©ration vrais services (MÃ©dia, Chat, Geoloc) | â¬œ |
+| **F** | Backend template | â¬œ |
+
+---
+
+## 4. DIFFICULTÃ‰S ET RÃ‰SOLUTIONS
+
+| # | ProblÃ¨me | RÃ©solution | Statut |
+|---|---|---|---|
+| 1 | Scripts reset tuaient tout Docker | Filtrage par pattern AGT | âœ… |
+| 2 | Conflit labels rÃ©seau | `external: true` + crÃ©ation idempotente | âœ… |
+| 3 | Swagger sans Authorize/body | `APPEND_COMPONENTS` + serializers | âœ… |
+| 4 | S2S Swagger : additionalProp | Serializers dÃ©diÃ©s | âœ… |
+| 5 | Tables inexistantes | makemigrations + migrate | âœ… |
+| 6 | RFC 1034 underscores hostnames | `fix_container_names.py` | âœ… GÃ©nÃ©rÃ© |
+| 7 | Docker Desktop ne s'ouvre plus | Non bloquant, CLI fonctionne | âš ï¸ Connu |
+
+---
+
+## 5. CONVENTIONS
+
+- **MÃ©thode 5 Ã©tapes** : Analyse â†’ Fonctionnel â†’ Technique â†’ ImplÃ©mentation â†’ Tests
+- **CDC > Code**
+- **GETTING_STARTED.md construit ensemble**, pas gÃ©nÃ©rÃ© en bloc
+- **Solutions propres pour la prod**, pas de quick fixes
+- **Scripts sÃ©parÃ©s** : deploy_mvp, deploy_all, reset_mvp, reset_all
+
+---
+
+## 6. PORTS
+
+| Service | Port | Swagger |
+|---|---|---|
+| Auth | 7000 | http://localhost:7000/api/v1/docs/ |
+| Users | 7001 | http://localhost:7001/api/v1/docs/ |
+| Notification | 7002 | http://localhost:7002/api/v1/docs/ |
+| Mailpit | 8025 | http://localhost:8025 |
+| RabbitMQ | 15672 | http://localhost:15672 (agt_rabbit / agt_rabbit_password) |
+
+---
+
+*AG Technologies â€” Handoff Report â€” 13 avril 2026*
 `
 ===== FILE END =====
 
@@ -1095,6 +1237,210 @@ Pour chaque tÃ¢che ou sous-tÃ¢che technique, nous appliquerons strictement c
 - [ ] RÃ©diger la documentation du gÃ©nÃ©rateur (`README.md` du template)
 - [ ] Tester en gÃ©nÃ©rant un nouveau service de test Ã  partir de zÃ©ro
 - [ ] **Commit : `feat(template): create backend scaffolding generator`**
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\run.py =====
+`
+"""
+AGT Technologies â€” Renommage container_name : underscores â†’ tirets
+Corrige le problÃ¨me Django RFC 1034/1035 (underscores invalides dans les hostnames HTTP).
+
+Remplace agt_xxx_yyy â†’ agt-xxx-yyy dans tous les fichiers impactÃ©s.
+Le rÃ©seau agt_network n'est PAS touchÃ© (ce n'est pas un hostname HTTP).
+
+Usage : python fix_container_names.py (depuis la racine AGT-SERVICES/)
+"""
+import os
+import re
+
+# =============================================================================
+# Mapping des renommages
+# =============================================================================
+
+# Format : (ancien, nouveau)
+# On ne touche PAS Ã  agt_network (rÃ©seau Docker, pas un hostname HTTP)
+CONTAINER_RENAMES = [
+    # Infra
+    ("agt_gateway", "agt-gateway"),
+    ("agt_rabbitmq", "agt-rabbitmq"),
+    ("agt_mailpit", "agt-mailpit"),
+    ("agt_elasticsearch", "agt-elasticsearch"),
+    # Auth
+    ("agt_auth_service", "agt-auth-service"),
+    ("agt_auth_db", "agt-auth-db"),
+    ("agt_auth_redis", "agt-auth-redis"),
+    ("agt_auth_dev", "agt-auth-dev"),
+    # Users
+    ("agt_users_service", "agt-users-service"),
+    ("agt_users_db", "agt-users-db"),
+    ("agt_users_redis", "agt-users-redis"),
+    ("agt_users_dev", "agt-users-dev"),
+    # Notification
+    ("agt_notif_service", "agt-notif-service"),
+    ("agt_notif_db", "agt-notif-db"),
+    ("agt_notif_redis", "agt-notif-redis"),
+    ("agt_notif_worker", "agt-notif-worker"),
+    ("agt_notif_beat", "agt-notif-beat"),
+    ("agt_notif_dev", "agt-notif-dev"),
+    # Subscription
+    ("agt_sub_service", "agt-sub-service"),
+    ("agt_sub_db", "agt-sub-db"),
+    ("agt_sub_redis", "agt-sub-redis"),
+    ("agt_sub_dev", "agt-sub-dev"),
+    # Payment
+    ("agt_pay_service", "agt-pay-service"),
+    ("agt_pay_db", "agt-pay-db"),
+    ("agt_pay_redis", "agt-pay-redis"),
+    ("agt_pay_dev", "agt-pay-dev"),
+    # Wallet
+    ("agt_wallet_service", "agt-wallet-service"),
+    ("agt_wallet_db", "agt-wallet-db"),
+    ("agt_wallet_redis", "agt-wallet-redis"),
+    ("agt_wallet_dev", "agt-wallet-dev"),
+    # Search
+    ("agt_search_service", "agt-search-service"),
+    ("agt_search_db", "agt-search-db"),
+    ("agt_search_redis", "agt-search-redis"),
+    ("agt_search_dev", "agt-search-dev"),
+    # Chatbot
+    ("agt_chatbot_service", "agt-chatbot-service"),
+    ("agt_chatbot_db", "agt-chatbot-db"),
+    ("agt_chatbot_redis", "agt-chatbot-redis"),
+    ("agt_chatbot_dev", "agt-chatbot-dev"),
+    # Simulateurs
+    ("agt_media_simulator", "agt-media-simulator"),
+    ("agt_media_service", "agt-media-service"),
+    ("agt_chat_simulator", "agt-chat-simulator"),
+    ("agt_chat_service", "agt-chat-service"),
+    ("agt_geoloc_simulator", "agt-geoloc-simulator"),
+    ("agt_geoloc_service", "agt-geoloc-service"),
+]
+
+# Fichiers Ã  traiter
+FILES_TO_PROCESS = [
+    # Infra
+    "docker-compose.infra.yml",
+    # Auth
+    "agt-auth/docker-compose.yml",
+    "agt-auth/.env.example",
+    "agt-auth/.env",
+    # Users
+    "agt-users/docker-compose.yml",
+    "agt-users/.env.example",
+    "agt-users/.env",
+    # Notification
+    "agt-notification/docker-compose.yml",
+    "agt-notification/.env.example",
+    "agt-notification/.env",
+    # Subscription
+    "agt-subscription/docker-compose.yml",
+    "agt-subscription/.env.example",
+    "agt-subscription/.env",
+    # Payment
+    "agt-payment/docker-compose.yml",
+    "agt-payment/.env.example",
+    "agt-payment/.env",
+    # Wallet
+    "agt-wallet/docker-compose.yml",
+    "agt-wallet/.env.example",
+    "agt-wallet/.env",
+    # Search
+    "agt-search/docker-compose.yml",
+    "agt-search/.env.example",
+    "agt-search/.env",
+    # Chatbot
+    "agt-chatbot/docker-compose.yml",
+    "agt-chatbot/.env.example",
+    "agt-chatbot/.env",
+    # Simulateurs
+    "agt-media/docker-compose.yml",
+    "agt-chat/docker-compose.yml",
+    "agt-geoloc/docker-compose.yml",
+    # Scripts deploy/reset
+    "deploy_mvp.ps1",
+    "deploy_mvp.sh",
+    "deploy_all.ps1",
+    "deploy_all.sh",
+    "reset_mvp.ps1",
+    "reset_mvp.sh",
+    "reset_all.ps1",
+    "reset_all.sh",
+    # Gateway
+    "gateway/nginx.conf",
+    # Standards & docs
+    "STANDARDS.md",
+    "standards.md",
+    "README.md",
+]
+
+
+def process_file(filepath):
+    """Applique tous les renommages sur un fichier."""
+    if not os.path.exists(filepath):
+        return None  # Fichier absent, on skip silencieusement
+
+    with open(filepath, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    original = content
+    changes = []
+
+    for old_name, new_name in CONTAINER_RENAMES:
+        if old_name in content:
+            count = content.count(old_name)
+            content = content.replace(old_name, new_name)
+            changes.append(f"    {old_name} â†’ {new_name} ({count}x)")
+
+    if content != original:
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(content)
+        return changes
+    return []
+
+
+def main():
+    print("=" * 60)
+    print("AGT Technologies â€” Fix container_name (underscores â†’ tirets)")
+    print("=" * 60)
+
+    if not os.path.isdir("agt-auth"):
+        print("[ERROR] Lancez ce script depuis la racine AGT-SERVICES/")
+        return
+
+    total_files = 0
+    total_changes = 0
+
+    for filepath in FILES_TO_PROCESS:
+        result = process_file(filepath)
+        if result is None:
+            continue  # Fichier absent
+        elif len(result) > 0:
+            total_files += 1
+            total_changes += len(result)
+            print(f"\n  [OK] {filepath}")
+            for change in result:
+                print(change)
+        # Fichier existant mais rien Ã  changer = on ne dit rien
+
+    # RÃ©sumÃ©
+    print(f"\n{'=' * 60}")
+    print(f"  {total_files} fichier(s) modifiÃ©(s), {total_changes} remplacement(s)")
+    print(f"{'=' * 60}")
+    print()
+    print("Prochaines Ã©tapes :")
+    print("  1. docker stop $(docker ps -aq) && docker rm $(docker ps -aq)")
+    print("  2. .\\reset_mvp.ps1 --clean")
+    print("  3. Relancer les migrations (makemigrations + migrate)")
+    print("  4. RecrÃ©er la plateforme + templates")
+    print("  5. Tester l'inscription")
+    print()
+    print("IMPORTANT : le rÃ©seau agt_network n'a PAS Ã©tÃ© touchÃ©.")
+    print("=" * 60)
+
+
+if __name__ == "__main__":
+    main()
 `
 ===== FILE END =====
 
@@ -1565,43 +1911,111 @@ Chaque service DOIT avoir un README contenant :
 plateforme:
 request:
 {
-  "name": "Platform Test",
-  "slug": "platform-test",
-  "allowed_auth_methods": ["email", "phone", "magic_link"],
-  "allowed_redirect_urls": ["http://localhost:3000/callback"]
+  "name": "AGT Market",
+  "slug": "agt-market",
+  "allowed_auth_methods": ["email"]
 }
-response:{
-  "id": "7a81bc81-e434-4f34-a8eb-9e849bca20de",
-  "name": "Platform Test",
-  "slug": "platform-test",
+response:
+{
+  "id": "a41810df-08db-4fb5-b3f5-2c892bb7ca1b",
+  "name": "AGT Market",
+  "slug": "agt-market",
   "allowed_auth_methods": [
-    "email",
-    "phone",
-    "magic_link"
+    "email"
   ],
-  "allowed_redirect_urls": [
-    "http://localhost:3000/callback"
-  ],
+  "allowed_redirect_urls": [],
   "is_active": true,
-  "created_at": "2026-04-13T04:16:37.831026-05:00",
-  "updated_at": "2026-04-13T04:16:37.831489-05:00",
-  "client_secret": "_mbVqFjsZvm5PpfG4Klc5aGd8L_SvFQCAPiuA04_bZDB3VooRNUYXer_O1_LI-Of"
+  "created_at": "2026-04-13T11:02:40.129725-05:00",
+  "updated_at": "2026-04-13T11:02:40.131361-05:00",
+  "client_secret": "7go2IZWIoFOMqiiTnWOgMor65CaNHaLzLS95DWtW-N_fAYz5Lk6Zua5UOkJS42hP"
 }
+
+obtain s2s token:
+request:
+{
+  "client_id": "a41810df-08db-4fb5-b3f5-2c892bb7ca1b",
+  "client_secret": "7go2IZWIoFOMqiiTnWOgMor65CaNHaLzLS95DWtW-N_fAYz5Lk6Zua5UOkJS42hP"
+}
+response:
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhNDE4MTBkZi0wOGRiLTRmYjUtYjNmNS0yYzg5MmJiN2NhMWIiLCJ0eXBlIjoiczJzIiwic2VydmljZV9uYW1lIjoiQUdUIE1hcmtldCIsImlzcyI6ImFndC1hdXRoIiwiYXVkIjoiYWd0LWVjb3N5c3RlbSIsImlhdCI6MTc3NjA5Njg2MiwiZXhwIjoxNzc2MTAwNDYyLCJqdGkiOiIyMmM0NTIwYi0xMjhlLTRmNmEtODZmZC04OTg0MThiNTIyNDUifQ.gdfDwBq5cm_WdS_xELckn8lLO7hQY2VomZCdfVK-X4dOGilWzt1Ibvsv7r1l59D2Pw2MDpzgrAqommILtYgrWAw6BZP7qsuCIHhsfuV_1tFeIT0LXjfCxa1pmjrOdQkpBNiiyi9DdIIPzfhhxhZRhYgaQuATTDAjAksmoA1Wejiagl9l25oPxDbzkqEVsPtuKnAq390MCH2qTOpj_MpvSCDseQovSBnnqzu_F5FW9NwzdakBuOTtkAx6CCGTU7u9wGqG85I6IY8IazrNOEv8TAuGS6CCvyG2ThcDkPZPW0phaAA7p4rAbflTuyCJezaYL218BZ3gl6eSkPI5Gj2x1w",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "service_name": "AGT Market"
+}
+
+create a template:
+request1:
+{
+  "name": "auth_verify_email",
+  "channel": "email",
+  "category": "security",
+  "subject": "VÃ©rifiez votre email - {{ platform_name }}",
+  "body": "<h1>Bienvenue sur {{ platform_name }}</h1><p>Cliquez sur le lien ci-dessous pour vÃ©rifier votre adresse email :</p><p><a href='{{ verification_url }}'>VÃ©rifier mon email</a></p><p>Ce lien expire dans {{ expires_in_minutes }} minutes.</p>"
+}
+response1:
+{
+  "id": "c12de592-77ab-4c4e-b38a-34280b1407a0",
+  "name": "auth_verify_email",
+  "channel": "email"
+}
+request2:
+{
+  "name": "auth_reset_password",
+  "channel": "email",
+  "category": "security",
+  "subject": "RÃ©initialisez votre mot de passe - {{ platform_name }}",
+  "body": "<h1>RÃ©initialisation de mot de passe</h1><p>Cliquez sur le lien ci-dessous pour rÃ©initialiser votre mot de passe :</p><p><a href='{{ reset_url }}'>RÃ©initialiser</a></p><p>Ce lien expire dans {{ expires_in_minutes }} minutes.</p><p>Si vous n'avez pas demandÃ© cette rÃ©initialisation, ignorez cet email.</p>"
+}
+response2:
+{
+  "id": "380d149b-75c2-49a5-adfe-adc3b81a51b0",
+  "name": "auth_reset_password",
+  "channel": "email"
+}
+request3:
+{
+  "name": "auth_magic_link",
+  "channel": "email",
+  "category": "security",
+  "subject": "Votre lien de connexion - {{ platform_name }}",
+  "body": "<h1>Connexion Ã  {{ platform_name }}</h1><p>Cliquez sur le lien ci-dessous pour vous connecter :</p><p><a href='{{ magic_link_url }}'>Me connecter</a></p><p>Ce lien expire dans {{ expires_in_minutes }} minutes.</p><p>Si vous n'avez pas demandÃ© ce lien, ignorez cet email.</p>"
+}
+response3:
+{
+  "id": "7d010080-eae9-468d-ba44-9da91a74610a",
+  "name": "auth_magic_link",
+  "channel": "email"
+}
+request4:
+{
+  "name": "auth_otp_sms",
+  "channel": "sms",
+  "category": "security",
+  "body": "Votre code AGT {{ platform_name }} : {{ otp_code }}. Expire dans {{ expires_in_minutes }} min. Ne partagez jamais ce code."
+}
+response4:
+{
+  "id": "e909502b-49c7-4740-bb75-5603fdae17e7",
+  "name": "auth_otp_sms",
+  "channel": "sms"
+}
+
 
 register user:
 request:
 {
-  "email": "gabriel@agt.com",
-  "password": "Password123!",
+  "email": "gabriel@agt-test.com",
+  "password": "Test1234!",
   "method": "email"
 }
 response:
 {
-  "id": "d544ab7d-5abd-4bcd-a0ff-d66c1229c970",
-  "email": "gabriel@agt.com",
+  "id": "daadff7b-c368-4f89-95fe-e7a9105fa30f",
+  "email": "gabriel@agt-test.com",
   "email_verified": false,
   "registration_method": "email",
-  "registration_platform_id": "7a81bc81-e434-4f34-a8eb-9e849bca20de",
+  "registration_platform_id": "a41810df-08db-4fb5-b3f5-2c892bb7ca1b",
   "message": "Verification email sent"
 }
 `
@@ -2012,15 +2426,15 @@ response:
 # â”€â”€â”€ Django â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SECRET_KEY=change-me-in-production-use-a-long-random-string
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_auth_service
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt-auth-service
 
 # â”€â”€â”€ Base de donnÃ©es â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# Correction : l'hÃ´te est le container_name 'agt_auth_db'
-DATABASE_URL=postgresql://agt_user:agt_password@agt_auth_db:5432/agt_auth_db
+# Correction : l'hÃ´te est le container_name 'agt-auth-db'
+DATABASE_URL=postgresql://agt_user:agt_password@agt-auth-db:5432/agt-auth-db
 
 # â”€â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# Correction : l'hÃ´te est le container_name 'agt_auth_redis'
-REDIS_URL=redis://agt_auth_redis:6379/0
+# Correction : l'hÃ´te est le container_name 'agt-auth-redis'
+REDIS_URL=redis://agt-auth-redis:6379/0
 
 # â”€â”€â”€ JWT (RS256) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 JWT_PRIVATE_KEY_PATH=/app/keys/private.pem
@@ -2038,8 +2452,8 @@ ADMIN_API_KEY=change-me-admin-api-key-very-secret
 
 # â”€â”€â”€ Services inter-microservices â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Correction : Utilisation des container_names globaux
-NOTIFICATION_SERVICE_URL=http://agt_notif_service:7002/api/v1
-USERS_SERVICE_URL=http://agt_users_service:7001/api/v1
+NOTIFICATION_SERVICE_URL=http://agt-notif-service:7002/api/v1
+USERS_SERVICE_URL=http://agt-users-service:7001/api/v1
 
 # â”€â”€â”€ OAuth Google â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 GOOGLE_CLIENT_ID=your-google-client-id
@@ -2081,15 +2495,15 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
 # â”€â”€â”€ Django â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SECRET_KEY=change-me-in-production-use-a-long-random-string
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_auth_service
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt-auth-service
 
 # â”€â”€â”€ Base de donnÃ©es â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# Correction : l'hÃ´te est le container_name 'agt_auth_db'
-DATABASE_URL=postgresql://agt_user:agt_password@agt_auth_db:5432/agt_auth_db
+# Correction : l'hÃ´te est le container_name 'agt-auth-db'
+DATABASE_URL=postgresql://agt_user:agt_password@agt-auth-db:5432/agt-auth-db
 
 # â”€â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# Correction : l'hÃ´te est le container_name 'agt_auth_redis'
-REDIS_URL=redis://agt_auth_redis:6379/0
+# Correction : l'hÃ´te est le container_name 'agt-auth-redis'
+REDIS_URL=redis://agt-auth-redis:6379/0
 
 # â”€â”€â”€ JWT (RS256) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 JWT_PRIVATE_KEY_PATH=/app/keys/private.pem
@@ -2107,8 +2521,8 @@ ADMIN_API_KEY=change-me-admin-api-key-very-secret
 
 # â”€â”€â”€ Services inter-microservices â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Correction : Utilisation des container_names globaux
-NOTIFICATION_SERVICE_URL=http://agt_notif_service:7002/api/v1
-USERS_SERVICE_URL=http://agt_users_service:7001/api/v1
+NOTIFICATION_SERVICE_URL=http://agt-notif-service:7002/api/v1
+USERS_SERVICE_URL=http://agt-users-service:7001/api/v1
 
 # â”€â”€â”€ OAuth Google â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 GOOGLE_CLIENT_ID=your-google-client-id
@@ -2276,10 +2690,10 @@ services:
   # â”€â”€ PostgreSQL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   db:
     image: postgres:15-alpine
-    container_name: agt_auth_db
+    container_name: agt-auth-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: agt_auth_db
+      POSTGRES_DB: agt-auth-db
       POSTGRES_USER: agt_user
       POSTGRES_PASSWORD: agt_password
     volumes:
@@ -2287,7 +2701,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U agt_user -d agt_auth_db"]
+      test: ["CMD-SHELL", "pg_isready -U agt_user -d agt-auth-db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -2297,7 +2711,7 @@ services:
   # â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   redis:
     image: redis:7-alpine
-    container_name: agt_auth_redis
+    container_name: agt-auth-redis
     restart: unless-stopped
     command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     volumes:
@@ -2317,13 +2731,13 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_auth_service
+    container_name: agt-auth-service
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://agt_user:agt_password@agt_auth_db:5432/agt_auth_db # Mis Ã  jour agt_auth_db
-      REDIS_URL: redis://agt_auth_redis:6379/0 # Mis Ã  jour agt_auth_redis
+      DATABASE_URL: postgresql://agt_user:agt_password@agt-auth-db:5432/agt-auth-db # Mis Ã  jour agt-auth-db
+      REDIS_URL: redis://agt-auth-redis:6379/0 # Mis Ã  jour agt-auth-redis
       JWT_PRIVATE_KEY_PATH: /app/keys/private.pem
       JWT_PUBLIC_KEY_PATH: /app/keys/public.pem
     volumes:
@@ -2349,7 +2763,7 @@ services:
     build:
       context: .
       target: builder
-    container_name: agt_auth_dev
+    container_name: agt-auth-dev
     restart: unless-stopped
     command: >
       sh -c "python manage.py migrate --noinput &&
@@ -2357,8 +2771,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://agt_user:agt_password@agt_auth_db:5432/agt_auth_db # Mis Ã  jour agt_auth_db
-      REDIS_URL: redis://agt_auth_redis:6379/0 # Mis Ã  jour agt_auth_redis
+      DATABASE_URL: postgresql://agt_user:agt_password@agt-auth-db:5432/agt-auth-db # Mis Ã  jour agt-auth-db
+      REDIS_URL: redis://agt-auth-redis:6379/0 # Mis Ã  jour agt-auth-redis
       DEBUG: "True"
       JWT_PRIVATE_KEY_PATH: /app/keys/private.pem
       JWT_PUBLIC_KEY_PATH: /app/keys/public.pem
@@ -3189,7 +3603,12 @@ class UserAuthResponseSerializer(serializers.ModelSerializer):
             "two_fa_enabled", "registration_method", "is_blocked",
             "is_deactivated", "created_at",
         ]
+class S2STokenRequestSerializer(serializers.Serializer):
+    client_id = serializers.UUIDField(help_text="UUID de la plateforme (= Platform.id)")
+    client_secret = serializers.CharField(help_text="Secret de la plateforme")
 
+class S2SIntrospectRequestSerializer(serializers.Serializer):
+    token = serializers.CharField(help_text="Token S2S a valider")
 `
 ===== FILE END =====
 
@@ -3475,7 +3894,7 @@ from apps.authentication.serializers import (
     ForgotPasswordSerializer, ResetPasswordSerializer, ChangePasswordSerializer,
     DeactivateAccountSerializer, TwoFAConfirmSerializer, TwoFAVerifySerializer,
     TwoFADisableSerializer, SessionResponseSerializer, LoginHistoryResponseSerializer,
-    UserAuthResponseSerializer
+    UserAuthResponseSerializer, S2STokenRequestSerializer, S2SIntrospectRequestSerializer,
 )
 from apps.platforms.serializers import PlatformCreateSerializer, PlatformUpdateSerializer, PlatformResponseSerializer
 # ------------------------
@@ -3644,13 +4063,13 @@ s2s_token_schema = extend_schema(
     tags=["S2S"], 
     summary="Generer token S2S", 
     description="Flux Client Credentials. Retourne un JWT S2S valide 1h.",
-    request={"type": "object", "properties": {"client_id": {"type": "string"}, "client_secret": {"type": "string"}}}
+    request=S2STokenRequestSerializer,
 )
 s2s_introspect_schema = extend_schema(
     tags=["S2S"], 
     summary="Valider token S2S", 
     description="Permet a un service de verifier la validite d'un token S2S plateforme.",
-    request={"type": "object", "properties": {"token": {"type": "string"}}}
+    request=S2SIntrospectRequestSerializer,
 )
 `
 ===== FILE END =====
@@ -6015,7 +6434,7 @@ PORT=7008
 services:
   chat:
     build: .
-    container_name: agt_chat_simulator
+    container_name: agt-chat-simulator
     restart: unless-stopped
     ports:
       - "7008:7008"
@@ -6234,7 +6653,7 @@ server.listen(PORT, () => {
 SECRET_KEY=change-me
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
-DATABASE_URL=postgresql://chatbot_user:chatbot_password@db:5432/agt_chatbot_db
+DATABASE_URL=postgresql://chatbot_user:chatbot_password@db:5432/agt-chatbot-db
 REDIS_URL=redis://redis:6379/8
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
 CORS_ALLOWED_ORIGINS=http://localhost:3000
@@ -6272,9 +6691,9 @@ OpenAI, Anthropic, configurable par bot. Strategy pattern + circuit breaker.
 services:
   db:
     image: postgres:15-alpine
-    container_name: agt_chatbot_db
+    container_name: agt-chatbot-db
     environment:
-      POSTGRES_DB: agt_chatbot_db
+      POSTGRES_DB: agt-chatbot-db
       POSTGRES_USER: chatbot_user
       POSTGRES_PASSWORD: chatbot_password
     volumes:
@@ -6282,13 +6701,13 @@ services:
     ports:
       - "5440:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U chatbot_user -d agt_chatbot_db"]
+      test: ["CMD-SHELL", "pg_isready -U chatbot_user -d agt-chatbot-db"]
       interval: 10s
       timeout: 5s
       retries: 5
   redis:
     image: redis:7-alpine
-    container_name: agt_chatbot_redis
+    container_name: agt-chatbot-redis
     volumes:
       - redis_data:/data
     ports:
@@ -6302,11 +6721,11 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_chatbot_service
+    container_name: agt-chatbot-service
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://chatbot_user:chatbot_password@db:5432/agt_chatbot_db
+      DATABASE_URL: postgresql://chatbot_user:chatbot_password@db:5432/agt-chatbot-db
       REDIS_URL: redis://redis:6379/8
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
@@ -6328,12 +6747,12 @@ services:
     build:
       context: .
       target: builder
-    container_name: agt_chatbot_dev
+    container_name: agt-chatbot-dev
     command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:7010"
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://chatbot_user:chatbot_password@db:5432/agt_chatbot_db
+      DATABASE_URL: postgresql://chatbot_user:chatbot_password@db:5432/agt-chatbot-db
       REDIS_URL: redis://redis:6379/8
       DEBUG: "True"
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
@@ -7360,7 +7779,7 @@ application = get_wsgi_application()
 services:
   geoloc:
     build: .
-    container_name: agt_geoloc_simulator
+    container_name: agt-geoloc-simulator
     restart: unless-stopped
     ports:
       - "7009:7009"
@@ -7547,7 +7966,7 @@ PORT=7003
 services:
   media:
     build: .
-    container_name: agt_media_simulator
+    container_name: agt-media-simulator
     restart: unless-stopped
     ports:
       - "7003:7003"
@@ -7752,29 +8171,29 @@ app.listen(PORT, () => {
 # â”€â”€â”€ Django â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SECRET_KEY=change-me-in-production
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_notif_service
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt-notif-service
 
 # â”€â”€â”€ Base de donnÃ©es â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# HÃ´te : agt_notif_db (dÃ©fini dans docker-compose.yml)
-DATABASE_URL=postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
+# HÃ´te : agt-notif-db (dÃ©fini dans docker-compose.yml)
+DATABASE_URL=postgresql://notif_user:notif_password@agt-notif-db:5432/agt_notification_db
 
 # â”€â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# HÃ´te : agt_notif_redis
-REDIS_URL=redis://agt_notif_redis:6379/2
+# HÃ´te : agt-notif-redis
+REDIS_URL=redis://agt-notif-redis:6379/2
 
 # â”€â”€â”€ RabbitMQ (Broker Celery partagÃ©) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# HÃ´te : agt_rabbitmq (dÃ©fini dans Docker compose.infra.yml)
-RABBITMQ_URL=amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
-CELERY_RESULT_BACKEND=redis://agt_notif_redis:6379/3
+# HÃ´te : agt-rabbitmq (dÃ©fini dans Docker compose.infra.yml)
+RABBITMQ_URL=amqp://agt_rabbit:agt_rabbit_password@agt-rabbitmq:5672//
+CELERY_RESULT_BACKEND=redis://agt-notif-redis:6379/3
 
 # â”€â”€â”€ Auth (Validation JWT) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# HÃ´te : agt_auth_service
-AUTH_SERVICE_URL=http://agt_auth_service:7000/api/v1
+# HÃ´te : agt-auth-service
+AUTH_SERVICE_URL=http://agt-auth-service:7000/api/v1
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
 
 # â”€â”€â”€ Users (RÃ©solution coordonnÃ©es) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# HÃ´te : agt_users_service
-USERS_SERVICE_URL=http://agt_users_service:7001/api/v1
+# HÃ´te : agt-users-service
+USERS_SERVICE_URL=http://agt-users-service:7001/api/v1
 
 # â”€â”€â”€ Cache TTL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 USER_CACHE_TTL=300
@@ -7782,7 +8201,7 @@ IDEMPOTENCY_TTL=86400
 
 # â”€â”€â”€ Email (DÃ©veloppement via Mailpit) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 DEFAULT_FROM_EMAIL=noreply@agtechnologies.com
-EMAIL_HOST=agt_mailpit
+EMAIL_HOST=agt-mailpit
 EMAIL_PORT=1025
 
 # â”€â”€â”€ Providers Email (Production uniquement) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -7812,29 +8231,29 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
 # â”€â”€â”€ Django â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SECRET_KEY=change-me-in-production
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_notif_service
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt-notif-service
 
 # â”€â”€â”€ Base de donnÃ©es â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# HÃ´te : agt_notif_db (dÃ©fini dans docker-compose.yml)
-DATABASE_URL=postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
+# HÃ´te : agt-notif-db (dÃ©fini dans docker-compose.yml)
+DATABASE_URL=postgresql://notif_user:notif_password@agt-notif-db:5432/agt_notification_db
 
 # â”€â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# HÃ´te : agt_notif_redis
-REDIS_URL=redis://agt_notif_redis:6379/2
+# HÃ´te : agt-notif-redis
+REDIS_URL=redis://agt-notif-redis:6379/2
 
 # â”€â”€â”€ RabbitMQ (Broker Celery partagÃ©) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# HÃ´te : agt_rabbitmq (dÃ©fini dans Docker compose.infra.yml)
-RABBITMQ_URL=amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
-CELERY_RESULT_BACKEND=redis://agt_notif_redis:6379/3
+# HÃ´te : agt-rabbitmq (dÃ©fini dans Docker compose.infra.yml)
+RABBITMQ_URL=amqp://agt_rabbit:agt_rabbit_password@agt-rabbitmq:5672//
+CELERY_RESULT_BACKEND=redis://agt-notif-redis:6379/3
 
 # â”€â”€â”€ Auth (Validation JWT) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# HÃ´te : agt_auth_service
-AUTH_SERVICE_URL=http://agt_auth_service:7000/api/v1
+# HÃ´te : agt-auth-service
+AUTH_SERVICE_URL=http://agt-auth-service:7000/api/v1
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
 
 # â”€â”€â”€ Users (RÃ©solution coordonnÃ©es) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# HÃ´te : agt_users_service
-USERS_SERVICE_URL=http://agt_users_service:7001/api/v1
+# HÃ´te : agt-users-service
+USERS_SERVICE_URL=http://agt-users-service:7001/api/v1
 
 # â”€â”€â”€ Cache TTL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 USER_CACHE_TTL=300
@@ -7842,7 +8261,7 @@ IDEMPOTENCY_TTL=86400
 
 # â”€â”€â”€ Email (DÃ©veloppement via Mailpit) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 DEFAULT_FROM_EMAIL=noreply@agtechnologies.com
-EMAIL_HOST=agt_mailpit
+EMAIL_HOST=agt-mailpit
 EMAIL_PORT=1025
 
 # â”€â”€â”€ Providers Email (Production uniquement) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -7961,7 +8380,7 @@ services:
   # â”€â”€ PostgreSQL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   db:
     image: postgres:15-alpine
-    container_name: agt_notif_db
+    container_name: agt-notif-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: agt_notification_db
@@ -7982,7 +8401,7 @@ services:
   # â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   redis:
     image: redis:7-alpine
-    container_name: agt_notif_redis
+    container_name: agt-notif-redis
     restart: unless-stopped
     command: redis-server --appendonly yes --maxmemory 256mb
     volumes:
@@ -8002,15 +8421,15 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_notif_service
+    container_name: agt-notif-service
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
-      REDIS_URL: redis://agt_notif_redis:6379/2
-      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
-      CELERY_RESULT_BACKEND: redis://agt_notif_redis:6379/3
+      DATABASE_URL: postgresql://notif_user:notif_password@agt-notif-db:5432/agt_notification_db
+      REDIS_URL: redis://agt-notif-redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt-rabbitmq:5672//
+      CELERY_RESULT_BACKEND: redis://agt-notif-redis:6379/3
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
       - ./keys:/app/keys:ro
@@ -8035,7 +8454,7 @@ services:
     build:
       context: .
       target: builder
-    container_name: agt_notif_dev
+    container_name: agt-notif-dev
     restart: unless-stopped
     command: >
       sh -c "python manage.py migrate --noinput &&
@@ -8043,9 +8462,9 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
-      REDIS_URL: redis://agt_notif_redis:6379/2
-      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
+      DATABASE_URL: postgresql://notif_user:notif_password@agt-notif-db:5432/agt_notification_db
+      REDIS_URL: redis://agt-notif-redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt-rabbitmq:5672//
       DEBUG: "True"
       DJANGO_SETTINGS_MODULE: config.settings
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
@@ -8069,16 +8488,16 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_notif_worker
+    container_name: agt-notif-worker
     restart: unless-stopped
     command: celery -A config.celery worker -l info -c 4
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
-      REDIS_URL: redis://agt_notif_redis:6379/2
-      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
-      CELERY_RESULT_BACKEND: redis://agt_notif_redis:6379/3
+      DATABASE_URL: postgresql://notif_user:notif_password@agt-notif-db:5432/agt_notification_db
+      REDIS_URL: redis://agt-notif-redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt-rabbitmq:5672//
+      CELERY_RESULT_BACKEND: redis://agt-notif-redis:6379/3
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
       - ./keys:/app/keys:ro
@@ -8095,15 +8514,15 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_notif_beat
+    container_name: agt-notif-beat
     restart: unless-stopped
     command: celery -A config.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://notif_user:notif_password@agt_notif_db:5432/agt_notification_db
-      REDIS_URL: redis://agt_notif_redis:6379/2
-      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt_rabbitmq:5672//
+      DATABASE_URL: postgresql://notif_user:notif_password@agt-notif-db:5432/agt_notification_db
+      REDIS_URL: redis://agt-notif-redis:6379/2
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt-rabbitmq:5672//
     depends_on:
       db:
         condition: service_healthy
@@ -10345,7 +10764,7 @@ idempotency_key UNIQUE NOT NULL. Meme cle = retour transaction existante.
 services:
   db:
     image: postgres:15-alpine
-    container_name: agt_pay_db
+    container_name: agt-pay-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: agt_payment_db
@@ -10362,7 +10781,7 @@ services:
       retries: 5
   redis:
     image: redis:7-alpine
-    container_name: agt_pay_redis
+    container_name: agt-pay-redis
     restart: unless-stopped
     volumes:
       - redis_data:/data
@@ -10377,7 +10796,7 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_pay_service
+    container_name: agt-pay-service
     restart: unless-stopped
     env_file:
       - .env
@@ -10404,7 +10823,7 @@ services:
     build:
       context: .
       target: builder
-    container_name: agt_pay_dev
+    container_name: agt-pay-dev
     command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:7005"
     env_file:
       - .env
@@ -11520,7 +11939,7 @@ application = get_wsgi_application()
 SECRET_KEY=change-me
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
-DATABASE_URL=postgresql://search_user:search_password@db:5432/agt_search_db
+DATABASE_URL=postgresql://search_user:search_password@db:5432/agt-search-db
 REDIS_URL=redis://redis:6379/7
 ELASTICSEARCH_URL=http://elasticsearch:9200
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
@@ -11534,7 +11953,7 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000
 SECRET_KEY=change-me
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
-DATABASE_URL=postgresql://search_user:search_password@db:5432/agt_search_db
+DATABASE_URL=postgresql://search_user:search_password@db:5432/agt-search-db
 REDIS_URL=redis://redis:6379/7
 ELASTICSEARCH_URL=http://elasticsearch:9200
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
@@ -11574,9 +11993,9 @@ Index par plateforme ({platform_id}_{index_name}). Full-text, fuzzy, facettes, b
 services:
   db:
     image: postgres:15-alpine
-    container_name: agt_search_db
+    container_name: agt-search-db
     environment:
-      POSTGRES_DB: agt_search_db
+      POSTGRES_DB: agt-search-db
       POSTGRES_USER: search_user
       POSTGRES_PASSWORD: search_password
     volumes:
@@ -11584,13 +12003,13 @@ services:
     ports:
       - "5438:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U search_user -d agt_search_db"]
+      test: ["CMD-SHELL", "pg_isready -U search_user -d agt-search-db"]
       interval: 10s
       timeout: 5s
       retries: 5
   redis:
     image: redis:7-alpine
-    container_name: agt_search_redis
+    container_name: agt-search-redis
     volumes:
       - redis_data:/data
     ports:
@@ -11620,11 +12039,11 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_search_service
+    container_name: agt-search-service
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://search_user:search_password@db:5432/agt_search_db
+      DATABASE_URL: postgresql://search_user:search_password@db:5432/agt-search-db
       REDIS_URL: redis://redis:6379/7
       ELASTICSEARCH_URL: http://elasticsearch:9200
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
@@ -11649,12 +12068,12 @@ services:
     build:
       context: .
       target: builder
-    container_name: agt_search_dev
+    container_name: agt-search-dev
     command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:7007"
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://search_user:search_password@db:5432/agt_search_db
+      DATABASE_URL: postgresql://search_user:search_password@db:5432/agt-search-db
       REDIS_URL: redis://redis:6379/7
       ELASTICSEARCH_URL: http://elasticsearch:9200
       DEBUG: "True"
@@ -12665,7 +13084,7 @@ trial > active (si paiement) | downgrade/suspend/expire (selon config)
 services:
   db:
     image: postgres:15-alpine
-    container_name: agt_sub_db
+    container_name: agt-sub-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: agt_subscription_db
@@ -12682,7 +13101,7 @@ services:
       retries: 5
   redis:
     image: redis:7-alpine
-    container_name: agt_sub_redis
+    container_name: agt-sub-redis
     restart: unless-stopped
     volumes:
       - redis_data:/data
@@ -12697,7 +13116,7 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_sub_service
+    container_name: agt-sub-service
     restart: unless-stopped
     env_file:
       - .env
@@ -12724,7 +13143,7 @@ services:
     build:
       context: .
       target: builder
-    container_name: agt_sub_dev
+    container_name: agt-sub-dev
     restart: unless-stopped
     command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:7004"
     env_file:
@@ -14324,29 +14743,29 @@ application = get_wsgi_application()
 # --- Django ---
 SECRET_KEY=change-me-in-production
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_users_service
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt-users-service
 
 # --- Base de donnees ---
-# Correction : l'hÃ´te est 'agt_users_db'
-DATABASE_URL=postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
+# Correction : l'hÃ´te est 'agt-users-db'
+DATABASE_URL=postgresql://users_user:users_password@agt-users-db:5432/agt-users-db
 
 # --- Redis ---
-# Correction : l'hÃ´te est 'agt_users_redis'
-REDIS_URL=redis://agt_users_redis:6379/1
+# Correction : l'hÃ´te est 'agt-users-redis'
+REDIS_URL=redis://agt-users-redis:6379/1
 
 # --- Service Auth (validation JWT) ---
-# Correction : l'hÃ´te est 'agt_auth_service'
-AUTH_SERVICE_URL=http://agt_auth_service:7000/api/v1
+# Correction : l'hÃ´te est 'agt-auth-service'
+AUTH_SERVICE_URL=http://agt-auth-service:7000/api/v1
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
 AUTH_ADMIN_API_KEY=change-me-admin-api-key-very-secret
 
 # --- Service Media ---
-# Correction : l'hÃ´te est 'agt_media_simulator'
-MEDIA_SERVICE_URL=http://agt_media_simulator:7003/api/v1
+# Correction : l'hÃ´te est 'agt-media-simulator'
+MEDIA_SERVICE_URL=http://agt-media-simulator:7003/api/v1
 
 # --- Service Notification ---
-# Correction : l'hÃ´te est 'agt_notif_service'
-NOTIFICATION_SERVICE_URL=http://agt_notif_service:7002/api/v1
+# Correction : l'hÃ´te est 'agt-notif-service'
+NOTIFICATION_SERVICE_URL=http://agt-notif-service:7002/api/v1
 
 # --- Cache TTL ---
 PERMISSION_CACHE_TTL=300
@@ -14369,29 +14788,29 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
 # --- Django ---
 SECRET_KEY=change-me-in-production
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt_users_service
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,agt-users-service
 
 # --- Base de donnees ---
-# Correction : l'hÃ´te est 'agt_users_db'
-DATABASE_URL=postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
+# Correction : l'hÃ´te est 'agt-users-db'
+DATABASE_URL=postgresql://users_user:users_password@agt-users-db:5432/agt-users-db
 
 # --- Redis ---
-# Correction : l'hÃ´te est 'agt_users_redis'
-REDIS_URL=redis://agt_users_redis:6379/1
+# Correction : l'hÃ´te est 'agt-users-redis'
+REDIS_URL=redis://agt-users-redis:6379/1
 
 # --- Service Auth (validation JWT) ---
-# Correction : l'hÃ´te est 'agt_auth_service'
-AUTH_SERVICE_URL=http://agt_auth_service:7000/api/v1
+# Correction : l'hÃ´te est 'agt-auth-service'
+AUTH_SERVICE_URL=http://agt-auth-service:7000/api/v1
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
 AUTH_ADMIN_API_KEY=change-me-admin-api-key-very-secret
 
 # --- Service Media ---
-# Correction : l'hÃ´te est 'agt_media_simulator'
-MEDIA_SERVICE_URL=http://agt_media_simulator:7003/api/v1
+# Correction : l'hÃ´te est 'agt-media-simulator'
+MEDIA_SERVICE_URL=http://agt-media-simulator:7003/api/v1
 
 # --- Service Notification ---
-# Correction : l'hÃ´te est 'agt_notif_service'
-NOTIFICATION_SERVICE_URL=http://agt_notif_service:7002/api/v1
+# Correction : l'hÃ´te est 'agt-notif-service'
+NOTIFICATION_SERVICE_URL=http://agt-notif-service:7002/api/v1
 
 # --- Cache TTL ---
 PERMISSION_CACHE_TTL=300
@@ -14531,10 +14950,10 @@ services:
   # â”€â”€ PostgreSQL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   db:
     image: postgres:15-alpine
-    container_name: agt_users_db
+    container_name: agt-users-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: agt_users_db
+      POSTGRES_DB: agt-users-db
       POSTGRES_USER: users_user
       POSTGRES_PASSWORD: users_password
     volumes:
@@ -14542,7 +14961,7 @@ services:
     ports:
       - "5433:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U users_user -d agt_users_db"]
+      test: ["CMD-SHELL", "pg_isready -U users_user -d agt-users-db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -14552,7 +14971,7 @@ services:
   # â”€â”€ Redis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   redis:
     image: redis:7-alpine
-    container_name: agt_users_redis
+    container_name: agt-users-redis
     restart: unless-stopped
     command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     volumes:
@@ -14572,13 +14991,13 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_users_service
+    container_name: agt-users-service
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
-      REDIS_URL: redis://agt_users_redis:6379/1
+      DATABASE_URL: postgresql://users_user:users_password@agt-users-db:5432/agt-users-db
+      REDIS_URL: redis://agt-users-redis:6379/1
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
       - ./keys:/app/keys:ro
@@ -14603,7 +15022,7 @@ services:
     build:
       context: .
       target: builder
-    container_name: agt_users_dev
+    container_name: agt-users-dev
     restart: unless-stopped
     command: >
       sh -c "python manage.py migrate --noinput &&
@@ -14611,8 +15030,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://users_user:users_password@agt_users_db:5432/agt_users_db
-      REDIS_URL: redis://agt_users_redis:6379/1
+      DATABASE_URL: postgresql://users_user:users_password@agt-users-db:5432/agt-users-db
+      REDIS_URL: redis://agt-users-redis:6379/1
       DEBUG: "True"
       DJANGO_SETTINGS_MODULE: config.settings
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
@@ -16899,7 +17318,7 @@ application = get_wsgi_application()
 SECRET_KEY=change-me
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
-DATABASE_URL=postgresql://wallet_user:wallet_password@db:5432/agt_wallet_db
+DATABASE_URL=postgresql://wallet_user:wallet_password@db:5432/agt-wallet-db
 REDIS_URL=redis://redis:6379/6
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
 CORS_ALLOWED_ORIGINS=http://localhost:3000
@@ -16912,7 +17331,7 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000
 SECRET_KEY=change-me
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
-DATABASE_URL=postgresql://wallet_user:wallet_password@db:5432/agt_wallet_db
+DATABASE_URL=postgresql://wallet_user:wallet_password@db:5432/agt-wallet-db
 REDIS_URL=redis://redis:6379/6
 AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
 CORS_ALLOWED_ORIGINS=http://localhost:3000
@@ -16952,10 +17371,10 @@ accounts, ledger_transactions, ledger_entries, holds, cashout_requests, split_ru
 services:
   db:
     image: postgres:15-alpine
-    container_name: agt_wallet_db
+    container_name: agt-wallet-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: agt_wallet_db
+      POSTGRES_DB: agt-wallet-db
       POSTGRES_USER: wallet_user
       POSTGRES_PASSWORD: wallet_password
     volumes:
@@ -16963,13 +17382,13 @@ services:
     ports:
       - "5437:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U wallet_user -d agt_wallet_db"]
+      test: ["CMD-SHELL", "pg_isready -U wallet_user -d agt-wallet-db"]
       interval: 10s
       timeout: 5s
       retries: 5
   redis:
     image: redis:7-alpine
-    container_name: agt_wallet_redis
+    container_name: agt-wallet-redis
     restart: unless-stopped
     volumes:
       - redis_data:/data
@@ -16984,12 +17403,12 @@ services:
     build:
       context: .
       target: production
-    container_name: agt_wallet_service
+    container_name: agt-wallet-service
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://wallet_user:wallet_password@db:5432/agt_wallet_db
+      DATABASE_URL: postgresql://wallet_user:wallet_password@db:5432/agt-wallet-db
       REDIS_URL: redis://redis:6379/6
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
@@ -17011,12 +17430,12 @@ services:
     build:
       context: .
       target: builder
-    container_name: agt_wallet_dev
+    container_name: agt-wallet-dev
     command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:7006"
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://wallet_user:wallet_password@db:5432/agt_wallet_db
+      DATABASE_URL: postgresql://wallet_user:wallet_password@db:5432/agt-wallet-db
       REDIS_URL: redis://redis:6379/6
       DEBUG: "True"
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
@@ -35575,5 +35994,5 @@ DÃ¨s que tu me donnes ton feu vert, nous pouvons officiellement dÃ©marrer la
 ===== FILE END =====
 
 ## SUMMARY
-- Total files: 297
+- Total files: 299
 
