@@ -217,7 +217,7 @@ Users propose deux types de suppression :
 | DELETE  | `/platforms/{platformId}/roles/{roleId}`                      | Supprimer un rôle                     | Oui  | [→ 6.10.4](#6104-supprimer-un-rôle)                  |
 | POST    | `/platforms/{platformId}/permissions`                         | Créer une permission                  | Oui  | [→ 6.10.5](#6105-créer-une-permission)               |
 | GET     | `/platforms/{platformId}/permissions`                         | Lister les permissions                | Oui  | [→ 6.10.6](#6106-lister-les-permissions)             |
-| POST    | `/platforms/{platformId}/roles/{roleId}/permissions`          | Attacher une permission à un rôle     | Oui  | [→ 6.10.7](#6107-attacher-une-permission-à-un-rôle)  |
+| POST    | `/platforms/{platformId}/roles/{roleId}/permissions/{permId}` | Attacher une permission à un rôle     | Oui  | [→ 6.10.7](#6107-attacher-une-permission-à-un-rôle)  |
 | DELETE  | `/platforms/{platformId}/roles/{roleId}/permissions/{permId}` | Détacher une permission               | Oui  | [→ 6.10.8](#6108-détacher-une-permission-dun-rôle)   |
 | POST    | `/users/{id}/roles`                                           | Assigner un rôle à un utilisateur     | Oui  | [→ 6.10.9](#6109-assigner-un-rôle-à-un-utilisateur)  |
 | GET     | `/users/{id}/roles`                                           | Lister les rôles d'un utilisateur     | Oui  | [→ 6.10.10](#61010-lister-les-rôles-dun-utilisateur) |
@@ -800,12 +800,12 @@ Body :
 **Endpoint :** `POST /api/v1/platforms/{platformId}/roles/{roleId}/permissions`
 **Auth requise :** Oui
 
-Body :
+> La permission est passée directement dans l'URL via `permId` — aucun body requis.
 
-```json
-{
-  "permission_id": "e08ce8da-36b2-4569-a730-4af1a563a545"
-}
+Exemple d'URL complète :
+
+```
+POST /api/v1/platforms/48a8351c-.../roles/91136ba8-.../permissions/e08ce8da-...
 ```
 
 **Réponse attendue (201) :**
@@ -904,10 +904,10 @@ C'est l'endpoint le plus utilisé par les autres services — il vérifie en tem
 **Endpoint :** `GET /api/v1/users/{id}/permissions/check`
 **Auth requise :** Oui
 
-Query params :
+Query params (obligatoires) :
 
-- `permission` : nom de la permission à vérifier (ex: `create_product`)
-- `platform_id` : UUID de la plateforme
+- `permission` : nom de la permission à vérifier (ex: `create_product`) — visible dans le formulaire Swagger
+- `platform_id` : UUID de la plateforme — visible dans le formulaire Swagger
 
 Exemple d'URL complète :
 
