@@ -349,6 +349,14 @@ class MagicLinkRequestView(APIView):
         if data["redirect_url"] not in platform.allowed_redirect_urls:
             return Response({"detail": "redirect_url non autorisée."}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Récupérer le prénom depuis Users pour personnaliser l'email (non bloquant)
+        first_name = ""
+        try:
+            profile = UsersServiceClient.get_profile_by_auth_id(str(user.id))
+            first_name = profile.get("first_name", "")
+        except Exception:
+            pass
+
         raw_token = TokenService.generate_raw_token()
         VerificationToken.objects.create(
             user=user, token_hash=TokenService.hash_token(raw_token),
@@ -363,7 +371,7 @@ class MagicLinkRequestView(APIView):
             notification_type="magic_link",
             recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
             template="auth_magic_link",
-            data={"magic_link_url": callback_url, "expires_in_minutes": settings.MAGIC_LINK_TTL // 60, "platform_name": platform.name, "first_name": data.get("first_name", "")},
+            data={"magic_link_url": callback_url, "expires_in_minutes": settings.MAGIC_LINK_TTL // 60, "platform_name": platform.name, "first_name": first_name},
             priority="high",
         )
 

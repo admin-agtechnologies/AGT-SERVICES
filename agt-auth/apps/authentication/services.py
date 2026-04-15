@@ -284,3 +284,22 @@ class UsersServiceClient:
         except Exception as e:
             logger.error(f"Credentials sync Users échoué: {e}")
             return False
+    @staticmethod
+    def get_profile_by_auth_id(auth_user_id: str) -> dict:
+        """Récupère le profil Users pour obtenir first_name/last_name."""
+        import httpx
+        url = getattr(settings, "USERS_SERVICE_URL", "")
+        if not url:
+            return {}
+        try:
+            token = UsersServiceClient._get_s2s_token()
+            resp = httpx.get(
+                f"{url}/users/by-auth/{auth_user_id}",
+                headers={"Authorization": f"Bearer {token}"},
+                timeout=3.0,
+            )
+            if resp.status_code == 200:
+                return resp.json()
+        except Exception as e:
+            logger.error(f"get_profile_by_auth_id échoué: {e}")
+        return {}
