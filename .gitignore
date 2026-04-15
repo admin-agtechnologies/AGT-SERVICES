@@ -107,3 +107,5 @@ htmlcov/
 # === Uploads ===
 uploads/
 media_storage/
+
+_scan_output/
