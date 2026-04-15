@@ -3,13 +3,16 @@ AGT Users Service v1.0 - Views : Profil, Adresses, Metadata, Sync, Stats.
 CDC v2.1 : by-auth lookup, leave platform, hard delete securise.
 """
 import logging
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q, Count
 from django.utils import timezone
-from rest_framework import status
+from rest_framework import status, serializers as drf_serializers
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
+from apps.roles.models import UserRole
 
 from apps.users.models import UserProfile, Address, UserMetadata, UserStatusChoice, AuditLog
 from apps.users.pagination import StandardPagination
@@ -22,7 +25,18 @@ from apps.users.serializers import (
 )
 from apps.users.services import ProfileCacheService, NotificationClient, AuthServiceClient
 
+from drf_spectacular.utils import OpenApiParameter, OpenApiTypes
+from drf_spectacular.openapi import AutoSchema
+
 logger = logging.getLogger(__name__)
+
+
+
+class MetadataUpsertSerializer(drf_serializers.Serializer):
+    """Body libre clé-valeur — exemple : {"theme": "dark", "language": "fr"}"""
+    class Meta:
+        ref_name = "MetadataUpsert"
+
 
 
 class HealthCheckView(APIView):
@@ -52,7 +66,6 @@ class HealthCheckView(APIView):
             "version": "1.0.0",
         }, status=code)
 
-
 # --- Profil CRUD ---
 
 class UserListCreateView(APIView):
@@ -77,7 +90,15 @@ class UserListCreateView(APIView):
         )
         return Response(UserProfileResponseSerializer(user).data, status=status.HTTP_201_CREATED)
 
-    @extend_schema(tags=["Profile"], summary="Listing pagine avec filtres")
+    @extend_schema(
+    tags=["Profile"],
+    summary="Listing pagine avec filtres",
+    parameters=[
+        OpenApiParameter(name="status", type=OpenApiTypes.STR, required=False, description="Filtrer par statut : active, inactive, deleted"),
+        OpenApiParameter(name="platform_id", type=OpenApiTypes.UUID, required=False, description="Filtrer par plateforme"),
+        OpenApiParameter(name="role", type=OpenApiTypes.STR, required=False, description="Filtrer par nom de role"),
+    ]
+)
     def get(self, request):
         """GET /users - Listing pagine avec filtres."""
         qs = UserProfile.objects.all()
@@ -142,10 +163,13 @@ class UserDetailView(APIView):
         user.save(update_fields=list(serializer.validated_data.keys()) + ["updated_at"])
         ProfileCacheService.invalidate(str(user_id))
 
+        # Convertir les valeurs en types JSON-compatibles via DjangoJSONEncoder
+        old_json = json.loads(json.dumps(old_values, cls=DjangoJSONEncoder))
+        new_json = json.loads(json.dumps(dict(serializer.validated_data), cls=DjangoJSONEncoder))
         AuditLog.objects.create(
             entity_type="users_profiles", entity_id=user.id, action="update",
             actor_id=getattr(request.user, "auth_user_id", None), actor_type="user",
-            old_value=old_values, new_value=serializer.validated_data,
+            old_value=old_json, new_value=new_json,
         )
 
         return Response(UserProfileResponseSerializer(user).data)
@@ -282,7 +306,10 @@ class UserPhotoView(APIView):
 class UserSearchView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Profile"], summary="Recherche utilisateurs")
+    @extend_schema(
+        tags=["Profile"], summary="Recherche utilisateurs",
+        parameters=[OpenApiParameter(name="q", type=OpenApiTypes.STR, required=True, description="Terme de recherche")]
+    )
     def get(self, request):
         q = request.GET.get("q", "").strip()
         if not q:
@@ -303,9 +330,11 @@ class UserStatsView(APIView):
 
     @extend_schema(tags=["Profile"], summary="Statistiques globales")
     def get(self, request):
-        from apps.roles.models import UserRole
         total = UserProfile.objects.count()
-        by_status = dict(UserProfile.objects.values_list("status").annotate(count=Count("id")))
+        by_status = dict(
+            UserProfile.objects.values_list("status")
+            .annotate(count=Count("id"))
+        )
 
         return Response({
             "total_users": total,
@@ -313,6 +342,7 @@ class UserStatsView(APIView):
                 "active": by_status.get("active", 0),
                 "inactive": by_status.get("inactive", 0),
                 "deleted": by_status.get("deleted", 0),
+                "deletion_in_progress": by_status.get("deletion_in_progress", 0),
             },
         })
 
@@ -457,7 +487,17 @@ class AddressSetDefaultView(APIView):
 class UserMetadataView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Metadata"], summary="Upsert metadata")
+    @extend_schema(
+    tags=["Metadata"],
+    summary="Upsert metadata",
+    request={
+        "application/json": {
+            "type": "object",
+            "additionalProperties": {"type": "string"},
+            "example": {"theme": "dark", "language": "fr", "notifications": "true"}
+        }
+    }
+)
     def put(self, request, user_id, platform_id):
         try:
             user = UserProfile.objects.get(id=user_id)

@@ -3,7 +3,7 @@ AGT Users Service v1.0 - Views Documents.
 """
 import logging
 from django.utils import timezone
-from rest_framework import status, serializers
+from rest_framework import status, serializers 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,6 +15,14 @@ from apps.users.services import NotificationClient
 
 logger = logging.getLogger(__name__)
 
+class DocumentCreateSerializer(serializers.Serializer):
+    platform_id = serializers.UUIDField()
+    doc_type = serializers.CharField(max_length=100)
+    media_id = serializers.UUIDField()
+
+class DocumentStatusSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choices=["validated", "rejected"])
+    comment = serializers.CharField(required=False, allow_blank=True)
 
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,7 +39,7 @@ class DocumentHistorySerializer(serializers.ModelSerializer):
 class DocumentListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Documents"], summary="Attacher un document")
+    @extend_schema(tags=["Documents"], summary="Attacher un document", request=DocumentCreateSerializer)
     def post(self, request, user_id):
         try:
             user = UserProfile.objects.get(id=user_id)
@@ -75,7 +83,7 @@ class DocumentListCreateView(APIView):
 class DocumentStatusUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Documents"], summary="Valider ou rejeter un document")
+    @extend_schema(tags=["Documents"], summary="Valider ou rejeter un document", request=DocumentStatusSerializer)
     def put(self, request, user_id, doc_id):
         try:
             doc = Document.objects.select_related("user").get(id=doc_id, user_id=user_id)

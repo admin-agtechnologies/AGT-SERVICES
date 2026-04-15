@@ -98,3 +98,4 @@ echo -e "\e[90m   docker ps                    → voir les conteneurs\e[0m"
 echo -e "\e[90m   bash reset_mvp.sh            → reset soft (garde les données)\e[0m"
 echo -e "\e[90m   bash reset_mvp.sh --clean    → reset complet (supprime tout)\e[0m"
 echo -e "\e[36m=========================================\e[0m"
+
