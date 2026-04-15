@@ -8,10 +8,10 @@ from apps.users.models import UserProfile, Address, UserMetadata
 
 class UserProfileCreateSerializer(serializers.Serializer):
     auth_user_id = serializers.UUIDField()
-    first_name = serializers.CharField(max_length=100, required=False, default="")
-    last_name = serializers.CharField(max_length=100, required=False, default="")
+    first_name = serializers.CharField(max_length=100, required=False, allow_blank=True, default="")
+    last_name = serializers.CharField(max_length=100, required=False, allow_blank=True, default="")
     email = serializers.EmailField(required=False, allow_null=True)
-    phone = serializers.CharField(max_length=20, required=False, allow_null=True)
+    phone = serializers.CharField(max_length=20, required=False, allow_null=True, allow_blank=True)
 
     def validate_auth_user_id(self, value):
         if UserProfile.objects.filter(auth_user_id=value).exists():

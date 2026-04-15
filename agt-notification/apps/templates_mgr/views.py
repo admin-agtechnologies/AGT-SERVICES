@@ -59,7 +59,7 @@ class TemplateDetailView(APIView):
         return Response({"id": str(tpl.id), "name": tpl.name, "channel": tpl.channel,
                          "subject": version.subject if version else None, "body": version.body if version else ""})
 
-    @extend_schema(tags=["Templates"], summary="Modifier template (nouvelle version)")
+    @extend_schema(tags=["Templates"], summary="Modifier template (nouvelle version)", request=TemplateUpdateSerializer)
     def put(self, request, template_id):
         try:
             tpl = Template.objects.get(id=template_id)
@@ -89,7 +89,7 @@ class TemplateDetailView(APIView):
 class TemplatePreviewView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Templates"], summary="Preview avec variables")
+    @extend_schema(tags=["Templates"], summary="Preview avec variables", request=TemplatePreviewSerializer)
     def post(self, request, template_id):
         try:
             tpl = Template.objects.get(id=template_id)

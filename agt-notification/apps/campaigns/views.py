@@ -92,5 +92,13 @@ class CampaignCancelView(APIView):
             c = Campaign.objects.get(id=campaign_id)
         except Campaign.DoesNotExist:
             return Response({"detail": "Campagne introuvable."}, status=status.HTTP_404_NOT_FOUND)
+
+        # On ne peut pas annuler une campagne déjà terminée ou déjà annulée
+        if c.status in ["completed", "cancelled"]:
+            return Response(
+                {"detail": f"Impossible d'annuler une campagne avec le statut '{c.status}'."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         c.cancel()
         return Response({"message": "Campagne annulee.", "status": "cancelled"})
