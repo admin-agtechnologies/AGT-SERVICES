@@ -12,7 +12,8 @@ urlpatterns = [
 
     # Permissions
     path("platforms/<uuid:platform_id>/permissions", PermissionListCreateView.as_view(), name="permissions-list-create"),
-    path("platforms/<uuid:platform_id>/roles/<uuid:role_id>/permissions", RolePermissionView.as_view(), name="role-permissions"),
+
+    # Attacher/détacher une permission à un rôle — perm_id obligatoire dans l'URL
     path("platforms/<uuid:platform_id>/roles/<uuid:role_id>/permissions/<uuid:perm_id>", RolePermissionView.as_view(), name="role-permission-detail"),
 
     # User Roles

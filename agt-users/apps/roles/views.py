@@ -1,20 +1,32 @@
 """
 AGT Users Service v1.0 - Views : Roles, Permissions, UserRoles, PermissionCheck.
-RBAC 100% dynamique. platform_id = UUID Auth directement.
+RBAC 100% dynamique. platform_id = UUID Auth directement. 
 """
 import logging
 from rest_framework import status, serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
 
 from apps.roles.models import Role, Permission, RolePermission, UserRole
 from apps.users.models import UserProfile
 from apps.users.services import PermissionCacheService, NotificationClient
+from rest_framework import serializers as drf_serializers
 
 logger = logging.getLogger(__name__)
 
+class RoleCreateSerializer(drf_serializers.Serializer):
+    name = drf_serializers.CharField(max_length=100)
+    description = drf_serializers.CharField(required=False, default="")
+
+class PermissionCreateSerializer(drf_serializers.Serializer):
+    name = drf_serializers.CharField(max_length=100)
+    description = drf_serializers.CharField(required=False, default="")
+
+class UserRoleAssignSerializer(drf_serializers.Serializer):
+    role_id = drf_serializers.UUIDField()
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,16 +39,23 @@ class PermissionSerializer(serializers.ModelSerializer):
         model = Permission
         fields = ["id", "platform_id", "name", "description", "created_at"]
 
+class RoleUpdateSerializer(drf_serializers.Serializer):
+    name = drf_serializers.CharField(max_length=100, required=False)
+    description = drf_serializers.CharField(required=False, allow_blank=True)
 
 # --- Roles CRUD ---
 
 class RoleListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Roles"], summary="Creer un role pour une plateforme")
+    @extend_schema(tags=["Roles"], summary="Creer un role pour une plateforme", request=RoleCreateSerializer)
     def post(self, request, platform_id):
-        name = request.data.get("name")
-        description = request.data.get("description", "")
+        serializer = RoleCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        name = serializer.validated_data["name"]
+        description = serializer.validated_data["description"]
         if not name:
             return Response({"detail": "name requis."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -55,7 +74,7 @@ class RoleListCreateView(APIView):
 class RoleDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Roles"], summary="Modifier un role")
+    @extend_schema(tags=["Roles"], summary="Modifier un role", request=RoleUpdateSerializer)
     def put(self, request, platform_id, role_id):
         try:
             role = Role.objects.get(id=role_id, platform_id=platform_id)
@@ -83,10 +102,14 @@ class RoleDetailView(APIView):
 class PermissionListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Permissions"], summary="Creer une permission")
+    @extend_schema(tags=["Permissions"], summary="Creer une permission", request=PermissionCreateSerializer)
     def post(self, request, platform_id):
-        name = request.data.get("name")
-        description = request.data.get("description", "")
+        serializer = PermissionCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        name = serializer.validated_data["name"]
+        description = serializer.validated_data["description"]
         if not name:
             return Response({"detail": "name requis."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -108,11 +131,8 @@ class RolePermissionView(APIView):
     permission_classes = [IsAuthenticated]
 
     @extend_schema(tags=["Roles"], summary="Attacher une permission a un role")
-    def post(self, request, platform_id, role_id):
-        perm_id = request.data.get("permission_id")
-        if not perm_id:
-            return Response({"detail": "permission_id requis."}, status=status.HTTP_400_BAD_REQUEST)
-
+    def post(self, request, platform_id, role_id, perm_id):
+        # perm_id vient directement de l'URL — plus besoin de body
         try:
             role = Role.objects.get(id=role_id, platform_id=platform_id)
             perm = Permission.objects.get(id=perm_id, platform_id=platform_id)
@@ -140,7 +160,7 @@ class RolePermissionView(APIView):
 class UserRoleListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["User Roles"], summary="Assigner un role a un utilisateur")
+    @extend_schema(tags=["User Roles"], summary="Assigner un role a un utilisateur", request=UserRoleAssignSerializer)
     def post(self, request, user_id):
         role_id = request.data.get("role_id")
         if not role_id:
@@ -204,7 +224,14 @@ class UserRoleDeleteView(APIView):
 class PermissionCheckView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Permissions"], summary="Verifier une permission (cache Redis)")
+    @extend_schema(
+    tags=["Permissions"],
+    summary="Verifier une permission (cache Redis)",
+    parameters=[
+        OpenApiParameter(name="permission", type=OpenApiTypes.STR, required=True, description="Nom de la permission a verifier (ex: create_product)"),
+        OpenApiParameter(name="platform_id", type=OpenApiTypes.UUID, required=True, description="UUID de la plateforme"),
+    ]
+)
     def get(self, request, user_id):
         platform_id = request.GET.get("platform_id")
         perm_name = request.GET.get("permission")
@@ -241,3 +268,6 @@ class PermissionCheckView(APIView):
         }
         PermissionCacheService.set(str(user_id), platform_id, perm_name, result)
         return Response(result)
+    
+
+

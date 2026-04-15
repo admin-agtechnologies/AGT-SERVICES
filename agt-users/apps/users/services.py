@@ -123,7 +123,8 @@ class AuthServiceClient:
                 headers={"X-Admin-API-Key": admin_key},
                 timeout=10.0,
             )
-            return resp.status_code < 400
+            # 404 = utilisateur déjà inexistant dans Auth = purge OK
+            return resp.status_code < 400 or resp.status_code == 404
         except Exception as e:
             logger.error(f"Auth purge failed: {e}")
             return False
