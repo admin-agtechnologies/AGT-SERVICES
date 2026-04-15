@@ -414,9 +414,19 @@
 \docs\cdc
 \docs\GETTING_STARTED.md
 \docs\GUIDE_AUTH.md
+\docs\GUIDE_CHAT.md
+\docs\GUIDE_CHATBOT.md
+\docs\GUIDE_GEOLOC.md
+\docs\GUIDE_LOGS.md
+\docs\GUIDE_MEDIA.md
+\docs\GUIDE_NEW_SERVICE.md
 \docs\GUIDE_NOTIFICATION.md
+\docs\GUIDE_PAYMENT.md
+\docs\GUIDE_SCRIPTS.md
+\docs\GUIDE_SEARCH.md
 \docs\GUIDE_SUBSCRIPTION.md
 \docs\GUIDE_USERS.md
+\docs\GUIDE_WALLET.md
 \docs\cdc\1.auth.pdf
 \docs\cdc\1.auth.txt
 \docs\cdc\10.wallet.pdf
@@ -443,6 +453,7 @@
 \prompt\save_context
 \prompt\instructions.md
 \prompt\prompt_task.md
+\prompt\TEAM_PROMPT.md
 \prompt\save_context\end_session.md
 \prompt\save_context\init_session.md
 \prompt\save_context\sync.md
@@ -453,13 +464,13 @@
 
 ## FILES
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docker-compose.infra.yml (2.64 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\hanover_report.md (3.9 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\hanover_report.md (6.44 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\notes.md (2.06 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\README.md (10.49 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\README.md (27.98 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\roadmap.md (4.43 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\standards.md (11.65 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\test.txt (3.87 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\todo.md (15.57 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\todo.md (15.05 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\.env (4.43 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\.env.example (4.43 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\CDC_v1.0.md (3.63 KB)
@@ -726,11 +737,21 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\config\urls.py (0.45 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\config\wsgi.py (0.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\config\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GETTING_STARTED.md (7.56 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GETTING_STARTED.md (19.22 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_AUTH.md (5.14 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_CHAT.md (0.06 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_CHATBOT.md (0.06 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_GEOLOC.md (0.06 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_LOGS.md (0.06 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_MEDIA.md (0.06 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_NEW_SERVICE.md (0.07 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_NOTIFICATION.md (8.46 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_PAYMENT.md (0.06 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_SCRIPTS.md (0.06 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_SEARCH.md (0.06 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_SUBSCRIPTION.md (6.73 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_USERS.md (5.83 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_WALLET.md (0.06 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\1.auth.txt (80.56 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\10.wallet.txt (54.84 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\cdc\11.geoloc.txt (58.91 KB)
@@ -745,11 +766,12 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\gateway\nginx.conf (10.55 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\instructions.md (2.22 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\prompt_task.md (0.47 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\TEAM_PROMPT.md (11.18 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\end_session.md (0.44 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\init_session.md (0.63 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\sync.md (0.76 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\t.md (3.24 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\_scan_output\context.md (1476.47 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\_scan_output\context.md (1471.66 KB)
 
 ## CODE CONTEXT
 
@@ -848,78 +870,139 @@ networks:
 # HANDOFF REPORT â€” Session du 14 avril 2026
 
 > **Projet** : AG Technologies â€” Architecture Microservices
+> **Pair-programmer** : Claude (Anthropic)
 > **MÃ©thode** : 5 Ã©tapes (Analyse â†’ Fonctionnel â†’ Technique â†’ ImplÃ©mentation â†’ Tests)
 
 ---
 
 ## 1. CE QUI A Ã‰TÃ‰ COMPLÃ‰TÃ‰ AVEC SUCCÃˆS
 
-### Flux MVP complet â€” TERMINÃ‰ âœ…
+### Flux MVP end-to-end â€” VALIDÃ‰ âœ…
 
-Le flux `register â†’ email de vÃ©rification dans Mailpit` fonctionne end-to-end.
+Le flux complet `register â†’ provisioning Users â†’ email de vÃ©rification dans Mailpit` fonctionne.
 
-**Fixes appliquÃ©s :**
+### Corrections techniques appliquÃ©es
 
-1. `agt-auth/apps/authentication/services.py` â€” Ajout header `Authorization Bearer` S2S sur tous les appels inter-services (`NotificationClient`, `UsersServiceClient`). Auto-gÃ©nÃ©ration du token S2S interne avec le bon `platform_id`.
-2. `agt-auth/apps/authentication/views_auth.py` â€” Ajout `user_id` et `platform_id` dans `recipient` sur tous les appels `NotificationClient.send`.
-3. `agt-notification/apps/notifications/authentication.py` â€” Fix `platform_id` pour tokens S2S (lecture depuis `sub`) + ajout `is_authenticated = True`.
-4. `agt-notification/apps/notifications/services.py` â€” Ajout `S2STokenService` (obtention et cache Redis du token S2S via `POST /auth/s2s/token`) + `UserResolverService` mis Ã  jour pour utiliser ce token.
-5. `agt-notification/config/settings.py` â€” DÃ©claration des variables `S2S_AUTH_URL`, `S2S_CLIENT_ID`, `S2S_CLIENT_SECRET`.
-6. `agt-notification/.env` â€” Ajout credentials S2S de la plateforme `agt-notification` (crÃ©Ã©e dans Auth).
-7. `agt-notification/providers/providers.py` â€” SMTP (Mailpit) en premier dans `PROVIDER_MAP`, suppression du double `PROVIDER_MAP` qui Ã©crasait le bon.
-8. `agt-notification/config/celery.py` â€” Ajout `app.conf.imports = ["workers.tasks"]` pour dÃ©couvrir la tÃ¢che `notifications.send_notification`.
-9. `agt-auth/apps/authentication/services.py` â€” Suppression de `first_name` et `last_name` vides dans le payload `provision_user` (causait 400 sur Users).
+| Fichier | Correction |
+|---|---|
+| `agt-auth/apps/authentication/services.py` | Ajout header `Authorization Bearer` S2S sur tous les appels inter-services. Auto-gÃ©nÃ©ration du token S2S avec le bon `platform_id` dans le JWT. Suppression de `first_name`/`last_name` vides dans `provision_user`. |
+| `agt-auth/apps/authentication/views_auth.py` | Ajout `user_id` et `platform_id` dans `recipient` sur tous les appels `NotificationClient.send`. |
+| `agt-notification/apps/notifications/authentication.py` | Fix `platform_id` pour tokens S2S (lecture depuis `sub` au lieu de `platform_id`) + ajout `is_authenticated = True`. |
+| `agt-notification/apps/notifications/services.py` | Ajout `S2STokenService` (obtention et cache Redis via `POST /auth/s2s/token`) + `UserResolverService` mis Ã  jour. |
+| `agt-notification/config/settings.py` | DÃ©claration des variables `S2S_AUTH_URL`, `S2S_CLIENT_ID`, `S2S_CLIENT_SECRET`. |
+| `agt-notification/config/celery.py` | Ajout `app.conf.imports = ["workers.tasks"]` â€” sans Ã§a, Celery ne dÃ©couvrait pas la tÃ¢che `notifications.send_notification`. |
+| `agt-notification/providers/providers.py` | SMTP (Mailpit) en premier dans `PROVIDER_MAP`. Suppression du double `PROVIDER_MAP` qui Ã©crasait le bon. |
+| `agt-notification/.env` | Ajout credentials S2S de la plateforme `agt-notification`. |
 
-### Plateformes S2S crÃ©Ã©es dans Auth
+### Plateformes crÃ©Ã©es dans Auth (Ã  NE PAS recrÃ©er sauf aprÃ¨s `--clean`)
 
-| Service | client_id | Statut |
+| Plateforme | client_id | Usage |
 |---|---|---|
-| AGT Market | c87d50a1-e954-4249-ad3e-04e3f07271c7 | âœ… |
-| AGT Notification | d3aa237c-726e-4cae-b250-30db70357623 | âœ… |
+| Plateforme Test | `c87d50a1-e954-4249-ad3e-04e3f07271c7` | Tests d'inscription et flux utilisateur |
+| AGT Notification | `d3aa237c-726e-4cae-b250-30db70357623` | Token S2S de Notification â†’ Users |
 
-### RÃ¨gle architecture Ã©tablie
-> Tout microservice qui appelle d'autres services doit avoir sa propre plateforme S2S dans Auth. Les plateformes S2S des microservices doivent Ãªtre crÃ©Ã©es **avant** les plateformes applicatives au premier dÃ©marrage.
+### Documentation produite
+
+- `docs/GETTING_STARTED.md` â€” guide complet du MVP avec chorÃ©graphie inter-services
+- `README.md` racine â€” vue d'ensemble du projet, structure, scripts, outils
+- `prompt/TEAM_PROMPT.md` â€” prompt gÃ©nÃ©rique pour dÃ©lÃ©guer le travail Ã  l'Ã©quipe
+- `todo.md` â€” roadmap complÃ¨te phases Aâ†’H avec bilan et prioritÃ©s
+- Guides vides crÃ©Ã©s : GUIDE_PAYMENT, GUIDE_WALLET, GUIDE_SEARCH, GUIDE_CHAT, GUIDE_CHATBOT, GUIDE_MEDIA, GUIDE_GEOLOC, GUIDE_SCRIPTS, GUIDE_LOGS, GUIDE_NEW_SERVICE
 
 ---
 
-## 2. Ã‰TAT ACTUEL
+## 2. RÃˆGLES ET PATTERNS CRITIQUES Ã€ RESPECTER
 
-Tous les containers MVP sont up et healthy :
-- Auth : http://localhost:7000
-- Users : http://localhost:7001
-- Notification : http://localhost:7002
-- Mailpit : http://localhost:8025
-- RabbitMQ : http://localhost:15672
+Ces points ont causÃ© des bugs en session â€” toute l'Ã©quipe doit les connaÃ®tre.
+
+### Communication inter-services (S2S)
+Tout appel HTTP entre services **doit** porter un header `Authorization: Bearer <token>`. Le token est obtenu via `POST /auth/s2s/token` et mis en cache Redis. Voir `S2STokenService` dans `agt-notification/apps/notifications/services.py` â€” copier ce pattern dans chaque nouveau service.
+
+### JWTPayload dans chaque service
+Toujours inclure `is_authenticated = True`. Pour les tokens S2S, `platform_id` est dans le champ `sub` du JWT (pas dans `platform_id`). Voir `agt-notification/apps/notifications/authentication.py`.
+
+### Celery : dÃ©couverte des tÃ¢ches
+`app.autodiscover_tasks()` ne dÃ©couvre que `apps/*/tasks.py`. Pour des tÃ¢ches dans `workers/tasks.py`, ajouter explicitement dans `config/celery.py` :
+```python
+app.conf.imports = ["workers.tasks"]
+```
+
+### Container names Docker
+Utiliser des **tirets**, jamais des underscores. Django 4.2+ rejette les underscores comme hostnames (RFC 1034).
+
+### Variables .env dans settings.py
+Toute variable lue depuis l'environnement doit Ãªtre dÃ©clarÃ©e dans `settings.py` avec `config("MA_VAR", default="")`. Sans dÃ©claration, Django ne la voit pas mÃªme si elle est dans le `.env`.
+
+### Swagger â€” bouton Authorize
+NÃ©cessite dans `settings.py` :
+```python
+SPECTACULAR_SETTINGS = {
+    "SECURITY": [{"BearerAuth": []}],
+    "APPEND_COMPONENTS": {"securitySchemes": {"BearerAuth": {"type": "http", "scheme": "bearer"}}}
+}
+```
 
 ---
 
 ## 3. PROCHAINE Ã‰TAPE IMMÃ‰DIATE
 
-**Phase B â€” Finaliser `GETTING_STARTED.md`**
+**Phase B â€” Documentation & Tests MVP en parallÃ¨le**
 
-Le guide doit documenter le flux de dÃ©marrage complet incluant :
-1. Lancer `deploy_mvp.ps1`
-2. CrÃ©er les plateformes S2S des microservices (agt-notification, etc.)
-3. CrÃ©er les plateformes applicatives (AGT Market, etc.)
-4. CrÃ©er les templates de notification
-5. Tester le flux register â†’ email
+Utiliser `prompt/TEAM_PROMPT.md` pour dÃ©lÃ©guer :
+
+```
+Dev 1  â†’  GUIDE_AUTH.md + pytest agt-auth/
+Dev 2  â†’  GUIDE_USERS.md + pytest agt-users/
+Dev 3  â†’  GUIDE_NOTIFICATION.md + pytest agt-notification/ + fix rendu Jinja2
+Lead   â†’  Phase C â€” Subscription ou Payment
+```
 
 ---
 
-## 4. POINTS D'ATTENTION
+## 4. POINTS D'ATTENTION EN SUSPENS
 
-| # | Point | Statut |
+| # | Point | Action requise |
 |---|---|---|
-| 1 | Token S2S Notification expire aprÃ¨s 1h â†’ renouvelÃ© automatiquement via Redis | âœ… GÃ©rÃ© |
-| 2 | `first_name`/`last_name` non envoyÃ©s au provisioning Users | âœ… CorrigÃ© |
-| 3 | `PROVIDER_MAP` dupliquÃ© dans providers.py | âœ… CorrigÃ© |
-| 4 | Variables S2S manquantes dans settings.py Notification | âœ… CorrigÃ© |
-| 5 | Body de l'email = template brut sans rendu Jinja2 | âš ï¸ Ã€ amÃ©liorer |
-| 6 | `run.py` (fix container_names) â€” encodage UTF-16 sur certains fichiers | âš ï¸ Connu |
+| 1 | Body des emails = template brut, variables Jinja2 non rendues | Corriger dans `agt-notification` â€” le template est stockÃ© en base mais non rendu avant envoi |
+| 2 | Tests pytest non validÃ©s en intÃ©gration rÃ©elle | Les lancer sur chaque service, corriger les Ã©checs |
+| 3 | `.env.example` de Notification ne contient pas encore `S2S_CLIENT_ID/SECRET` | Mettre Ã  jour `.env.example` avec les clÃ©s S2S (valeurs vides, commentÃ©es) |
+| 4 | AprÃ¨s tout `reset --clean` : recrÃ©er plateformes + token S2S + templates | Documenter dans GUIDE_SCRIPTS.md ou automatiser dans un script `setup_platforms.ps1` |
 
 ---
 
-## 5. PORTS
+## 5. COMMANDES UTILES
+
+```powershell
+# Lancer le MVP
+.\deploy_mvp.ps1
+
+# Reset complet (repart de zÃ©ro)
+.\reset_mvp.ps1 --clean
+
+# Rebuild Auth
+cd agt-auth && docker compose up -d --build auth && cd ..
+
+# Rebuild Notification (service + worker)
+cd agt-notification
+docker compose up -d --build notification celery-worker
+cd ..
+
+# Logs en temps rÃ©el
+docker logs agt-auth-service --follow
+docker logs agt-notif-worker --follow
+
+# Vider le cache Redis Auth (rate limiting)
+docker exec agt-auth-redis redis-cli FLUSHDB
+
+# Lancer les tests
+docker exec agt-auth-service python -m pytest -v
+docker exec agt-users-service python -m pytest -v
+docker exec agt-notif-service python -m pytest -v
+```
+
+---
+
+## 6. PORTS DE RÃ‰FÃ‰RENCE
 
 | Service | Port | Swagger |
 |---|---|---|
@@ -927,7 +1010,7 @@ Le guide doit documenter le flux de dÃ©marrage complet incluant :
 | Users | 7001 | http://localhost:7001/api/v1/docs/ |
 | Notification | 7002 | http://localhost:7002/api/v1/docs/ |
 | Mailpit | 8025 | http://localhost:8025 |
-| RabbitMQ | 15672 | http://localhost:15672 |
+| RabbitMQ | 15672 | http://localhost:15672 (agt_rabbit / agt_rabbit_password) |
 
 ---
 
@@ -968,145 +1051,411 @@ AprÃ¨s avoir lancÃ© ce service, je me suis posÃ© les mÃªmes questions qu
 
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\README.md =====
 `
-# AG Technologies — Microservices Platform
+# AG Technologies — Microservices Suite
 
-Architecture microservices partagée pour l'écosystème AGT (AGT-Bot, AGT-Market, SALMA, futures plateformes).
+> Architecture microservices complète pour applications backend à grande échelle.
+> Stack : Python / Django / DRF / Docker / RabbitMQ / PostgreSQL / Redis / Elasticsearch
 
 ---
 
-## Architecture
+## Table des matières
+
+1. [Vue d'ensemble](#1-vue-densemble)
+2. [Structure du projet](#2-structure-du-projet)
+3. [Services](#3-services)
+4. [Démarrage rapide](#4-démarrage-rapide)
+5. [Scripts disponibles](#5-scripts-disponibles)
+6. [Infrastructure partagée](#6-infrastructure-partagée)
+7. [Documentation](#7-documentation)
+8. [Outils de prompting et collaboration](#8-outils-de-prompting-et-collaboration)
+9. [Conventions](#9-conventions)
+10. [État du projet](#10-état-du-projet)
+
+---
+
+## 1. Vue d'ensemble
+
+AGT est une suite de microservices découplés conçue pour être le socle backend de n'importe quelle application métier. Chaque service est :
+
+- **Autonome** : sa propre base de données, son propre cycle de déploiement
+- **Indépendant** : déployable sans impacter les autres
+- **Responsable** : un seul périmètre métier par service
+
+La communication inter-services suit deux patterns :
+- **REST synchrone** : lectures, validations, actions critiques
+- **RabbitMQ asynchrone** : notifications, paiements, wallet, indexation
+
+---
+
+## 2. Structure du projet
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    PLATEFORMES                          │
-│         AGT-Bot · AGT-Market · SALMA · ...              │
-└──────────┬──────────┬──────────┬──────────┬─────────────┘
-           │          │          │          │
-     ┌─────▼──┐ ┌─────▼──┐ ┌────▼───┐ ┌───▼────┐
-     │  Auth  │ │ Users  │ │ Notifs │ │ Média  │
-     │ Django │ │ Django │ │ Django │ │ NestJS │
-     └───┬────┘ └───┬────┘ └───┬────┘ └───┬────┘
-         │          │          │           │
-   ┌─────▼──┐ ┌─────▼──┐ ┌────▼───┐ ┌────▼───┐
-   │  Sub.  │ │Payment │ │ Wallet │ │ Search │
-   │ Django │ │ Django │ │ Django │ │Django+ES│
-   └────────┘ └────────┘ └────────┘ └────────┘
-         │          │          │
-   ┌─────▼──┐ ┌─────▼──┐ ┌────▼───┐
-   │  Chat  │ │ Geoloc │ │Chatbot │
-   │Express │ │ NestJS │ │ Django │
-   └────────┘ └────────┘ └────────┘
+AGT-SERVICES/
+│
+├── agt-auth/               # Service Auth — identité, JWT, sessions, OAuth
+├── agt-users/              # Service Users — profils, rôles, permissions
+├── agt-notification/       # Service Notification — email, SMS, push, in-app
+├── agt-media/              # Service Media — upload, traitement, stockage
+├── agt-subscription/       # Service Subscription — plans, quotas, facturation
+├── agt-payment/            # Service Payment — transactions externes
+├── agt-wallet/             # Service Wallet — ledger double-entry
+├── agt-search/             # Service Search — indexation Elasticsearch
+├── agt-chat/               # Service Chat — messagerie temps réel
+├── agt-geoloc/             # Service Geoloc — GPS, geofencing
+├── agt-chatbot/            # Service Chatbot — orchestrateur IA, RAG
+│
+├── gateway/
+│   └── nginx.conf          # Configuration du reverse proxy Nginx
+│
+├── docs/
+│   ├── GETTING_STARTED.md  # Guide de démarrage complet (point d'entrée principal)
+│   ├── GUIDE_AUTH.md       # Guide détaillé du service Auth
+│   ├── GUIDE_USERS.md      # Guide détaillé du service Users
+│   ├── GUIDE_NOTIFICATION.md
+│   ├── GUIDE_SUBSCRIPTION.md
+│   ├── GUIDE_PAYMENT.md
+│   ├── GUIDE_WALLET.md
+│   ├── GUIDE_SEARCH.md
+│   ├── GUIDE_CHAT.md
+│   ├── GUIDE_CHATBOT.md
+│   ├── GUIDE_MEDIA.md
+│   ├── GUIDE_GEOLOC.md
+│   ├── GUIDE_SCRIPTS.md    # Référence complète des scripts
+│   ├── GUIDE_LOGS.md       # Comment lire et interpréter les logs
+│   ├── GUIDE_NEW_SERVICE.md # Démarrer un service hors MVP
+│   └── cdc/                # Cahiers des charges de chaque service (référence absolue)
+│       ├── 1.auth.txt
+│       ├── 2.users.txt
+│       └── ...
+│
+├── prompt/
+│   ├── TEAM_PROMPT.md      # Prompt générique pour déléguer le travail à l'équipe
+│   ├── instructions.md     # Instructions système pour le pair-programmer IA
+│   ├── prompt_task.md      # Template pour démarrer une tâche spécifique
+│   └── save_context/
+│       ├── init_session.md # Prompt d'initialisation d'une nouvelle session
+│       ├── end_session.md  # Prompt de fin de session (génère le Handoff Report)
+│       └── sync.md         # Prompt de synchronisation (reprendre où on s'est arrêté)
+│
+├── _scan_output/
+│   └── context.md          # Snapshot complet du projet (généré par scanner.ps1)
+│
+├── docker-compose.infra.yml # Infrastructure partagée (Gateway, RabbitMQ, Mailpit, ES)
+├── hanover_report.md        # Dernier Handoff Report de session
+├── roadmap.md               # Roadmap globale du projet
+├── standards.md             # Conventions techniques unifiées (référence)
+├── todo.md                  # Plan de mise en place détaillé avec checkboxes
+├── run.py                   # Script utilitaire (fix container_names)
+├── scanner.ps1              # Génère le snapshot context.md
+├── deploy_mvp.ps1 / .sh     # Déployer le MVP (Auth + Users + Notification)
+├── deploy_all.ps1 / .sh     # Déployer tous les services
+├── reset_mvp.ps1 / .sh      # Reset le MVP (soft ou --clean)
+└── reset_all.ps1 / .sh      # Reset tous les services
 ```
 
-**Communication** : REST (synchrone) + RabbitMQ (asynchrone pour paiement, wallet, notifications, indexation).
+### Rôle de chaque fichier racine
+
+| Fichier | Rôle |
+|---|---|
+| `docker-compose.infra.yml` | Démarre l'infrastructure partagée : Gateway Nginx, RabbitMQ, Mailpit (SMTP dev), Elasticsearch |
+| `hanover_report.md` | Rapport de passation de la dernière session de travail. À lire en début de session. |
+| `roadmap.md` | Vision globale du projet et grandes phases de travail |
+| `standards.md` | Conventions techniques que tous les services doivent respecter |
+| `todo.md` | Plan détaillé avec checkboxes — état d'avancement par service |
+| `scanner.ps1` | Génère `_scan_output/context.md` : un snapshot de tous les fichiers du projet, utile pour fournir le contexte à une IA |
+| `run.py` | Script de maintenance — corrige les container_name avec underscores en tirets (RFC 1034) |
 
 ---
 
-## Services
+## 3. Services
 
-| Service | Stack | Port | Rôle |
-|---------|-------|------|------|
-| **Auth** | Django/DRF | 7000 | Identité, JWT, sessions, OAuth, 2FA, S2S |
-| **Users** | Django/DRF | 7001 | Profils, RBAC dynamique, documents, métadonnées |
-| **Notification** | Django/DRF + Celery | 7002 | Envoi multi-canal (email, SMS, push, in-app, WhatsApp) |
-| **Média** | NestJS | 7003 | Upload, traitement, stockage, thumbnails, CDN |
-| **Subscription** | Django/DRF + Celery | 7004 | Plans, quotas, cycles, facturation |
-| **Payment** | Django/DRF | 7005 | Providers (Orange Money, MTN MoMo, Stripe, PayPal) |
-| **Wallet** | Django/DRF | 7006 | Ledger double-entry, virements, cash-in/out |
-| **Search** | Django/DRF + Elasticsearch | 7007 | Indexation, recherche full-text, suggestions |
-| **Chat** | Express/Socket.io | 7008 | Messagerie temps réel, présence, fichiers |
-| **Geoloc** | NestJS/Socket.io + PostGIS | 7009 | Tracking GPS, geofencing, zones |
-| **Chatbot** | Django/DRF + Celery | 7010 | Orchestrateur IA, flows, knowledge base, RAG |
+### MVP (opérationnel)
 
----
+| Service | Port | Swagger | Rôle |
+|---|---|---|---|
+| **Auth** | 7000 | http://localhost:7000/api/v1/docs/ | Identité, JWT RS256, sessions, OAuth 2.0, 2FA, tokens S2S |
+| **Users** | 7001 | http://localhost:7001/api/v1/docs/ | Profils, RBAC dynamique, adresses, métadonnées, documents |
+| **Notification** | 7002 | http://localhost:7002/api/v1/docs/ | Email, SMS, push, in-app, WhatsApp via Celery + RabbitMQ |
 
-## État actuel
+### Services complémentaires
 
-**4 services codés** (héritage v0, en cours de correction) :
+| Service | Port | État | Rôle |
+|---|---|---|---|
+| **Subscription** | 7004 | À implémenter | Plans, quotas, cycles de facturation |
+| **Payment** | 7005 | À implémenter | Transactions Orange Money, MTN MoMo, Stripe, PayPal |
+| **Wallet** | 7006 | À implémenter | Ledger double-entry, virements, cash-in/out |
+| **Search** | 7007 | À implémenter | Indexation et recherche full-text Elasticsearch |
+| **Chat** | 7008 | Simulateur | Messagerie temps réel Socket.io |
+| **Geoloc** | 7009 | Simulateur | Tracking GPS, geofencing |
+| **Chatbot** | 7010 | À implémenter | Orchestrateur IA, flows, knowledge base, RAG |
+| **Media** | 7003 | Simulateur | Upload, traitement, stockage, thumbnails |
 
-| Service | État | Travail restant |
-|---------|------|-----------------|
-| Auth | ✅ ~85% conforme | Corrections mineures (rate limiting, CSRF, bug cleanup) |
-| Users | ⚠️ ~60% conforme | Refonte partielle — code basé sur Users v1.0 au lieu de v2.1 |
-| Notification | ✅ ~80% conforme | Ajustements (convention user_id, vérification user actif) |
-| Média | ✅ ~75% conforme | Ajustements (préfixe API, convention identité) |
+### Outils de développement
 
-**7 services à implémenter** : Subscription, Payment, Wallet, Search, Chat, Geoloc, Chatbot.
-
-**Problème principal identifié** : le code existant a été développé avec Users v1.0. L'architecture validée exige Users v2.1 (suppression dual, hard delete sécurisé, plus de table platforms locale). La mise en conformité de Users est le chantier prioritaire car tous les services en dépendent.
-
----
-
-## Convention de versionnement
-
-Tous les services seront livrés en **v1.0**. Les numéros de version des CDC d'architecture (Auth v2.1, Users v2.1, Notifs v1.2, etc.) sont des versions de conception interne. La version de livraison du code est uniformément **1.0.0**.
+| Outil | URL | Rôle |
+|---|---|---|
+| **Mailpit** | http://localhost:8025 | Intercepte les emails envoyés en dev |
+| **RabbitMQ Management** | http://localhost:15672 | Monitoring des queues (agt_rabbit / agt_rabbit_password) |
+| **Elasticsearch** | http://localhost:9200 | Moteur de recherche |
+| **Gateway Nginx** | http://localhost:80 | Reverse proxy vers tous les services |
 
 ---
 
-## Documentation
+## 4. Démarrage rapide
 
-| Document | Description |
-|----------|-------------|
-| **[TODO.md](./TODO.md)** | Plan de mise en place complet — 6 phases, 11 services, checkboxes |
-| **[STANDARDS.md](./STANDARDS.md)** | Conventions techniques unifiées — identité, réponses API, events, ports |
-| **[docker-compose.infra.yml](./docker-compose.infra.yml)** | Infrastructure partagée — Gateway Nginx, RabbitMQ, Elasticsearch |
-| **[gateway/nginx.conf](./gateway/nginx.conf)** | Configuration du reverse proxy — routage vers tous les services |
+```powershell
+# Lancer le MVP
+.\deploy_mvp.ps1
+
+# Vérifier que tout est up
+docker ps
+
+# Accéder au Swagger Auth
+# http://localhost:7000/api/v1/docs/
+```
+
+Pour le guide de configuration complet (plateformes S2S, templates, premier utilisateur) :
+
+→ **[docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md)**
 
 ---
 
-## Démarrage rapide
+## 5. Scripts disponibles
 
-```bash
-# 1. Monter l'infrastructure partagée
-docker compose -f docker-compose.infra.yml up -d
+### Déploiement
 
-# 2. Monter un service (exemple : Auth)
+```powershell
+# MVP uniquement (Auth + Users + Notification + infra)
+.\deploy_mvp.ps1         # Windows
+./deploy_mvp.sh          # Linux/Mac
+
+# Tous les services
+.\deploy_all.ps1
+./deploy_all.sh
+```
+
+### Reset
+
+```powershell
+# Reset soft (garde les données en base)
+.\reset_mvp.ps1
+
+# Reset complet (supprime les volumes = repart de zéro)
+.\reset_mvp.ps1 --clean
+
+# Idem pour tous les services
+.\reset_all.ps1 --clean
+```
+
+> **Attention :** `--clean` supprime toutes les données. Vous devrez reconfigurer les plateformes et templates après.
+
+### Rebuild d'un service
+
+```powershell
 cd agt-auth
-cp .env.example .env
-docker compose up -d
+docker compose up -d --build auth
+cd ..
 
-# 3. Vérifier
-curl http://localhost/api/v1/auth/health
+cd agt-notification
+docker compose up -d --build notification celery-worker
+cd ..
+```
+
+### Utilitaires
+
+```powershell
+# Générer un snapshot du projet (pour fournir contexte à une IA)
+.\scanner.ps1
+
+# Fix des container_names (underscores → tirets)
+python run.py
+```
+
+Pour la référence complète des scripts : → [docs/GUIDE_SCRIPTS.md](./docs/GUIDE_SCRIPTS.md)
+
+---
+
+## 6. Infrastructure partagée
+
+Le fichier `docker-compose.infra.yml` démarre les services d'infrastructure communs à tout l'écosystème. Ces services ne sont **pas** des microservices métier, ce sont des outils partagés.
+
+```powershell
+docker compose -f docker-compose.infra.yml up -d
+```
+
+| Container | Rôle |
+|---|---|
+| `agt-gateway` | Nginx — reverse proxy, routage vers les services |
+| `agt-rabbitmq` | Message broker — queues asynchrones |
+| `agt-elasticsearch` | Moteur de recherche full-text |
+| `agt-mailpit` | Serveur SMTP de développement |
+
+En production, ces services sont remplacés par des instances managées (AWS SQS, Elastic Cloud, SendGrid, etc.).
+
+---
+
+## 7. Documentation
+
+Toute la documentation est dans le dossier `docs/`. Voici l'ordre de lecture recommandé pour un nouveau développeur :
+
+1. **[docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md)** — Point d'entrée. Lancer le MVP et valider le premier flux.
+2. **[docs/GUIDE_AUTH.md](./docs/GUIDE_AUTH.md)** — Comprendre Auth en profondeur (JWT, S2S, sessions).
+3. **[docs/GUIDE_USERS.md](./docs/GUIDE_USERS.md)** — Profils, rôles, RBAC.
+4. **[docs/GUIDE_NOTIFICATION.md](./docs/GUIDE_NOTIFICATION.md)** — Templates, canaux, Celery.
+5. Les autres guides selon le service sur lequel vous travaillez.
+
+### Les CDC (Cahiers des Charges)
+
+Le dossier `docs/cdc/` contient les CDC de chaque service. Ce sont les **références absolues** de conception. En cas de conflit entre le code et le CDC, le CDC prime.
+
+```
+docs/cdc/
+├── 1.auth.txt
+├── 2.users.txt
+├── 3.notifs.txt
+├── 4.medias.txt
+├── 5.search.txt
+├── 6.chat.txt
+├── 7.chatbot.txt
+├── 8.subscription.txt
+├── 9.payment.txt
+├── 10.wallet.txt
+└── 11.geoloc.txt
 ```
 
 ---
 
-## Structure type d'un service
+## 8. Outils de prompting et collaboration
 
-Chaque service respecte le template unifié :
+Le dossier `prompt/` contient des outils pour travailler efficacement avec une IA (Claude) sur ce projet.
+
+### Pour déléguer une tâche à un dev + IA
 
 ```
-service-name/
-├── app/                    # Code applicatif (Django apps ou src/ NestJS)
-├── domain/                 # Logique métier
-├── infrastructure/         # DB, cache, clients externes
-├── api/                    # Exposition REST
-├── tests/
-│   ├── unit/
-│   └── integration/
-├── docker/
-│   ├── Dockerfile
-│   └── docker-compose.yml
-├── .env.example
-├── requirements.txt        # ou package.json
+prompt/TEAM_PROMPT.md
+```
+
+Donnez ce fichier à chaque développeur. Il contient toutes les règles, conventions et patterns à respecter. L'IA s'en sert comme contexte pour guider le développeur. Après lecture, l'IA demande simplement : **"Sur quel service veux-tu travailler ?"**
+
+**Cas d'usage typiques :**
+- Documenter un service existant (ex: rédiger GUIDE_AUTH.md)
+- Tester et corriger les bugs d'un service
+- Implémenter un nouveau service à partir de son CDC
+
+### Pour une session de travail
+
+**Démarrer une session :**
+```
+prompt/save_context/init_session.md
+```
+Copiez ce prompt au début d'une nouvelle session Claude pour recadrer le pair-programmer.
+
+**Reprendre une session interrompue :**
+```
+prompt/save_context/sync.md
+```
+Fournissez ce prompt + le `hanover_report.md` pour que l'IA déduise où vous en êtes.
+
+**Terminer une session :**
+```
+prompt/save_context/end_session.md
+```
+L'IA génère un Handoff Report que vous copiez dans `hanover_report.md` avant de commiter.
+
+**Démarrer une tâche spécifique :**
+```
+prompt/prompt_task.md
+```
+Template à adapter pour démarrer une tâche précise en suivant la méthode 5 étapes.
+
+### Pour fournir le contexte à une IA
+
+Le fichier `_scan_output/context.md` est un snapshot complet de tous les fichiers du projet. Donnez-le à Claude en début de session pour qu'il ait une vision complète du code.
+
+Pour le régénérer :
+```powershell
+.\scanner.ps1
+```
+
+### Travail en parallèle (équipe)
+
+Plusieurs développeurs peuvent travailler en parallèle sur des services différents, chacun avec sa propre session Claude :
+
+```
+Dev 1  →  GUIDE_AUTH.md + tests Auth
+Dev 2  →  GUIDE_USERS.md + tests Users
+Dev 3  →  GUIDE_NOTIFICATION.md + tests Notification
+Lead   →  Implémentation Payment ou Subscription
+```
+
+Chaque dev travaille sur sa branche Git. Les merges se font sur `main` après validation et revue.
+
+---
+
+## 9. Conventions
+
+Toutes les conventions techniques sont documentées dans `standards.md`. Voici les points critiques :
+
+### Règle des containers Docker
+Les `container_name` utilisent des **tirets**, jamais des underscores.
+Django 4.2+ rejette les underscores (RFC 1034) → erreurs `DisallowedHost`.
+
+```yaml
+# ✅ Correct
+container_name: agt-auth-service
+
+# ❌ Incorrect
+container_name: agt_auth_service
+```
+
+### Authentification inter-services
+Tout appel HTTP entre services doit porter un token S2S Bearer.
+Auth est le seul émetteur. Chaque service a sa plateforme S2S dans Auth.
+
+### Versionnement des API
+Tous les endpoints sont préfixés `/api/v1/`.
+
+### Structure d'un service
+```
+agt-nom-service/
+├── apps/           # Applications Django
+├── common/         # Middleware, authentication partagés
+├── config/         # settings.py, urls.py, wsgi.py, celery.py
+├── keys/           # Clés RSA (auth_public.pem)
+├── workers/        # Tâches Celery (si applicable)
+├── providers/      # Intégrations externes (si applicable)
+├── scripts/        # Scripts de setup (setup.ps1, setup.sh)
+├── tests/          # Tests unitaires et d'intégration
+├── .env.example    # Variables d'environnement (à commiter)
+├── .env            # Variables réelles (jamais commitées)
+├── CDC_v1.0.md     # Cahier des charges local
+├── docker-compose.yml
+├── Dockerfile
+├── manage.py
+├── pytest.ini
 ├── README.md
-└── CDC_v1.0.md
+└── requirements.txt
 ```
 
 ---
 
-## Principes
+## 10. État du projet
 
-- **CDC > Code** — les cahiers des charges validés sont la référence absolue
-- **1 service = 1 DB** — pas d'accès direct à la base d'un autre service
-- **Auth est la source de vérité** pour l'identité et les plateformes
-- **Users est la source de vérité** pour les profils, rôles et permissions
-- **Idempotence obligatoire** sur paiement, wallet, notifications
-- **Pas de logique métier dupliquée** entre services
+| Phase | Description | Statut |
+|---|---|---|
+| **A** | Scripts de déploiement | ✅ Terminé |
+| **B** | Getting Started + Documentation MVP | ✅ Terminé |
+| **C** | Guides détaillés par service (Auth, Users, Notification) | 🔄 En cours |
+| **D** | Intégration Subscription → Payment → Wallet → Search → Chatbot | ⬜ À faire |
+| **E** | Vrais services Media, Chat, Geoloc (remplacer simulateurs) | ⬜ À faire |
+| **F** | Backend template (générateur de service) | ⬜ À faire |
+| **G** | Déploiement production | ⬜ À faire |
+
+Pour le détail complet : → [todo.md](./todo.md) | [roadmap.md](./roadmap.md)
 
 ---
 
-*AG Technologies — Confidentiel — Usage interne*
+*AG Technologies — Usage interne — Confidentiel*
 `
 ===== FILE END =====
 
@@ -1770,397 +2119,363 @@ response:
 
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\todo.md =====
 `
-# AG TECHNOLOGIES â€” PLAN DE MISE EN PLACE v1.0
-
-> **RÃ¨gle** : Tous les services seront livrÃ©s en **version 1.0**.
-> Chaque service = CDC v1.0 mis Ã  jour + Code ZIP complet conforme + Template de structure unifiÃ©.
-
----
-
-## PHASE 0 â€” FONDATIONS & STANDARDS
-
-### 0.1 Template de structure de projet unifiÃ©
-
-- [ ] DÃ©finir le template Django/DRF (Auth, Users, Notification, Search, Chatbot, Subscription, Payment, Wallet)
-- [ ] DÃ©finir le template Node.js/NestJS (MÃ©dia, Geoloc)
-- [ ] DÃ©finir le template Node.js/Express (Chat)
-- [ ] Valider la structure commune :
-  ```
-  service-name/
-  â”œâ”€â”€ app/              # ou src/ (NestJS)
-  â”œâ”€â”€ domain/
-  â”œâ”€â”€ infrastructure/
-  â”œâ”€â”€ api/
-  â”œâ”€â”€ tests/
-  â”‚   â”œâ”€â”€ unit/
-  â”‚   â””â”€â”€ integration/
-  â”œâ”€â”€ docker/
-  â”‚   â”œâ”€â”€ Dockerfile
-  â”‚   â””â”€â”€ docker-compose.yml
-  â”œâ”€â”€ .env.example
-  â”œâ”€â”€ requirements.txt  # ou package.json
-  â”œâ”€â”€ README.md
-  â””â”€â”€ CDC_v1.0.md       # CDC embarquÃ© dans le service
-  ```
-- [ ] DÃ©finir les conventions de nommage (endpoints, variables, fichiers)
-- [ ] DÃ©finir le format standard des rÃ©ponses d'erreur
-- [ ] DÃ©finir le format standard de pagination
-- [ ] DÃ©finir le health check standard (DB + Redis + version)
-- [ ] DÃ©finir la convention d'identitÃ© unifiÃ©e (`user_id = users_auth.id` = `sub` JWT sauf Users qui utilise `users_profiles.id` en interne)
-- [ ] DÃ©finir le `.env.example` type par stack
-- [ ] DÃ©finir le `docker-compose.yml` type par stack
-- [ ] DÃ©finir le README template (run local, endpoints, tests, env vars)
-
-### 0.2 RenumÃ©rotation des CDC
-
-- [ ] CrÃ©er le mapping de versions :
-  - Auth v2.1 â†’ **Auth v1.0**
-  - Users v2.1 â†’ **Users v1.0**
-  - Notification v1.2 â†’ **Notifs v1.0**
-  - MÃ©dia v1.4 â†’ **MÃ©dia v1.0**
-  - Search v1.2 â†’ **Search v1.0**
-  - Chat v1.2 â†’ **Chat v1.0**
-  - Chatbot v1.2 â†’ **Chatbot v1.0**
-  - Subscription v1.2 â†’ **Subscription v1.0**
-  - Payment v1.2 â†’ **Payment v1.0**
-  - Wallet v1.1 â†’ **Wallet v1.0**
-  - Geoloc v1.2 â†’ **Geoloc v1.0**
+# TODO â€” AGT Microservices Suite
+> DerniÃ¨re mise Ã  jour : 14 avril 2026
+> MÃ©thode : 5 Ã©tapes par tÃ¢che (Analyse â†’ Fonctionnel â†’ Technique â†’ ImplÃ©mentation â†’ Tests)
 
 ---
 
-## PHASE 1 â€” SERVICES FONDATION
+## BILAN ACTUEL â€” 14 avril 2026
 
-### 1.1 Service Auth v1.0
+### âœ… Ce qui est terminÃ© et validÃ©
 
-#### CDC
-- [ ] Mettre Ã  jour le CDC : version â†’ 1.0, historique condensÃ©
-- [ ] IntÃ©grer la convention d'identitÃ© unifiÃ©e dans le CDC
-- [ ] IntÃ©grer le template de structure dans le CDC
-- [ ] Valider les contrats inter-services (Auth â†’ Users, Auth â†’ Notification)
+| Ã‰lÃ©ment | Ã‰tat | Notes |
+|---|---|---|
+| Infrastructure Docker (rÃ©seau, volumes, scripts) | âœ… | deploy_mvp, deploy_all, reset_mvp, reset_all |
+| Service Auth v1.0 | âœ… | JWT RS256, sessions, OAuth, 2FA, S2S, Swagger |
+| Service Users v1.0 | âœ… | Profils, rÃ´les, permissions, RBAC, documents |
+| Service Notification v1.0 | âœ… | Email, SMS, push, in-app, Celery, RabbitMQ |
+| Flux MVP end-to-end | âœ… | register â†’ provisioning Users â†’ email Mailpit |
+| Communication S2S inter-services | âœ… | Tokens JWT Bearer sur tous les appels |
+| Simulateurs Media, Chat, Geoloc | âœ… | Node.js/Express, stateful en RAM |
+| GETTING_STARTED.md | âœ… | Guide complet du MVP |
+| README.md racine | âœ… | Vue d'ensemble du projet |
+| TEAM_PROMPT.md | âœ… | Prompt pour dÃ©lÃ©guer le travail Ã  l'Ã©quipe |
+| Guides vides crÃ©Ã©s | âœ… | Tous les GUIDE_*.md existent avec titres |
 
-#### Code â€” Audit & Corrections
-- [ ] Corriger le bug `cleanup_expired.py` (import `models` mal placÃ©)
-- [ ] ImplÃ©menter le rate limiting Redis (sliding window) sur les endpoints critiques
-- [ ] ImplÃ©menter la protection CSRF (header `X-Requested-With` sur endpoints cookie-based)
-- [ ] VÃ©rifier le contrat `UsersServiceClient` â€” push `POST /api/v1/users/status-sync`
-- [ ] VÃ©rifier le contrat `UsersServiceClient` â€” provisioning `POST /api/v1/users`
-- [ ] VÃ©rifier le contrat `UsersServiceClient` â€” sync email/phone `POST /api/v1/users/sync`
-- [ ] Aligner la structure du projet sur le template unifiÃ©
-- [ ] Mettre Ã  jour le health check â†’ version `"1.0.0"`
-- [ ] VÃ©rifier et complÃ©ter les tests unitaires
-- [ ] VÃ©rifier et complÃ©ter les tests d'intÃ©gration
-- [ ] VÃ©rifier le `.env.example` (toutes les variables documentÃ©es)
-- [ ] VÃ©rifier le `docker-compose.yml`
-- [ ] Mettre Ã  jour le `README.md` selon le template
-- [ ] VÃ©rifier les migrations Django
+### âš ï¸ Points d'attention connus
 
-#### Livraison
-- [ ] Produire le CDC Auth v1.0 final (markdown)
-- [ ] Produire le ZIP du service complet
-- [ ] Checklist de validation avant zip
+| # | ProblÃ¨me | Impact | PrioritÃ© |
+|---|---|---|---|
+| 1 | Body email = template brut (variables non rendues par Jinja2) | Emails illisibles en prod | Haute |
+| 2 | `run.py` â€” encodage UTF-16 sur certains fichiers Windows | Script de fix partiel | Basse |
+| 3 | Swagger warnings sur vues APIView sans serializer_class | Non bloquant, logs verbeux | Basse |
+| 4 | Tests pytest existants non encore validÃ©s en intÃ©gration | Couverture Ã  vÃ©rifier | Haute |
 
----
+### ðŸ“Š Ã‰tat des services
 
-### 1.2 Service Users v1.0
-
-#### CDC
-- [ ] Mettre Ã  jour le CDC : version â†’ 1.0, intÃ©grer les changements v2.1
-- [ ] Documenter la convention `{id} = users_profiles.id`
-- [ ] Documenter le modÃ¨le de suppression dual (quitter plateforme vs soft delete global)
-- [ ] Documenter la sÃ©quence hard delete sÃ©curisÃ©e
-- [ ] Documenter les champs `hard_delete_after`, `purge_auth_pending`, `deletion_error_reason`
-
-#### Code â€” Corrections structurelles (v1.0 â†’ v2.1)
-- [ ] Supprimer la table `platforms` locale â€” utiliser les UUID Auth directement
-- [ ] Ajouter les champs manquants Ã  `UserProfile` :
-  - [ ] `hard_delete_after` (TIMESTAMPTZ)
-  - [ ] `purge_auth_pending` (BOOLEAN, default false)
-  - [ ] `deletion_error_reason` (TEXT)
-  - [ ] `deletion_in_progress` dans `UserStatusChoice`
-- [ ] Ajouter la table `audit_logs`
-- [ ] Ajouter la table `document_history`
-- [ ] Ajouter l'endpoint `GET /api/v1/users/by-auth/{authUserId}`
-- [ ] Ajouter l'endpoint `DELETE /api/v1/users/{id}/platforms/{platformId}` (quitter une plateforme)
-- [ ] Corriger `UserRole.unique_together` : `(user, role)` au lieu de `(user, role, platform)`
-- [ ] Bloquer `email` et `phone` en Ã©criture dans `UserProfileUpdateSerializer`
-- [ ] ImplÃ©menter la sÃ©quence hard delete sÃ©curisÃ©e (Users â†’ deletion_in_progress â†’ purge Auth â†’ purge Users)
-- [ ] Aligner la structure sur le template unifiÃ©
-- [ ] Mettre Ã  jour le health check â†’ version `"1.0.0"`
-- [ ] VÃ©rifier et complÃ©ter les tests unitaires
-- [ ] VÃ©rifier et complÃ©ter les tests d'intÃ©gration
-- [ ] VÃ©rifier le `.env.example`
-- [ ] VÃ©rifier le `docker-compose.yml`
-- [ ] Mettre Ã  jour le `README.md`
-- [ ] GÃ©nÃ©rer les migrations Django
-
-#### Livraison
-- [ ] Produire le CDC Users v1.0 final (markdown)
-- [ ] Produire le ZIP du service complet
-- [ ] Checklist de validation avant zip
+| Service | Code | Tests | Documentation | S2S configurÃ© |
+|---|---|---|---|---|
+| Auth | âœ… v1.0 | âš ï¸ Ã€ valider | ðŸ”„ En cours | âœ… |
+| Users | âœ… v1.0 | âš ï¸ Ã€ valider | ðŸ”„ En cours | âœ… |
+| Notification | âœ… v1.0 | âš ï¸ Ã€ valider | ðŸ”„ En cours | âœ… |
+| Subscription | âœ… v1.0 squelette | â¬œ | â¬œ | â¬œ |
+| Payment | âœ… v1.0 squelette | â¬œ | â¬œ | â¬œ |
+| Wallet | âœ… v1.0 squelette | â¬œ | â¬œ | â¬œ |
+| Search | âœ… v1.0 squelette | â¬œ | â¬œ | â¬œ |
+| Chatbot | âœ… v1.0 squelette | â¬œ | â¬œ | â¬œ |
+| Media | ðŸ”„ Simulateur Node.js | â¬œ | â¬œ | â¬œ |
+| Chat | ðŸ”„ Simulateur Node.js | â¬œ | â¬œ | â¬œ |
+| Geoloc | ðŸ”„ Simulateur Node.js | â¬œ | â¬œ | â¬œ |
 
 ---
 
-## PHASE 2 â€” SERVICES DE SUPPORT
+## PHASE A â€” Infrastructure & Scripts âœ… TERMINÃ‰E
 
-### 2.1 Service Notification v1.0
-
-#### CDC
-- [ ] Mettre Ã  jour le CDC : version â†’ 1.0
-- [ ] Clarifier la convention `user_id = users_profiles.id`
-- [ ] Aligner les contrats inter-services
-
-#### Code â€” Corrections
-- [ ] VÃ©rifier la rÃ©solution `user_id` (users_profiles.id vs users_auth.id)
-- [ ] VÃ©rifier l'implÃ©mentation de la table `device_tokens`
-- [ ] VÃ©rifier l'implÃ©mentation de `PlatformChannelConfig`
-- [ ] VÃ©rifier la logique de fallback inter-canal dans le worker
-- [ ] VÃ©rifier la vÃ©rification user actif avant envoi (v1.2)
-- [ ] Aligner la structure sur le template unifiÃ©
-- [ ] Mettre Ã  jour le health check â†’ version `"1.0.0"`
-- [ ] VÃ©rifier les tests
-- [ ] VÃ©rifier `.env.example` et `docker-compose.yml`
-- [ ] Mettre Ã  jour le `README.md`
-
-#### Livraison
-- [ ] Produire le CDC Notification v1.0 final (markdown)
-- [ ] Produire le ZIP du service complet
-- [ ] Checklist de validation avant zip
+- [x] Scripts deploy_mvp / deploy_all (PS1 + SH)
+- [x] Scripts reset_mvp / reset_all avec flag --clean
+- [x] docker-compose.infra.yml (Gateway, RabbitMQ, Mailpit, Elasticsearch)
+- [x] RÃ©seau agt_network avec external: true
+- [x] Distribution automatique des clÃ©s RSA Auth
+- [x] Health checks sur tous les services
 
 ---
 
-### 2.2 Service MÃ©dia v1.0
+## PHASE B â€” Documentation & Tests MVP ðŸ”„ EN COURS
 
-#### CDC
-- [ ] Mettre Ã  jour le CDC : version â†’ 1.0
-- [ ] Confirmer la convention `uploaded_by = users_auth.id`, `owner_user_id = users_auth.id`
+> **Peut Ãªtre parallÃ©lisÃ© sur 3 devs** â€” utiliser `prompt/TEAM_PROMPT.md`
 
-#### Code â€” Corrections
-- [ ] Ajouter le prÃ©fixe `/api/v1` sur tous les endpoints
-- [ ] VÃ©rifier `owner_user_id` dans le modÃ¨le `MediaFile`
-- [ ] VÃ©rifier le contrat Users â†” MÃ©dia (avatar_media_id, RGPD)
-- [ ] VÃ©rifier le hard delete S2S-only
-- [ ] Aligner la structure sur le template unifiÃ© (NestJS)
-- [ ] Mettre Ã  jour le health check â†’ version `"1.0.0"`
-- [ ] VÃ©rifier les tests
-- [ ] VÃ©rifier `.env.example` et `docker-compose.yml`
-- [ ] Mettre Ã  jour le `README.md`
+### B.1 Service Auth
+- [x] GETTING_STARTED.md â€” flux MVP complet
+- [ ] Valider et corriger les tests pytest existants (`pytest` depuis agt-auth/)
+- [ ] Documenter tous les endpoints dans GUIDE_AUTH.md :
+  - [ ] register / login / logout / refresh / /me
+  - [ ] VÃ©rification email (token + callback)
+  - [ ] Forgot password / reset password
+  - [ ] Magic link
+  - [ ] OTP phone
+  - [ ] 2FA (TOTP)
+  - [ ] OAuth Google / Facebook
+  - [ ] Sessions (list, revoke)
+  - [ ] Gestion des plateformes S2S
+  - [ ] Tokens S2S (obtention, introspection)
+- [ ] Documenter les flux inter-services Auth â†’ Users et Auth â†’ Notification
+- [ ] Commit : `docs(auth): guide complet et tests validÃ©s`
 
-#### Livraison
-- [ ] Produire le CDC MÃ©dia v1.0 final (markdown)
-- [ ] Produire le ZIP du service complet
-- [ ] Checklist de validation avant zip
+### B.2 Service Users
+- [ ] Valider et corriger les tests pytest existants (`pytest` depuis agt-users/)
+- [ ] Documenter tous les endpoints dans GUIDE_USERS.md :
+  - [ ] Provisioning (POST /users â€” appelÃ© par Auth)
+  - [ ] Profil (GET/PUT /users/{id})
+  - [ ] Lookup par auth_user_id (GET /users/by-auth/{id})
+  - [ ] Adresses (CRUD)
+  - [ ] RÃ´les et permissions (RBAC)
+  - [ ] MÃ©tadonnÃ©es par plateforme
+  - [ ] Documents
+  - [ ] Sync email/phone depuis Auth
+  - [ ] Soft delete / hard delete RGPD
+- [ ] Documenter les flux inter-services
+- [ ] Commit : `docs(users): guide complet et tests validÃ©s`
 
----
+### B.3 Service Notification
+- [ ] Corriger le rendu Jinja2 des templates (variables non remplacÃ©es dans le body)
+- [ ] Valider et corriger les tests pytest existants
+- [ ] Documenter tous les endpoints dans GUIDE_NOTIFICATION.md :
+  - [ ] CrÃ©ation / gestion des templates
+  - [ ] Envoi mono-notification (send)
+  - [ ] Envoi bulk
+  - [ ] Campagnes (create, start, cancel)
+  - [ ] Notifications in-app (list, mark read)
+  - [ ] PrÃ©fÃ©rences utilisateur par canal
+  - [ ] Devices (push tokens FCM)
+  - [ ] Config plateforme par canal
+- [ ] Documenter le flux Celery + RabbitMQ
+- [ ] Documenter le pattern S2STokenService
+- [ ] Commit : `docs(notification): guide complet et tests validÃ©s`
 
-## PHASE 3 â€” SERVICES MÃ‰TIER CÅ’UR
-
-### 3.1 Service Subscription v1.0
-
-#### CDC
-- [ ] Mettre Ã  jour le CDC : version â†’ 1.0
-- [ ] Aligner avec Auth v1.0 et Users v1.0
-
-#### Code â€” ImplÃ©mentation from scratch
-- [ ] ImplÃ©menter les modÃ¨les (Plan, PlanVersion, Subscriber, SubscriptionCycle, QuotaDefinition, QuotaUsage, QuotaReservation)
-- [ ] ImplÃ©menter les endpoints REST
-- [ ] ImplÃ©menter la vÃ©rification de quotas (reserve/confirm/release)
-- [ ] ImplÃ©menter les Ã©vÃ©nements RabbitMQ (â†’ Payment, â†’ Notification)
-- [ ] ImplÃ©menter les workers Celery (renewal, expiration, trial)
-- [ ] ImplÃ©menter la stratÃ©gie de rÃ©silience (4 niveaux)
-- [ ] ImplÃ©menter le rate limiting
-- [ ] Ã‰crire les tests unitaires et d'intÃ©gration
-- [ ] CrÃ©er `.env.example`, `docker-compose.yml`, `README.md`
-- [ ] Respecter le template de structure
-
-#### Livraison
-- [ ] Produire le CDC Subscription v1.0 final (markdown)
-- [ ] Produire le ZIP du service complet
-- [ ] Checklist de validation avant zip
-
----
-
-### 3.2 Service Payment v1.0
-
-#### CDC
-- [ ] Mettre Ã  jour le CDC : version â†’ 1.0
-- [ ] Aligner avec Auth v1.0, Subscription v1.0
-
-#### Code â€” ImplÃ©mentation from scratch
-- [ ] ImplÃ©menter les modÃ¨les (PaymentIntent, Transaction, WebhookEvent, ProviderConfig, PaymentMethod)
-- [ ] ImplÃ©menter les endpoints REST (initiate, status, cancel, webhooks)
-- [ ] ImplÃ©menter les providers (Orange Money, MTN MoMo, Stripe, PayPal)
-- [ ] ImplÃ©menter les webhooks normalisÃ©s
-- [ ] ImplÃ©menter l'idempotence (`idempotency_key`)
-- [ ] ImplÃ©menter les Ã©vÃ©nements RabbitMQ sortants (payment.confirmed/failed/cancelled)
-- [ ] ImplÃ©menter la rÃ©conciliation
-- [ ] Ã‰crire les tests unitaires et d'intÃ©gration
-- [ ] CrÃ©er `.env.example`, `docker-compose.yml`, `README.md`
-
-#### Livraison
-- [ ] Produire le CDC Payment v1.0 final (markdown)
-- [ ] Produire le ZIP du service complet
-- [ ] Checklist de validation avant zip
+### B.4 Guides transverses
+- [ ] GUIDE_SCRIPTS.md â€” rÃ©fÃ©rence complÃ¨te de tous les scripts
+- [ ] GUIDE_LOGS.md â€” comment lire les logs de chaque service
+- [ ] GUIDE_NEW_SERVICE.md â€” dÃ©marrer un service hors MVP
 
 ---
 
-### 3.3 Service Wallet v1.0
+## PHASE C â€” IntÃ©gration des services existants â¬œ Ã€ FAIRE
 
-#### CDC
-- [ ] Mettre Ã  jour le CDC : version â†’ 1.0
-- [ ] Aligner avec Auth v1.0, Payment v1.0
+> Services avec squelette de code v1.0 â€” Ã  tester, corriger et documenter
 
-#### Code â€” ImplÃ©mentation from scratch
-- [ ] ImplÃ©menter les modÃ¨les (Account, LedgerTransaction, Hold, CashoutRequest, AutoSplit)
-- [ ] ImplÃ©menter le ledger double-entry (OBLIGATOIRE â€” aucune modification/suppression d'Ã©criture)
-- [ ] ImplÃ©menter les endpoints REST (balance, transactions, transfer, cash-in, cash-out, holds)
-- [ ] ImplÃ©menter la consommation des Ã©vÃ©nements RabbitMQ (payment.confirmed â†’ crÃ©dit wallet)
-- [ ] ImplÃ©menter les Ã©missions d'Ã©vÃ©nements (wallet.credited, wallet.debited)
-- [ ] ImplÃ©menter l'idempotence
-- [ ] Ã‰crire les tests unitaires et d'intÃ©gration
-- [ ] CrÃ©er `.env.example`, `docker-compose.yml`, `README.md`
+### C.1 Service Subscription (:7004)
+- [ ] Lire et analyser le CDC (docs/cdc/8.subscription.txt)
+- [ ] Configurer le S2S (crÃ©er plateforme dans Auth, .env)
+- [ ] Lancer le service et passer les migrations
+- [ ] Valider les endpoints : plans, quotas, subscriptions, organizations
+- [ ] Tester le flux : crÃ©er un plan â†’ souscrire â†’ vÃ©rifier quota
+- [ ] Corriger les bugs identifiÃ©s
+- [ ] Ã‰crire / complÃ©ter les tests pytest
+- [ ] RÃ©diger GUIDE_SUBSCRIPTION.md
+- [ ] Commit : `feat(subscription): service validÃ© et documentÃ©`
 
-#### Livraison
-- [ ] Produire le CDC Wallet v1.0 final (markdown)
-- [ ] Produire le ZIP du service complet
-- [ ] Checklist de validation avant zip
+### C.2 Service Payment (:7005)
+- [ ] Lire et analyser le CDC (docs/cdc/9.payment.txt)
+- [ ] Configurer le S2S
+- [ ] Lancer le service et passer les migrations
+- [ ] Valider les endpoints : initiate, status, webhook, refund
+- [ ] Tester l'idempotence (idempotency_key obligatoire)
+- [ ] Valider les providers : Orange Money, MTN MoMo, Stripe, PayPal (mocks en dev)
+- [ ] Corriger les bugs identifiÃ©s
+- [ ] Ã‰crire / complÃ©ter les tests pytest
+- [ ] RÃ©diger GUIDE_PAYMENT.md
+- [ ] Commit : `feat(payment): service validÃ© et documentÃ©`
 
----
+### C.3 Service Wallet (:7006)
+- [ ] Lire et analyser le CDC (docs/cdc/10.wallet.txt)
+- [ ] Configurer le S2S
+- [ ] Lancer le service et passer les migrations
+- [ ] Valider le ledger double-entry (toute Ã©criture doit Ãªtre irrÃ©versible)
+- [ ] Valider les endpoints : accounts, transactions, holds, cashout
+- [ ] Tester l'idempotence sur toutes les opÃ©rations financiÃ¨res
+- [ ] Corriger les bugs identifiÃ©s
+- [ ] Ã‰crire / complÃ©ter les tests pytest
+- [ ] RÃ©diger GUIDE_WALLET.md
+- [ ] Commit : `feat(wallet): service validÃ© et documentÃ©`
 
-## PHASE 4 â€” SERVICES APPLICATIFS
+### C.4 Service Search (:7007)
+- [ ] Lire et analyser le CDC (docs/cdc/5.search.txt)
+- [ ] Configurer le S2S
+- [ ] Lancer le service avec Elasticsearch
+- [ ] Valider les endpoints : index, search, suggest, delete
+- [ ] Tester l'indexation depuis un autre service (ex: Users)
+- [ ] Corriger les bugs identifiÃ©s
+- [ ] Ã‰crire / complÃ©ter les tests pytest
+- [ ] RÃ©diger GUIDE_SEARCH.md
+- [ ] Commit : `feat(search): service validÃ© et documentÃ©`
 
-### 4.1 Service Search v1.0
+### C.5 Service Chatbot (:7010)
+- [ ] Lire et analyser le CDC (docs/cdc/7.chatbot.txt)
+- [ ] Configurer le S2S + clÃ© API LLM
+- [ ] Lancer le service et passer les migrations
+- [ ] Valider les endpoints : bots, conversations, knowledge base
+- [ ] Tester le flux RAG (Retrieval Augmented Generation)
+- [ ] Corriger les bugs identifiÃ©s
+- [ ] Ã‰crire / complÃ©ter les tests pytest
+- [ ] RÃ©diger GUIDE_CHATBOT.md
+- [ ] Commit : `feat(chatbot): service validÃ© et documentÃ©`
 
-#### CDC
-- [ ] Mettre Ã  jour le CDC : version â†’ 1.0
-
-#### Code â€” ImplÃ©mentation from scratch
-- [ ] ImplÃ©menter les modÃ¨les (SearchIndex, IndexConfig, PopularSearch)
-- [ ] ImplÃ©menter les endpoints REST (search, index CRUD, suggestions, boost)
-- [ ] ImplÃ©menter l'intÃ©gration Elasticsearch
-- [ ] ImplÃ©menter la consommation des Ã©vÃ©nements RabbitMQ (indexation async via Celery)
-- [ ] ImplÃ©menter la gouvernance des index (nommage, quotas)
-- [ ] Ã‰crire les tests unitaires et d'intÃ©gration
-- [ ] CrÃ©er `.env.example`, `docker-compose.yml`, `README.md`
-
-#### Livraison
-- [ ] Produire le CDC Search v1.0 final (markdown)
-- [ ] Produire le ZIP du service complet
-- [ ] Checklist de validation avant zip
-
----
-
-### 4.2 Service Chat v1.0
-
-#### CDC
-- [ ] Mettre Ã  jour le CDC : version â†’ 1.0
-
-#### Code â€” ImplÃ©mentation from scratch (Node.js/Express/Socket.io)
-- [ ] ImplÃ©menter les modÃ¨les (Conversation, Participant, Message, Attachment, Reaction, ReadReceipt)
-- [ ] ImplÃ©menter les endpoints REST (conversations, messages, attachments)
-- [ ] ImplÃ©menter les WebSockets (Socket.io) : prÃ©sence, typing, messages temps rÃ©el
-- [ ] ImplÃ©menter le Redis Adapter (multi-instance)
-- [ ] ImplÃ©menter l'intÃ©gration MÃ©dia (fichiers)
-- [ ] ImplÃ©menter le transfert opÃ©rateur
-- [ ] Ã‰crire les tests
-- [ ] CrÃ©er `.env.example`, `docker-compose.yml`, `README.md`
-
-#### Livraison
-- [ ] Produire le CDC Chat v1.0 final (markdown)
-- [ ] Produire le ZIP du service complet
-- [ ] Checklist de validation avant zip
-
----
-
-### 4.3 Service Geoloc v1.0
-
-#### CDC
-- [ ] Mettre Ã  jour le CDC : version â†’ 1.0
-
-#### Code â€” ImplÃ©mentation from scratch (Node.js/NestJS/Socket.io/PostGIS)
-- [ ] ImplÃ©menter les modÃ¨les (TrackedEntity, GeoZone, GeoEvent, PositionHistory)
-- [ ] ImplÃ©menter les endpoints REST (zones CRUD, position history, nearby)
-- [ ] ImplÃ©menter les WebSockets (Socket.io) : position updates, geofence events
-- [ ] ImplÃ©menter le geofencing (R-tree/quadtree in-memory)
-- [ ] ImplÃ©menter les Ã©vÃ©nements RabbitMQ (geofence triggers)
-- [ ] ImplÃ©menter PostGIS pour le stockage spatial
-- [ ] Ã‰crire les tests
-- [ ] CrÃ©er `.env.example`, `docker-compose.yml`, `README.md`
-
-#### Livraison
-- [ ] Produire le CDC Geoloc v1.0 final (markdown)
-- [ ] Produire le ZIP du service complet
-- [ ] Checklist de validation avant zip
+### C.6 Flux transverses (intÃ©gration complÃ¨te)
+- [ ] Flux : inscription â†’ abonnement â†’ paiement â†’ quota vÃ©rifiÃ©
+- [ ] Flux : Ã©vÃ©nement mÃ©tier â†’ indexation Search â†’ rÃ©sultat retrouvable
+- [ ] Flux : paiement rÃ©ussi â†’ notification email â†’ wallet crÃ©ditÃ©
+- [ ] Commit : `test(integration): flux transverses validÃ©s`
 
 ---
 
-## PHASE 5 â€” ORCHESTRATEUR IA (DERNIER)
+## PHASE D â€” Services simulÃ©s â†’ Vrais services â¬œ Ã€ FAIRE
 
-### 5.1 Service Chatbot v1.0
+> Remplacer les simulateurs Node.js par de vraies implÃ©mentations
 
-> âš ï¸ Ne commence qu'aprÃ¨s stabilisation de : Auth, Users, Chat, Notification, MÃ©dia
+### D.1 Service Media (:7003)
+- [ ] Lire et analyser le CDC (docs/cdc/4.medias.txt)
+- [ ] Choisir le stack final : Node.js/NestJS ou Django
+- [ ] ImplÃ©menter upload (multipart), traitement (resize, compress), stockage (local / S3)
+- [ ] Endpoints : upload, get, delete, thumbnail, CDN URL
+- [ ] IntÃ©gration avec Users (avatar) et autres services
+- [ ] Tests et documentation
+- [ ] Commit : `feat(media): implÃ©mentation complÃ¨te`
 
-#### CDC
-- [ ] Mettre Ã  jour le CDC : version â†’ 1.0
-- [ ] Aligner avec Chat v1.0, Search v1.0, MÃ©dia v1.0
+### D.2 Service Chat (:7008)
+- [ ] Lire et analyser le CDC (docs/cdc/6.chat.txt)
+- [ ] ImplÃ©menter Socket.io, rooms, prÃ©sence, messages, fichiers
+- [ ] Endpoints REST + Ã©vÃ©nements WebSocket
+- [ ] IntÃ©gration Auth (JWT sur handshake Socket.io)
+- [ ] Tests et documentation
+- [ ] Commit : `feat(chat): implÃ©mentation complÃ¨te`
 
-#### Code â€” ImplÃ©mentation from scratch
-- [ ] ImplÃ©menter les modÃ¨les (Bot, BotConfig, BotChannel, Flow, FlowNode, FlowAction, Intent, KnowledgeCategory, KnowledgeBaseEntry, AiProviderConfig, ConversationSession, ConversationLog, BotAction, BotStats, IngestionJob, TransferLog)
-- [ ] ImplÃ©menter le Conversation Orchestrator
-- [ ] ImplÃ©menter l'Action System standardisÃ©
-- [ ] ImplÃ©menter les 3 couches de rÃ©ponse (rules â†’ KB â†’ IA)
-- [ ] ImplÃ©menter les endpoints REST (bots CRUD, flows, intents, knowledge, stats)
-- [ ] ImplÃ©menter le endpoint `POST /chatbot/converse`
-- [ ] ImplÃ©menter le multi-provider IA (OpenAI, Anthropic) avec circuit breaker
-- [ ] ImplÃ©menter le RAG (knowledge base + embeddings)
-- [ ] ImplÃ©menter les workers Celery (ingestion docs, stats, health check providers)
-- [ ] Ã‰crire les tests
-- [ ] CrÃ©er `.env.example`, `docker-compose.yml`, `README.md`
-
-#### Livraison
-- [ ] Produire le CDC Chatbot v1.0 final (markdown)
-- [ ] Produire le ZIP du service complet
-- [ ] Checklist de validation avant zip
-
----
-
-## PHASE 6 â€” VALIDATION GLOBALE
-
-### 6.1 Tests inter-services
-- [ ] VÃ©rifier la compatibilitÃ© Auth â†” Users (provisioning, sync, purge)
-- [ ] VÃ©rifier la compatibilitÃ© Auth â†” Notification
-- [ ] VÃ©rifier la compatibilitÃ© Subscription â†” Payment (RabbitMQ)
-- [ ] VÃ©rifier la compatibilitÃ© Payment â†” Wallet (RabbitMQ)
-- [ ] VÃ©rifier la compatibilitÃ© Chat â†” Chatbot (transfert)
-- [ ] VÃ©rifier tous les contrats S2S
-
-### 6.2 Documentation finale
-- [ ] VÃ©rifier que chaque ZIP contient son CDC v1.0
-- [ ] VÃ©rifier que chaque service dÃ©marre sans erreur
-- [ ] VÃ©rifier que chaque `.env.example` est complet
-- [ ] VÃ©rifier que chaque `README.md` est exploitable
-- [ ] Produire le document de synthÃ¨se inter-services (contrats, ports, dÃ©pendances)
+### D.3 Service Geoloc (:7009)
+- [ ] Lire et analyser le CDC (docs/cdc/11.geoloc.txt)
+- [ ] ImplÃ©menter tracking GPS, geofencing, zones
+- [ ] Endpoints : position, zones, alertes
+- [ ] IntÃ©gration avec Notification (alertes gÃ©ofencing)
+- [ ] Tests et documentation
+- [ ] Commit : `feat(geoloc): implÃ©mentation complÃ¨te`
 
 ---
 
-## RÃ‰SUMÃ‰ DES LIVRABLES PAR SERVICE
+## PHASE E â€” Backend Template (GÃ©nÃ©rateur de service) â¬œ Ã€ FAIRE
 
-| # | Service | Stack | CDC v1.0 | ZIP Code | Statut |
-|---|---------|-------|----------|----------|--------|
-| 1 | Auth | Django/DRF | â¬œ | â¬œ | Correction |
-| 2 | Users | Django/DRF | â¬œ | â¬œ | Refonte partielle |
-| 3 | Notification | Django/DRF + Celery | â¬œ | â¬œ | Correction |
-| 4 | MÃ©dia | NestJS | â¬œ | â¬œ | Correction |
-| 5 | Subscription | Django/DRF + Celery/RabbitMQ | â¬œ | â¬œ | From scratch |
-| 6 | Payment | Django/DRF + RabbitMQ | â¬œ | â¬œ | From scratch |
-| 7 | Wallet | Django/DRF + RabbitMQ | â¬œ | â¬œ | From scratch |
-| 8 | Search | Django/DRF + Elasticsearch + Celery | â¬œ | â¬œ | From scratch |
-| 9 | Chat | Express/Socket.io | â¬œ | â¬œ | From scratch |
-| 10 | Geoloc | NestJS/Socket.io/PostGIS | â¬œ | â¬œ | From scratch |
-| 11 | Chatbot | Django/DRF + Celery | â¬œ | â¬œ | From scratch |
+> Objectif : permettre de scaffolder un nouveau microservice AGT en une commande
+
+### E.1 Analyse et conception
+- [ ] Identifier les briques communes Ã  tous les services Django (auth, exceptions, pagination, Docker, settings pattern, Swagger config)
+- [ ] Concevoir la CLI : `agt create-service <nom>`
+- [ ] DÃ©finir les templates de fichiers (.tpl) pour chaque brique
+
+### E.2 ImplÃ©mentation du gÃ©nÃ©rateur
+- [ ] CLI de base : `agt create-service <nom>` â€” gÃ©nÃ¨re la structure complÃ¨te
+- [ ] GÃ©nÃ©rateur CRUD : `agt generate-crud <table> --fields="nom:str,prix:int"` â€” gÃ©nÃ¨re model + serializer + view + url + test
+- [ ] GÃ©nÃ©rateur backend complet : `agt create-backend <nom>` â€” service mÃ©tier prÃªt Ã  dÃ©ployer
+- [ ] Templates inclus : authentication.py, settings.py, Dockerfile, docker-compose.yml, pytest.ini, .env.example
+
+### E.3 Validation
+- [ ] GÃ©nÃ©rer un service test Ã  partir de zÃ©ro avec le gÃ©nÃ©rateur
+- [ ] VÃ©rifier que le service gÃ©nÃ©rÃ© dÃ©marre, passe les migrations et les tests
+- [ ] Documenter le gÃ©nÃ©rateur dans un README dÃ©diÃ©
+- [ ] Commit : `feat(template): backend scaffolding generator`
 
 ---
 
-*AG Technologies â€” Plan de mise en place v1.0 â€” Avril 2026*
+## PHASE F â€” Frontend Next.js Template â¬œ Ã€ FAIRE
+
+> Objectif : un template Next.js prÃªt Ã  consommer les APIs AGT
+
+### F.1 Template frontend gÃ©nÃ©rique
+- [ ] Initialiser un projet Next.js avec TypeScript, Tailwind CSS, shadcn/ui
+- [ ] IntÃ©gration Auth AGT :
+  - [ ] Login / Register / Logout
+  - [ ] Gestion des tokens JWT (access + refresh)
+  - [ ] Intercepteur axios/fetch avec refresh automatique
+  - [ ] Protection des routes (middleware Next.js)
+- [ ] SDK client AGT :
+  - [ ] Client Auth (login, register, me, refresh)
+  - [ ] Client Users (profil, adresses, rÃ´les)
+  - [ ] Client Notification (prÃ©fÃ©rences, in-app)
+  - [ ] Client gÃ©nÃ©rique extensible pour les autres services
+- [ ] Pages de base : login, register, dashboard, profil
+- [ ] Gestion d'erreurs globale (401 â†’ redirect login, 403 â†’ page accÃ¨s refusÃ©)
+- [ ] Commit : `feat(frontend): Next.js template AGT`
+
+### F.2 Frontends par microservice
+- [ ] Interface Admin Auth (gestion plateformes, utilisateurs, sessions)
+- [ ] Interface Users (annuaire, profils, rÃ´les)
+- [ ] Interface Notification (templates, campagnes, historique)
+- [ ] Interface Subscription (plans, quotas, facturation)
+- [ ] Interface Payment (transactions, webhooks, remboursements)
+- [ ] Interface Wallet (ledger, virements, solde)
+- [ ] Interface Search (requÃªtes, index, suggestions)
+- [ ] Interface Chat (messagerie, rooms, prÃ©sence)
+- [ ] Interface Chatbot (bots, conversations, knowledge base)
+
+---
+
+## PHASE G â€” Dashboard de supervision â¬œ Ã€ FAIRE
+
+> Objectif : un tableau de bord pour monitorer l'architecture en temps rÃ©el
+
+### G.1 Dashboard technique
+- [ ] Vue d'ensemble : Ã©tat de santÃ© de tous les services (health check agrÃ©gÃ©)
+- [ ] MÃ©triques RabbitMQ (queues, messages pending, consumers)
+- [ ] MÃ©triques Elasticsearch (indices, documents, latence)
+- [ ] Logs agrÃ©gÃ©s (streaming depuis tous les services)
+- [ ] Alertes : service down, queue saturÃ©e, erreur rate Ã©levÃ©
+
+### G.2 Dashboard mÃ©tier
+- [ ] MÃ©triques Auth : inscriptions, connexions actives, taux d'erreur
+- [ ] MÃ©triques Users : utilisateurs actifs, nouveaux, supprimÃ©s
+- [ ] MÃ©triques Notification : emails envoyÃ©s, taux d'ouverture, Ã©checs
+- [ ] MÃ©triques Payment : transactions, montants, taux de succÃ¨s
+- [ ] MÃ©triques Wallet : soldes, flux financiers
+- [ ] MÃ©triques Subscription : abonnements actifs, churns, revenus
+
+### G.3 Stack recommandÃ©e
+- [ ] Frontend : Next.js + Recharts / Tremor
+- [ ] Collecte mÃ©triques : Prometheus + Grafana (optionnel)
+- [ ] Logs : ELK Stack ou Loki + Grafana
+- [ ] Alerting : intÃ©gration Notification AGT pour les alertes critiques
+
+---
+
+## PHASE H â€” DÃ©ploiement Production â¬œ Ã€ FAIRE
+
+> Cette phase dÃ©marre aprÃ¨s validation complÃ¨te des Phases B, C et D en local
+
+### H.1 PrÃ©paration
+- [ ] Audit de sÃ©curitÃ© : secrets, variables d'environnement, CORS, HTTPS
+- [ ] Remplacer tous les `change-me-in-production` dans les .env
+- [ ] Configurer les vraies clÃ©s RSA (rÃ©gÃ©nÃ©rer pour la prod)
+- [ ] Configurer les providers de production (SendGrid, Twilio, Stripe, etc.)
+- [ ] Audit des `DEBUG=True` â†’ passer Ã  `False` en prod
+
+### H.2 Infrastructure cloud
+- [ ] Choisir le provider (AWS / GCP / Azure / VPS)
+- [ ] Configurer les bases de donnÃ©es managÃ©es (RDS PostgreSQL)
+- [ ] Configurer Redis managÃ© (ElastiCache ou Redis Cloud)
+- [ ] Configurer RabbitMQ managÃ© (CloudAMQP ou Amazon MQ)
+- [ ] Configurer Elasticsearch managÃ© (Elastic Cloud ou OpenSearch)
+- [ ] Configurer le stockage objet (S3 ou compatible) pour Media
+
+### H.3 CI/CD
+- [ ] Pipeline GitHub Actions : test â†’ build â†’ deploy
+- [ ] Docker registry (ECR, GCR ou Docker Hub)
+- [ ] DÃ©ploiement Kubernetes ou Docker Swarm
+- [ ] Health checks et rollback automatique
+
+### H.4 Monitoring production
+- [ ] Logs centralisÃ©s
+- [ ] Alertes sur erreurs critiques
+- [ ] Dashboard de supervision (Phase G)
+
+---
+
+## ORDRE DE PRIORITÃ‰ RECOMMANDÃ‰
+
+```
+B (Documentation MVP)     â† ParallÃ©liser sur 3 devs maintenant
+    â†“
+C (IntÃ©gration services)  â† Subscription â†’ Payment â†’ Wallet â†’ Search â†’ Chatbot
+    â†“
+E (Backend Template)      â† Pour accÃ©lÃ©rer Phase D
+    â†“
+D (Vrais services)        â† Media, Chat, Geoloc
+    â†“
+F (Frontend Template)     â† Next.js + SDK AGT
+    â†“
+G (Dashboard)             â† Supervision de l'archi
+    â†“
+H (Production)            â† DÃ©ploiement final
+```
+
+---
+
+*AG Technologies â€” Usage interne â€” Mis Ã  jour le 14 avril 2026*
 `
 ===== FILE END =====
 
@@ -18380,181 +18695,615 @@ application = get_wsgi_application()
 
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GETTING_STARTED.md =====
 `
-# AGT Microservices - Getting Started (Guide de DÃ©marrage)
+# Getting Started â€” AG Technologies Microservices
 
-Bienvenue dans l'Ã©cosystÃ¨me microservices d'AG Technologies. Ce guide vous accompagne pas Ã  pas pour lancer, configurer et comprendre l'environnement de dÃ©veloppement local (MVP).
-
----
-
-## 1. Architecture du MVP (Minimum Viable Product)
-
-Pour dÃ©velopper et tester les flux de base (Inscription, Profil, Fichiers), nous dÃ©ployons un sous-ensemble de l'architecture complÃ¨te. Le **MVP** se compose de :
-
-### Services MÃ©tier
-*   **Auth (7000) :** GÃ¨re l'identitÃ©, les tokens JWT, la sÃ©curitÃ© (2FA) et le registre des plateformes.
-*   **Users (7001) :** GÃ¨re les profils Ã©tendus, les rÃ´les (RBAC) et les documents KYC.
-*   **Notification (7002) :** Orchestre l'envoi des emails, SMS et push via des files d'attente.
-*   **MÃ©dia (7003) :** GÃ¨re l'upload, le traitement et le stockage des fichiers. *(Note : Le service final en NestJS n'Ã©tant pas encore terminÃ©, nous utilisons un simulateur lÃ©ger pour le MVP afin de ne pas bloquer les autres services).*
-
-### Infrastructure PartagÃ©e
-*   **API Gateway (Nginx) :** Point d'entrÃ©e unique de l'Ã©cosystÃ¨me sur le port `80`.
-*   **RabbitMQ :** Bus de messages pour la communication asynchrone entre les services.
-*   **Mailpit :** Serveur SMTP local de dÃ©veloppement. Il intercepte tous les emails envoyÃ©s par le service Notification pour Ã©viter de spammer de vraies adresses. Accessible sur `http://localhost:8025`.
-*   **PostgreSQL & Redis :** Chaque service mÃ©tier possÃ¨de sa propre base de donnÃ©es et son propre cache, isolÃ©s des autres.
+> **Ã€ qui s'adresse ce guide ?**
+> Ã€ tout dÃ©veloppeur qui rejoint le projet AGT et souhaite comprendre, lancer et utiliser l'Ã©cosystÃ¨me microservices pour la premiÃ¨re fois.
+>
+> **Ce guide couvre le MVP** : les trois services socles (Auth, Users, Notification) suffisants pour valider le flux d'inscription complet.
 
 ---
 
-## 2. Configuration Initiale
+## Table des matiÃ¨res
 
-Avant de lancer les services, configurez la clÃ© d'administration globale :
-
-1. Allez dans le dossier `agt-auth/`.
-2. Copiez `.env.example` vers `.env` (si ce n'est pas dÃ©jÃ  fait).
-3. Ouvrez `agt-auth/.env` et modifiez la variable `ADMIN_API_KEY` :
-   ```env
-   ADMIN_API_KEY=votre-cle-secrete-admin-123
-   ```
-   *Cette clÃ© sera utilisÃ©e pour les opÃ©rations sensibles (crÃ©ation de plateforme, blocage d'utilisateur).*
+1. [Vue d'ensemble de l'architecture](#1-vue-densemble-de-larchitecture)
+2. [PrÃ©requis](#2-prÃ©requis)
+3. [Les scripts de dÃ©ploiement](#3-les-scripts-de-dÃ©ploiement)
+4. [Lancer le MVP](#4-lancer-le-mvp)
+5. [VÃ©rifier l'Ã©tat des services](#5-vÃ©rifier-lÃ©tat-des-services)
+6. [Configurer l'environnement](#6-configurer-lenvironnement)
+7. [CrÃ©er les plateformes S2S des microservices](#7-crÃ©er-les-plateformes-s2s-des-microservices)
+8. [CrÃ©er une plateforme applicative de test](#8-crÃ©er-une-plateforme-applicative-de-test)
+9. [CrÃ©er les templates de notification](#9-crÃ©er-les-templates-de-notification)
+10. [Inscrire un premier utilisateur](#10-inscrire-un-premier-utilisateur)
+11. [VÃ©rifier l'email dans Mailpit](#11-vÃ©rifier-lemail-dans-mailpit)
+12. [Ce qui se passe sous le capot](#12-ce-qui-se-passe-sous-le-capot)
+13. [RedÃ©marrer un service](#13-redÃ©marrer-un-service)
+14. [Consulter les logs](#14-consulter-les-logs)
+15. [Aller plus loin â€” les autres flux](#15-aller-plus-loin--les-autres-flux)
 
 ---
 
-## 3. Lancement du MVP
+## 1. Vue d'ensemble de l'architecture
 
-Des scripts automatisÃ©s Ã  la racine du projet orchestrent le dÃ©marrage (respect des dÃ©pendances et partage des clÃ©s RSA).
+AGT est une architecture **microservices dÃ©couplÃ©e**. Chaque service est autonome, responsable d'un seul pÃ©rimÃ¨tre mÃ©tier, et dispose de sa propre base de donnÃ©es. Les services communiquent entre eux de deux faÃ§ons :
 
-**Sur Windows (PowerShell en administrateur) :**
+- **REST (synchrone)** : pour les lectures rapides, validations et actions critiques.
+- **RabbitMQ (asynchrone)** : pour les opÃ©rations comme l'envoi de notifications, les paiements ou les mises Ã  jour de wallet.
+
+Voici les services de l'Ã©cosystÃ¨me complet :
+
+| Service | Port | RÃ´le |
+|---|---|---|
+| **Auth** | 7000 | IdentitÃ©, JWT, sessions, OAuth 2.0, 2FA, tokens S2S |
+| **Users** | 7001 | Profils utilisateurs, rÃ´les, permissions, documents |
+| **Notification** | 7002 | Envoi multi-canal : email, SMS, push, in-app, WhatsApp |
+| **Media** | 7003 | Upload, traitement, stockage, thumbnails |
+| **Subscription** | 7004 | Plans, quotas, cycles de facturation |
+| **Payment** | 7005 | Transactions via Orange Money, MTN MoMo, Stripe, PayPal |
+| **Wallet** | 7006 | Ledger double-entry, virements, cash-in/out |
+| **Search** | 7007 | Indexation et recherche full-text (Elasticsearch) |
+| **Chat** | 7008 | Messagerie temps rÃ©el, prÃ©sence |
+| **Geoloc** | 7009 | Tracking GPS, geofencing |
+| **Chatbot** | 7010 | Orchestrateur IA, flows, knowledge base, RAG |
+
+**Le MVP** regroupe les trois premiers services (Auth + Users + Notification) et l'infrastructure partagÃ©e (RabbitMQ, Mailpit, Elasticsearch, Gateway Nginx).
+
+---
+
+## 2. PrÃ©requis
+
+Avant de commencer, assurez-vous d'avoir installÃ© :
+
+- **Docker Desktop** (ou Docker Engine + Docker Compose) â€” version 24+
+- **Git**
+- **PowerShell** (Windows) ou **Bash** (Linux/Mac)
+
+VÃ©rifiez que Docker est actif :
+
 ```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+docker --version
+docker compose version
+```
+
+Clonez le dÃ©pÃ´t si ce n'est pas encore fait :
+
+```bash
+git clone <URL_DU_REPO>
+cd AGT-SERVICES
+```
+
+---
+
+## 3. Les scripts de dÃ©ploiement
+
+Ã€ la racine du projet, vous trouverez plusieurs scripts. Voici leur rÃ´le :
+
+| Script | RÃ´le |
+|---|---|
+| `deploy_mvp.ps1` / `deploy_mvp.sh` | Lance uniquement le MVP (Auth + Users + Notification + infra) |
+| `deploy_all.ps1` / `deploy_all.sh` | Lance tous les services de l'Ã©cosystÃ¨me |
+| `reset_mvp.ps1` / `reset_mvp.sh` | ArrÃªte et nettoie les containers du MVP (garde les donnÃ©es) |
+| `reset_mvp.ps1 --clean` | ArrÃªte, nettoie **et supprime les volumes** (repart de zÃ©ro) |
+| `reset_all.ps1` / `reset_all.sh` | Idem pour tous les services |
+
+> **RÃ¨gle importante :** utilisez toujours `--clean` si vous souhaitez repartir d'une base vide (ex : aprÃ¨s avoir modifiÃ© les migrations ou corrompu une DB).
+
+---
+
+## 4. Lancer le MVP
+
+Lancez le MVP avec la commande suivante depuis la racine du projet :
+
+```powershell
+# Windows
+.\deploy_mvp.ps1
+
+# Linux / Mac
+./deploy_mvp.sh
+```
+
+Le script effectue automatiquement dans l'ordre :
+
+1. CrÃ©ation du rÃ©seau Docker `agt_network` s'il n'existe pas
+2. DÃ©marrage de l'infrastructure partagÃ©e (Gateway, RabbitMQ, Mailpit, Elasticsearch)
+3. Copie du `.env.example` vers `.env` pour chaque service si absent
+4. Build et dÃ©marrage du service Auth
+5. Distribution de la clÃ© publique RSA d'Auth vers Users et Notification
+6. Build et dÃ©marrage de Users et Notification
+7. ExÃ©cution des migrations de base de donnÃ©es
+8. Health checks pour confirmer que tout est up
+
+En fin de script, vous devriez voir :
+
+```
+=========================================
+ DÃ‰PLOIEMENT MVP RÃ‰USSI !
+=========================================
+ Auth         : http://localhost:7000/api/v1/docs/
+ Users        : http://localhost:7001/api/v1/docs/
+ Notification : http://localhost:7002/api/v1/docs/
+ Mailpit      : http://localhost:8025
+ RabbitMQ     : http://localhost:15672
+=========================================
+```
+
+---
+
+## 5. VÃ©rifier l'Ã©tat des services
+
+### Via Docker
+
+```powershell
+docker ps
+```
+
+Vous devriez voir tous les containers avec le statut `(healthy)` :
+
+```
+agt-auth-service     Up ... (healthy)   0.0.0.0:7000->7000/tcp
+agt-users-service    Up ... (healthy)   0.0.0.0:7001->7001/tcp
+agt-notif-service    Up ... (healthy)   0.0.0.0:7002->7002/tcp
+agt-notif-worker     Up ...             7002/tcp
+agt-notif-beat       Up ...             7002/tcp
+agt-rabbitmq         Up ... (healthy)   0.0.0.0:5672->5672/tcp
+agt-mailpit          Up ... (healthy)   0.0.0.0:8025->8025/tcp
+```
+
+### Via les endpoints de santÃ©
+
+Chaque service expose un endpoint `/health` :
+
+```powershell
+# Auth
+curl http://localhost:7000/api/v1/health
+
+# Users
+curl http://localhost:7001/api/v1/health
+
+# Notification
+curl http://localhost:7002/api/v1/health
+```
+
+RÃ©ponse attendue :
+
+```json
+{
+  "status": "healthy",
+  "database": "ok",
+  "redis": "ok",
+  "version": "1.0.0"
+}
+```
+
+### Via Swagger (interface graphique)
+
+Chaque service dispose d'une documentation API interactive :
+
+- Auth : http://localhost:7000/api/v1/docs/
+- Users : http://localhost:7001/api/v1/docs/
+- Notification : http://localhost:7002/api/v1/docs/
+
+---
+
+## 6. Configurer l'environnement
+
+Les fichiers `.env` sont gÃ©nÃ©rÃ©s automatiquement par les scripts de dÃ©ploiement Ã  partir des `.env.example`. Vous n'avez normalement rien Ã  faire manuellement pour le MVP en local.
+
+Si vous devez le faire manuellement :
+
+```powershell
+# Auth
+Copy-Item agt-auth\.env.example agt-auth\.env
+
+# Users
+Copy-Item agt-users\.env.example agt-users\.env
+
+# Notification
+Copy-Item agt-notification\.env.example agt-notification\.env
+```
+
+> **Note :** les `.env` ne sont jamais commitÃ©s en Git. Seuls les `.env.example` le sont. Ne mettez jamais de secrets dans un `.env.example`.
+
+### Migrations
+
+Les migrations sont exÃ©cutÃ©es automatiquement au dÃ©marrage. Si vous devez les relancer manuellement :
+
+```powershell
+# Auth
+docker exec agt-auth-service python manage.py makemigrations authentication platforms
+docker exec agt-auth-service python manage.py migrate
+
+# Users
+docker exec agt-users-service python manage.py makemigrations users roles documents
+docker exec agt-users-service python manage.py migrate
+
+# Notification
+docker exec agt-notif-service python manage.py makemigrations notifications templates_mgr campaigns devices
+docker exec agt-notif-service python manage.py migrate
+```
+
+---
+
+## 7. CrÃ©er les plateformes S2S des microservices
+
+> **Pourquoi cette Ã©tape ?**
+>
+> Dans AGT, Auth est le seul Ã©metteur de tokens JWT. Tout service qui doit appeler un autre service doit possÃ©der une **plateforme S2S** dans Auth. Cette plateforme lui permet d'obtenir un token JWT pour s'authentifier lors de ses appels inter-services.
+>
+> **RÃ¨gle fondamentale :** les plateformes S2S des microservices doivent Ãªtre crÃ©Ã©es **avant** les plateformes applicatives.
+
+### 7.1 CrÃ©er la plateforme S2S de Notification
+
+Dans Swagger Auth (http://localhost:7000/api/v1/docs/), appelez `POST /api/v1/auth/platforms` avec le header :
+
+```
+X-Admin-API-Key: change-me-admin-api-key-very-secret
+```
+
+Body :
+
+```json
+{
+  "name": "AGT Notification",
+  "slug": "agt-notification",
+  "allowed_auth_methods": ["email"]
+}
+```
+
+Notez le `id` (qui sera votre `client_id`) et le `client_secret` retournÃ©s.
+
+### 7.2 Configurer le `.env` de Notification
+
+Ajoutez ces variables dans `agt-notification/.env` :
+
+```env
+S2S_AUTH_URL=http://agt-auth-service:7000/api/v1
+S2S_CLIENT_ID=<id_retournÃ©>
+S2S_CLIENT_SECRET=<client_secret_retournÃ©>
+```
+
+### 7.3 RedÃ©marrer Notification
+
+```powershell
+cd agt-notification
+docker compose up -d --build notification celery-worker
+cd ..
+```
+
+> **RÃ©pÃ©tez cette procÃ©dure** pour chaque nouveau microservice qui a besoin d'appeler d'autres services (Subscription, Payment, Wallet, etc.).
+
+---
+
+## 8. CrÃ©er une plateforme applicative de test
+
+Une plateforme applicative reprÃ©sente une application cliente qui utilise l'Ã©cosystÃ¨me AGT (ex : une app mobile, un site web, un backoffice). Pour ce guide, nous crÃ©ons une plateforme gÃ©nÃ©rique de test.
+
+Dans Swagger Auth, appelez `POST /api/v1/auth/platforms` :
+
+```
+X-Admin-API-Key: change-me-admin-api-key-very-secret
+```
+
+```json
+{
+  "name": "Plateforme Test",
+  "slug": "plateforme-test",
+  "allowed_auth_methods": ["email"]
+}
+```
+
+Notez l'`id` retournÃ© â€” c'est votre **Platform ID**, vous en aurez besoin pour toutes les requÃªtes suivantes.
+
+---
+
+## 9. CrÃ©er les templates de notification
+
+Notification utilise des templates pour formater les emails envoyÃ©s. Avant d'inscrire un utilisateur, il faut crÃ©er les templates nÃ©cessaires au flux d'authentification.
+
+### 9.1 Obtenir un token S2S
+
+Dans Swagger Auth, appelez `POST /api/v1/auth/s2s/token` :
+
+```json
+{
+  "client_id": "<id_de_la_plateforme_test>",
+  "client_secret": "<client_secret_de_la_plateforme_test>"
+}
+```
+
+Notez le `access_token` retournÃ©. Dans Swagger Notification (http://localhost:7002/api/v1/docs/), cliquez sur **Authorize** et entrez :
+
+```
+Bearer <access_token>
+```
+
+### 9.2 CrÃ©er les 4 templates
+
+Appelez `POST /api/v1/templates/` pour chacun des templates suivants :
+
+**Template 1 â€” VÃ©rification email**
+```json
+{
+  "name": "auth_verify_email",
+  "channel": "email",
+  "platform_id": "<platform_id_plateforme_test>",
+  "subject": "VÃ©rifiez votre adresse email",
+  "body": "Bonjour,\n\nCliquez sur ce lien pour vÃ©rifier votre email : {{verification_url}}\n\nCe lien expire dans {{expires_in_minutes}} minutes.\n\n{{platform_name}}",
+  "variables": ["verification_url", "expires_in_minutes", "platform_name"]
+}
+```
+
+**Template 2 â€” RÃ©initialisation de mot de passe**
+```json
+{
+  "name": "auth_reset_password",
+  "channel": "email",
+  "platform_id": "<platform_id_plateforme_test>",
+  "subject": "RÃ©initialisation de votre mot de passe",
+  "body": "Bonjour,\n\nCliquez sur ce lien pour rÃ©initialiser votre mot de passe : {{reset_url}}\n\nCe lien expire dans {{expires_in_minutes}} minutes.\n\n{{platform_name}}",
+  "variables": ["reset_url", "expires_in_minutes", "platform_name"]
+}
+```
+
+**Template 3 â€” Magic link**
+```json
+{
+  "name": "auth_magic_link",
+  "channel": "email",
+  "platform_id": "<platform_id_plateforme_test>",
+  "subject": "Votre lien de connexion",
+  "body": "Bonjour,\n\nCliquez sur ce lien pour vous connecter : {{magic_link_url}}\n\nCe lien expire dans {{expires_in_minutes}} minutes.\n\n{{platform_name}}",
+  "variables": ["magic_link_url", "expires_in_minutes", "platform_name"]
+}
+```
+
+**Template 4 â€” OTP SMS**
+```json
+{
+  "name": "auth_otp_sms",
+  "channel": "sms",
+  "platform_id": "<platform_id_plateforme_test>",
+  "subject": null,
+  "body": "{{platform_name}} - Votre code de vÃ©rification : {{otp_code}}\nExpire dans {{expires_in_minutes}} minutes.",
+  "variables": ["otp_code", "expires_in_minutes", "platform_name"]
+}
+```
+
+---
+
+## 10. Inscrire un premier utilisateur
+
+Tout est en place. Inscrivez un utilisateur via Swagger Auth (`POST /api/v1/auth/register`).
+
+Ajoutez le header suivant :
+
+```
+X-Platform-ID: <platform_id_plateforme_test>
+```
+
+Body :
+
+```json
+{
+  "email": "dev@example.com",
+  "password": "Test1234!",
+  "method": "email"
+}
+```
+
+RÃ©ponse attendue (HTTP 201) :
+
+```json
+{
+  "id": "...",
+  "email": "dev@example.com",
+  "email_verified": false,
+  "registration_method": "email",
+  "registration_platform_id": "...",
+  "message": "Verification email sent"
+}
+```
+
+---
+
+## 11. VÃ©rifier l'email dans Mailpit
+
+Ouvrez Mailpit dans votre navigateur : http://localhost:8025
+
+Vous devriez voir un email **"VÃ©rifiez votre adresse email"** destinÃ© Ã  `dev@example.com`.
+
+> **Qu'est-ce que Mailpit ?**
+> Mailpit est un serveur SMTP de dÃ©veloppement. Il intercepte tous les emails envoyÃ©s par l'application et les affiche dans une interface web, sans jamais les envoyer rÃ©ellement. C'est l'Ã©quivalent de Mailtrap ou MailHog.
+
+---
+
+## 12. Ce qui se passe sous le capot
+
+Lorsque vous avez appelÃ© `POST /auth/register`, voici prÃ©cisÃ©ment ce qui s'est passÃ© dans l'Ã©cosystÃ¨me :
+
+### ChorÃ©graphie inter-services
+
+```
+Client
+  â”‚
+  â”‚  POST /auth/register
+  â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚    Auth     â”‚  1. Valide les donnÃ©es, hache le mot de passe
+â”‚   :7000     â”‚  2. CrÃ©e l'utilisateur dans sa propre base PostgreSQL
+â””â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”˜
+       â”‚
+       â”‚  POST /api/v1/users  (appel S2S avec JWT)
+       â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚    Users    â”‚  3. ReÃ§oit le auth_user_id et l'email
+â”‚   :7001     â”‚  4. CrÃ©e le profil dans sa propre base PostgreSQL
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+       â”‚
+       â”‚  POST /api/v1/notifications/send  (appel S2S avec JWT)
+       â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  Notification   â”‚  5. Enregistre la demande en base
+â”‚     :7002       â”‚  6. Place la tÃ¢che dans RabbitMQ
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+         â”‚
+         â”‚  Celery Worker consomme la tÃ¢che
+         â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  Celery Worker  â”‚  7. RÃ©cupÃ¨re le profil utilisateur depuis Users (S2S)
+â”‚                 â”‚  8. Rend le template email avec les variables
+â”‚                 â”‚  9. Envoie l'email via SMTP â†’ Mailpit
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+```
+
+### Points clÃ©s Ã  retenir
+
+**Auth est le seul Ã©metteur de tokens JWT.** Tous les appels inter-services utilisent des tokens S2S signÃ©s par Auth avec sa clÃ© privÃ©e RSA. Chaque service valide ces tokens grÃ¢ce Ã  la clÃ© publique RSA d'Auth (copiÃ©e dans son rÃ©pertoire `keys/`).
+
+**Chaque service a sa propre base de donnÃ©es.** Auth ne connaÃ®t que l'email et le mot de passe hachÃ©. Users dÃ©tient le profil complet. Notification ne stocke que les Ã©vÃ©nements de notification. Aucun service n'accÃ¨de directement Ã  la base d'un autre.
+
+**La notification est asynchrone.** Auth ne "attend" pas que l'email soit envoyÃ©. Il dÃ©pose une demande dans RabbitMQ et rÃ©pond immÃ©diatement au client avec un 201. C'est le worker Celery qui traite l'envoi en arriÃ¨re-plan, ce qui garantit la rÃ©silience.
+
+---
+
+## 13. RedÃ©marrer un service
+
+Si vous modifiez le code d'un service, vous devez le rebuilder :
+
+```powershell
+# Rebuilder Auth
+cd agt-auth
+docker compose up -d --build auth
+cd ..
+
+# Rebuilder Users
+cd agt-users
+docker compose up -d --build users
+cd ..
+
+# Rebuilder Notification (service + worker)
+cd agt-notification
+docker compose up -d --build notification celery-worker
+cd ..
+```
+
+Pour un simple redÃ©marrage sans rebuild (ex : aprÃ¨s modification d'un `.env`) :
+
+```powershell
+docker restart agt-auth-service
+docker restart agt-users-service
+docker restart agt-notif-service agt-notif-worker agt-notif-beat
+```
+
+Pour rÃ©initialiser complÃ¨tement le MVP et repartir de zÃ©ro :
+
+```powershell
+.\reset_mvp.ps1 --clean
 .\deploy_mvp.ps1
 ```
 
-**Sur Linux / macOS :**
-```bash
-bash deploy_mvp.sh
-```
-
-VÃ©rifiez que tout fonctionne avec `docker ps`. Tous les conteneurs doivent avoir le statut `Up` et `(healthy)`.
+> **Attention :** `--clean` supprime tous les volumes Docker, donc toutes les donnÃ©es en base. Vous devrez reconfigurer les plateformes et templates.
 
 ---
 
-## 4. GÃ©nÃ©ration et Application des Migrations
+## 14. Consulter les logs
 
-Lors du premier lancement, les bases de donnÃ©es sont vides. Il faut gÃ©nÃ©rer et appliquer les schÃ©mas de base de donnÃ©es.
+### Logs d'un service
 
-ExÃ©cutez ces commandes dans votre terminal :
+```powershell
+# DerniÃ¨res 50 lignes
+docker logs agt-auth-service --tail=50
 
-**Pour Auth :**
-```bash
-docker exec -it agt_auth_service python manage.py makemigrations authentication platforms
-docker exec -it agt_auth_service python manage.py migrate
+# Suivre en temps rÃ©el
+docker logs agt-auth-service --follow
+
+# Logs du worker Celery (pour dÃ©boguer les notifications)
+docker logs agt-notif-worker --tail=50 --follow
 ```
 
-**Pour Users :**
-```bash
-docker exec -it agt_users_service python manage.py makemigrations users roles documents
-docker exec -it agt_users_service python manage.py migrate
+### Ce qu'il faut surveiller
+
+Dans les logs d'Auth, les appels inter-services apparaissent ainsi :
+
+```
+HTTP Request: POST http://agt-notif-service:7002/api/v1/notifications/send "HTTP/1.1 202 Accepted"
+HTTP Request: POST http://agt-users-service:7001/api/v1/users "HTTP/1.1 201 Created"
 ```
 
-**Pour Notification :**
-```bash
-docker exec -it agt_notif_service python manage.py makemigrations notifications templates_mgr campaigns devices
-docker exec -it agt_notif_service python manage.py migrate
+Dans les logs du worker Celery, une tÃ¢che rÃ©ussie ressemble Ã  :
+
 ```
+Task notifications.send_notification[...] received
+HTTP Request: GET http://agt-users-service:7001/api/v1/users/by-auth/... "HTTP/1.1 200 OK"
+Task notifications.send_notification[...] succeeded in 0.76s: None
+```
+
+Pour une documentation complÃ¨te sur les logs, consultez â†’ [GUIDE_LOGS.md](./GUIDE_LOGS.md)
 
 ---
 
-## 5. Premier Flux Complet : Comprendre les Microservices
+## 15. Aller plus loin â€” les autres flux
 
-Nous allons crÃ©er une plateforme, inscrire un utilisateur, et valider son email. Tout se fait via le **Swagger UI**.
+FÃ©licitations, le flux d'inscription fonctionne. Voici les prochaines Ã©tapes naturelles pour approfondir votre connaissance de l'Ã©cosystÃ¨me :
 
-### Ã‰tape A : CrÃ©er la plateforme
-1. Ouvrez le Swagger Auth : `http://localhost:7000/api/v1/docs/`
-2. Allez sur `POST /api/v1/auth/platforms` et cliquez sur **Try it out**.
-3. Header `X-Admin-API-Key` : mettez la clÃ© dÃ©finie Ã  l'Ã©tape 2.
-4. Body :
-   ```json
-   {
-     "name": "AGT Market",
-     "slug": "agt-market",
-     "allowed_auth_methods": ["email", "phone", "magic_link"],
-     "allowed_redirect_urls": ["http://localhost:3000/callback"]
-   }
-   ```
-5. **Execute**. Copiez l'UUID du champ `"id"` dans la rÃ©ponse. C'est votre `platform_id`.
+### Flux d'authentification
 
-> **Que se passe-t-il sous le capot ?**
-> Le service Auth valide votre clÃ© Admin, gÃ©nÃ¨re un `client_secret` chiffrÃ©, et enregistre la plateforme dans sa base de donnÃ©es `agt_auth_db`. Cette plateforme est dÃ©sormais reconnue par tout l'Ã©cosystÃ¨me.
+Le flux suivant logique est la connexion d'un utilisateur dÃ©jÃ  inscrit (login, refresh token, logout, /me). Ce flux est entiÃ¨rement documentÃ© dans :
 
-### Ã‰tape B : Inscrire un utilisateur
-1. Sur le Swagger Auth, allez sur `POST /api/v1/auth/register` et cliquez sur **Try it out**.
-2. Header `X-Platform-Id` : collez l'UUID copiÃ© Ã  l'Ã©tape A.
-3. Body :
-   ```json
-   {
-     "email": "test@agt.com",
-     "password": "Password123!",
-     "method": "email"
-   }
-   ```
-4. **Execute**. Vous obtenez un `201 Created`.
+â†’ **[GUIDE_AUTH.md](./GUIDE_AUTH.md)** â€” Authentification, sessions, JWT, 2FA, OAuth
 
-> **Que se passe-t-il sous le capot ? (ChorÃ©graphie inter-services)**
-> 1. **Auth** hache le mot de passe et crÃ©e l'utilisateur dans sa base.
-> 2. **Auth** fait un appel HTTP (S2S) au service **Users** (`POST /api/v1/users`) pour lui dire : *"Un nouvel utilisateur s'est inscrit, provisionne son profil"*. Users crÃ©e le profil dans sa propre base.
-> 3. **Auth** gÃ©nÃ¨re un token de vÃ©rification, puis fait un appel HTTP au service **Notification** pour demander l'envoi de l'email de bienvenue.
-> 4. **Notification** enregistre la demande en base, la place dans **RabbitMQ**, et un **Worker Celery** la consomme pour envoyer l'email vers **Mailpit**.
+### Gestion des profils utilisateurs
 
-### Ã‰tape C : VÃ©rifier l'email via Mailpit
-1. Ouvrez Mailpit : `http://localhost:8025`
-2. Ouvrez l'email "VÃ©rifiez votre email - AGT Market".
-3. Copiez le `token` prÃ©sent dans le lien.
+AprÃ¨s l'inscription, Users est le service qui gÃ¨re les profils, les rÃ´les et les permissions. Pour comprendre comment mettre Ã  jour un profil, assigner des rÃ´les ou gÃ©rer les adresses :
 
-### Ã‰tape D : Valider l'email
-1. Sur le Swagger Auth, allez sur `POST /api/v1/auth/verify-email`.
-2. Body : `{"token": "le-token-copie"}`
-3. **Execute**. RÃ©ponse `200 OK`.
+â†’ **[GUIDE_USERS.md](./GUIDE_USERS.md)** â€” Profils, rÃ´les, permissions, RBAC
 
-> **Que se passe-t-il sous le capot ?**
-> Auth vÃ©rifie le hash du token dans sa base. S'il est valide et non expirÃ©, il passe le champ `email_verified` Ã  `true` et marque le token comme utilisÃ©.
+### Notifications avancÃ©es
 
----
+Pour aller au-delÃ  des emails transactionnels : campagnes, notifications in-app, SMS, templates avancÃ©s :
 
-## 6. Commandes Utiles (Debug & Reset)
+â†’ **[GUIDE_NOTIFICATION.md](./GUIDE_NOTIFICATION.md)** â€” Templates, campagnes, prÃ©fÃ©rences, canaux
 
-**Voir les logs en direct (trÃ¨s utile pour le debug) :**
-```bash
-docker logs --tail 50 -f agt_gateway          # Logs du routeur Nginx
-docker logs --tail 50 -f agt_auth_service     # Logs de l'API Auth
-docker logs --tail 50 -f agt_users_service    # Logs de l'API Users
-docker logs --tail 50 -f agt_notif_service    # Logs de l'API Notification
-docker logs --tail 50 -f agt_notif_worker     # Logs des envois d'emails/SMS (Celery)
-docker logs --tail 50 -f agt_media_simulator  # Logs des uploads de fichiers
-```
+### Abonnements et quotas
 
-**ArrÃªter l'environnement :**
-```bash
-docker stop $(docker ps -aq)
-```
+Pour comprendre comment les plans d'abonnement dÃ©finissent les quotas d'utilisation de chaque service :
 
-**RÃ©initialiser complÃ¨tement (Attention : supprime bases de donnÃ©es et rÃ©seaux) :**
-```bash
-docker rm -f $(docker ps -aq)
-docker volume rm $(docker volume ls -q)
-docker network prune -f
-```
+â†’ **[GUIDE_SUBSCRIPTION.md](./GUIDE_SUBSCRIPTION.md)** â€” Plans, cycles, quotas
+
+### Paiements
+
+Pour intÃ©grer un flux de paiement (Orange Money, MTN MoMo, Stripe) :
+
+â†’ **[GUIDE_PAYMENT.md](./GUIDE_PAYMENT.md)** â€” Providers, webhooks, idempotence
+
+### Wallet
+
+Pour gÃ©rer les portefeuilles Ã©lectroniques, les virements et le ledger double-entry :
+
+â†’ **[GUIDE_WALLET.md](./GUIDE_WALLET.md)** â€” Ledger, virements, cash-in/out
+
+### Autres services
+
+| Guide | Sujet |
+|---|---|
+| [GUIDE_SEARCH.md](./GUIDE_SEARCH.md) | Indexation et recherche full-text |
+| [GUIDE_CHAT.md](./GUIDE_CHAT.md) | Messagerie temps rÃ©el |
+| [GUIDE_CHATBOT.md](./GUIDE_CHATBOT.md) | Orchestrateur IA et RAG |
+| [GUIDE_MEDIA.md](./GUIDE_MEDIA.md) | Upload et gestion de fichiers |
+| [GUIDE_GEOLOC.md](./GUIDE_GEOLOC.md) | GÃ©olocalisation et geofencing |
+
+### Guides transverses
+
+| Guide | Sujet |
+|---|---|
+| [GUIDE_SCRIPTS.md](./GUIDE_SCRIPTS.md) | RÃ©fÃ©rence complÃ¨te des scripts de dÃ©ploiement |
+| [GUIDE_LOGS.md](./GUIDE_LOGS.md) | Lire et interprÃ©ter les logs de chaque service |
+| [GUIDE_NEW_SERVICE.md](./GUIDE_NEW_SERVICE.md) | DÃ©marrer un service qui n'est pas dans le MVP |
 
 ---
 
-## 7. Prochaines Ã‰tapes
-
-Maintenant que l'infrastructure de base est comprise, vous pouvez approfondir chaque domaine :
-
-*   **Approfondir l'Authentification :** Testez le login, le refresh token via les cookies, et la sÃ©curitÃ© 2FA. $\rightarrow$ [Voir le Guide Auth](./GUIDE_AUTH.md)
-*   **Gestion du Profil et RBAC :** Connectez-vous, rÃ©cupÃ©rez votre JWT, et utilisez le Swagger Users (`http://localhost:7001/api/v1/docs/`) pour modifier votre profil ou crÃ©er des rÃ´les dynamiques. $\rightarrow$[Voir le Guide Users](./GUIDE_USERS.md)
-*   **Gestion des Notifications :** CrÃ©ez des templates dynamiques avec variables et testez les notifications In-App. $\rightarrow$ [Voir le Guide Notification](./GUIDE_NOTIFICATION.md)
-*   **Gestion des Abonnements :** DÃ©couvrez comment crÃ©er des plans, des quotas et gÃ©rer le cycle de vie B2B/B2C. $\rightarrow$ [Voir le Guide Subscription](./GUIDE_SUBSCRIPTION.md)
-*   **Gestion des MÃ©dias :** Testez l'upload d'une photo de profil via le simulateur MÃ©dia sur le port `7003`.
-
+*AG Technologies â€” Usage interne â€” Tous droits rÃ©servÃ©s*
 `
 ===== FILE END =====
 
@@ -18747,6 +19496,66 @@ docker compose down -v
 | `MAX_REFRESH_TOKENS` | 5 | Max tokens actifs par user |
 
 Liste complete : voir `.env.example`
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_CHAT.md =====
+`
+# Guide — CHAT
+
+> Ce guide est en cours de rédaction.
+
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_CHATBOT.md =====
+`
+# Guide — CHATBOT
+
+> Ce guide est en cours de rédaction.
+
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_GEOLOC.md =====
+`
+# Guide — GEOLOC
+
+> Ce guide est en cours de rédaction.
+
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_LOGS.md =====
+`
+# Guide — LOGS
+
+> Ce guide est en cours de rédaction.
+
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_MEDIA.md =====
+`
+# Guide — MEDIA
+
+> Ce guide est en cours de rédaction.
+
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_NEW_SERVICE.md =====
+`
+# Guide — NEW_SERVICE
+
+> Ce guide est en cours de rédaction.
+
 
 `
 ===== FILE END =====
@@ -19066,6 +19875,36 @@ docker compose logs -f celery-worker
 # Logs Scheduler
 docker compose logs -f celery-beat
 ```
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_PAYMENT.md =====
+`
+# Guide — PAYMENT
+
+> Ce guide est en cours de rédaction.
+
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_SCRIPTS.md =====
+`
+# Guide — SCRIPTS
+
+> Ce guide est en cours de rédaction.
+
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_SEARCH.md =====
+`
+# Guide — SEARCH
+
+> Ce guide est en cours de rédaction.
+
 
 `
 ===== FILE END =====
@@ -19527,6 +20366,16 @@ docker compose exec users python -m pytest -v
 | Swagger | http://localhost:7001/api/v1/docs/ |
 | PostgreSQL | localhost:5433 (users_user / users_password) |
 | Redis | localhost:6380 |
+
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_WALLET.md =====
+`
+# Guide — WALLET
+
+> Ce guide est en cours de rédaction.
+
 
 `
 ===== FILE END =====
@@ -35705,6 +36554,331 @@ Sois concret et respecte strictement lâ€™architecture actuelle.
 `
 ===== FILE END =====
 
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\TEAM_PROMPT.md =====
+`
+# AGT â€” Prompt Ã‰quipe : Test, Documentation & ImplÃ©mentation de Microservices
+
+> **Usage :** Copiez ce prompt en entier au dÃ©but d'une nouvelle session Claude. Fournissez ensuite le contexte du projet (fichier `_scan_output/context.md` ou les fichiers pertinents). Claude vous guidera Ã©tape par Ã©tape.
+
+---
+
+## PROMPT SYSTÃˆME
+
+```
+Tu es mon pair-programmer principal pour AG Technologies (AGT), une architecture microservices Django/Python.
+
+Tu m'accompagnes dans la documentation, le test ou l'implÃ©mentation d'un microservice de l'Ã©cosystÃ¨me AGT, Ã©tape par Ã©tape, avec rigueur et discipline.
+
+---
+
+## CONTEXTE DU PROJET
+
+AGT est une suite de microservices dÃ©couplÃ©s. Chaque service est autonome, a sa propre base PostgreSQL, et communique via REST (synchrone) ou RabbitMQ (asynchrone).
+
+Stack technique :
+- Backend : Python / Django / Django REST Framework
+- Auth : JWT RS256 (clÃ©s RSA gÃ©nÃ©rÃ©es par Auth Service)
+- Cache : Redis
+- Queue : RabbitMQ + Celery
+- DB : PostgreSQL
+- Conteneurisation : Docker Compose
+- Tests : pytest
+- Doc API : drf-spectacular (Swagger UI)
+
+Services existants (MVP validÃ©) :
+- Auth (:7000) â€” identitÃ©, JWT, sessions, OAuth, 2FA, tokens S2S
+- Users (:7001) â€” profils, rÃ´les, permissions
+- Notification (:7002) â€” email, SMS, push, in-app via Celery + RabbitMQ
+
+Services restants Ã  implÃ©menter : Subscription, Payment, Wallet, Search, Chat, Geoloc, Chatbot, Media.
+
+---
+
+## RÃˆGLES ABSOLUES
+
+1. Tu travailles UNE seule tÃ¢che Ã  la fois.
+2. Tu ne codes jamais avant d'avoir analysÃ© l'existant et validÃ© la conception avec moi.
+3. Tu respectes strictement l'architecture existante et les conventions AGT.
+4. CDC (Cahier des Charges) > Code existant. En cas de conflit, le CDC prime.
+5. Tu produis un code modulaire, lisible, commentÃ©, testable et scalable.
+6. Chaque service livrÃ© doit inclure : code complet, .env.example, README, migrations, tests pytest.
+7. Commits rÃ©guliers aprÃ¨s chaque tÃ¢che validÃ©e.
+8. Ã€ la fin de chaque session, tu gÃ©nÃ¨res un Handoff Report.
+
+---
+
+## MÃ‰THODE OBLIGATOIRE EN 5 Ã‰TAPES
+
+Pour chaque tÃ¢che, suis exactement cet ordre :
+
+1. **Analyse de l'existant** â€” ce qui existe, ce qu'il faut rÃ©utiliser, ce qu'il ne faut pas casser
+2. **Conception fonctionnelle** â€” que va-t-on faire, pourquoi, quels choix mÃ©tier
+3. **Conception technique** â€” fichiers concernÃ©s, structure, dÃ©pendances
+4. **ImplÃ©mentation** â€” gÃ©nÃ©ration du code, uniquement dans le pÃ©rimÃ¨tre validÃ©
+5. **Tests** â€” tests Ã  prÃ©voir, vÃ©rifications locales, points de contrÃ´le
+
+Ne passe jamais Ã  l'Ã©tape suivante sans validation explicite de ma part.
+
+---
+
+## CONVENTIONS TECHNIQUES CRITIQUES
+
+### 1. Communication inter-services (S2S)
+
+Tout appel HTTP d'un service vers un autre DOIT inclure un header Authorization Bearer avec un token S2S.
+
+Auth est le SEUL Ã©metteur de tokens JWT. Chaque service qui appelle un autre service doit :
+1. Avoir une plateforme S2S crÃ©Ã©e dans Auth (POST /auth/platforms)
+2. Stocker son client_id et client_secret dans son .env
+3. Obtenir un token S2S via POST /auth/s2s/token et le mettre en cache Redis
+4. Injecter ce token dans tous ses appels httpx sortants
+
+Exemple de service client S2S (pattern validÃ©, copier tel quel) :
+
+```python
+class S2STokenService:
+    CACHE_KEY = "service_s2s_token"
+    MARGIN_SECONDS = 60
+
+    @staticmethod
+    def get_token() -> str:
+        from django.core.cache import cache
+        import httpx, uuid
+        from django.conf import settings
+
+        cached = cache.get(S2STokenService.CACHE_KEY)
+        if cached:
+            return cached
+
+        auth_url = getattr(settings, "S2S_AUTH_URL", "")
+        client_id = getattr(settings, "S2S_CLIENT_ID", "")
+        client_secret = getattr(settings, "S2S_CLIENT_SECRET", "")
+
+        if not all([auth_url, client_id, client_secret]):
+            return ""
+
+        try:
+            resp = httpx.post(f"{auth_url}/auth/s2s/token", json={
+                "client_id": client_id,
+                "client_secret": client_secret,
+            }, timeout=5.0)
+
+            if resp.status_code != 200:
+                return ""
+
+            data = resp.json()
+            token = data.get("access_token", "")
+            expires_in = data.get("expires_in", 3600)
+            ttl = max(expires_in - S2STokenService.MARGIN_SECONDS, 60)
+            cache.set(S2STokenService.CACHE_KEY, token, timeout=ttl)
+            return token
+        except Exception:
+            return ""
+```
+
+Variables .env requises pour tout service S2S :
+```
+S2S_AUTH_URL=http://agt-auth-service:7000/api/v1
+S2S_CLIENT_ID=<uuid>
+S2S_CLIENT_SECRET=<secret>
+```
+
+### 2. Authentification JWT dans chaque service
+
+Chaque service valide les tokens JWT via la clÃ© publique RSA d'Auth.
+Le fichier `keys/auth_public.pem` est copiÃ© automatiquement par deploy_mvp.
+
+Le JWTPayload doit toujours inclure `is_authenticated = True`.
+Pour les tokens S2S, `platform_id` se trouve dans le champ `sub` du JWT (pas dans `platform_id`).
+
+Pattern validÃ© pour authentication.py :
+
+```python
+class JWTPayload:
+    def __init__(self, payload):
+        self.payload = payload
+        self.id = payload.get("sub")
+        self.auth_user_id = payload.get("sub")
+        self.is_authenticated = True
+        token_type = payload.get("type", "")
+        if token_type == "s2s":
+            self.platform_id = payload.get("sub")
+        else:
+            self.platform_id = payload.get("platform_id")
+```
+
+### 3. Swagger (drf-spectacular)
+
+Les vues APIView sans serializer_class gÃ©nÃ¨rent des warnings dans les logs au dÃ©marrage â€” c'est normal et non bloquant. Ne pas s'en inquiÃ©ter.
+
+Pour que le bouton Authorize fonctionne dans Swagger, le settings.py doit contenir :
+
+```python
+SPECTACULAR_SETTINGS = {
+    "TITLE": "NOM DU SERVICE",
+    "VERSION": "1.0.0",
+    "SECURITY": [{"BearerAuth": []}],
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
+        }
+    },
+    "COMPONENT_SPLIT_REQUEST": True,
+}
+```
+
+### 4. Celery et tÃ¢ches asynchrones
+
+Si le service utilise Celery (comme Notification), les tÃ¢ches doivent Ãªtre dans workers/tasks.py.
+Le fichier config/celery.py doit inclure :
+
+```python
+app.conf.imports = ["workers.tasks"]
+```
+
+Sans cette ligne, Celery ne dÃ©couvre pas les tÃ¢ches et lÃ¨ve KeyError au runtime.
+
+### 5. Nommage des containers Docker
+
+Les container_name dans docker-compose.yml doivent utiliser des tirets, jamais des underscores.
+Django 4.2+ rejette les underscores dans les hostnames (RFC 1034), ce qui cause des erreurs DisallowedHost sur les appels inter-services.
+
+âœ… Correct : `container_name: agt-auth-service`
+âŒ Incorrect : `container_name: agt_auth_service`
+
+### 6. Serializers et champs vides
+
+Ne jamais envoyer des champs string obligatoires avec une valeur vide ("").
+Si un champ est optionnel cÃ´tÃ© Ã©metteur, ne pas l'inclure dans le payload plutÃ´t que d'envoyer "".
+
+### 7. Variables d'environnement
+
+Toute variable lue depuis l'environnement doit Ãªtre dÃ©clarÃ©e dans settings.py avec python-decouple :
+
+```python
+from decouple import config
+MA_VARIABLE = config("MA_VARIABLE", default="")
+```
+
+Sans cette dÃ©claration, Django ne la verra pas mÃªme si elle est dans le .env.
+
+---
+
+## WORKFLOW DE SESSION
+
+### DÃ©marrage de session
+
+1. Lis ce prompt en entier.
+2. Demande-moi sur quel service je veux travailler.
+3. Demande-moi si j'ai un Handoff Report de la session prÃ©cÃ©dente Ã  te fournir.
+4. Attends que je te fournisse le contexte (fichiers du service concernÃ©).
+5. Fais une analyse de l'existant AVANT toute action.
+
+### Pendant la session
+
+- Une tÃ¢che Ã  la fois.
+- Propose du code seulement aprÃ¨s analyse + conception validÃ©e.
+- Commite aprÃ¨s chaque tÃ¢che complÃ¨te et testÃ©e.
+- Si tu dÃ©tectes un bug, explique la cause racine avant de proposer le fix.
+- Toujours consulter les logs avant de proposer un fix.
+
+### Fin de session
+
+GÃ©nÃ¨re un Handoff Report avec ce format exact :
+
+```markdown
+# HANDOFF REPORT â€” Session du JJ mois AAAA
+
+## 1. CE QUI A Ã‰TÃ‰ COMPLÃ‰TÃ‰
+[Liste des tÃ¢ches terminÃ©es avec les fichiers modifiÃ©s]
+
+## 2. EN COURS
+[Ce qui n'est pas terminÃ©, avec le fichier exact et la ligne si possible]
+
+## 3. PROCHAINE Ã‰TAPE IMMÃ‰DIATE
+[La prochaine sous-tÃ¢che logique selon la mÃ©thode 5 Ã©tapes]
+
+## 4. POINTS D'ATTENTION
+[Bugs connus, dÃ©cisions techniques prises, choix Ã  valider]
+
+## 5. COMMANDES UTILES
+[Les commandes docker/pytest spÃ©cifiques Ã  ce service]
+```
+
+---
+
+## POUR UN SERVICE Ã€ DOCUMENTER (ex: Auth, Users, Notification)
+
+L'objectif est de produire un GUIDE_NOM_SERVICE.md complet qui couvre :
+
+1. RÃ´le du service dans l'architecture AGT
+2. Lancer le service localement (avec ses dÃ©pendances)
+3. Variables d'environnement clÃ©s
+4. Endpoints principaux avec exemples de requÃªte/rÃ©ponse
+5. Flux inter-services : quand ce service appelle qui, et quand il est appelÃ©
+6. Tests disponibles et comment les lancer
+7. Troubleshooting des erreurs courantes
+
+Chaque endpoint documentÃ© doit inclure :
+- La mÃ©thode + URL
+- Les headers requis
+- Un exemple de body (si POST/PUT)
+- La rÃ©ponse attendue
+- Ce qui se passe sous le capot (chorÃ©graphie inter-services si applicable)
+
+LE MODE DE TRAVAIL NE CONSISTE PAS A GENRER UNE FOI LA DOCS DU SERVICE? MAIS A LE TESTER ET DEBOGUER D4ABORD AVEC MOI ETAPE PAR ETAPE ET PRODUIRE LE GUIDE EN FIN DE SESSION.
+
+---
+
+## POUR UN SERVICE Ã€ IMPLÃ‰MENTER (ex: Subscription, Payment, Wallet...)
+
+L'objectif est de livrer un service conforme au CDC, testÃ© et documentÃ©.
+
+Ordre obligatoire :
+1. Lire le CDC du service (docs/cdc/NOM.txt)
+2. Analyser les services existants similaires (ex: Notification pour Subscription)
+3. Concevoir la structure (models, serializers, views, urls, services)
+4. ImplÃ©menter module par module
+5. Ã‰crire les tests pytest
+6. RÃ©diger le README et le GUIDE
+7. Commit final
+
+Ne jamais implÃ©menter sans avoir lu le CDC. Ne jamais livrer sans tests.
+
+---
+
+## RAPPEL FINAL
+
+Tu es mon pair-programmer, pas un agent autonome.
+Tu avances avec moi, Ã  mon rythme, Ã©tape par Ã©tape.
+En cas de doute sur une convention, cherche d'abord dans le code d'Auth â€” c'est le service de rÃ©fÃ©rence.
+```
+
+---
+
+## MODE D'EMPLOI POUR LE LEAD DEV
+
+Pour dÃ©lÃ©guer le travail sur un service Ã  un membre de l'Ã©quipe :
+
+1. Donnez-lui ce fichier `TEAM_PROMPT.md`
+2. Donnez-lui accÃ¨s au dÃ©pÃ´t Git
+3. PrÃ©cisez-lui le service sur lequel travailler
+4. Demandez-lui de fournir Ã  Claude :
+   - Ce prompt
+   - Le fichier `_scan_output/context.md` (contexte complet du projet) Ã  scanner Ã  partir du script scanner.ps1 ou scanner.sh
+   - Le Handoff Report de la session prÃ©cÃ©dente si disponible
+5. Ã€ la fin de chaque session, rÃ©cupÃ©rez le Handoff Report et commitez
+
+**Travail en parallÃ¨le possible** (sessions Claude indÃ©pendantes) :
+- Dev 1 â†’ `GUIDE_AUTH.md` + tests Auth
+- Dev 2 â†’ `GUIDE_USERS.md` + tests Users
+- Dev 3 â†’ `GUIDE_NOTIFICATION.md` + tests Notification
+- Lead â†’ ImplÃ©mentation Subscription ou Payment
+
+Chaque dev travaille sur sa branche Git, les merges se font sur `main` aprÃ¨s validation.
+`
+===== FILE END =====
+
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\end_session.md =====
 `
 Nous allons bientÃ´t changer de session. GÃ©nÃ¨re-moi un 'Handoff Report' (RÃ©sumÃ© de passation) trÃ¨s concis. Il doit contenir :
@@ -35821,5 +36995,5 @@ DÃ¨s que tu me donnes ton feu vert, nous pouvons officiellement dÃ©marrer la
 ===== FILE END =====
 
 ## SUMMARY
-- Total files: 298
+- Total files: 309
 

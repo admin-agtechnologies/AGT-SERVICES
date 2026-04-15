@@ -178,6 +178,7 @@ Réponse attendue :
   "version": "1.0.0"
 }
 ```
+**NB:** vous pouvez aussi tester ces endpoints directement sur le swagger de chaque service.
 
 ### Via Swagger (interface graphique)
 
@@ -210,7 +211,7 @@ Copy-Item agt-notification\.env.example agt-notification\.env
 
 ### Migrations
 
-Les migrations sont exécutées automatiquement au démarrage. Si vous devez les relancer manuellement :
+Les migrations sont normalement exécutées automatiquement au démarrage mais je conseille de  les relancer manuellement :
 
 ```powershell
 # Auth
@@ -238,7 +239,7 @@ docker exec agt-notif-service python manage.py migrate
 
 ### 7.1 Créer la plateforme S2S de Notification
 
-Dans Swagger Auth (http://localhost:7000/api/v1/docs/), appelez `POST /api/v1/auth/platforms` avec le header :
+Dans Swagger Auth (http://localhost:7000/api/v1/docs/), appelez `POST /api/v1/auth/platforms` avec le header à ajouter en haut à droite,sur le boutton authorize:
 
 ```
 X-Admin-API-Key: change-me-admin-api-key-very-secret

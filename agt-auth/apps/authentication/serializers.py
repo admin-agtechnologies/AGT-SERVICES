@@ -10,6 +10,8 @@ class RegisterSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=20, required=False, allow_null=True)
     password = serializers.CharField(min_length=8, required=False, write_only=True, allow_null=True)
     method = serializers.ChoiceField(choices=["email", "phone"])
+    first_name = serializers.CharField(max_length=50, required=False, allow_blank=True, default="")
+    last_name = serializers.CharField(max_length=50, required=False, allow_blank=True, default="")
 
     def validate(self, data):
         method = data.get("method")
@@ -43,6 +45,10 @@ class MagicLinkSerializer(serializers.Serializer):
 
 class VerifyEmailSerializer(serializers.Serializer):
     token = serializers.CharField()
+
+class ResendVerificationSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    platform_id = serializers.UUIDField()
 
 
 class VerifyOTPSerializer(serializers.Serializer):

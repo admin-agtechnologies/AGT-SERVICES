@@ -208,7 +208,7 @@ class NotificationClient:
                 "user_id": user_id,
                 "channels": ["email"],
                 "template_name": template,
-                "data": data,
+                "variables": data,
                 "idempotency_key": str(uuid.uuid4()),
             }, headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
             if resp.status_code >= 400:
@@ -240,6 +240,8 @@ class UsersServiceClient:
     "auth_user_id": auth_user_id,
     "email": email,
     "phone": phone,
+    "first_name": first_name,
+    "last_name": last_name,
 }, headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
             return resp.status_code < 400
         except Exception as e:

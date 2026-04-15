@@ -4,7 +4,7 @@ AGT Auth Service v1.0 — URLs
 from django.urls import path
 from apps.authentication.views_auth import (
     HealthCheckView, RegisterView, VerifyEmailView, VerifyOTPView,
-    LoginView, LoginPhoneView, MagicLinkRequestView, MagicLinkCallbackView,
+    LoginView, LoginPhoneView, MagicLinkRequestView, MagicLinkCallbackView,    ResendVerificationView,
 )
 from apps.authentication.views_sessions import (
     RefreshTokenView, LogoutView, SessionListView, SessionRevokeView,
@@ -27,6 +27,7 @@ urlpatterns = [
     # Register & Verify
     path("auth/register", RegisterView.as_view(), name="auth-register"),
     path("auth/verify-email", VerifyEmailView.as_view(), name="auth-verify-email"),
+    path("auth/resend-verification", ResendVerificationView.as_view(), name="auth-resend-verification"),
     path("auth/verify-otp", VerifyOTPView.as_view(), name="auth-verify-otp"),
 
     # Login

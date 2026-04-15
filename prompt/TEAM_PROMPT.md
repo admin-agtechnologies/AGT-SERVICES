@@ -268,6 +268,8 @@ Chaque endpoint documenté doit inclure :
 - La réponse attendue
 - Ce qui se passe sous le capot (chorégraphie inter-services si applicable)
 
+LE MODE DE TRAVAIL NE CONSISTE PAS A GENRER UNE FOI LA DOCS DU SERVICE? MAIS A LE TESTER ET DEBOGUER D4ABORD AVEC MOI ETAPE PAR ETAPE ET PRODUIRE LE GUIDE EN FIN DE SESSION.
+
 ---
 
 ## POUR UN SERVICE À IMPLÉMENTER (ex: Subscription, Payment, Wallet...)

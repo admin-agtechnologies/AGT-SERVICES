@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 from apps.authentication.models import Platform, UserAuth, VerificationToken, LoginHistory
 from apps.authentication.serializers import (
     RegisterSerializer, VerifyEmailSerializer, VerifyOTPSerializer,
-    LoginSerializer, LoginPhoneSerializer, MagicLinkSerializer,
+    LoginSerializer, LoginPhoneSerializer, MagicLinkSerializer,ResendVerificationSerializer
 )
 from apps.authentication.services import (
     JWTService, TokenService, SessionService, NotificationClient, UsersServiceClient,
@@ -25,6 +25,7 @@ from apps.authentication.swagger import (
     health_schema, register_schema, verify_email_schema, verify_otp_schema,
     login_schema, login_phone_schema, magic_link_schema, magic_link_callback_schema,
 )
+from drf_spectacular.utils import extend_schema
 
 logger = logging.getLogger(__name__)
 
@@ -106,16 +107,16 @@ class RegisterView(APIView):
                 expires_at=timezone.now() + timedelta(hours=1),
             )
 
+            # Provisioning Users
+            UsersServiceClient.provision_user(str(user.id), email=user.email, first_name=data.get("first_name", ""), last_name=data.get("last_name", ""),)
+
             NotificationClient.send(
                 notification_type="email_verification",
                 recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
                 template="auth_verify_email",
-                data={"verification_url": f"{request.scheme}://{request.get_host()}/api/v1/auth/verify-email?token={raw_token}", "expires_in_minutes": 60, "platform_name": platform.name},
+                data={"verification_url": f"{request.scheme}://{request.get_host()}/api/v1/auth/verify-email?token={raw_token}", "expires_in_minutes": 60, "platform_name": platform.name, "first_name": data.get("first_name", ""),},
                 priority="high",
             )
-
-            # Provisioning Users
-            UsersServiceClient.provision_user(str(user.id), email=user.email)
 
             return Response({
                 "id": str(user.id), "email": user.email, "email_verified": False,
@@ -133,16 +134,15 @@ class RegisterView(APIView):
                 type="phone_otp", payload={"context": "registration"},
                 expires_at=timezone.now() + timedelta(seconds=settings.OTP_TTL),
             )
-
+            
+            UsersServiceClient.provision_user(str(user.id), phone=user.phone, first_name=data.get("first_name", ""), last_name=data.get("last_name", ""),)
             NotificationClient.send(
                 notification_type="phone_otp",
                 recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
                 template="auth_otp_sms",
-                data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60, "platform_name": platform.name},
+                data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60, "platform_name": platform.name ,"first_name": data.get("first_name", "")},
                 priority="critical",
             )
-
-            UsersServiceClient.provision_user(str(user.id), phone=user.phone)
 
             return Response({
                 "id": str(user.id), "phone": user.phone, "phone_verified": False,
@@ -254,6 +254,12 @@ class LoginView(APIView):
             return Response({"detail": "Identifiants invalides."}, status=status.HTTP_401_UNAUTHORIZED)
 
         available, reason = user.is_available_for_login
+        # Bloquer si email non vérifié
+        if not user.email_verified:
+            return Response(
+                {"detail": "Email non vérifié. Consultez votre boîte mail ou renvoyez le lien de vérification."},
+                status=status.HTTP_403_FORBIDDEN
+            )
         if not available:
             LoginHistory.objects.create(user=user, platform=platform, method="email", ip_address=get_client_ip(request), user_agent=request.headers.get("User-Agent"), success=False, failure_reason=reason)
             return Response({"detail": reason}, status=status.HTTP_403_FORBIDDEN)
@@ -310,7 +316,7 @@ class LoginPhoneView(APIView):
             notification_type="phone_otp",
             recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
             template="auth_otp_sms",
-            data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60},
+            data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60, "first_name": data.get("first_name", "")},
             priority="critical",
         )
 
@@ -357,7 +363,7 @@ class MagicLinkRequestView(APIView):
             notification_type="magic_link",
             recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
             template="auth_magic_link",
-            data={"magic_link_url": callback_url, "expires_in_minutes": settings.MAGIC_LINK_TTL // 60, "platform_name": platform.name},
+            data={"magic_link_url": callback_url, "expires_in_minutes": settings.MAGIC_LINK_TTL // 60, "platform_name": platform.name, "first_name": data.get("first_name", "")},
             priority="high",
         )
 
@@ -410,3 +416,68 @@ class MagicLinkCallbackView(APIView):
         set_access_cookie(response, access_token)
         set_refresh_cookie(response, raw_refresh)
         return response
+
+@extend_schema(
+    tags=["Register"],
+    summary="Renvoyer l'email de vérification",
+    request=ResendVerificationSerializer
+)
+class ResendVerificationView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def post(self, request):
+        serializer = ResendVerificationSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        data = serializer.validated_data
+
+        # Réponse générique pour éviter l'énumération d'emails
+        generic_response = Response(
+            {"message": "Si cet email existe et n'est pas vérifié, un nouveau lien a été envoyé."},
+            status=status.HTTP_200_OK
+        )
+
+        try:
+            user = UserAuth.objects.get(email=data["email"])
+        except UserAuth.DoesNotExist:
+            return generic_response
+
+        # Ne rien faire si déjà vérifié
+        if user.email_verified:
+            return generic_response
+
+        try:
+            platform = Platform.objects.get(id=data["platform_id"], is_active=True)
+        except Platform.DoesNotExist:
+            return Response({"detail": "Plateforme invalide."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Invalider les anciens tokens de vérification
+        VerificationToken.objects.filter(
+            user=user, type="email_verification", used_at__isnull=True
+        ).update(expires_at=timezone.now())
+
+        # Créer un nouveau token
+        raw_token = TokenService.generate_raw_token()
+        VerificationToken.objects.create(
+            user=user,
+            token_hash=TokenService.hash_token(raw_token),
+            type="email_verification",
+            expires_at=timezone.now() + timedelta(hours=1),
+        )
+
+        NotificationClient.send(
+            notification_type="email_verification",
+            recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
+            template="auth_verify_email",
+            data={
+                "verification_url": f"{request.scheme}://{request.get_host()}/api/v1/auth/verify-email?token={raw_token}",
+                "expires_in_minutes": 60,
+                "platform_name": platform.name,
+                "first_name": "",
+            },
+            priority="high",
+        )
+
+        return generic_response
