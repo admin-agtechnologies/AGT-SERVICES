@@ -22,7 +22,8 @@
 \deploy_mvp.ps1
 \deploy_mvp.sh
 \docker-compose.infra.yml
-\hanover_report.md
+\handover_report_auth.md
+\handover_report_guetting_started.md
 \notes.md
 \README.md
 \reset_all.ps1
@@ -464,7 +465,8 @@
 
 ## FILES
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docker-compose.infra.yml (2.64 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\hanover_report.md (6.44 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\handover_report_auth.md (6.33 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\handover_report_guetting_started.md (6.44 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\notes.md (2.06 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\README.md (27.98 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\roadmap.md (4.43 KB)
@@ -485,13 +487,13 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\models.py (9.44 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\pagination.py (0.47 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\permissions.py (0.63 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\serializers.py (4.51 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\services.py (10.72 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\serializers.py (4.84 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\services.py (10.78 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\swagger.py (9.01 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\urls.py (4.07 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\urls.py (4.2 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\utils.py (1.6 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\views_admin.py (16.12 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\views_auth.py (17.48 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\views_auth.py (20.5 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\views_sessions.py (16.41 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\__init__.py (0 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-auth\apps\authentication\management\__init__.py (0 KB)
@@ -554,7 +556,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\package.json (0.29 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\README.md (1.94 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-media\server.js (2.48 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env (3.7 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env (3.67 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\.env.example (3.49 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\CDC_v1.0.md (2.6 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-notification\docker-compose.yml (5.26 KB)
@@ -737,8 +739,8 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\config\urls.py (0.45 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\config\wsgi.py (0.16 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\agt-wallet\config\__init__.py (0 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GETTING_STARTED.md (19.22 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_AUTH.md (5.14 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GETTING_STARTED.md (19.38 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_AUTH.md (24.84 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_CHAT.md (0.06 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_CHATBOT.md (0.06 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_GEOLOC.md (0.06 KB)
@@ -771,7 +773,7 @@
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\init_session.md (0.63 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\sync.md (0.76 KB)
 - C:\Users\hp\Documents\gabriel\AGT-SERVICES\prompt\save_context\t.md (3.24 KB)
-- C:\Users\hp\Documents\gabriel\AGT-SERVICES\_scan_output\context.md (1471.66 KB)
+- C:\Users\hp\Documents\gabriel\AGT-SERVICES\_scan_output\context.md (1509.54 KB)
 
 ## CODE CONTEXT
 
@@ -865,7 +867,168 @@ networks:
 `
 ===== FILE END =====
 
-===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\hanover_report.md =====
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\handover_report_auth.md =====
+`
+# HANDOFF REPORT â€” Session du 15 avril 2026
+
+> **Projet** : AG Technologies â€” Auth Service v1.0
+> **MÃ©thode** : Test manuel via Swagger + corrections de bugs + documentation
+
+---
+
+## 1. CE QUI A Ã‰TÃ‰ COMPLÃ‰TÃ‰
+
+### MVP validÃ©
+- `deploy_mvp.ps1` exÃ©cutÃ© et validÃ© â€” 15 containers UP, tous healthy
+- Flux end-to-end Register â†’ Email â†’ Verify â†’ Login fonctionnel et testÃ©
+
+### Bugs corrigÃ©s dans Auth
+
+| Fichier | Correction |
+|---------|------------|
+| `agt-auth/apps/authentication/views_auth.py` | Ordre inversÃ© : `provision_user` (Users) appelÃ© AVANT `NotificationClient.send` |
+| `agt-auth/apps/authentication/views_auth.py` | `first_name`/`last_name` ajoutÃ©s au register, resend-verification et login bloquÃ© si email non vÃ©rifiÃ© |
+| `agt-auth/apps/authentication/views_auth.py` | Nouveau endpoint `ResendVerificationView` crÃ©Ã© |
+| `agt-auth/apps/authentication/serializers.py` | `first_name`/`last_name` ajoutÃ©s dans `RegisterSerializer` + `ResendVerificationSerializer` crÃ©Ã© |
+| `agt-auth/apps/authentication/services.py` | `"data"` â†’ `"variables"` dans le payload envoyÃ© Ã  Notification + `first_name`/`last_name` dans payload Users |
+| `agt-auth/apps/authentication/urls.py` | Route `auth/resend-verification` ajoutÃ©e + import `ResendVerificationView` |
+
+### Nouveau endpoint crÃ©Ã©
+- `POST /api/v1/auth/resend-verification` â€” renvoi email de vÃ©rification avec invalidation des anciens tokens
+
+### Templates Notification crÃ©Ã©s
+| Template | Canal | Platform ID |
+|----------|-------|-------------|
+| `auth_verify_email` | email | Ã  recrÃ©er sur votre machine |
+| `auth_otp_sms` | sms | Ã  recrÃ©er sur votre machine |
+| `auth_magic_link` | email | Ã  recrÃ©er sur votre machine |
+| `auth_reset_password` | email | Ã  recrÃ©er sur votre machine |
+
+### Documentation produite
+- `GUIDE_AUTH.md` â€” guide complet autonome couvrant Health, Platforms, S2S, Register, Login
+- `HANDOFF_REPORT_15_AVRIL_2026.md` â€” ce fichier
+
+### Groupes testÃ©s et validÃ©s
+| Groupe | Statut |
+|--------|--------|
+| Health | âœ… |
+| Platforms (POST, GET, PUT, DELETE) | âœ… |
+| S2S (token + introspect) | âœ… |
+| Register (register + verify-email + resend-verification) | âœ… |
+| Login (valide + mauvais password + email non vÃ©rifiÃ©) | âœ… |
+
+---
+
+## 2. EN COURS
+
+Tests manuels Auth via Swagger â€” groupes non encore testÃ©s :
+
+| Groupe | Endpoints Ã  tester |
+|--------|-------------------|
+| Sessions | `POST /refresh`, `POST /logout`, `GET /sessions`, `DELETE /sessions/{id}`, `GET /verify-token`, `POST /token/exchange` |
+| Profile | `GET /me`, `GET /login-history`, `GET /stats/{user_id}` |
+| Password | `POST /forgot-password`, `POST /reset-password`, `PUT /change-password` |
+| 2FA | `POST /2fa/enable`, `POST /2fa/confirm`, `POST /2fa/verify`, `POST /2fa/disable` |
+| Admin | `POST /admin/block/{id}`, `POST /admin/unblock/{id}`, `POST /account/deactivate`, `DELETE /admin/purge/{id}` |
+| OAuth | `GET /oauth/google`, `GET /oauth/google/callback`, `GET /oauth/facebook`, `GET /oauth/facebook/callback` |
+
+---
+
+## 3. PROCHAINE Ã‰TAPE IMMÃ‰DIATE
+
+**Reprendre le guide au groupe Sessions.**
+
+MÃ©thode Ã  suivre pour chaque groupe :
+1. Demander Ã  l'IA d'expliquer le rÃ´le de chaque endpoint du groupe
+2. Tester chaque endpoint dans Swagger avec les bons JSON (voir section 5)
+3. Si un bug est trouvÃ© â†’ diagnostiquer avec les logs avant de coder
+4. Documenter le rÃ©sultat dans `GUIDE_AUTH.md` Ã  la suite de ce qui existe
+
+**Compte de test disponible :**
+- Email : `jane.doe@example.com` / Password : `Test1234!` â€” vÃ©rifiÃ©, prÃªt pour tous les tests
+- Obtenir un `access_token` frais via `POST /auth/login` avant de tester les endpoints protÃ©gÃ©s
+
+**JSON de login pour rÃ©cupÃ©rer un token frais :**
+```json
+POST /api/v1/auth/login
+{
+  "email": "jane.doe@example.com",
+  "password": "Test1234!",
+  "platform_id": "<votre_platform_id>"
+}
+```
+â†’ Copier le `access_token` et cliquer **Authorize** dans Swagger.
+
+---
+
+## 4. POINTS D'ATTENTION
+
+| # | Point | Action requise |
+|---|-------|----------------|
+| 1 | `PUT /templates/{id}` n'affiche pas le body dans Swagger Notification | Bug Swagger Ã  corriger â€” ajouter `@extend_schema(request=TemplateUpdateSerializer)` dans `apps/templates_mgr/views.py` |
+| 2 | `resend-verification` apparaÃ®t dans le groupe `auth` au lieu de `Register` dans Swagger | VÃ©rifier le tag dans `@extend_schema` de `ResendVerificationView` |
+| 3 | Apostrophes perdues dans les templates (`L equipe`, `n avez`) | Corriger les templates via PUT quand le bug Swagger sera fixÃ© |
+| 4 | `first_name` toujours vide dans `resend-verification` | Auth ne stocke pas le prÃ©nom â€” amÃ©lioration future : le rÃ©cupÃ©rer depuis Users |
+| 5 | AprÃ¨s `reset --clean` : recrÃ©er plateformes + templates + credentials S2S Notification | Refaire les sections 5, 6, 7 du GUIDE_AUTH.md depuis le dÃ©but |
+| 6 | Tests pytest Auth non encore lancÃ©s | Ã€ faire aprÃ¨s les tests manuels complets |
+
+---
+
+## 5. COMMANDES UTILES
+
+```powershell
+# Lancer le MVP
+.\deploy_mvp.ps1
+
+# Reset complet (reconfigurer depuis section 5 du GUIDE_AUTH.md)
+.\reset_mvp.ps1 --clean
+
+# Rebuild Auth uniquement
+cd agt-auth && docker compose up -d --build auth && cd ..
+
+# Rebuild Notification (service + worker)
+cd agt-notification
+docker compose up -d --build notification celery-worker
+cd ..
+
+# Vider le rate limiting Redis Auth
+docker exec agt-auth-redis redis-cli FLUSHDB
+
+# Logs Auth en temps rÃ©el
+docker logs agt-auth-service --follow
+
+# Logs worker Notification
+docker logs agt-notif-worker --tail=50
+
+# RÃ©gÃ©nÃ©rer un token S2S (remplacer les valeurs)
+$r = Invoke-RestMethod -Uri "http://localhost:7000/api/v1/auth/s2s/token" `
+  -Method POST -ContentType "application/json" `
+  -Body '{"client_id": "<platform_id>", "client_secret": "<secret>"}'
+$token = $r.access_token
+
+# Tests pytest Auth
+docker exec agt-auth-service python -m pytest -v
+```
+
+---
+
+## 6. PORTS DE RÃ‰FÃ‰RENCE
+
+| Service | Port | Swagger |
+|---------|------|---------|
+| Auth | 7000 | http://localhost:7000/api/v1/docs/ |
+| Users | 7001 | http://localhost:7001/api/v1/docs/ |
+| Notification | 7002 | http://localhost:7002/api/v1/docs/ |
+| Mailpit | 8025 | http://localhost:8025 |
+| RabbitMQ | 15672 | http://localhost:15672 (agt_rabbit / agt_rabbit_password) |
+
+---
+
+*AG Technologies â€” Handoff Report â€” 15 avril 2026*
+`
+===== FILE END =====
+
+===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\handover_report_guetting_started.md =====
 `
 # HANDOFF REPORT â€” Session du 14 avril 2026
 
@@ -3558,6 +3721,8 @@ class RegisterSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=20, required=False, allow_null=True)
     password = serializers.CharField(min_length=8, required=False, write_only=True, allow_null=True)
     method = serializers.ChoiceField(choices=["email", "phone"])
+    first_name = serializers.CharField(max_length=50, required=False, allow_blank=True, default="")
+    last_name = serializers.CharField(max_length=50, required=False, allow_blank=True, default="")
 
     def validate(self, data):
         method = data.get("method")
@@ -3591,6 +3756,10 @@ class MagicLinkSerializer(serializers.Serializer):
 
 class VerifyEmailSerializer(serializers.Serializer):
     token = serializers.CharField()
+
+class ResendVerificationSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    platform_id = serializers.UUIDField()
 
 
 class VerifyOTPSerializer(serializers.Serializer):
@@ -3886,7 +4055,7 @@ class NotificationClient:
                 "user_id": user_id,
                 "channels": ["email"],
                 "template_name": template,
-                "data": data,
+                "variables": data,
                 "idempotency_key": str(uuid.uuid4()),
             }, headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
             if resp.status_code >= 400:
@@ -3918,6 +4087,8 @@ class UsersServiceClient:
     "auth_user_id": auth_user_id,
     "email": email,
     "phone": phone,
+    "first_name": first_name,
+    "last_name": last_name,
 }, headers={"Authorization": f"Bearer {token}"}, timeout=5.0)
             return resp.status_code < 400
         except Exception as e:
@@ -4167,7 +4338,7 @@ AGT Auth Service v1.0 â€” URLs
 from django.urls import path
 from apps.authentication.views_auth import (
     HealthCheckView, RegisterView, VerifyEmailView, VerifyOTPView,
-    LoginView, LoginPhoneView, MagicLinkRequestView, MagicLinkCallbackView,
+    LoginView, LoginPhoneView, MagicLinkRequestView, MagicLinkCallbackView,    ResendVerificationView,
 )
 from apps.authentication.views_sessions import (
     RefreshTokenView, LogoutView, SessionListView, SessionRevokeView,
@@ -4190,6 +4361,7 @@ urlpatterns = [
     # Register & Verify
     path("auth/register", RegisterView.as_view(), name="auth-register"),
     path("auth/verify-email", VerifyEmailView.as_view(), name="auth-verify-email"),
+    path("auth/resend-verification", ResendVerificationView.as_view(), name="auth-resend-verification"),
     path("auth/verify-otp", VerifyOTPView.as_view(), name="auth-verify-otp"),
 
     # Login
@@ -4706,7 +4878,7 @@ from rest_framework.views import APIView
 from apps.authentication.models import Platform, UserAuth, VerificationToken, LoginHistory
 from apps.authentication.serializers import (
     RegisterSerializer, VerifyEmailSerializer, VerifyOTPSerializer,
-    LoginSerializer, LoginPhoneSerializer, MagicLinkSerializer,
+    LoginSerializer, LoginPhoneSerializer, MagicLinkSerializer,ResendVerificationSerializer
 )
 from apps.authentication.services import (
     JWTService, TokenService, SessionService, NotificationClient, UsersServiceClient,
@@ -4716,6 +4888,7 @@ from apps.authentication.swagger import (
     health_schema, register_schema, verify_email_schema, verify_otp_schema,
     login_schema, login_phone_schema, magic_link_schema, magic_link_callback_schema,
 )
+from drf_spectacular.utils import extend_schema
 
 logger = logging.getLogger(__name__)
 
@@ -4797,16 +4970,16 @@ class RegisterView(APIView):
                 expires_at=timezone.now() + timedelta(hours=1),
             )
 
+            # Provisioning Users
+            UsersServiceClient.provision_user(str(user.id), email=user.email, first_name=data.get("first_name", ""), last_name=data.get("last_name", ""),)
+
             NotificationClient.send(
                 notification_type="email_verification",
                 recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
                 template="auth_verify_email",
-                data={"verification_url": f"{request.scheme}://{request.get_host()}/api/v1/auth/verify-email?token={raw_token}", "expires_in_minutes": 60, "platform_name": platform.name},
+                data={"verification_url": f"{request.scheme}://{request.get_host()}/api/v1/auth/verify-email?token={raw_token}", "expires_in_minutes": 60, "platform_name": platform.name, "first_name": data.get("first_name", ""),},
                 priority="high",
             )
-
-            # Provisioning Users
-            UsersServiceClient.provision_user(str(user.id), email=user.email)
 
             return Response({
                 "id": str(user.id), "email": user.email, "email_verified": False,
@@ -4824,16 +4997,15 @@ class RegisterView(APIView):
                 type="phone_otp", payload={"context": "registration"},
                 expires_at=timezone.now() + timedelta(seconds=settings.OTP_TTL),
             )
-
+            
+            UsersServiceClient.provision_user(str(user.id), phone=user.phone, first_name=data.get("first_name", ""), last_name=data.get("last_name", ""),)
             NotificationClient.send(
                 notification_type="phone_otp",
                 recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
                 template="auth_otp_sms",
-                data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60, "platform_name": platform.name},
+                data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60, "platform_name": platform.name ,"first_name": data.get("first_name", "")},
                 priority="critical",
             )
-
-            UsersServiceClient.provision_user(str(user.id), phone=user.phone)
 
             return Response({
                 "id": str(user.id), "phone": user.phone, "phone_verified": False,
@@ -4945,6 +5117,12 @@ class LoginView(APIView):
             return Response({"detail": "Identifiants invalides."}, status=status.HTTP_401_UNAUTHORIZED)
 
         available, reason = user.is_available_for_login
+        # Bloquer si email non vÃ©rifiÃ©
+        if not user.email_verified:
+            return Response(
+                {"detail": "Email non vÃ©rifiÃ©. Consultez votre boÃ®te mail ou renvoyez le lien de vÃ©rification."},
+                status=status.HTTP_403_FORBIDDEN
+            )
         if not available:
             LoginHistory.objects.create(user=user, platform=platform, method="email", ip_address=get_client_ip(request), user_agent=request.headers.get("User-Agent"), success=False, failure_reason=reason)
             return Response({"detail": reason}, status=status.HTTP_403_FORBIDDEN)
@@ -5001,7 +5179,7 @@ class LoginPhoneView(APIView):
             notification_type="phone_otp",
             recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
             template="auth_otp_sms",
-            data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60},
+            data={"otp_code": otp, "expires_in_minutes": settings.OTP_TTL // 60, "first_name": data.get("first_name", "")},
             priority="critical",
         )
 
@@ -5048,7 +5226,7 @@ class MagicLinkRequestView(APIView):
             notification_type="magic_link",
             recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
             template="auth_magic_link",
-            data={"magic_link_url": callback_url, "expires_in_minutes": settings.MAGIC_LINK_TTL // 60, "platform_name": platform.name},
+            data={"magic_link_url": callback_url, "expires_in_minutes": settings.MAGIC_LINK_TTL // 60, "platform_name": platform.name, "first_name": data.get("first_name", "")},
             priority="high",
         )
 
@@ -5102,6 +5280,70 @@ class MagicLinkCallbackView(APIView):
         set_refresh_cookie(response, raw_refresh)
         return response
 
+@extend_schema(
+    tags=["Register"],
+    summary="Renvoyer l'email de vÃ©rification",
+    request=ResendVerificationSerializer
+)
+class ResendVerificationView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def post(self, request):
+        serializer = ResendVerificationSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        data = serializer.validated_data
+
+        # RÃ©ponse gÃ©nÃ©rique pour Ã©viter l'Ã©numÃ©ration d'emails
+        generic_response = Response(
+            {"message": "Si cet email existe et n'est pas vÃ©rifiÃ©, un nouveau lien a Ã©tÃ© envoyÃ©."},
+            status=status.HTTP_200_OK
+        )
+
+        try:
+            user = UserAuth.objects.get(email=data["email"])
+        except UserAuth.DoesNotExist:
+            return generic_response
+
+        # Ne rien faire si dÃ©jÃ  vÃ©rifiÃ©
+        if user.email_verified:
+            return generic_response
+
+        try:
+            platform = Platform.objects.get(id=data["platform_id"], is_active=True)
+        except Platform.DoesNotExist:
+            return Response({"detail": "Plateforme invalide."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Invalider les anciens tokens de vÃ©rification
+        VerificationToken.objects.filter(
+            user=user, type="email_verification", used_at__isnull=True
+        ).update(expires_at=timezone.now())
+
+        # CrÃ©er un nouveau token
+        raw_token = TokenService.generate_raw_token()
+        VerificationToken.objects.create(
+            user=user,
+            token_hash=TokenService.hash_token(raw_token),
+            type="email_verification",
+            expires_at=timezone.now() + timedelta(hours=1),
+        )
+
+        NotificationClient.send(
+            notification_type="email_verification",
+            recipient={"user_id": str(user.id), "email": user.email, "phone": None, "platform_id": str(platform.id)},
+            template="auth_verify_email",
+            data={
+                "verification_url": f"{request.scheme}://{request.get_host()}/api/v1/auth/verify-email?token={raw_token}",
+                "expires_in_minutes": 60,
+                "platform_name": platform.name,
+                "first_name": "",
+            },
+            priority="high",
+        )
+
+        return generic_response
 `
 ===== FILE END =====
 
@@ -8304,10 +8546,11 @@ FCM_SERVER_KEY=
 
 # â”€â”€â”€ CORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
-# --- S2S Auth credentials ---
-S2S_CLIENT_ID=d3aa237c-726e-4cae-b250-30db70357623
-S2S_CLIENT_SECRET=eCBoxzf4bS0b6sUNiaiQ0uo-AqQskW4-zQtAr0Aty3nwioRiXDHzHJEn_XTmW_Tk
+
+
 S2S_AUTH_URL=http://agt-auth-service:7000/api/v1
+S2S_CLIENT_ID=f91bb78e-df24-4b64-ad01-25d1c07ffa26
+S2S_CLIENT_SECRET=6f3B_lhwhq8ClDsEFpKcm0AKNQispkXWS6rFjdb-RCyCVun0J69-Log5EwVfT4hj
 `
 ===== FILE END =====
 
@@ -18875,6 +19118,7 @@ RÃ©ponse attendue :
   "version": "1.0.0"
 }
 ```
+**NB:** vous pouvez aussi tester ces endpoints directement sur le swagger de chaque service.
 
 ### Via Swagger (interface graphique)
 
@@ -18907,7 +19151,7 @@ Copy-Item agt-notification\.env.example agt-notification\.env
 
 ### Migrations
 
-Les migrations sont exÃ©cutÃ©es automatiquement au dÃ©marrage. Si vous devez les relancer manuellement :
+Les migrations sont normalement exÃ©cutÃ©es automatiquement au dÃ©marrage mais je conseille de  les relancer manuellement :
 
 ```powershell
 # Auth
@@ -18935,7 +19179,7 @@ docker exec agt-notif-service python manage.py migrate
 
 ### 7.1 CrÃ©er la plateforme S2S de Notification
 
-Dans Swagger Auth (http://localhost:7000/api/v1/docs/), appelez `POST /api/v1/auth/platforms` avec le header :
+Dans Swagger Auth (http://localhost:7000/api/v1/docs/), appelez `POST /api/v1/auth/platforms` avec le header Ã  ajouter en haut Ã  droite,sur le boutton authorize:
 
 ```
 X-Admin-API-Key: change-me-admin-api-key-very-secret
@@ -19309,194 +19553,857 @@ Pour gÃ©rer les portefeuilles Ã©lectroniques, les virements et le ledger dou
 
 ===== FILE START: C:\Users\hp\Documents\gabriel\AGT-SERVICES\docs\GUIDE_AUTH.md =====
 `
-# Service Auth v1.0 - Guide d'utilisation
+# GUIDE AUTH SERVICE â€” AG Technologies
+## Auth Service v1.0
 
-> Ce guide explique comment configurer, demarrer et utiliser le service Auth de l'ecosysteme AGT.
-
-## 1. Demarrage
-
-### Prerequis
-- Docker Desktop installe et **demarr** (icone verte dans la barre de taches)
-
-### Lancement
-
-**Windows :**
-```powershell
-cd agt-auth
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\setup.ps1
-```
-
-**Linux/macOS :**
-```bash
-cd agt-auth
-bash scripts/setup.sh
-```
-
-Le script fait tout automatiquement :
-1. Cree le `.env` depuis `.env.example`
-2. Genere les cles RSA (via OpenSSL ou via Docker si OpenSSL absent)
-3. Build et demarre PostgreSQL + Redis + le service Auth
-4. Execute les migrations
-5. Verifie le health check
-
-### Verification
-
-```
-curl http://localhost:7000/api/v1/auth/health
-```
-
-Reponse attendue :
-```json
-{"status": "healthy", "database": "ok", "redis": "ok", "version": "1.0.0"}
-```
-
-### Documentation API interactive
-
-- **Swagger UI** : http://localhost:7000/api/v1/docs/
-- **ReDoc** : http://localhost:7000/api/v1/redoc/
+> **Ã€ qui s'adresse ce guide ?**
+> Ã€ tout dÃ©veloppeur qui souhaite tester et valider le service Auth d'AGT.
+> Ce guide est **autonome** â€” vous partez de zÃ©ro sur votre machine.
+>
+> **Ce guide couvre les groupes testÃ©s et validÃ©s le 15 avril 2026 :**
+> Health â†’ Platforms â†’ S2S â†’ Templates Notification â†’ Register â†’ Login
+>
+> **Ce qui reste Ã  tester et documenter (suite) :**
+> Sessions, Profile, Password, 2FA, Admin, OAuth
 
 ---
 
-## 2. Premiere configuration
+## Table des matiÃ¨res
 
-### 2.1 Creer une plateforme
+1. [RÃ´le du service Auth dans l'Ã©cosystÃ¨me](#1-rÃ´le-du-service-auth-dans-lÃ©cosystÃ¨me)
+2. [PrÃ©requis](#2-prÃ©requis)
+3. [Lancer le MVP](#3-lancer-le-mvp)
+4. [Groupe 1 â€” Health](#4-groupe-1--health)
+5. [Groupe 2 â€” Platforms](#5-groupe-2--platforms)
+6. [Groupe 3 â€” S2S](#6-groupe-3--s2s)
+7. [PrÃ©requis Register â€” CrÃ©er les templates Notification](#7-prÃ©requis-register--crÃ©er-les-templates-notification)
+8. [Groupe 4 â€” Register](#8-groupe-4--register)
+9. [Groupe 5 â€” Login](#9-groupe-5--login)
+10. [Troubleshooting](#10-troubleshooting)
+11. [Commandes utiles](#11-commandes-utiles)
 
-Chaque application qui utilise Auth (AGT-Market, AGT-Bot, SALMA...) doit etre enregistree comme "plateforme". C'est le premier truc a faire.
+---
 
-```bash
-curl -X POST http://localhost:7000/api/v1/auth/platforms \
-  -H "Content-Type: application/json" \
-  -H "X-Admin-API-Key: change-me-admin-api-key-very-secret" \
-  -d '{
-    "name": "AGT Market",
-    "slug": "agt-market",
-    "allowed_auth_methods": ["email", "phone", "google", "magic_link"],
-    "allowed_redirect_urls": ["http://localhost:3000/callback"]
-  }'
+## 1. RÃ´le du service Auth dans l'Ã©cosystÃ¨me
+
+Auth est le **service central de confiance** de l'Ã©cosystÃ¨me AGT. Il est le **seul Ã©metteur de tokens JWT**. Tous les autres services lui font confiance pour :
+
+- Authentifier les utilisateurs (tokens JWT RS256)
+- Authentifier les microservices entre eux (tokens S2S)
+- GÃ©rer le cycle de vie des comptes (register, verify, login, logout, 2FA, OAuth, password reset)
+
+Auth communique avec deux services lors de l'inscription :
+- **Users** â†’ provisioning du profil utilisateur (appel synchrone S2S)
+- **Notification** â†’ envoi de l'email/SMS de vÃ©rification (asynchrone via RabbitMQ + Celery)
+
+**Port :** 7000
+**Swagger UI :** http://localhost:7000/api/v1/docs/
+
+---
+
+## 2. PrÃ©requis
+
+- Docker Desktop actif (version 24+)
+- Le dÃ©pÃ´t AGT clonÃ© en local
+- PowerShell (Windows) ou Bash (Linux/Mac)
+
+---
+
+## 3. Lancer le MVP
+
+Depuis la racine du projet :
+
+```powershell
+# Windows
+.\deploy_mvp.ps1
+
+# Linux / Mac
+./deploy_mvp.sh
 ```
 
-**Important** : la reponse contient un `client_secret` qui n'est affiche qu'une seule fois. Notez-le.
+Attendez le message de confirmation :
 
-La reponse inclut aussi l'`id` de la plateforme (UUID). C'est le `X-Platform-Id` que vous passerez dans toutes les requetes.
-
-### 2.2 Inscrire un utilisateur
-
-```bash
-curl -X POST http://localhost:7000/api/v1/auth/register \
-  -H "Content-Type: application/json" \
-  -H "X-Platform-Id: <UUID-plateforme>" \
-  -d '{
-    "email": "gabriel@agt.com",
-    "password": "MonMotDePasse123!",
-    "method": "email"
-  }'
+```
+=========================================
+ DÃ‰PLOIEMENT MVP RÃ‰USSI !
+=========================================
+ Auth         : http://localhost:7000/api/v1/docs/
+ Users        : http://localhost:7001/api/v1/docs/
+ Notification : http://localhost:7002/api/v1/docs/
+ Mailpit      : http://localhost:8025
+ RabbitMQ     : http://localhost:15672
+=========================================
 ```
 
-Note : la verification email est envoyee au Service Notification. En dev (Notification pas encore lance), l'inscription fonctionne mais l'email n'est pas envoye. L'utilisateur peut quand meme se connecter.
+VÃ©rifiez l'Ã©tat des containers :
 
-### 2.3 Se connecter
-
-```bash
-curl -X POST http://localhost:7000/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "gabriel@agt.com",
-    "password": "MonMotDePasse123!",
-    "platform_id": "<UUID-plateforme>"
-  }'
+```powershell
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 ```
 
-Reponse :
+Vous devez voir au minimum ces containers avec le statut `(healthy)` :
+
+```
+agt-auth-service     Up ... (healthy)   0.0.0.0:7000->7000/tcp
+agt-users-service    Up ... (healthy)   0.0.0.0:7001->7001/tcp
+agt-notif-service    Up ... (healthy)   0.0.0.0:7002->7002/tcp
+agt-notif-worker     Up ...
+agt-rabbitmq         Up ... (healthy)
+agt-mailpit          Up ... (healthy)   0.0.0.0:8025->8025/tcp
+```
+
+---
+
+## 4. Groupe 1 â€” Health
+
+### RÃ´le
+VÃ©rifier en temps rÃ©el que les 3 composants critiques sont opÃ©rationnels : l'application Django, la base PostgreSQL et le cache Redis. UtilisÃ© par les scripts de dÃ©ploiement avant de continuer.
+
+### Test â€” `GET /api/v1/auth/health`
+
+**Headers requis :** aucun â€” endpoint public.
+
+Dans Swagger : `GET /api/v1/auth/health` â†’ `Try it out` â†’ `Execute`
+
+**RÃ©ponse attendue (200 OK) :**
 ```json
 {
-  "access_token": "eyJhbGciOiJSUzI1NiIs...",
+  "status": "healthy",
+  "database": "ok",
+  "redis": "ok",
+  "version": "1.0.0"
+}
+```
+
+Si vous obtenez `"status": "degraded"` â†’ vÃ©rifiez les logs :
+```powershell
+docker logs agt-auth-service --tail=30
+```
+
+---
+
+## 5. Groupe 2 â€” Platforms
+
+### RÃ´le
+Une plateforme reprÃ©sente un client autorisÃ© Ã  appeler Auth â€” application mobile, frontend web, ou autre microservice. Chaque plateforme reÃ§oit un `client_id` (UUID) et un `client_secret` qui lui permettent d'obtenir des tokens S2S et d'identifier les utilisateurs qui s'inscrivent via elle.
+
+**Sans plateforme valide â†’ aucun register, aucun login, aucun token S2S.**
+
+Il y a deux types de plateformes :
+- **Plateformes S2S** â€” pour les microservices (ex : AGT Notification â†’ appelle Users)
+- **Plateformes applicatives** â€” pour les apps clientes (ex : app mobile, backoffice de test)
+
+### Authentification des endpoints Platforms
+
+Ces endpoints utilisent une **API Key admin** â€” pas de JWT. Dans Swagger, cliquez sur **Authorize** (en haut Ã  droite) et saisissez :
+
+```
+X-Admin-API-Key: change-me-admin-api-key-very-secret
+```
+
+> La valeur rÃ©elle se trouve dans `agt-auth/.env` Ã  la variable `ADMIN_API_KEY`.
+> Ne jamais exposer cette clÃ© cÃ´tÃ© client.
+
+---
+
+### Ã‰tape 1 â€” CrÃ©er la plateforme S2S de Notification
+
+Notification doit pouvoir appeler Users pour rÃ©soudre les infos utilisateur avant d'envoyer un email. Il lui faut donc une plateforme S2S dans Auth.
+
+**`POST /api/v1/auth/platforms`**
+
+Body :
+```json
+{
+  "name": "AGT Notification",
+  "slug": "agt-notification",
+  "allowed_auth_methods": ["email"]
+}
+```
+
+**RÃ©ponse (201 Created) :**
+```json
+{
+  "id": "<uuid_gÃ©nÃ©rÃ©>",
+  "name": "AGT Notification",
+  "slug": "agt-notification",
+  "is_active": true,
+  "client_secret": "<secret_affichÃ©_une_seule_fois>"
+}
+```
+
+> âš ï¸ **Le `client_secret` n'est affichÃ© qu'une seule fois.** Notez-le immÃ©diatement.
+> En cas de perte â†’ dÃ©sactiver la plateforme et en recrÃ©er une nouvelle.
+
+Mettez Ã  jour `agt-notification/.env` avec les valeurs obtenues :
+
+```env
+S2S_AUTH_URL=http://agt-auth-service:7000/api/v1
+S2S_CLIENT_ID=<id_retournÃ©>
+S2S_CLIENT_SECRET=<client_secret_retournÃ©>
+```
+
+Puis redÃ©marrez Notification :
+
+```powershell
+cd agt-notification
+docker compose up -d --build notification celery-worker
+cd ..
+```
+
+---
+
+### Ã‰tape 2 â€” CrÃ©er une plateforme applicative de test
+
+**`POST /api/v1/auth/platforms`**
+
+Body :
+```json
+{
+  "name": "Plateforme Test",
+  "slug": "plateforme-test",
+  "allowed_auth_methods": ["email", "phone", "magic_link"],
+  "allowed_redirect_urls": []
+}
+```
+
+**RÃ©ponse (201 Created) :**
+```json
+{
+  "id": "<uuid_gÃ©nÃ©rÃ©>",
+  "name": "Plateforme Test",
+  "slug": "plateforme-test",
+  "allowed_auth_methods": ["email", "phone", "magic_link"],
+  "is_active": true,
+  "client_secret": "<secret_affichÃ©_une_seule_fois>"
+}
+```
+
+> Notez l'`id` â€” c'est votre **Platform ID**. Il sera requis dans le header `X-Platform-Id` pour tous les appels Register et Login.
+
+**Champs expliquÃ©s :**
+| Champ | RÃ´le |
+|-------|------|
+| `name` | Nom lisible de la plateforme |
+| `slug` | Identifiant URL-friendly â€” doit Ãªtre unique |
+| `allowed_auth_methods` | MÃ©thodes autorisÃ©es : `email`, `phone`, `magic_link` |
+| `allowed_redirect_urls` | URLs autorisÃ©es pour le callback magic link |
+| `client_secret` | Secret affichÃ© une seule fois â€” Ã  stocker immÃ©diatement |
+
+---
+
+### Ã‰tape 3 â€” Lister les plateformes
+
+**`GET /api/v1/auth/platforms`**
+
+Retourne toutes les plateformes y compris les inactives.
+
+```json
+{
+  "data": [
+    {
+      "id": "<uuid>",
+      "name": "AGT Notification",
+      "slug": "agt-notification",
+      "is_active": true
+    },
+    {
+      "id": "<uuid>",
+      "name": "Plateforme Test",
+      "slug": "plateforme-test",
+      "is_active": true
+    }
+  ]
+}
+```
+
+---
+
+### Ã‰tape 4 â€” Modifier une plateforme
+
+**`PUT /api/v1/auth/platforms/{platform_id}`**
+
+Exemple â€” ajouter `magic_link` aux mÃ©thodes autorisÃ©es :
+
+```json
+{
+  "allowed_auth_methods": ["email", "phone", "magic_link"]
+}
+```
+
+RÃ©ponse : objet plateforme mis Ã  jour avec `updated_at` incrÃ©mentÃ©.
+
+---
+
+### Ã‰tape 5 â€” DÃ©sactiver une plateforme
+
+**`DELETE /api/v1/auth/platforms/{platform_id}`**
+
+> âš ï¸ **C'est un soft delete.** La plateforme n'est pas supprimÃ©e de la DB â€” elle passe Ã  `is_active: false` et reste visible dans le GET. Cela permet de rÃ©voquer proprement les tokens S2S Ã©mis avant la dÃ©sactivation.
+
+**RÃ©ponse (200 OK) :**
+```json
+{
+  "message": "Platform deactivated",
+  "is_active": false
+}
+```
+
+---
+
+## 6. Groupe 3 â€” S2S (Service-to-Service)
+
+### RÃ´le
+Quand un microservice doit appeler un autre, il ne peut pas utiliser un token utilisateur. Il utilise un **token S2S**, gÃ©nÃ©rÃ© depuis le `client_id` + `client_secret` de sa plateforme.
+
+**Sans token S2S valide dans le header `Authorization: Bearer` â†’ les appels inter-services sont rejetÃ©s avec 401.**
+
+Les services mettent ce token en cache Redis et le renouvellent avant expiration (marge de 60s).
+
+---
+
+### Test 1 â€” `POST /api/v1/auth/s2s/token` â€” GÃ©nÃ©rer un token S2S
+
+**Headers requis :** aucun â€” les credentials sont dans le body.
+
+Body (utilisez les credentials de la Plateforme Test) :
+```json
+{
+  "client_id": "<platform_id_plateforme_test>",
+  "client_secret": "<client_secret_plateforme_test>"
+}
+```
+
+**RÃ©ponse (200 OK) :**
+```json
+{
+  "access_token": "eyJhbGci...",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "service_name": "Plateforme Test"
+}
+```
+
+> **DurÃ©e : 3600s (1h).** Notez ce token â€” il sera utilisÃ© pour crÃ©er les templates dans Notification.
+
+**Contenu du JWT (dÃ©codable sur jwt.io) :**
+```json
+{
+  "sub": "<platform_id>",
+  "type": "s2s",
+  "service_name": "Plateforme Test",
+  "iss": "agt-auth",
+  "aud": "agt-ecosystem"
+}
+```
+
+> **Note importante :** `sub` = `client_id` de la plateforme. C'est ce que les autres services lisent comme `platform_id`. Le champ `type: "s2s"` permet aux services de distinguer token utilisateur vs token service.
+
+---
+
+### Test 2 â€” `POST /api/v1/auth/s2s/introspect` â€” Valider un token S2S
+
+**Headers requis :** `X-Admin-API-Key`
+
+Permet Ã  un service qui reÃ§oit un token S2S de vÃ©rifier sa validitÃ© sans dÃ©coder le JWT lui-mÃªme.
+
+Body :
+```json
+{
+  "token": "<access_token_s2s>"
+}
+```
+
+**RÃ©ponse (200 OK) :**
+```json
+{
+  "active": true,
+  "client_id": "<platform_id>",
+  "service_name": "Plateforme Test",
+  "exp": 1776213594
+}
+```
+
+---
+
+## 7. PrÃ©requis Register â€” CrÃ©er les templates Notification
+
+Avant tout test Register, les 4 templates suivants doivent exister dans Notification pour votre plateforme. Auth les appelle par leur nom exact lors des flux d'inscription et de rÃ©cupÃ©ration de mot de passe.
+
+| Template | Canal | DÃ©clenchÃ© par |
+|----------|-------|---------------|
+| `auth_verify_email` | email | Register email |
+| `auth_otp_sms` | sms | Register/Login phone |
+| `auth_magic_link` | email | Login magic link |
+| `auth_reset_password` | email | Forgot password |
+
+### Authentification Swagger Notification
+
+Dans Swagger Notification (http://localhost:7002/api/v1/docs/), cliquez sur **Authorize** et entrez le token S2S gÃ©nÃ©rÃ© Ã  l'Ã©tape prÃ©cÃ©dente :
+
+```
+Bearer <access_token_s2s>
+```
+
+> âš ï¸ Le token S2S expire en 1h. Si vous obtenez un 401 â†’ rÃ©gÃ©nÃ©rez-en un via `POST /auth/s2s/token`.
+
+### Champs expliquÃ©s pour la crÃ©ation de templates (`POST /api/v1/templates`)
+
+| Champ | RÃ´le |
+|-------|------|
+| `name` | Identifiant mÃ©tier â€” nom exact appelÃ© par Auth |
+| `channel` | Canal d'envoi : `email`, `sms`, `push`, `in_app` |
+| `body` | Contenu du message â€” supporte les variables Jinja2 `{{ variable }}` |
+| `subject` | Objet de l'email â€” supporte aussi Jinja2 |
+| `platform_id` | Lie le template Ã  une plateforme. Si absent â†’ template global |
+| `locale` | Langue (`fr` par dÃ©faut) |
+| `category` | `transactional` par dÃ©faut |
+
+---
+
+**Template 1 â€” `auth_verify_email`**
+
+EnvoyÃ© Ã  l'inscription par email. Contient le lien d'activation du compte.
+
+```json
+{
+  "name": "auth_verify_email",
+  "channel": "email",
+  "platform_id": "<platform_id_plateforme_test>",
+  "subject": "VÃ©rifiez votre adresse email â€” {{ platform_name }}",
+  "body": "Bonjour {{ first_name }},\n\nMerci de vous Ãªtre inscrit sur {{ platform_name }}.\n\nCliquez sur le lien ci-dessous pour vÃ©rifier votre adresse email :\n\n{{ verification_url }}\n\nCe lien expire dans {{ expires_in_minutes }} minutes.\n\nSi vous n'avez pas crÃ©Ã© de compte, ignorez cet email.\n\nL'Ã©quipe {{ platform_name }}",
+  "locale": "fr",
+  "category": "transactional"
+}
+```
+
+---
+
+**Template 2 â€” `auth_otp_sms`**
+
+EnvoyÃ© lors d'un register ou login par tÃ©lÃ©phone. Contient le code OTP Ã  usage unique.
+
+```json
+{
+  "name": "auth_otp_sms",
+  "channel": "sms",
+  "platform_id": "<platform_id_plateforme_test>",
+  "subject": null,
+  "body": "Bonjour {{ first_name }}, votre code de vÃ©rification {{ platform_name }} est : {{ otp_code }}. Valable {{ expires_in_minutes }} minutes. Ne le partagez jamais.",
+  "locale": "fr",
+  "category": "transactional"
+}
+```
+
+---
+
+**Template 3 â€” `auth_magic_link`**
+
+EnvoyÃ© lors d'un login sans mot de passe. Contient le lien de connexion Ã  usage unique.
+
+```json
+{
+  "name": "auth_magic_link",
+  "channel": "email",
+  "platform_id": "<platform_id_plateforme_test>",
+  "subject": "Votre lien de connexion â€” {{ platform_name }}",
+  "body": "Bonjour {{ first_name }},\n\nVous avez demandÃ© un lien de connexion sans mot de passe.\n\nCliquez ici pour vous connecter :\n\n{{ magic_link_url }}\n\nCe lien expire dans {{ expires_in_minutes }} minutes. Il ne peut Ãªtre utilisÃ© qu'une seule fois.\n\nSi vous n'avez pas fait cette demande, ignorez cet email.\n\nL'Ã©quipe {{ platform_name }}",
+  "locale": "fr",
+  "category": "transactional"
+}
+```
+
+---
+
+**Template 4 â€” `auth_reset_password`**
+
+EnvoyÃ© lors d'une demande de rÃ©initialisation de mot de passe.
+
+```json
+{
+  "name": "auth_reset_password",
+  "channel": "email",
+  "platform_id": "<platform_id_plateforme_test>",
+  "subject": "RÃ©initialisation de votre mot de passe â€” {{ platform_name }}",
+  "body": "Bonjour {{ first_name }},\n\nVous avez demandÃ© la rÃ©initialisation de votre mot de passe.\n\nCliquez sur le lien ci-dessous pour choisir un nouveau mot de passe :\n\n{{ reset_url }}\n\nCe lien expire dans {{ expires_in_minutes }} minutes. Il ne peut Ãªtre utilisÃ© qu'une seule fois.\n\nSi vous n'avez pas fait cette demande, ignorez cet email â€” votre mot de passe reste inchangÃ©.\n\nL'Ã©quipe {{ platform_name }}",
+  "locale": "fr",
+  "category": "transactional"
+}
+```
+
+> âš ï¸ **Bug connu :** `PUT /api/v1/templates/{id}` n'affiche pas le champ body dans Swagger.
+> Pour mettre Ã  jour un template existant, utilisez ce script PowerShell :
+>
+> ```powershell
+> $r = Invoke-RestMethod -Uri "http://localhost:7000/api/v1/auth/s2s/token" `
+>   -Method POST -ContentType "application/json" `
+>   -Body '{"client_id": "<platform_id>", "client_secret": "<secret>"}'
+> $token = $r.access_token
+> $body = @{
+>   subject = "Nouveau sujet {{ platform_name }}"
+>   body    = "Nouveau corps {{ first_name }}"
+>   locale  = "fr"
+> } | ConvertTo-Json
+> Invoke-RestMethod -Uri "http://localhost:7002/api/v1/templates/<template_id>" `
+>   -Method PUT -ContentType "application/json" `
+>   -Headers @{Authorization = "Bearer $token"} -Body $body
+> ```
+
+---
+
+## 8. Groupe 4 â€” Register
+
+### RÃ´le
+Point d'entrÃ©e de tout utilisateur dans l'Ã©cosystÃ¨me. Auth crÃ©e le compte, provisionne le profil dans Users, puis dÃ©clenche l'envoi de l'email de vÃ©rification via Notification.
+
+### Flux complet Register email
+
+```
+Client â†’ POST /auth/register (header X-Platform-Id)
+             â†“
+         Auth crÃ©e le compte (email_verified: false)
+         Auth crÃ©e un VerificationToken (expire 1h)
+             â†“
+         Auth â†’ Users : POST /users  (S2S â€” provisioning profil)
+             â†“
+         Auth â†’ Notification : POST /notifications/send  (S2S)
+             â†“
+         Worker Celery â†’ SMTP â†’ Mailpit (dev)
+             â†“
+         Utilisateur reÃ§oit l'email â†’ copie le token du lien
+             â†“
+         POST /auth/verify-email  {token: "..."}
+             â†“
+         email_verified: true â†’ login possible
+```
+
+---
+
+### Test 1 â€” `POST /api/v1/auth/register`
+
+**Headers requis :**
+```
+X-Platform-Id: <platform_id_plateforme_test>
+```
+
+**Body :**
+```json
+{
+  "email": "jane.doe@example.com",
+  "password": "Test1234!",
+  "method": "email",
+  "first_name": "Jane",
+  "last_name": "Doe"
+}
+```
+
+**Champs expliquÃ©s :**
+| Champ | Obligatoire | RÃ´le |
+|-------|-------------|------|
+| `email` | âœ… si method=email | Adresse email |
+| `password` | âœ… si method=email | Minimum 8 caractÃ¨res |
+| `method` | âœ… | `email` ou `phone` |
+| `first_name` | optionnel | PrÃ©nom â€” utilisÃ© dans les emails de notification |
+| `last_name` | optionnel | Nom de famille |
+| `phone` | âœ… si method=phone | NumÃ©ro de tÃ©lÃ©phone |
+
+**RÃ©ponse attendue (201 Created) :**
+```json
+{
+  "id": "2fba21ba-c47a-46e9-bf09-850ed365f039",
+  "email": "jane.doe@example.com",
+  "email_verified": false,
+  "registration_method": "email",
+  "registration_platform_id": "<platform_id>",
+  "message": "Verification email sent"
+}
+```
+
+VÃ©rifiez que l'email est arrivÃ© dans **Mailpit** : http://localhost:8025
+
+**Erreurs possibles :**
+| Code | Message | Cause |
+|------|---------|-------|
+| 400 | `Header X-Platform-Id requis` | Header manquant |
+| 400 | `Plateforme invalide ou inactive` | UUID inconnu ou plateforme dÃ©sactivÃ©e |
+| 409 | `Email dÃ©jÃ  utilisÃ©` | Doublon |
+| 400 | `MÃ©thode 'X' non autorisÃ©e sur cette plateforme` | MÃ©thode absente de `allowed_auth_methods` |
+| 429 | `Trop de requÃªtes` | Rate limit â€” voir Troubleshooting |
+
+---
+
+### Test 2 â€” `POST /api/v1/auth/verify-email`
+
+AprÃ¨s rÃ©ception de l'email dans Mailpit, copiez le token depuis l'URL du lien :
+```
+http://localhost:7000/api/v1/auth/verify-email?token=<COPIEZ_CETTE_VALEUR>
+```
+
+**Headers requis :** aucun â€” endpoint public.
+
+**Body :**
+```json
+{
+  "token": "<token_copiÃ©_depuis_le_lien>"
+}
+```
+
+**RÃ©ponse attendue (200 OK) :**
+```json
+{
+  "message": "Email verified",
+  "email_verified": true
+}
+```
+
+**Erreurs possibles :**
+| Code | Message | Cause |
+|------|---------|-------|
+| 400 | `Token invalide` | Token inexistant en DB |
+| 400 | `Token expirÃ© ou dÃ©jÃ  utilisÃ©` | Token consommÃ© ou expirÃ© (dÃ©lai 1h) |
+
+---
+
+### Test 3 â€” `POST /api/v1/auth/resend-verification`
+
+Ã€ utiliser quand l'utilisateur n'a pas reÃ§u ou a perdu l'email de vÃ©rification. Invalide les anciens tokens et en gÃ©nÃ¨re un nouveau.
+
+**Headers requis :** aucun â€” endpoint public.
+
+**Body :**
+```json
+{
+  "email": "jane.doe@example.com",
+  "platform_id": "<platform_id_plateforme_test>"
+}
+```
+
+**RÃ©ponse attendue (200 OK) â€” toujours identique, mÃªme si l'email n'existe pas :**
+```json
+{
+  "message": "Si cet email existe et n'est pas vÃ©rifiÃ©, un nouveau lien a Ã©tÃ© envoyÃ©."
+}
+```
+
+> **Note sÃ©curitÃ© :** La rÃ©ponse est intentionnellement gÃ©nÃ©rique pour Ã©viter l'Ã©numÃ©ration d'emails.
+
+VÃ©rifiez qu'un nouvel email est arrivÃ© dans Mailpit avec un nouveau lien.
+
+---
+
+## 9. Groupe 5 â€” Login
+
+### RÃ´le
+Authentifier un utilisateur et lui retourner un `access_token` JWT + un `refresh_token` en cookie HTTP-only. C'est le point d'entrÃ©e de toute session utilisateur.
+
+**RÃ¨gle importante :** un utilisateur dont l'email n'est pas vÃ©rifiÃ© reÃ§oit un `403`. Il doit d'abord vÃ©rifier son email ou utiliser `resend-verification`.
+
+### Tokens retournÃ©s
+
+| Token | DurÃ©e | Stockage | Visible dans le body |
+|-------|-------|----------|----------------------|
+| `access_token` | 15 min (900s) | MÃ©moire cÃ´tÃ© client | âœ… oui |
+| `refresh_token` | 30 jours | Cookie HTTP-only | âŒ non â€” inaccessible depuis JS (protection XSS) |
+
+### Contenu du JWT access_token (dÃ©codable sur jwt.io)
+
+```json
+{
+  "sub": "<user_id>",
+  "iss": "agt-auth",
+  "aud": "agt-ecosystem",
+  "session_id": "<session_id>",
+  "platform_id": "<platform_id>",
+  "email": "jane.doe@example.com",
+  "email_verified": true,
+  "two_fa_verified": false,
+  "exp": 1776214162
+}
+```
+
+---
+
+### Test 1 â€” Login valide
+
+**`POST /api/v1/auth/login`**
+
+**Headers requis :** aucun â€” endpoint public.
+
+**Body :**
+```json
+{
+  "email": "jane.doe@example.com",
+  "password": "Test1234!",
+  "platform_id": "<platform_id_plateforme_test>"
+}
+```
+
+**RÃ©ponse attendue (200 OK) â€” sans 2FA :**
+```json
+{
+  "access_token": "eyJhbGci...",
   "token_type": "Bearer",
   "expires_in": 900,
   "requires_2fa": false
 }
 ```
 
-Le `refresh_token` est pose en cookie HttpOnly (pas visible dans la reponse JSON, mais present dans les headers Set-Cookie).
+**RÃ©ponse si 2FA activÃ© :**
+```json
+{
+  "requires_2fa": true,
+  "temp_token": "eyJhbGci...",
+  "token_type": "Bearer",
+  "expires_in": 300
+}
+```
+â†’ Le `temp_token` doit Ãªtre utilisÃ© sur `POST /auth/2fa/verify`.
 
-### 2.4 Utiliser le token
+**Ce qui se passe sous le capot :**
+1. VÃ©rifie que la plateforme est active
+2. VÃ©rifie que l'email existe
+3. VÃ©rifie que le compte n'est pas bloquÃ© ou dÃ©sactivÃ©
+4. VÃ©rifie `email_verified` â†’ 403 si false
+5. VÃ©rifie le mot de passe â†’ incrÃ©mente `failed_attempts` si incorrect
+6. CrÃ©e une session en DB
+7. GÃ©nÃ¨re `access_token` (body) + `refresh_token` (cookie HTTP-only)
+8. Enregistre dans `LoginHistory`
 
-Tous les endpoints proteges des autres services acceptent ce token :
+---
 
-```bash
-curl http://localhost:7001/api/v1/users \
-  -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIs..."
+### Test 2 â€” Login avec mauvais mot de passe
+
+**Body :**
+```json
+{
+  "email": "jane.doe@example.com",
+  "password": "MauvaisMotDePasse!",
+  "platform_id": "<platform_id_plateforme_test>"
+}
+```
+
+**RÃ©ponse attendue (401 Unauthorized) :**
+```json
+{
+  "detail": "Identifiants invalides."
+}
 ```
 
 ---
 
-## 3. Concepts cles
+### Test 3 â€” Login avec email non vÃ©rifiÃ©
 
-### JWT RS256
-Auth signe les tokens avec une **cle privee** RSA. Les autres services (Users, Notification...) valident les tokens avec la **cle publique** â€” sans appeler Auth. C'est pour ca que chaque service a besoin de `keys/auth_public.pem`.
+Inscrivez un nouvel utilisateur **sans vÃ©rifier son email**, puis tentez de vous connecter.
 
-### Refresh Token Rotation
-Le refresh token est un cookie HttpOnly. A chaque appel `POST /auth/refresh`, l'ancien est revoque et un nouveau est emis. Maximum 5 refresh tokens actifs par utilisateur (FIFO).
-
-### Plateformes
-Une plateforme = une application cliente. Chaque plateforme a ses propres methodes d'auth autorisees, ses redirect URLs, et son client_secret pour les tokens S2S.
-
-### Admin API Key
-Le header `X-Admin-API-Key` protege les endpoints d'administration (block, unblock, purge, gestion plateformes). La cle est definie dans `.env` (`ADMIN_API_KEY`).
-
----
-
-## 4. Endpoints essentiels
-
-| Action | Methode | Endpoint | Auth |
-|--------|---------|----------|------|
-| Creer plateforme | POST | `/auth/platforms` | Admin Key |
-| Inscrire | POST | `/auth/register` | X-Platform-Id |
-| Connecter | POST | `/auth/login` | - |
-| Refresh token | POST | `/auth/refresh` | Cookie |
-| Deconnecter | POST | `/auth/logout` | Bearer |
-| Mon profil | GET | `/auth/me` | Bearer |
-| Verifier token (S2S) | GET | `/auth/verify-token` | Bearer |
-
-Liste complete : voir Swagger http://localhost:7000/api/v1/docs/
-
----
-
-## 5. Tests
-
-```bash
-docker compose exec auth python -m pytest -v
+**Body :**
+```json
+{
+  "email": "unverified@example.com",
+  "password": "Test1234!",
+  "platform_id": "<platform_id_plateforme_test>"
+}
 ```
 
-26 tests couvrant : modeles, JWT, sessions, register, login, refresh, admin.
+**RÃ©ponse attendue (403 Forbidden) :**
+```json
+{
+  "detail": "Email non vÃ©rifiÃ©. Consultez votre boÃ®te mail ou renvoyez le lien de vÃ©rification."
+}
+```
+
+â†’ Utilisez `POST /auth/resend-verification` pour renvoyer le lien, vÃ©rifiez l'email dans Mailpit, puis retestez le login.
+
+**Erreurs possibles :**
+| Code | Message | Cause |
+|------|---------|-------|
+| 401 | `Identifiants invalides` | Email inconnu ou mauvais mot de passe |
+| 403 | `Email non vÃ©rifiÃ©...` | `email_verified: false` |
+| 403 | Autre message | Compte bloquÃ© ou dÃ©sactivÃ© |
+| 400 | `Plateforme invalide` | UUID inconnu ou inactif |
 
 ---
 
-## 6. Arret et nettoyage
+## 10. Troubleshooting
 
-```bash
-# Arreter
-docker compose down
+| SymptÃ´me | Cause probable | Solution |
+|----------|---------------|----------|
+| `429 Trop de requÃªtes` | Rate limit Redis | `docker exec agt-auth-redis redis-cli FLUSHDB` |
+| `404 Template introuvable` | Template non crÃ©Ã© dans Notification | CrÃ©er les 4 templates (section 7) |
+| Email reÃ§u mais variables vides | Nom de variable incorrect dans le template | VÃ©rifier que les noms correspondent exactement Ã  ceux listÃ©s en section 7 |
+| Email arrivÃ© mais `first_name` vide | `first_name` non envoyÃ© dans le body du register | Ajouter `"first_name"` dans le body |
+| `UserResolver: 404` dans les logs du worker | Race condition â€” Notification appelÃ© avant Users | VÃ©rifier que `provision_user` est avant `NotificationClient.send` dans `views_auth.py` |
+| `401` sur appel Notification | Token S2S expirÃ© | RÃ©gÃ©nÃ©rer via `POST /auth/s2s/token` |
+| `badly formed hexadecimal UUID` | Placeholder `<uuid>` non remplacÃ© | Utiliser un vrai UUID de plateforme |
+| Email non reÃ§u dans Mailpit | Worker Celery en erreur | `docker logs agt-notif-worker --tail=30` |
+| `SENDGRID_API_KEY non configurÃ©` dans les logs | Provider mal configurÃ© | VÃ©rifier que `SMTPProvider` est en premier dans `PROVIDER_MAP` dans `providers/providers.py` |
 
-# Arreter et supprimer les donnees (reset complet)
-docker compose down -v
+---
+
+## 11. Commandes utiles
+
+```powershell
+# Lancer le MVP
+.\deploy_mvp.ps1
+
+# Reset soft (conserve les donnÃ©es)
+.\reset_mvp.ps1
+
+# Reset complet (supprime tout â€” reconfigurer depuis section 5)
+.\reset_mvp.ps1 --clean
+
+# Rebuild Auth uniquement
+cd agt-auth && docker compose up -d --build auth && cd ..
+
+# Rebuild Notification (service + worker)
+cd agt-notification
+docker compose up -d --build notification celery-worker
+cd ..
+
+# Vider le rate limiting Redis Auth
+docker exec agt-auth-redis redis-cli FLUSHDB
+
+# Logs Auth en temps rÃ©el
+docker logs agt-auth-service --follow
+
+# Logs worker Notification
+docker logs agt-notif-worker --tail=50
+
+# RÃ©gÃ©nÃ©rer un token S2S (PowerShell)
+$r = Invoke-RestMethod -Uri "http://localhost:7000/api/v1/auth/s2s/token" `
+  -Method POST -ContentType "application/json" `
+  -Body '{"client_id": "<platform_id>", "client_secret": "<secret>"}'
+$token = $r.access_token
+Write-Host "Token S2S : $token"
+
+# Tests pytest Auth
+docker exec agt-auth-service python -m pytest -v
 ```
 
 ---
 
-## 7. Variables d'environnement cles
+## Ce qui reste Ã  tester et documenter
 
-| Variable | Defaut | Description |
-|----------|--------|-------------|
-| `ADMIN_API_KEY` | change-me... | Cle admin pour endpoints admin |
-| `JWT_ACCESS_TTL` | 900 | Duree access token (secondes) |
-| `JWT_REFRESH_TTL` | 604800 | Duree refresh token (7 jours) |
-| `BRUTE_FORCE_MAX` | 5 | Tentatives avant blocage |
-| `BRUTE_FORCE_LOCKOUT` | 900 | Duree blocage (15 min) |
-| `MAX_REFRESH_TOKENS` | 5 | Max tokens actifs par user |
+Ce guide s'arrÃªte ici â€” les groupes suivants sont Ã  tester, valider et documenter en suivant la mÃªme mÃ©thode :
 
-Liste complete : voir `.env.example`
+| Groupe | Endpoints principaux |
+|--------|---------------------|
+| **Sessions** | `POST /refresh`, `POST /logout`, `GET /sessions`, `DELETE /sessions/{id}`, `GET /verify-token` |
+| **Profile** | `GET /me`, `GET /login-history`, `GET /stats/{user_id}` |
+| **Password** | `POST /forgot-password`, `POST /reset-password`, `PUT /change-password` |
+| **2FA** | `POST /2fa/enable`, `POST /2fa/confirm`, `POST /2fa/verify`, `POST /2fa/disable` |
+| **Admin** | `POST /admin/block/{id}`, `POST /admin/unblock/{id}`, `POST /account/deactivate`, `DELETE /admin/purge/{id}` |
+| **OAuth** | `GET /oauth/google`, `GET /oauth/google/callback`, `GET /oauth/facebook`, `GET /oauth/facebook/callback` |
 
+**Compte de test disponible aprÃ¨s avoir suivi ce guide :**
+
+| Email | Password | Statut |
+|-------|----------|--------|
+| `jane.doe@example.com` | `Test1234!` | vÃ©rifiÃ© â€” prÃªt pour les tests Sessions/Profile/Password/2FA |
+
+---
+
+*GUIDE_AUTH.md â€” AG Technologies â€” 15 avril 2026*
+*TestÃ© et validÃ© sur Auth Service v1.0*
 `
 ===== FILE END =====
 
@@ -36995,5 +37902,5 @@ DÃ¨s que tu me donnes ton feu vert, nous pouvons officiellement dÃ©marrer la
 ===== FILE END =====
 
 ## SUMMARY
-- Total files: 309
+- Total files: 310
 

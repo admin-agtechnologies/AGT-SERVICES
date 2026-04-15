@@ -97,6 +97,36 @@ agt-rabbitmq         Up ... (healthy)
 agt-mailpit          Up ... (healthy)   0.0.0.0:8025->8025/tcp
 ```
 
+### Appliquer les migrations (obligatoire après un démarrage à froid)
+
+> ⚠️ **À faire impérativement** après chaque `deploy_mvp.ps1` sur une base vide (premier lancement ou après `--clean`).
+> Sans cette étape, les tables n'existent pas et toutes les requêtes API renverront une erreur 500.
+
+```powershell
+# Auth — créer et appliquer les migrations
+docker exec agt-auth-service python manage.py makemigrations authentication
+docker exec agt-auth-service python manage.py migrate --noinput
+
+# Users — créer et appliquer les migrations
+docker exec agt-users-service python manage.py makemigrations users roles documents
+docker exec agt-users-service python manage.py migrate --noinput
+
+# Notification — créer et appliquer les migrations
+docker exec agt-notif-service python manage.py makemigrations notifications templates_mgr campaigns devices
+docker exec agt-notif-service python manage.py migrate --noinput
+```
+
+Résultat attendu pour chaque service :
+
+  ```bash
+  Operations to perform:
+  Apply all migrations: authentication, contenttypes, platforms, sessions, ...
+  Running migrations:
+  Applying authentication.0001_initial... OK
+  Applying platforms.0001_initial... OK
+  ```
+Si vous voyez `No migrations to apply` sur tous les services, c'est que les migrations sont déjà à jour — vous pouvez continuer.
+
 ---
 
 ## 4. Groupe 1 — Health
@@ -106,9 +136,12 @@ Vérifier en temps réel que les 3 composants critiques sont opérationnels : l'
 
 ### Test — `GET /api/v1/auth/health`
 
-**Headers requis :** aucun — endpoint public.
-
 Dans Swagger : `GET /api/v1/auth/health` → `Try it out` → `Execute`
+
+Ou en ligne de commande :
+```powershell
+curl http://localhost:7000/api/v1/auth/health
+```
 
 **Réponse attendue (200 OK) :**
 ```json
@@ -180,9 +213,10 @@ Body :
 > ⚠️ **Le `client_secret` n'est affiché qu'une seule fois.** Notez-le immédiatement.
 > En cas de perte → désactiver la plateforme et en recréer une nouvelle.
 
-Mettez à jour `agt-notification/.env` avec les valeurs obtenues :
+Mettez à jour `agt-notification/.env` avec les valeurs obtenues à ajouter en fin de fichier :
 
 ```env
+# ─── S2S ─────────────────────────────────────────────────────────────────────
 S2S_AUTH_URL=http://agt-auth-service:7000/api/v1
 S2S_CLIENT_ID=<id_retourné>
 S2S_CLIENT_SECRET=<client_secret_retourné>
@@ -285,6 +319,17 @@ Réponse : objet plateforme mis à jour avec `updated_at` incrémenté.
 **`DELETE /api/v1/auth/platforms/{platform_id}`**
 
 > ⚠️ **C'est un soft delete.** La plateforme n'est pas supprimée de la DB — elle passe à `is_active: false` et reste visible dans le GET. Cela permet de révoquer proprement les tokens S2S émis avant la désactivation.
+
+Je vous conseille de créer rapidement une ``plateforme Test to delete`` comme ci haut pour faire ceci car vous allez utiliser plateform test plus bas.voici un body à utiliser:
+
+```json
+{
+  "name": "Plateforme Test to delete",
+  "slug": "plateforme-test-to-delete",
+  "allowed_auth_methods": ["email", "phone", "magic_link"],
+  "allowed_redirect_urls": []
+}
+````
 
 **Réponse (200 OK) :**
 ```json
@@ -612,13 +657,25 @@ http://localhost:7000/api/v1/auth/verify-email?token=<COPIEZ_CETTE_VALEUR>
 ### Test 3 — `POST /api/v1/auth/resend-verification`
 
 À utiliser quand l'utilisateur n'a pas reçu ou a perdu l'email de vérification. Invalide les anciens tokens et en génère un nouveau.
+pour tester,créer rapidement un nouveau user sans vérifier son mail:
+
+```json
+{
+  "email": "jane.doe.test@example.com",
+  "password": "Test1234!",
+  "method": "email",
+  "first_name": "Jane test",
+  "last_name": "Doe test"
+}
+````
+Aller ensuite demander le renvoi de mail
 
 **Headers requis :** aucun — endpoint public.
 
 **Body :**
 ```json
 {
-  "email": "jane.doe@example.com",
+  "email": "jane.doe.test@example.com",
   "platform_id": "<platform_id_plateforme_test>"
 }
 ```
@@ -743,7 +800,7 @@ Inscrivez un nouvel utilisateur **sans vérifier son email**, puis tentez de vou
 **Body :**
 ```json
 {
-  "email": "unverified@example.com",
+  "email": "jane.doe.test@example.com",
   "password": "Test1234!",
   "platform_id": "<platform_id_plateforme_test>"
 }
@@ -844,6 +901,383 @@ Ce guide s'arrête ici — les groupes suivants sont à tester, valider et docum
 | Email | Password | Statut |
 |-------|----------|--------|
 | `jane.doe@example.com` | `Test1234!` | vérifié — prêt pour les tests Sessions/Profile/Password/2FA |
+
+---
+
+*GUIDE_AUTH.md — AG Technologies — 15 avril 2026*
+*Testé et validé sur Auth Service v1.0*
+
+---
+---
+# Partie 2 du Guide
+
+## 10. Groupe 6 — Sessions
+
+### Rôle
+Gérer le cycle de vie des sessions utilisateur : lister les sessions actives, révoquer une session spécifique (déconnexion à distance), renouveler l'access_token et se déconnecter.
+
+### Prérequis
+Être connecté avec un `access_token` valide dans Swagger (Authorize).
+
+---
+
+### Test 1 — `GET /api/v1/auth/verify-token`
+
+Vérifie que le token courant est valide.
+
+**Headers requis :** `Authorization: Bearer <token>`
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "valid": true,
+  "user_id": "<uuid>",
+  "platform_id": "<uuid>",
+  "expires_at": "2026-04-15T13:48:26Z"
+}
+```
+
+**Réponse si révoqué ou expiré :**
+```json
+{
+  "detail": {
+    "valid": "False",
+    "reason": "session_revoked"
+  }
+}
+```
+
+---
+
+### Test 2 — `GET /api/v1/auth/sessions`
+
+Liste toutes les sessions actives. La session courante a `is_current: true`.
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "data": [
+    {
+      "id": "<session_id>",
+      "platform": "plateforme-test",
+      "ip_address": "172.18.0.1",
+      "user_agent": "Mozilla/5.0...",
+      "created_at": "2026-04-15T...",
+      "is_current": true
+    }
+  ],
+  "page": 1,
+  "limit": 20,
+  "total": 1
+}
+```
+
+---
+
+### Test 3 — `DELETE /api/v1/auth/sessions/{id}`
+
+Révoque une session spécifique — simule la déconnexion depuis un autre appareil. Utiliser l'`id` d'une session non courante.
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "message": "Session revoked"
+}
+```
+
+---
+
+### Test 4 — `POST /api/v1/auth/refresh`
+
+Renouvelle l'`access_token` à partir du `refresh_token` en cookie HTTP-only. Pas de body requis — le cookie est envoyé automatiquement par le navigateur.
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "access_token": "eyJhbGci...",
+  "token_type": "Bearer",
+  "expires_in": 900
+}
+```
+
+---
+
+### Test 5 — `POST /api/v1/auth/logout`
+
+Révoque la session courante et invalide le cookie `refresh_token`.
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+**Vérification :** relancer `POST /refresh` après logout → doit retourner `401 Refresh token manquant`.
+
+---
+
+### `POST /api/v1/auth/token/exchange`
+
+> ⏭️ **Reporté — à tester dans le contexte OAuth.** Cet endpoint échange un cookie `access_token` (posé par le callback magic-link ou OAuth) contre un token Bearer visible dans le body. Ne peut pas être testé sans frontend ou flux OAuth complet.
+
+---
+
+## 11. Groupe 7 — Profile
+
+### Rôle
+Accéder au profil d'authentification de l'utilisateur connecté, consulter son historique de connexions et ses statistiques.
+
+---
+
+### Test 1 — `GET /api/v1/auth/me`
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "id": "<uuid>",
+  "email": "john.smith@example.com",
+  "phone": null,
+  "email_verified": true,
+  "phone_verified": false,
+  "two_fa_enabled": false,
+  "registration_method": "email",
+  "is_blocked": false,
+  "is_deactivated": false,
+  "created_at": "2026-04-15T..."
+}
+```
+
+---
+
+### Test 2 — `GET /api/v1/auth/login-history`
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "data": [
+    {
+      "id": "<uuid>",
+      "method": "email",
+      "platform": "plateforme-test",
+      "ip_address": "172.18.0.1",
+      "success": true,
+      "created_at": "2026-04-15T..."
+    }
+  ],
+  "page": 1,
+  "limit": 20,
+  "total": 4
+}
+```
+
+---
+
+### Test 3 — `GET /api/v1/auth/stats/{user_id}`
+
+Utiliser l'`id` retourné par `GET /me`.
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "user_id": "<uuid>",
+  "total_logins": 4,
+  "last_login": "2026-04-15T12:57:20+00:00",
+  "active_sessions": 2
+}
+```
+
+---
+
+## 12. Groupe 8 — Password
+
+### Rôle
+Réinitialiser ou changer le mot de passe. Le forgot-password et reset-password sont publics. Le change-password nécessite d'être connecté.
+
+---
+
+### Test 1 — `POST /api/v1/auth/forgot-password`
+
+**Headers requis :** aucun — endpoint public.
+
+**Body :**
+```json
+{
+  "email": "john.smith@example.com"
+}
+```
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "message": "Reset link sent if account exists"
+}
+```
+
+Vérifiez l'email dans Mailpit — le lien contient un token à copier.
+
+> ⚠️ Rate limit actif sur cet endpoint. Si vous obtenez `429` → `docker exec agt-auth-redis redis-cli FLUSHDB`
+
+---
+
+### Test 2 — `POST /api/v1/auth/reset-password`
+
+Copier le token depuis l'URL dans Mailpit :
+```
+http://localhost:7000/api/v1/auth/reset-password?token=<COPIER_CE_TOKEN>
+```
+
+**Body :**
+```json
+{
+  "token": "<token_copié>",
+  "new_password": "NewPass1234!"
+}
+```
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "message": "Password reset successfully"
+}
+```
+
+> Toutes les sessions actives sont révoquées après reset.
+
+---
+
+### Test 3 — `PUT /api/v1/auth/change-password`
+
+**Headers requis :** `Authorization: Bearer <token>`
+
+**Body :**
+```json
+{
+  "current_password": "NewPass1234!",
+  "new_password": "Test1234!"
+}
+```
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "message": "Password changed successfully"
+}
+```
+
+---
+
+## 13. Groupe 9 — Admin
+
+### Rôle
+Endpoints d'administration — blocage, déblocage, désactivation et purge RGPD des utilisateurs. Tous ces endpoints utilisent une **API Key admin** — pas de JWT.
+
+**Dans Swagger, cliquez sur Authorize et saisissez :**
+```
+X-Admin-API-Key: change-me-admin-api-key-very-secret
+```
+
+---
+
+### Test 1 — `POST /api/v1/auth/admin/block/{user_id}`
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "message": "User blocked",
+  "user_id": "<uuid>",
+  "is_blocked": true
+}
+```
+
+Toutes les sessions de l'utilisateur sont révoquées automatiquement.
+
+---
+
+### Test 2 — `POST /api/v1/auth/admin/unblock/{user_id}`
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "message": "User unblocked",
+  "user_id": "<uuid>",
+  "is_blocked": false
+}
+```
+
+---
+
+### Test 3 — `POST /api/v1/auth/account/deactivate`
+
+Désactivation par l'utilisateur lui-même. Nécessite un Bearer token valide.
+
+**Body :**
+```json
+{
+  "password": "<mot_de_passe_actuel>"
+}
+```
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "message": "Account deactivated",
+  "is_deactivated": true
+}
+```
+
+> **Soft delete** — le compte peut être réactivé par un admin.
+
+---
+
+### Test 4 — `DELETE /api/v1/auth/admin/purge/{user_id}`
+
+**⚠️ Irréversible.** Supprime toutes les données de l'utilisateur : tokens, sessions, historique, profil OAuth.
+
+**Réponse attendue (200 OK) :**
+```json
+{
+  "message": "User purged",
+  "user_id": "<uuid>",
+  "purged": true
+}
+```
+
+---
+
+## 14. Groupes reportés
+
+| Groupe | Raison | Quand |
+|--------|--------|-------|
+| **2FA (TOTP)** | Nécessite une app TOTP (Google Authenticator) | Prochaine session |
+| **OAuth Google/Facebook** | Nécessite credentials OAuth configurés | Post-déploiement serveur |
+| **OTP SMS** | Nécessite provider SMS configuré | Post-déploiement serveur |
+| **token/exchange** | Nécessite flux OAuth ou magic-link complet | Post-déploiement serveur |
+
+---
+
+## 15. Bugs connus
+
+| # | Bug | Fichier | Action |
+|---|-----|---------|--------|
+| 1 | `SENDGRID_API_KEY non configuré` dans worker quand Users retourne 404 | `agt-notification/providers/providers.py` | Vérifier ordre `PROVIDER_MAP` |
+| 2 | Email non reçu quand provisioning Users échoue | `agt-notification/workers/tasks.py` | Worker tombe sur Sendgrid au lieu de SMTP |
+| 3 | `resend-verification` — `first_name` toujours vide | `agt-auth/apps/authentication/views_auth.py` | Appeler `get_profile_by_auth_id` |
+| 4 | Migrations absentes du repo | Tous les services | Générer et commiter les migrations |
+| 5 | `deploy_mvp.ps1` lance `migrate` trop tôt | `deploy_mvp.ps1` | Intégrer `makemigrations` dans le script |
+| 6 | `PUT /templates/{id}` — body non visible dans Swagger Notification | `agt-notification/apps/templates_mgr/views.py` | Ajouter `@extend_schema` |
+
+---
+
+## 16. Perspectives d'évolution
+
+| # | Perspective |
+|---|-------------|
+| 1 | **2FA par email** — configurable par plateforme (`totp` ou `email`) |
+| 2 | **OAuth** — Google + Facebook — post-déploiement |
+| 3 | **Réactivation de compte** — endpoint admin dédié |
+| 4 | **`makemigrations` automatique** dans `deploy_mvp.ps1` |
+| 5 | **OTP SMS** — quand provider SMS configuré |
 
 ---
 

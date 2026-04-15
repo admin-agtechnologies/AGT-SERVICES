@@ -1,147 +1,123 @@
 # HANDOFF REPORT — Session du 15 avril 2026
 
-> **Projet** : AG Technologies — Auth Service v1.0
-> **Méthode** : Test manuel via Swagger + corrections de bugs + documentation
-
----
-
 ## 1. CE QUI A ÉTÉ COMPLÉTÉ
 
-### MVP validé
-- `deploy_mvp.ps1` exécuté et validé — 15 containers UP, tous healthy
-- Flux end-to-end Register → Email → Verify → Login fonctionnel et testé
+### Scripts
+- `stop_clean.ps1` et `stop_clean.sh` créés et validés — arrêt + nettoyage complet sans redéploiement
 
 ### Bugs corrigés dans Auth
 
 | Fichier | Correction |
 |---------|------------|
-| `agt-auth/apps/authentication/views_auth.py` | Ordre inversé : `provision_user` (Users) appelé AVANT `NotificationClient.send` |
-| `agt-auth/apps/authentication/views_auth.py` | `first_name`/`last_name` ajoutés au register, resend-verification et login bloqué si email non vérifié |
-| `agt-auth/apps/authentication/views_auth.py` | Nouveau endpoint `ResendVerificationView` créé |
-| `agt-auth/apps/authentication/serializers.py` | `first_name`/`last_name` ajoutés dans `RegisterSerializer` + `ResendVerificationSerializer` créé |
-| `agt-auth/apps/authentication/services.py` | `"data"` → `"variables"` dans le payload envoyé à Notification + `first_name`/`last_name` dans payload Users |
-| `agt-auth/apps/authentication/urls.py` | Route `auth/resend-verification` ajoutée + import `ResendVerificationView` |
+| `agt-auth/apps/authentication/authentication.py` | `JWTPayload` ajouté + `authenticate` retourne `JWTPayload` au lieu de `UserAuth` |
+| `agt-auth/apps/authentication/views_sessions.py` | Toutes les vues migrées de `user=request.user` vers `user_id=request.user.auth_user_id` + `UsersServiceClient` importé |
+| `agt-auth/apps/authentication/views_sessions.py` | `ForgotPasswordView` — `user_id` ajouté dans `recipient` + `first_name` récupéré depuis Users |
+| `agt-auth/apps/authentication/views_auth.py` | `MagicLinkRequestView` — `first_name` récupéré depuis Users via `get_profile_by_auth_id` + correction `data.get("first_name")` → variable `first_name` |
+| `agt-auth/apps/authentication/services.py` | `UsersServiceClient.get_profile_by_auth_id()` ajouté |
+| `agt-auth/apps/authentication/views_admin.py` | `AccountDeactivateView` — `user = request.user` → `UserAuth.objects.get(id=request.user.auth_user_id)` |
 
-### Nouveau endpoint créé
-- `POST /api/v1/auth/resend-verification` — renvoi email de vérification avec invalidation des anciens tokens
-
-### Templates Notification créés
-| Template | Canal | Platform ID |
-|----------|-------|-------------|
-| `auth_verify_email` | email | à recréer sur votre machine |
-| `auth_otp_sms` | sms | à recréer sur votre machine |
-| `auth_magic_link` | email | à recréer sur votre machine |
-| `auth_reset_password` | email | à recréer sur votre machine |
-
-### Documentation produite
-- `GUIDE_AUTH.md` — guide complet autonome couvrant Health, Platforms, S2S, Register, Login
-- `HANDOFF_REPORT_15_AVRIL_2026.md` — ce fichier
+### Migrations
+- Découverte et correction du bug critique : migrations non générées au déploiement
+- Fix documenté dans le guide : `makemigrations authentication` + `makemigrations users roles documents` + `makemigrations notifications templates_mgr campaigns devices`
 
 ### Groupes testés et validés
+
 | Groupe | Statut |
 |--------|--------|
 | Health | ✅ |
 | Platforms (POST, GET, PUT, DELETE) | ✅ |
 | S2S (token + introspect) | ✅ |
-| Register (register + verify-email + resend-verification) | ✅ |
-| Login (valide + mauvais password + email non vérifié) | ✅ |
+| Templates Notification (4 templates) | ✅ |
+| Register (register + verify + resend) | ✅ |
+| Login (valide + mauvais mdp + non vérifié + magic-link) | ✅ |
+| Sessions (list + revoke + refresh + logout) | ✅ |
+| Profile (me + login-history + stats) | ✅ |
+| Password (forgot + reset + change) | ✅ |
+| Admin (block + unblock) | ✅ |
 
 ---
 
 ## 2. EN COURS
 
-Tests manuels Auth via Swagger — groupes non encore testés :
+Tests Admin — non encore testés :
 
-| Groupe | Endpoints à tester |
-|--------|-------------------|
-| Sessions | `POST /refresh`, `POST /logout`, `GET /sessions`, `DELETE /sessions/{id}`, `GET /verify-token`, `POST /token/exchange` |
-| Profile | `GET /me`, `GET /login-history`, `GET /stats/{user_id}` |
-| Password | `POST /forgot-password`, `POST /reset-password`, `PUT /change-password` |
-| 2FA | `POST /2fa/enable`, `POST /2fa/confirm`, `POST /2fa/verify`, `POST /2fa/disable` |
-| Admin | `POST /admin/block/{id}`, `POST /admin/unblock/{id}`, `POST /account/deactivate`, `DELETE /admin/purge/{id}` |
-| OAuth | `GET /oauth/google`, `GET /oauth/google/callback`, `GET /oauth/facebook`, `GET /oauth/facebook/callback` |
+| Endpoint | Notes |
+|----------|-------|
+| `POST /account/deactivate` | Erreur `invalid_signature` — à investiguer |
+| `DELETE /admin/purge/{id}` | Non testé — à faire en début de prochaine session |
 
 ---
 
 ## 3. PROCHAINE ÉTAPE IMMÉDIATE
 
-**Reprendre le guide au groupe Sessions.**
-
-Méthode à suivre pour chaque groupe :
-1. Demander à l'IA d'expliquer le rôle de chaque endpoint du groupe
-2. Tester chaque endpoint dans Swagger avec les bons JSON (voir section 5)
-3. Si un bug est trouvé → diagnostiquer avec les logs avant de coder
-4. Documenter le résultat dans `GUIDE_AUTH.md` à la suite de ce qui existe
-
-**Compte de test disponible :**
-- Email : `jane.doe@example.com` / Password : `Test1234!` — vérifié, prêt pour tous les tests
-- Obtenir un `access_token` frais via `POST /auth/login` avant de tester les endpoints protégés
-
-**JSON de login pour récupérer un token frais :**
-```json
-POST /api/v1/auth/login
-{
-  "email": "jane.doe@example.com",
-  "password": "Test1234!",
-  "platform_id": "<votre_platform_id>"
-}
-```
-→ Copier le `access_token` et cliquer **Authorize** dans Swagger.
+1. **Valider le guide de façon autonome** — refaire les parties 1 et 2 depuis zéro avec `stop_clean.ps1`
+2. **Terminer Admin** — tester `account/deactivate` + `admin/purge`
+3. **Corriger les bugs connus** listés en section 4
+4. **Documenter les perspectives** dans le guide
 
 ---
 
-## 4. POINTS D'ATTENTION
+## 4. POINTS D'ATTENTION ET BUGS CONNUS
 
-| # | Point | Action requise |
-|---|-------|----------------|
-| 1 | `PUT /templates/{id}` n'affiche pas le body dans Swagger Notification | Bug Swagger à corriger — ajouter `@extend_schema(request=TemplateUpdateSerializer)` dans `apps/templates_mgr/views.py` |
-| 2 | `resend-verification` apparaît dans le groupe `auth` au lieu de `Register` dans Swagger | Vérifier le tag dans `@extend_schema` de `ResendVerificationView` |
-| 3 | Apostrophes perdues dans les templates (`L equipe`, `n avez`) | Corriger les templates via PUT quand le bug Swagger sera fixé |
-| 4 | `first_name` toujours vide dans `resend-verification` | Auth ne stocke pas le prénom — amélioration future : le récupérer depuis Users |
-| 5 | Après `reset --clean` : recréer plateformes + templates + credentials S2S Notification | Refaire les sections 5, 6, 7 du GUIDE_AUTH.md depuis le début |
-| 6 | Tests pytest Auth non encore lancés | À faire après les tests manuels complets |
+| # | Bug | Fichier | Action |
+|---|-----|---------|--------|
+| 1 | `SENDGRID_API_KEY non configuré` dans les logs worker quand Users retourne 404 | `agt-notification/providers/providers.py` | Vérifier ordre `PROVIDER_MAP` — SMTP doit être en premier |
+| 2 | Email non reçu quand provisioning Users échoue (404) | `agt-notification/workers/tasks.py` | Le worker tombe sur Sendgrid au lieu de SMTP |
+| 3 | `resend-verification` — `first_name` toujours vide | `agt-auth/apps/authentication/views_auth.py` | Appeler `get_profile_by_auth_id` comme dans magic-link et forgot-password |
+| 4 | Migrations absentes du repo | Tous les services | Générer et commiter les migrations |
+| 5 | `deploy_mvp.ps1` lance `migrate` trop tôt | `deploy_mvp.ps1` | Ajouter `makemigrations` avant `migrate` dans le script |
+| 6 | `account/deactivate` — `invalid_signature` à investiguer | `views_admin.py` | Tester avec token frais copié proprement |
+| 7 | `PUT /templates/{id}` — body non visible dans Swagger Notification | `agt-notification/apps/templates_mgr/views.py` | Ajouter `@extend_schema(request=TemplateUpdateSerializer)` |
 
 ---
 
-## 5. COMMANDES UTILES
+## 5. PERSPECTIVES À DOCUMENTER
+
+| # | Perspective |
+|---|-------------|
+| 1 | 2FA par email — configurable par plateforme (TOTP vs email) |
+| 2 | OAuth Google + Facebook — à tester post-déploiement serveur |
+| 3 | `token/exchange` — à tester dans le contexte OAuth |
+| 4 | OTP SMS — à tester quand provider SMS configuré |
+| 5 | Réactivation de compte désactivé — endpoint admin à implémenter |
+| 6 | `deploy_mvp.ps1` — intégrer `makemigrations` automatiquement |
+
+---
+
+## 6. COMMANDES UTILES
 
 ```powershell
-# Lancer le MVP
+# Nettoyage complet
+.\stop_clean.ps1
+
+# Déploiement MVP
 .\deploy_mvp.ps1
 
-# Reset complet (reconfigurer depuis section 5 du GUIDE_AUTH.md)
-.\reset_mvp.ps1 --clean
+# Migrations (obligatoire après deploy sur base vide)
+docker exec agt-auth-service python manage.py makemigrations authentication
+docker exec agt-auth-service python manage.py migrate --noinput
+docker exec agt-users-service python manage.py makemigrations users roles documents
+docker exec agt-users-service python manage.py migrate --noinput
+docker exec agt-notif-service python manage.py makemigrations notifications templates_mgr campaigns devices
+docker exec agt-notif-service python manage.py migrate --noinput
 
-# Rebuild Auth uniquement
-cd agt-auth && docker compose up -d --build auth && cd ..
-
-# Rebuild Notification (service + worker)
-cd agt-notification
-docker compose up -d --build notification celery-worker
-cd ..
-
-# Vider le rate limiting Redis Auth
+# Vider le rate limiting Redis
 docker exec agt-auth-redis redis-cli FLUSHDB
 
-# Logs Auth en temps réel
-docker logs agt-auth-service --follow
+# Rebuild Auth
+cd agt-auth && docker compose up -d --build auth && cd ..
 
-# Logs worker Notification
-docker logs agt-notif-worker --tail=50
+# Logs
+docker logs agt-auth-service --tail=30
+docker logs agt-notif-worker --tail=30
 
-# Régénérer un token S2S (remplacer les valeurs)
-$r = Invoke-RestMethod -Uri "http://localhost:7000/api/v1/auth/s2s/token" `
-  -Method POST -ContentType "application/json" `
-  -Body '{"client_id": "<platform_id>", "client_secret": "<secret>"}'
-$token = $r.access_token
-
-# Tests pytest Auth
+# Tests pytest
 docker exec agt-auth-service python -m pytest -v
 ```
 
 ---
 
-## 6. PORTS DE RÉFÉRENCE
+## 7. PORTS DE RÉFÉRENCE
 
 | Service | Port | Swagger |
 |---------|------|---------|

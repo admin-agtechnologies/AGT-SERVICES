@@ -19,7 +19,7 @@ from apps.authentication.serializers import (
     TwoFAConfirmSerializer, TwoFAVerifySerializer, TwoFADisableSerializer,
     SessionResponseSerializer, LoginHistoryResponseSerializer, UserAuthResponseSerializer,
 )
-from apps.authentication.services import JWTService, TokenService, TOTPService, SessionService, NotificationClient
+from apps.authentication.services import JWTService, TokenService, TOTPService, SessionService, NotificationClient, UsersServiceClient
 from apps.authentication.utils import get_client_ip, set_refresh_cookie, clear_refresh_cookie, clear_access_cookie
 from apps.authentication.swagger import (
     refresh_schema, logout_schema, session_list_schema, session_revoke_schema,
@@ -97,7 +97,7 @@ class SessionListView(APIView):
     def get(self, request):
         payload = request.auth
         current_session_id = payload.get("session_id") if payload else None
-        sessions = Session.objects.filter(user=request.user, is_active=True).select_related("platform")
+        sessions = Session.objects.filter(user_id=request.user.auth_user_id, is_active=True).select_related("platform")
         paginator = StandardPagination()
         page = paginator.paginate_queryset(sessions, request)
         serializer = SessionResponseSerializer(page, many=True, context={"current_session_id": current_session_id})
@@ -111,7 +111,7 @@ class SessionRevokeView(APIView):
 
     def delete(self, request, session_id):
         try:
-            session = Session.objects.get(id=session_id, user=request.user, is_active=True)
+            session = Session.objects.get(id=session_id, user_id=request.user.auth_user_id, is_active=True)
         except Session.DoesNotExist:
             return Response({"detail": "Session introuvable."}, status=status.HTTP_404_NOT_FOUND)
         SessionService.revoke_session(session)
@@ -203,11 +203,24 @@ class ForgotPasswordView(APIView):
                 type="password_reset",
                 expires_at=timezone.now() + timedelta(hours=1),
             )
+           # Récupérer le prénom depuis Users (non bloquant)
+            first_name = ""
+            try:
+                profile = UsersServiceClient.get_profile_by_auth_id(str(user.id))
+                first_name = profile.get("first_name", "")
+            except Exception:
+                pass
+
             NotificationClient.send(
                 notification_type="password_reset",
-                recipient={"email": email, "phone": None},
+                recipient={"user_id": str(user.id), "email": email, "phone": None, "platform_id": str(user.registration_platform_id)},
                 template="auth_reset_password",
-                data={"reset_url": f"{request.scheme}://{request.get_host()}/api/v1/auth/reset-password?token={raw_token}", "expires_in_minutes": 60},
+                data={
+                    "reset_url": f"{request.scheme}://{request.get_host()}/api/v1/auth/reset-password?token={raw_token}",
+                    "expires_in_minutes": 60,
+                    "platform_name": user.registration_platform.name if user.registration_platform else "",
+                    "first_name": first_name,
+                },
                 priority="high",
             )
         except UserAuth.DoesNotExist:
@@ -257,7 +270,7 @@ class ChangePasswordView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        user = request.user
+        user = UserAuth.objects.get(id=request.user.auth_user_id)
         if not user.check_password(serializer.validated_data["current_password"]):
             return Response({"detail": "Mot de passe actuel incorrect."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -276,7 +289,7 @@ class TwoFAEnableView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        user = request.user
+        user = UserAuth.objects.get(id=request.user.auth_user_id)
         if user.two_fa_enabled:
             return Response({"detail": "2FA déjà activé."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -301,7 +314,7 @@ class TwoFAConfirmView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        user = request.user
+        user = UserAuth.objects.get(id=request.user.auth_user_id)
         if not user.two_fa_secret:
             return Response({"detail": "2FA non initialisé."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -359,7 +372,7 @@ class TwoFADisableView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        user = request.user
+        user = UserAuth.objects.get(id=request.user.auth_user_id)
         if not user.two_fa_enabled:
             return Response({"detail": "2FA non activé."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -380,7 +393,8 @@ class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response(UserAuthResponseSerializer(request.user).data)
+        user = UserAuth.objects.get(id=request.user.auth_user_id)
+        return Response(UserAuthResponseSerializer(user).data)
 
 
 
@@ -389,7 +403,7 @@ class LoginHistoryView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        history = LoginHistory.objects.filter(user=request.user).select_related("platform")
+        history = LoginHistory.objects.filter(user_id=request.user.auth_user_id).select_related("platform")
         platform_slug = request.GET.get("platform")
         if platform_slug:
             history = history.filter(platform__slug=platform_slug)

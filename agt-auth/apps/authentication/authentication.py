@@ -15,7 +15,19 @@ from apps.authentication.services import JWTService
 
 logger = logging.getLogger(__name__)
 
+class JWTPayload:
+    def __init__(self, payload):
+        self.payload = payload
+        self.id = payload.get("sub")
+        self.auth_user_id = payload.get("sub")
+        self.email = payload.get("email")
+        self.platform_id = payload.get("platform_id")
+        self.session_id = payload.get("session_id")
+        self.is_authenticated = True
 
+    def __str__(self):
+        return f"JWTUser({self.auth_user_id})"
+    
 class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
         auth_header = request.headers.get("Authorization", "")
@@ -30,11 +42,7 @@ class JWTAuthentication(BaseAuthentication):
         if cached == "invalid":
             raise AuthenticationFailed("Token invalide.")
         if cached and isinstance(cached, dict):
-            try:
-                user = UserAuth.objects.get(id=cached["user_id"])
-                return user, cached.get("payload", cached)
-            except UserAuth.DoesNotExist:
-                pass
+            return JWTPayload(cached), cached
 
         try:
             payload = JWTService.decode_token(token)
@@ -64,8 +72,8 @@ class JWTAuthentication(BaseAuthentication):
             except Session.DoesNotExist:
                 raise AuthenticationFailed({"valid": False, "reason": "session_revoked"})
 
-        cache.set(cache_key, {"user_id": str(user.id), "payload": payload}, timeout=30)
-        return user, payload
+        cache.set(cache_key, payload, timeout=30)
+        return JWTPayload(payload), payload
 
     def authenticate_header(self, request):
         return "Bearer"

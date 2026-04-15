@@ -83,7 +83,7 @@ class AccountDeactivateView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        user = request.user
+        user = UserAuth.objects.get(id=request.user.auth_user_id)
         if not user.check_password(serializer.validated_data["password"]):
             return Response({"detail": "Mot de passe incorrect."}, status=status.HTTP_400_BAD_REQUEST)
 
