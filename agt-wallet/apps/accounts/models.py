@@ -44,8 +44,9 @@ class Account(models.Model):
         return self.status == AccountStatus.FROZEN
 
     def can_debit(self, amount):
+        # Les comptes externes peuvent avoir un solde négatif (représente les entrées/sorties réelles)
         if self.account_type == AccountType.EXTERNAL:
-            return True  # External peut etre negatif
+            return True
         return self.available_balance >= amount
 
 
@@ -58,11 +59,11 @@ class LedgerTransaction(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     ledger_reference_id = models.CharField(max_length=30, unique=True)
-    idempotency_key = models.UUIDField(unique=True)
+    idempotency_key = models.CharField(max_length=128, unique=True)
     transaction_type = models.CharField(max_length=30, choices=TX_TYPES)
     platform_id = models.UUIDField()
     source = models.CharField(max_length=30)  # payment, platform, admin, cron
-    source_reference_id = models.UUIDField(null=True, blank=True)
+    source_reference_id = models.CharField(max_length=128, null=True, blank=True)
     description = models.CharField(max_length=255, null=True, blank=True)
     metadata = models.JSONField(null=True, blank=True)
     status = models.CharField(max_length=20, default="completed")  # completed, reversed
@@ -110,8 +111,8 @@ class Hold(models.Model):
     amount = models.DecimalField(max_digits=15, decimal_places=2)
     status = models.CharField(max_length=20, choices=HoldStatus.choices, default=HoldStatus.PENDING)
     reason = models.CharField(max_length=50)
-    reference_id = models.UUIDField(null=True, blank=True)
-    idempotency_key = models.UUIDField(unique=True)
+    reference_id = models.CharField(max_length=128, null=True, blank=True)
+    idempotency_key = models.CharField(max_length=128, unique=True)
     expires_at = models.DateTimeField()
     captured_amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -123,7 +124,10 @@ class Hold(models.Model):
 
 
 class CashoutRequest(models.Model):
-    STATUS_CHOICES = [("pending", "Pending"), ("processing", "Processing"), ("completed", "Completed"), ("failed", "Failed"), ("cancelled", "Cancelled")]
+    STATUS_CHOICES = [
+        ("pending", "Pending"), ("processing", "Processing"),
+        ("completed", "Completed"), ("failed", "Failed"), ("cancelled", "Cancelled"),
+    ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="cashout_requests")
@@ -133,8 +137,8 @@ class CashoutRequest(models.Model):
     destination_details = models.JSONField()
     status = models.CharField(max_length=20, default="pending")
     hold = models.ForeignKey(Hold, on_delete=models.SET_NULL, null=True, blank=True)
-    payment_tx_id = models.UUIDField(null=True, blank=True)
-    idempotency_key = models.UUIDField(unique=True)
+    payment_tx_id = models.CharField(max_length=128, null=True, blank=True)
+    idempotency_key = models.CharField(max_length=128, unique=True)
     failure_reason = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -148,8 +152,12 @@ class SplitRule(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     platform_id = models.UUIDField()
     name = models.CharField(max_length=100)
-    rules = models.JSONField()  # [{"target": "seller", "percent": 85}, {"target": "platform", "percent": 15}]
+    # Définition des parts : [{"target": "seller", "percent": 85}, {"target": "platform", "percent": 15}]
+    rules = models.JSONField()
+    is_active = models.BooleanField(default=True)  # Permet de désactiver sans supprimer
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "split_rules"
+        unique_together = [("platform_id", "name")]
