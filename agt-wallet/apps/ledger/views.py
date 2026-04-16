@@ -10,6 +10,7 @@ from drf_spectacular.utils import extend_schema
 from apps.accounts.models import Account, AccountStatus, LedgerTransaction, LedgerEntry, Hold, SplitRule
 from apps.ledger.service import LedgerService
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 class CreditSerializer(serializers.Serializer):
     account_id = serializers.UUIDField()
@@ -57,6 +58,20 @@ class DebitSerializer(serializers.Serializer):
     source_reference_id = serializers.CharField(required=False, allow_null=True)
     idempotency_key = serializers.CharField()
     description = serializers.CharField(required=False, allow_null=True)
+
+class SplitRuleSerializer(serializers.Serializer):
+    platform_id = serializers.UUIDField()
+    name = serializers.CharField()
+    rules = serializers.ListField(child=serializers.DictField())
+
+class AdjustmentSerializer(serializers.Serializer):
+    account_id = serializers.UUIDField()
+    amount = serializers.DecimalField(max_digits=18, decimal_places=2)
+    direction = serializers.ChoiceField(choices=["credit", "debit"])
+    reason = serializers.CharField()
+    currency = serializers.CharField(default="XAF")
+    platform_id = serializers.UUIDField(required=False, allow_null=True)
+    idempotency_key = serializers.CharField(required=False, allow_null=True)
 
 logger = logging.getLogger(__name__)
 
@@ -292,10 +307,14 @@ class HoldReleaseView(APIView):
 
 class SplitRuleListCreateView(APIView):
     permission_classes = [IsAuthenticated]
-    @extend_schema(tags=["Split Rules"], summary="CRUD regles de split")
+    @extend_schema(tags=["Split Rules"], summary="CRUD regles de split", request=SplitRuleSerializer)
     def post(self, request):
-        d = request.data
-        rule = SplitRule.objects.create(platform_id=d["platform_id"], name=d["name"], rules=d["rules"])
+        serializer = SplitRuleSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        d = serializer.validated_data
+        rule = SplitRule.objects.create(
+            platform_id=d["platform_id"], name=d["name"], rules=d["rules"])
         return Response({"id": str(rule.id), "name": rule.name}, status=status.HTTP_201_CREATED)
     def get(self, request):
         qs = SplitRule.objects.filter(is_active=True)
@@ -323,23 +342,50 @@ class AdminAuditView(APIView):
 
 class AdminAdjustmentView(APIView):
     permission_classes = [IsAuthenticated]
-    @extend_schema(tags=["Admin"], summary="Ajustement correctif")
+    @extend_schema(tags=["Admin"], summary="Ajustement correctif", request=AdjustmentSerializer)
     def post(self, request):
-        d = request.data
-        if not d.get("amount") or not d.get("account_id"):
-            return Response({"detail": "account_id et amount obligatoires."}, status=status.HTTP_400_BAD_REQUEST)
-        direction = d.get("direction")
-        if direction not in ("credit", "debit"):
-            return Response({"detail": "direction doit etre 'credit' ou 'debit'."}, status=status.HTTP_400_BAD_REQUEST)
-        if not d.get("reason"):
-            return Response({"detail": "reason obligatoire."}, status=status.HTTP_400_BAD_REQUEST)
-        pid = d.get("platform_id", "00000000-0000-0000-0000-000000000000")
-        if direction == "credit":
+        serializer = AdjustmentSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        d = serializer.validated_data
+        pid = d.get("platform_id") or "00000000-0000-0000-0000-000000000000"
+        if d["direction"] == "credit":
             ltx, err = LedgerService.credit(d["account_id"], d["amount"], d.get("currency", "XAF"),
-                                              pid, "admin", None, d.get("idempotency_key"), d["reason"])
+                                            pid, "admin", None, d.get("idempotency_key"), d["reason"])
         else:
             ltx, err = LedgerService.debit(d["account_id"], d["amount"], d.get("currency", "XAF"),
-                                             pid, "admin", None, d.get("idempotency_key"), d["reason"])
+                                        pid, "admin", None, d.get("idempotency_key"), d["reason"])
         if err:
             return Response({"detail": err}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"transaction_id": str(ltx.id), "message": f"Adjustment {direction} completed"}, status=status.HTTP_201_CREATED)
+        return Response({"transaction_id": str(ltx.id), "message": f"Adjustment {d['direction']} completed"}, status=status.HTTP_201_CREATED)
+
+class HoldDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+    @extend_schema(tags=["Holds"], summary="Detail d'un hold")
+    def get(self, request, hold_id):
+        try:
+            hold = Hold.objects.get(id=hold_id)
+        except Hold.DoesNotExist:
+            return Response({"detail": "Hold introuvable."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({
+            "hold_id": str(hold.id), "account_id": str(hold.account_id),
+            "amount": float(hold.amount), "status": hold.status,
+            "reason": hold.reason, "expires_at": hold.expires_at.isoformat(),
+            "created_at": hold.created_at.isoformat()
+        })
+    
+class HoldListView(APIView):
+    permission_classes = [IsAuthenticated]
+    @extend_schema(tags=["Holds"], summary="Liste des holds d'un compte",
+               parameters=[
+                   OpenApiParameter(name="account_id", type=str, location=OpenApiParameter.QUERY, required=True)
+               ])
+    def get(self, request):
+        account_id = request.GET.get("account_id")
+        if not account_id:
+            return Response({"detail": "account_id requis."}, status=status.HTTP_400_BAD_REQUEST)
+        holds = Hold.objects.filter(account_id=account_id).order_by("-created_at")
+        data = [{"hold_id": str(h.id), "amount": float(h.amount),
+                 "status": h.status, "reason": h.reason,
+                 "expires_at": h.expires_at.isoformat()} for h in holds]
+        return Response({"data": data})
