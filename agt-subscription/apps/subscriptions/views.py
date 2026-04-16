@@ -1,4 +1,4 @@
-"""AGT Subscription Service v1.0 - Views."""
+﻿"""AGT Subscription Service v1.0 - Views."""
 import logging
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -279,7 +279,8 @@ class QuotaCheckView(APIView):
     def post(self, request):
         d = request.data
         result = QuotaService.check(d.get("platform_id"), d.get("subscriber_type", "user"),
-                                     d.get("subscriber_id"), d.get("quota_key"), d.get("requested", 1))
+                                     d.get("subscriber_id"), d.get("quota_key"),
+                                     d.get("amount") or d.get("requested", 1))
         return Response(result)
 
 
@@ -408,7 +409,7 @@ class OrganizationMemberView(APIView):
         deleted, _ = OrganizationMember.objects.filter(organization_id=org_id, user_id=user_id).delete()
         if not deleted:
             return Response({"detail": "Membre introuvable."}, status=status.HTTP_404_NOT_FOUND)
-        return Response({"message": "Member removed"})
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # --- Platform Config ---
