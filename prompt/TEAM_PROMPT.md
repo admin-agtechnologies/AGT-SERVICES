@@ -32,7 +32,8 @@ Services existants (MVP validé) :
 - Users (:7001) — profils, rôles, permissions
 - Notification (:7002) — email, SMS, push, in-app via Celery + RabbitMQ
 
-Services restants à implémenter : Subscription, Payment, Wallet, Search, Chat, Geoloc, Chatbot, Media.
+Services restants à auditer et finaliser l' implémentation : Subscription, Payment, Wallet, Search, Chatbot.
+services actuellement simulés à implémenter : Media, Chat, Geoloc,
 
 ---
 
