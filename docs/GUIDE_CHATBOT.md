@@ -1,7 +1,8 @@
 ﻿# GUIDE COMPLET — Service Chatbot AGT
 > **AG Technologies** — `agt-chatbot` — Port `7010` — Version `1.0`  
 > Ce guide vous accompagne de zéro à un bot IA fonctionnel, étape par étape.  
-> Accessible à un débutant, complet pour un développeur confirmé.
+> Accessible à un débutant, complet pour un développeur confirmé.  
+> ✅ **Validé et testé le 15 Avril 2026 — Production-Ready**
 
 ---
 
@@ -15,8 +16,9 @@
 6. [Tests des Routes Critiques (Résultats Réels)](#6-tests-des-routes-critiques-résultats-réels)
 7. [Configurer l'IA Générative (Couche 3)](#7-configurer-lia-générative-couche-3)
 8. [Tests Automatisés (pytest)](#8-tests-automatisés-pytest)
-9. [Résolution des Problèmes Courants](#9-résolution-des-problèmes-courants)
-10. [Commandes Utiles de Référence](#10-commandes-utiles-de-référence)
+9. [Corrections Appliquées (Production-Ready)](#9-corrections-appliquées-production-ready)
+10. [Résolution des Problèmes Courants](#10-résolution-des-problèmes-courants)
+11. [Commandes Utiles de Référence](#11-commandes-utiles-de-référence)
 
 ---
 
@@ -37,7 +39,7 @@ Chaque message envoyé au bot traverse un pipeline de 4 couches dans l'ordre. **
 | **3** | IA Générative | Appel à OpenAI ou Anthropic si les couches 1 et 2 échouent. Réponse intelligente et contextuelle. | 🐢 ~1-3s |
 | **4** | Fallback | Message par défaut si aucune couche ne répond. Après 3 fallbacks consécutifs → transfert vers un agent humain. | ⚡ Immédiat |
 
-> **Note :** La couche 2 (Flows) est présente dans l'architecture mais non implémentée dans la v1.0 (retourne toujours `null`). C'est un TODO assumé pour la v1.1.
+> **Note :** La couche 2 (Flows) est présente dans l'architecture mais non implémentée dans la v1.0 (retourne toujours `null`). C'est un TODO prévu pour la v1.1.
 
 ---
 
@@ -77,6 +79,8 @@ AUTH_SERVICE_PUBLIC_KEY_PATH=/app/keys/auth_public.pem
 CORS_ALLOWED_ORIGINS=http://localhost:3000
 ```
 
+> ⚠️ **En production :** remplacez `SECRET_KEY=change-me` par une vraie clé aléatoire et passez `DEBUG=False`.
+
 ### 2.3 Étape 2 — Copier la clé publique Auth
 
 Le service Chatbot doit pouvoir vérifier les tokens JWT émis par Auth. Il a besoin de la clé publique RSA d'Auth.
@@ -104,15 +108,13 @@ docker compose down
 docker compose --profile dev up --build
 ```
 
-> ⏱ Le premier lancement prend 1 à 3 minutes (téléchargement des images Docker et installation des dépendances Python). Les lancements suivants sont beaucoup plus rapides.
+> ⏱ Le premier lancement prend 1 à 3 minutes. Les lancements suivants sont beaucoup plus rapides.
 
-### 2.5 Étape 4 — Générer les migrations (premier lancement uniquement)
+### 2.5 Étape 4 — Appliquer les migrations (premier lancement uniquement)
 
-Après le premier démarrage, il faut générer et appliquer les migrations de base de données :
+Les migrations sont déjà présentes dans le dépôt Git. Il suffit de les appliquer :
 
 ```powershell
-docker exec agt-chatbot-dev python manage.py makemigrations bots
-docker exec agt-chatbot-dev python manage.py makemigrations conversations
 docker exec agt-chatbot-dev python manage.py migrate
 ```
 
@@ -129,8 +131,6 @@ Running migrations:
 ## 3. Vérifier que le Service est Opérationnel
 
 ### 3.1 Health Check
-
-Le health check vérifie la connexion à la base de données et au cache Redis.
 
 ```powershell
 curl http://localhost:7010/api/v1/chatbot/health -UseBasicParsing
@@ -150,9 +150,9 @@ curl http://localhost:7010/api/v1/chatbot/health -UseBasicParsing
 
 ### 3.2 Swagger UI — Documentation interactive
 
-Le service expose une documentation interactive permettant de tester toutes les routes directement depuis votre navigateur.
-
 > 🌐 Ouvrez : **http://localhost:7010/api/v1/docs/**
+
+Le bouton **Authorize** en haut à droite permet de coller votre token JWT pour tester toutes les routes directement depuis le navigateur.
 
 ---
 
@@ -161,8 +161,6 @@ Le service expose une documentation interactive permettant de tester toutes les 
 Toutes les routes du Chatbot (sauf `/health`) nécessitent un token JWT valide émis par le service Auth.
 
 ### 4.1 Étape 1 — Créer une plateforme dans Auth
-
-Une plateforme représente votre application cliente.
 
 ```powershell
 $body = '{"name": "Test Platform", "slug": "test-platform", "allowed_auth_methods": ["email"]}'
@@ -187,7 +185,7 @@ $resp.Content
 }
 ```
 
-> 📌 **Notez le `platform_id` :** `fc877f7a-8d44-413d-9a7d-6b7791379fae` — vous en aurez besoin pour les étapes suivantes.
+> 📌 **Notez le `platform_id` :** `fc877f7a-8d44-413d-9a7d-6b7791379fae`
 
 > ⚠️ Les valeurs valides pour `allowed_auth_methods` sont : `email`, `phone`, `google`, `facebook`, `magic_link`.
 
@@ -225,6 +223,9 @@ $resp = Invoke-WebRequest `
   -Headers @{"X-Platform-Id" = "fc877f7a-8d44-413d-9a7d-6b7791379fae"} `
   -Body $body -UseBasicParsing
 $resp.Content
+
+# Sauvegarder le token
+$token = ($resp.Content | ConvertFrom-Json).access_token
 ```
 
 **Résultat obtenu :**
@@ -235,11 +236,6 @@ $resp.Content
   "expires_in": 900,
   "requires_2fa": false
 }
-```
-
-**Sauvegardez le token dans une variable PowerShell :**
-```powershell
-$token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."   # collez votre token ici
 ```
 
 > ⏱ Le token expire après **15 minutes** (`expires_in: 900`). En cas d'erreur 401, reconnectez-vous.
@@ -278,8 +274,6 @@ $token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."   # collez votre token ici
 
 ### 6.1 Créer un Bot — `POST /chatbot/bots`
 
-Un bot définit son comportement, son message de secours, et le seuil de transfert humain.
-
 ```powershell
 $body = '{"name": "Bot Test",
           "platform_id": "fc877f7a-8d44-413d-9a7d-6b7791379fae",
@@ -295,7 +289,6 @@ $resp = Invoke-WebRequest `
   -Body $body -UseBasicParsing
 $resp.Content
 
-# Sauvegarder le bot_id
 $bot_id = ($resp.Content | ConvertFrom-Json).id
 ```
 
@@ -315,7 +308,6 @@ $bot_id = ($resp.Content | ConvertFrom-Json).id
 ### 6.2 Voir le Détail d'un Bot — `GET /chatbot/bots/{id}`
 
 ```powershell
-$bot_id = "7cb6d749-caca-4491-910c-1090a5d78bba"
 $resp = Invoke-WebRequest `
   -Uri "http://localhost:7010/api/v1/chatbot/bots/$bot_id" `
   -Method GET `
@@ -340,8 +332,6 @@ $resp.Content
 ---
 
 ### 6.3 Ajouter une Intention — `POST /chatbot/bots/{id}/intents`
-
-Une intention associe des mots-clés à une réponse prédéfinie. C'est la **couche 1** du pipeline.
 
 ```powershell
 $body = '{"name": "greeting",
@@ -370,9 +360,7 @@ $resp.Content
 
 ---
 
-### 6.4 Envoyer un Message au Bot — `POST /chatbot/converse`
-
-C'est la **route principale**. On envoie un message contenant le mot-clé "bonjour" pour déclencher la couche 1.
+### 6.4 Envoyer un Message — `POST /chatbot/converse` (Couche 1)
 
 ```powershell
 $body = "{`"bot_id`": `"$bot_id`", `"message`": `"Bonjour, j'ai besoin d'aide`", `"channel`": `"web`"}"
@@ -399,13 +387,11 @@ $resp.Content
 }
 ```
 
-> ✅ `layer_1_keywords` confirme que le mot-clé a été détecté. `is_resolved: true` — réponse satisfaisante. `processing_time_ms: 20` — très rapide.
+> ✅ `layer_1_keywords` — mot-clé détecté. `is_resolved: true`. `processing_time_ms: 20` — très rapide.
 
 ---
 
-### 6.5 Tester le Fallback — Message incompréhensible
-
-On envoie un message sans aucun mot-clé connu pour déclencher le **fallback (couche 4)**.
+### 6.5 Tester le Fallback — Couche 4
 
 ```powershell
 $body = "{`"bot_id`": `"$bot_id`", `"message`": `"xyzqwerty blabla incomprehensible`", `"channel`": `"web`"}"
@@ -436,14 +422,13 @@ $resp.Content
 Redis maintient un compteur de fallbacks par conversation. Après 3 fallbacks avec le **même `conversation_id`**, le bot déclenche automatiquement un transfert humain.
 
 ```powershell
-$conv_id = "8f0b7af1-fcbd-4847-a780-6d4a1cf93adc"   # même conversation_id
+$conv_id = "8f0b7af1-fcbd-4847-a780-6d4a1cf93adc"
 
 # Fallback 2
 $body = "{`"bot_id`": `"$bot_id`", `"message`": `"azerty incomprehensible`", `"channel`": `"web`", `"conversation_id`": `"$conv_id`"}"
 $resp = Invoke-WebRequest -Uri "http://localhost:7010/api/v1/chatbot/converse" `
   -Method POST -ContentType "application/json" `
   -Headers @{"Authorization" = "Bearer $token"} -Body $body -UseBasicParsing
-$resp.Content
 
 # Fallback 3 — déclenche le transfert humain
 $body = "{`"bot_id`": `"$bot_id`", `"message`": `"toujours incomprehensible`", `"channel`": `"web`", `"conversation_id`": `"$conv_id`"}"
@@ -464,7 +449,7 @@ $resp.Content
 }
 ```
 
-> ✅ Le message "Je vous transfere vers un agent humain." apparaît bien au 3ème fallback consécutif. Le compteur Redis fonctionne correctement.
+> ✅ Transfert humain déclenché correctement. Compteur Redis fonctionnel.
 
 ---
 
@@ -492,8 +477,6 @@ $resp.Content
   }
 }
 ```
-
-> ✅ Les stats sont cohérentes : 4 messages total, 1 résolu (le greeting), 3 fallbacks.
 
 ---
 
@@ -539,13 +522,11 @@ $resp = Invoke-WebRequest `
 $resp.Content
 ```
 
-> 💡 **Priorité des providers :** `priority: 0` est essayé en premier. Si OpenAI échoue, Anthropic (`priority: 1`) est essayé automatiquement. C'est le **circuit breaker** intégré.
+> 💡 **Priorité des providers :** `priority: 0` est essayé en premier. Si OpenAI échoue, Anthropic (`priority: 1`) est essayé automatiquement — c'est le **circuit breaker** intégré.
 
 ---
 
 ## 8. Tests Automatisés (pytest)
-
-Le service inclut une suite de tests automatisés qui valide le comportement du pipeline.
 
 ### 8.1 Lancer les tests
 
@@ -553,7 +534,27 @@ Le service inclut une suite de tests automatisés qui valide le comportement du 
 docker exec agt-chatbot-dev python -m pytest -v
 ```
 
-### 8.2 Ce que couvrent les tests
+### 8.2 Résultat validé le 15 Avril 2026
+
+```
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-8.2.0, pluggy-1.6.0
+django: version: 5.0.4, settings: config.settings_test
+collected 8 items
+
+apps/conversations/tests/test_all.py::TestBotModel::test_create_bot PASSED          [ 12%]
+apps/conversations/tests/test_all.py::TestLayer1Keywords::test_intent_matching PASSED [ 25%]
+apps/conversations/tests/test_all.py::TestLayer1Keywords::test_no_match_fallback PASSED [ 37%]
+apps/conversations/tests/test_all.py::TestFallbackCounter::test_consecutive_fallbacks PASSED [ 50%]
+apps/conversations/tests/test_all.py::TestConversationLog::test_log_created PASSED  [ 62%]
+apps/conversations/tests/test_all.py::TestHealthEndpoint::test_health PASSED        [ 75%]
+apps/conversations/tests/test_all.py::TestBotEndpoints::test_converse_bot_not_found PASSED [ 87%]
+apps/conversations/tests/test_all.py::TestBotEndpoints::test_create_bot PASSED      [100%]
+
+============================== 8 passed in 1.87s ===============================
+```
+
+### 8.3 Ce que couvrent les tests
 
 | Classe de test | Ce qui est testé |
 |----------------|-----------------|
@@ -566,7 +567,96 @@ docker exec agt-chatbot-dev python -m pytest -v
 
 ---
 
-## 9. Résolution des Problèmes Courants
+## 9. Corrections Appliquées (Production-Ready)
+
+Cette section documente les 3 corrections appliquées lors de la session de validation du 15 Avril 2026.
+
+### 9.1 Correction — `JWTPayload` : Support tokens S2S
+
+**Fichier :** `common/authentication.py`
+
+**Problème :** Pour les tokens S2S, le `platform_id` était lu depuis `payload.platform_id` au lieu de `payload.sub` — non conforme à la convention AGT.
+
+**Correction appliquée :**
+```python
+class JWTPayload:
+    def __init__(self, p):
+        self.payload = p
+        self.id = p.get("sub")
+        self.auth_user_id = p.get("sub")
+        self.is_authenticated = True
+        # Pour les tokens S2S, platform_id est dans "sub" (pas dans "platform_id")
+        token_type = p.get("type", "")
+        if token_type == "s2s":
+            self.platform_id = p.get("sub")
+        else:
+            self.platform_id = p.get("platform_id")
+```
+
+---
+
+### 9.2 Correction — Swagger BearerAuth
+
+**Fichier :** `config/settings.py`
+
+**Problème :** Le bouton "Authorize" du Swagger ne fonctionnait pas — `BearerAuth` absent de `SPECTACULAR_SETTINGS`.
+
+**Correction appliquée :**
+```python
+SPECTACULAR_SETTINGS = {
+    "TITLE": "AGT Chatbot Service API",
+    "VERSION": "1.0.0",
+    "SECURITY": [{"BearerAuth": []}],
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
+    "COMPONENT_SPLIT_REQUEST": True,
+    ...
+}
+```
+
+---
+
+### 9.3 Correction — Migrations committées dans Git
+
+**Fichiers :** `apps/bots/migrations/0001_initial.py`, `apps/bots/migrations/__init__.py`
+
+**Problème :** Les migrations n'existaient pas dans le dépôt Git — tout nouveau clone du projet aurait échoué au démarrage.
+
+**Commit de validation :**
+```
+fix(chatbot): corrections production-ready v1.0 - fix JWTPayload S2S, fix Swagger BearerAuth, add migrations
+5 files changed, 1093 insertions(+), 22 deletions(-)
+```
+
+---
+
+### 9.4 Bilan Production-Ready
+
+| Élément | Statut |
+|---------|--------|
+| Health check (DB + Redis) | ✅ |
+| Pipeline couche 1 (keywords) | ✅ |
+| Pipeline couche 4 (fallback) | ✅ |
+| Transfert humain (3 fallbacks) | ✅ |
+| Stats bot cohérentes | ✅ |
+| JWTPayload S2S corrigé | ✅ |
+| Swagger BearerAuth fonctionnel | ✅ |
+| Migrations committées dans Git | ✅ |
+| 8/8 tests pytest | ✅ |
+| Commit Git propre | ✅ |
+
+> ⚠️ **Reste à faire avant déploiement réel :** remplacer `SECRET_KEY=change-me` par une vraie clé aléatoire et passer `DEBUG=False` dans le `.env` de production.
+
+---
+
+## 10. Résolution des Problèmes Courants
 
 ### 🔴 Port 7010 déjà utilisé
 
@@ -577,8 +667,8 @@ Bind for 0.0.0.0:7010 failed: port is already allocated
 
 **Solution :**
 ```powershell
-docker ps | findstr 7010      # identifier le container
-docker compose down           # arrêter tous les containers du service
+docker ps | findstr 7010
+docker compose down
 docker compose --profile dev up --build
 ```
 
@@ -591,9 +681,8 @@ docker compose --profile dev up --build
 django.db.utils.ProgrammingError: relation "bots" does not exist
 ```
 
-**Solution :** Les migrations n'ont pas été appliquées.
+**Solution :**
 ```powershell
-docker exec agt-chatbot-dev python manage.py makemigrations bots
 docker exec agt-chatbot-dev python manage.py migrate
 ```
 
@@ -606,7 +695,7 @@ docker exec agt-chatbot-dev python manage.py migrate
 {"valid": false, "reason": "token_expired"}
 ```
 
-**Solution :** Les tokens expirent après 15 minutes. Reconnectez-vous :
+**Solution :**
 ```powershell
 $body = '{"email": "test@agt.com", "password": "Test1234!", "method": "email", "platform_id": "fc877f7a-8d44-413d-9a7d-6b7791379fae"}'
 $resp = Invoke-WebRequest -Uri "http://localhost:7000/api/v1/auth/login" `
@@ -625,7 +714,7 @@ $token = ($resp.Content | ConvertFrom-Json).access_token
 AuthenticationFailed: AUTH_PUBLIC_KEY non configure.
 ```
 
-**Solution :** Le fichier `keys/auth_public.pem` est manquant.
+**Solution :**
 ```powershell
 copy ..\agt-auth\keys\public.pem .\keys\auth_public.pem
 docker compose restart chatbot
@@ -633,18 +722,18 @@ docker compose restart chatbot
 
 ---
 
-### 🔴 Slug déjà utilisé lors de la création de plateforme
+### 🔴 Slug déjà utilisé
 
 **Erreur :**
 ```json
 {"slug": ["Ce slug est déjà utilisé."]}
 ```
 
-**Solution :** Choisissez un slug différent dans le body de la requête. Ex : `"slug": "test-platform-2"`.
+**Solution :** Choisissez un slug différent. Ex : `"slug": "test-platform-2"`.
 
 ---
 
-## 10. Commandes Utiles de Référence
+## 11. Commandes Utiles de Référence
 
 ### Gestion du service
 
@@ -661,7 +750,7 @@ docker logs agt-chatbot-dev -f
 # Ouvrir un shell dans le container
 docker exec -it agt-chatbot-dev bash
 
-# Redémarrer uniquement le service Django (sans reconstruire)
+# Redémarrer uniquement le service Django
 docker compose restart chatbot
 ```
 
@@ -670,9 +759,6 @@ docker compose restart chatbot
 ```powershell
 # Appliquer les migrations
 docker exec agt-chatbot-dev python manage.py migrate
-
-# Créer de nouvelles migrations
-docker exec agt-chatbot-dev python manage.py makemigrations bots
 
 # Shell Django interactif
 docker exec -it agt-chatbot-dev python manage.py shell
@@ -684,10 +770,10 @@ docker exec -it agt-chatbot-dev python manage.py shell
 # Lancer tous les tests
 docker exec agt-chatbot-dev python -m pytest -v
 
-# Lancer avec couverture de code
+# Avec couverture de code
 docker exec agt-chatbot-dev python -m pytest -v --cov=apps
 
-# Lancer un test spécifique
+# Un test spécifique
 docker exec agt-chatbot-dev python -m pytest apps/conversations/tests/test_all.py::TestLayer1Keywords -v
 ```
 
@@ -702,4 +788,4 @@ docker exec agt-chatbot-dev python -m pytest apps/conversations/tests/test_all.p
 ---
 
 *AG Technologies — Guide Service Chatbot v1.0 — Usage interne — Confidentiel*  
-*Testé et validé le 15 Avril 2026*
+*Testé, corrigé et validé le 15 Avril 2026 — Production-Ready*
