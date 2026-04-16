@@ -9,6 +9,54 @@ from rest_framework.pagination import PageNumberPagination
 from drf_spectacular.utils import extend_schema
 from apps.accounts.models import Account, AccountStatus, LedgerTransaction, LedgerEntry, Hold, SplitRule
 from apps.ledger.service import LedgerService
+from rest_framework import serializers
+
+class CreditSerializer(serializers.Serializer):
+    account_id = serializers.UUIDField()
+    amount = serializers.DecimalField(max_digits=18, decimal_places=2)
+    currency = serializers.CharField(default="XAF")
+    platform_id = serializers.UUIDField(required=False, allow_null=True)
+    source = serializers.CharField(default="payment")
+    source_reference_id = serializers.CharField(required=False, allow_null=True)
+    idempotency_key = serializers.CharField()
+    description = serializers.CharField(required=False, allow_null=True)
+
+class TransferSerializer(serializers.Serializer):
+    from_account_id = serializers.UUIDField()
+    to_account_id = serializers.UUIDField()
+    amount = serializers.DecimalField(max_digits=18, decimal_places=2)
+    currency = serializers.CharField(default="XAF")
+    platform_id = serializers.UUIDField(required=False, allow_null=True)
+    idempotency_key = serializers.CharField()
+    description = serializers.CharField(required=False, allow_null=True)
+
+class HoldSerializer(serializers.Serializer):
+    account_id = serializers.UUIDField()
+    amount = serializers.DecimalField(max_digits=18, decimal_places=2)
+    reason = serializers.CharField()
+    idempotency_key = serializers.CharField()
+    ttl_seconds = serializers.IntegerField(default=3600, required=False)
+    source_reference_id = serializers.CharField(required=False, allow_null=True)
+
+class SplitSerializer(serializers.Serializer):
+    source_account_id = serializers.UUIDField()
+    amount = serializers.DecimalField(max_digits=18, decimal_places=2)
+    currency = serializers.CharField(default="XAF")
+    platform_id = serializers.UUIDField(required=False, allow_null=True)
+    targets = serializers.ListField(child=serializers.DictField())
+    idempotency_key = serializers.CharField()
+    source_reference_id = serializers.CharField(required=False, allow_null=True)
+    description = serializers.CharField(required=False, allow_null=True)
+
+class DebitSerializer(serializers.Serializer):
+    account_id = serializers.UUIDField()
+    amount = serializers.DecimalField(max_digits=18, decimal_places=2)
+    currency = serializers.CharField(default="XAF")
+    platform_id = serializers.UUIDField(required=False, allow_null=True)
+    source = serializers.CharField(default="platform")
+    source_reference_id = serializers.CharField(required=False, allow_null=True)
+    idempotency_key = serializers.CharField()
+    description = serializers.CharField(required=False, allow_null=True)
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +98,8 @@ class AccountCreateView(APIView):
         d = request.data
         acc = Account.objects.create(
             account_type=d.get("account_type", "user"), owner_type=d.get("owner_type", "user"),
-            owner_id=d.get("owner_id"), currency=d.get("currency", "XAF"), label=d.get("label"))
+            owner_id=d.get("owner_id") or getattr(request.user, "auth_user_id", None),
+            currency=d.get("currency", "XAF"), label=d.get("label"))
         return Response({"id": str(acc.id), "account_type": acc.account_type, "currency": acc.currency,
                          "balance": 0, "message": "Account created"}, status=status.HTTP_201_CREATED)
 
@@ -109,14 +158,17 @@ class AccountUnfreezeView(APIView):
 
 class CreditView(APIView):
     permission_classes = [IsAuthenticated]
-    @extend_schema(tags=["Ledger"], summary="Crediter un compte (double-entry)")
+    @extend_schema(tags=["Ledger"], summary="Crediter un compte (double-entry)", request=CreditSerializer)
     def post(self, request):
-        d = request.data
+        serializer = CreditSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        d = serializer.validated_data
         ltx, err = LedgerService.credit(
-            d.get("account_id"), d.get("amount"), d.get("currency", "XAF"),
+            d["account_id"], d["amount"], d["currency"],
             d.get("platform_id"), d.get("source", "payment"),
-            d.get("source_reference_id"), d.get("idempotency_key"),
-            d.get("description"), d.get("metadata"))
+            d.get("source_reference_id"), d["idempotency_key"],
+            d.get("description"))
         if err == "idempotent_hit":
             return Response({"transaction_id": str(ltx.id), "message": "Idempotent hit"})
         if err:
@@ -124,14 +176,16 @@ class CreditView(APIView):
             return Response({"detail": err}, status=codes.get(err, 400))
         acc = Account.objects.get(id=d["account_id"])
         return Response({"transaction_id": str(ltx.id), "new_balance": float(acc.balance),
-                         "message": "Credit completed"}, status=status.HTTP_201_CREATED)
-
+                        "message": "Credit completed"}, status=status.HTTP_201_CREATED)
 
 class DebitView(APIView):
     permission_classes = [IsAuthenticated]
-    @extend_schema(tags=["Ledger"], summary="Debiter un compte (double-entry)")
+    @extend_schema(tags=["Ledger"], summary="Debiter un compte (double-entry)", request=DebitSerializer)
     def post(self, request):
-        d = request.data
+        serializer = DebitSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        d = serializer.validated_data
         ltx, err = LedgerService.debit(
             d.get("account_id"), d.get("amount"), d.get("currency", "XAF"),
             d.get("platform_id"), d.get("source", "platform"),
@@ -148,11 +202,14 @@ class DebitView(APIView):
 
 class TransferView(APIView):
     permission_classes = [IsAuthenticated]
-    @extend_schema(tags=["Ledger"], summary="Virement entre comptes")
+    @extend_schema(tags=["Ledger"], summary="Virement entre comptes", request=TransferSerializer)
     def post(self, request):
-        d = request.data
+        serializer = TransferSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        d = serializer.validated_data
         ltx, err = LedgerService.transfer(
-            d.get("from_account_id"), d.get("to_account_id"), d.get("amount"),
+            d["from_account_id"], d["to_account_id"], d["amount"],
             d.get("currency", "XAF"), d.get("platform_id"),
             d.get("idempotency_key"), d.get("description"))
         if err == "idempotent_hit":
@@ -164,11 +221,14 @@ class TransferView(APIView):
 
 class SplitView(APIView):
     permission_classes = [IsAuthenticated]
-    @extend_schema(tags=["Ledger"], summary="Split (partage commission)")
+    @extend_schema(tags=["Ledger"], summary="Split (partage commission)", request=SplitSerializer)
     def post(self, request):
-        d = request.data
+        serializer = SplitSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        d = serializer.validated_data
         ltx, err = LedgerService.split(
-            d.get("source_account_id"), d.get("amount"), d.get("currency", "XAF"),
+            d["source_account_id"], d["amount"], d.get("currency", "XAF"),
             d.get("platform_id"), d.get("targets", []),
             d.get("idempotency_key"), d.get("source_reference_id"), d.get("description"))
         if err == "idempotent_hit":
@@ -195,12 +255,15 @@ class TransactionHistoryView(APIView):
 
 class HoldCreateView(APIView):
     permission_classes = [IsAuthenticated]
-    @extend_schema(tags=["Holds"], summary="Creer un hold")
+    @extend_schema(tags=["Holds"], summary="Creer un hold", request=HoldSerializer)
     def post(self, request):
-        d = request.data
+        serializer = HoldSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        d = serializer.validated_data
         hold, err = LedgerService.create_hold(
-            d.get("account_id"), d.get("amount"), d.get("currency", "XAF"),
-            d.get("reason"), d.get("source_reference_id"), d.get("ttl_seconds", 3600))
+            d.get("account_id"), d.get("amount"), d.get("reason"),
+            d.get("idempotency_key"), d.get("ttl_seconds", 3600), d.get("source_reference_id"))
         if err:
             return Response({"detail": err}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"hold_id": str(hold.id), "amount": float(hold.amount),
@@ -211,7 +274,7 @@ class HoldCaptureView(APIView):
     permission_classes = [IsAuthenticated]
     @extend_schema(tags=["Holds"], summary="Capturer un hold")
     def post(self, request, hold_id):
-        hold, err = LedgerService.capture_hold(hold_id, request.data.get("platform_id", ""))
+        hold, err = LedgerService.capture_hold(hold_id, request.data.get("capture_amount"))
         if err:
             return Response({"detail": err}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"hold_id": str(hold.id), "status": "captured"})
@@ -255,7 +318,7 @@ class AdminAuditView(APIView):
     permission_classes = [IsAuthenticated]
     @extend_schema(tags=["Admin"], summary="Audit equilibre ledger")
     def post(self, request):
-        return Response(LedgerService.audit_balance())
+        return Response(LedgerService.verify_integrity())
 
 
 class AdminAdjustmentView(APIView):
@@ -263,6 +326,8 @@ class AdminAdjustmentView(APIView):
     @extend_schema(tags=["Admin"], summary="Ajustement correctif")
     def post(self, request):
         d = request.data
+        if not d.get("amount") or not d.get("account_id"):
+            return Response({"detail": "account_id et amount obligatoires."}, status=status.HTTP_400_BAD_REQUEST)
         direction = d.get("direction")
         if direction not in ("credit", "debit"):
             return Response({"detail": "direction doit etre 'credit' ou 'debit'."}, status=status.HTTP_400_BAD_REQUEST)
