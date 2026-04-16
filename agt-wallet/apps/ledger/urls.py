@@ -3,7 +3,8 @@ from apps.ledger.views import (
     HealthCheckView, AccountCreateView, AccountDetailView, AccountByOwnerView,
     AccountFreezeView, AccountUnfreezeView, CreditView, DebitView, TransferView,
     SplitView, TransactionHistoryView, HoldCreateView, HoldCaptureView, HoldReleaseView,
-    SplitRuleListCreateView, AdminStatsView, AdminAuditView, AdminAdjustmentView,
+    HoldDetailView, HoldListView, SplitRuleListCreateView, AdminStatsView,
+    AdminAuditView, AdminAdjustmentView,
 )
 
 urlpatterns = [
@@ -18,7 +19,9 @@ urlpatterns = [
     path("wallet/debit", DebitView.as_view()),
     path("wallet/transfer", TransferView.as_view()),
     path("wallet/split", SplitView.as_view()),
-    path("wallet/holds", HoldCreateView.as_view()),
+    path("wallet/holds", HoldListView.as_view()),
+    path("wallet/holds/create", HoldCreateView.as_view()),
+    path("wallet/holds/<uuid:hold_id>", HoldDetailView.as_view()),
     path("wallet/holds/<uuid:hold_id>/capture", HoldCaptureView.as_view()),
     path("wallet/holds/<uuid:hold_id>/release", HoldReleaseView.as_view()),
     path("wallet/split-rules", SplitRuleListCreateView.as_view()),
@@ -26,3 +29,4 @@ urlpatterns = [
     path("wallet/admin/audit-ledger", AdminAuditView.as_view()),
     path("wallet/admin/adjustment", AdminAdjustmentView.as_view()),
 ]
+

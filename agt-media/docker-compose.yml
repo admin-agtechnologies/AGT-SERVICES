@@ -1,14 +1,94 @@
+version: '3.8'
+
+# ============================================================
+#  AGT Media Service — Docker Compose
+#  Port : 7003 (conforme à l'architecture AGT)
+#  Dépendances : PostgreSQL, Redis (partagé avec les autres services)
+# ============================================================
+
 services:
-  media:
-    build: .
-    container_name: agt-media-simulator
+
+  # ----- Service Media (NestJS) -----
+  agt-media-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agt-media-service
     restart: unless-stopped
     ports:
       - "7003:7003"
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 7003
+      DATABASE_URL: postgresql://${POSTGRES_USER:-media_user}:${POSTGRES_PASSWORD:-media_pass}@agt-media-db:5432/${POSTGRES_DB:-media_db}
+      REDIS_URL: redis://agt-media-redis:6379
+      AUTH_SERVICE_URL: ${AUTH_SERVICE_URL:-http://agt-auth-service:7000/api/v1}
+      S2S_AUTH_URL: ${S2S_AUTH_URL:-http://agt-auth-service:7000/api/v1}
+      S2S_CLIENT_ID: ${S2S_CLIENT_ID:-}
+      S2S_CLIENT_SECRET: ${S2S_CLIENT_SECRET:-}
+      STORAGE_PROVIDER: ${STORAGE_PROVIDER:-local}
+      LOCAL_STORAGE_PATH: /app/uploads
+      SIGNED_URL_SECRET: ${SIGNED_URL_SECRET:-change-me-signed-url-secret-key-32chars}
+      RATE_LIMIT_USER: ${RATE_LIMIT_USER:-30}
+      RATE_LIMIT_S2S: ${RATE_LIMIT_S2S:-100}
+      MAX_FILE_SIZE_BYTES: ${MAX_FILE_SIZE_BYTES:-52428800}
+      THUMBNAIL_SIZES: ${THUMBNAIL_SIZES:-150x150,300x300}
+      COMPRESSION_QUALITY: ${COMPRESSION_QUALITY:-80}
+      QUEUE_NAME: media-processing
     volumes:
-      - ./uploads:/app/uploads
+      - media-uploads:/app/uploads
+    depends_on:
+      agt-media-db:
+        condition: service_healthy
+      agt-media-redis:
+        condition: service_healthy
     networks:
       - agt_network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:7003/api/v1/media/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ----- PostgreSQL dédié au service Media -----
+  agt-media-db:
+    image: postgres:16-alpine
+    container_name: agt-media-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-media_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-media_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-media_db}
+    volumes:
+      - media-db-data:/var/lib/postgresql/data
+    networks:
+      - agt_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-media_user} -d ${POSTGRES_DB:-media_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# NOTE : Redis est supposé être celui de l'infra partagée AGT (agt-redis).
+# Si vous démarrez ce service seul (sans le stack AGT complet), décommentez
+# le service redis ci-dessous et ajustez REDIS_URL=redis://agt-media-redis:6379
+
+  agt-media-redis:
+      image: redis:7-alpine
+      container_name: agt-media-redis
+      restart: unless-stopped
+      networks:
+        - agt_network
+      healthcheck:
+        test: ["CMD", "redis-cli", "ping"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
+volumes:
+  media-db-data:
+  media-uploads:
 
 networks:
   agt_network:
