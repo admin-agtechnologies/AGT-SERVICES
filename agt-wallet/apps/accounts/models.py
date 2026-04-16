@@ -44,8 +44,9 @@ class Account(models.Model):
         return self.status == AccountStatus.FROZEN
 
     def can_debit(self, amount):
+        # Les comptes externes peuvent avoir un solde négatif (représente les entrées/sorties réelles)
         if self.account_type == AccountType.EXTERNAL:
-            return True  # External peut etre negatif
+            return True
         return self.available_balance >= amount
 
 
@@ -123,7 +124,10 @@ class Hold(models.Model):
 
 
 class CashoutRequest(models.Model):
-    STATUS_CHOICES = [("pending", "Pending"), ("processing", "Processing"), ("completed", "Completed"), ("failed", "Failed"), ("cancelled", "Cancelled")]
+    STATUS_CHOICES = [
+        ("pending", "Pending"), ("processing", "Processing"),
+        ("completed", "Completed"), ("failed", "Failed"), ("cancelled", "Cancelled"),
+    ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="cashout_requests")
@@ -148,8 +152,12 @@ class SplitRule(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     platform_id = models.UUIDField()
     name = models.CharField(max_length=100)
-    rules = models.JSONField()  # [{"target": "seller", "percent": 85}, {"target": "platform", "percent": 15}]
+    # Définition des parts : [{"target": "seller", "percent": 85}, {"target": "platform", "percent": 15}]
+    rules = models.JSONField()
+    is_active = models.BooleanField(default=True)  # Permet de désactiver sans supprimer
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "split_rules"
+        unique_together = [("platform_id", "name")]
