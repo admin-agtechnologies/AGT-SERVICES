@@ -1,4 +1,4 @@
-services:
+﻿services:
   db:
     image: postgres:15-alpine
     container_name: agt-sub-db
@@ -16,6 +16,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
+
   redis:
     image: redis:7-alpine
     container_name: agt-sub-redis
@@ -29,6 +32,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - agt_network
+
   subscription:
     build:
       context: .
@@ -38,8 +44,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://sub_user:sub_password@db:5432/agt_subscription_db
-      REDIS_URL: redis://redis:6379/4
+      DATABASE_URL: postgresql://sub_user:sub_password@agt-sub-db:5432/agt_subscription_db
+      REDIS_URL: redis://agt-sub-redis:6379/4
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
       - ./keys:/app/keys:ro
@@ -56,6 +62,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - agt_network
+
   subscription-dev:
     build:
       context: .
@@ -66,8 +75,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://sub_user:sub_password@db:5432/agt_subscription_db
-      REDIS_URL: redis://redis:6379/4
+      DATABASE_URL: postgresql://sub_user:sub_password@agt-sub-db:5432/agt_subscription_db
+      REDIS_URL: redis://agt-sub-redis:6379/4
       DEBUG: "True"
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
@@ -82,6 +91,13 @@ services:
         condition: service_healthy
     profiles:
       - dev
+    networks:
+      - agt_network
+
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  agt_network:
+    external: true

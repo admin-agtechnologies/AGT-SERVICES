@@ -144,6 +144,32 @@ http://localhost:7002/api/v1/docs/
 
 Avant de pouvoir utiliser le service, vous devez effectuer ces étapes dans l'ordre.
 
+### Étape préalable — Migrations (premier lancement uniquement)
+
+Lors du premier lancement, les bases de données sont vides.
+Vous devez générer et appliquer les schémas avant toute utilisation.
+
+**Auth :**
+```bash
+docker exec -it agt-auth-service python manage.py makemigrations authentication platforms
+docker exec -it agt-auth-service python manage.py migrate
+```
+
+**Users :**
+```bash
+docker exec -it agt-users-service python manage.py makemigrations users roles documents
+docker exec -it agt-users-service python manage.py migrate
+```
+
+**Notification :**
+```bash
+docker exec -it agt-notif-service python manage.py makemigrations notifications templates_mgr campaigns devices
+docker exec -it agt-notif-service python manage.py migrate
+```
+
+> ⚠️ Ces commandes sont à exécuter **une seule fois** lors du premier
+> lancement ou après un reset complet de la base de données.
+> Si les tables existent déjà, Django ignorera les migrations déjà appliquées.
 ### Étape 1 — Créer une plateforme S2S dans Auth
 
 > ℹ️ Une plateforme S2S est l'identité machine de votre service ou application dans l'écosystème AGT. Elle lui permet de s'authentifier de service à service.

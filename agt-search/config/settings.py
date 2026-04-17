@@ -20,9 +20,37 @@ def _read_key(path):
     except FileNotFoundError: return ""
 AUTH_PUBLIC_KEY = _read_key(config("AUTH_SERVICE_PUBLIC_KEY_PATH", default=str(BASE_DIR / "keys/auth_public.pem")))
 REST_FRAMEWORK = {"DEFAULT_AUTHENTICATION_CLASSES": ["common.authentication.JWTAuthentication"], "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"], "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"], "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema", "UNAUTHENTICATED_USER": None}
-SPECTACULAR_SETTINGS = {"TITLE": "AGT Search Service API", "VERSION": "1.0.0", "DESCRIPTION": "Recherche full-text Elasticsearch, indexation, autocomplete, historique.", "TAGS": [{"name": "Health"}, {"name": "Indexes"}, {"name": "Documents"}, {"name": "Search"}, {"name": "History"}, {"name": "Config"}, {"name": "Stats"}]}
+SPECTACULAR_SETTINGS = {
+    "TITLE": "AGT Search Service API",
+    "VERSION": "1.0.0",
+    "DESCRIPTION": "Recherche full-text Elasticsearch, indexation, autocomplete, historique.",
+    "TAGS": [
+        {"name": "Health"}, {"name": "Indexes"}, {"name": "Documents"},
+        {"name": "Search"}, {"name": "History"}, {"name": "Config"}, {"name": "Stats"}
+    ],
+    # Correction AGT — BearerAuth requis pour que le bouton Authorize fonctionne dans Swagger
+    "SECURITY": [{"BearerAuth": []}],
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
+    "COMPONENT_SPLIT_REQUEST": True,
+}
 CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="http://localhost:3000").split(",")
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGGING = {"version": 1, "disable_existing_loggers": False, "handlers": {"console": {"class": "logging.StreamHandler"}}, "root": {"handlers": ["console"], "level": "INFO"}}
+
+# S2S — communication inter-services
+S2S_AUTH_URL = config("S2S_AUTH_URL", default="")
+S2S_CLIENT_ID = config("S2S_CLIENT_ID", default="")
+S2S_CLIENT_SECRET = config("S2S_CLIENT_SECRET", default="")
+
+# Quota maximum d'index actifs par plateforme (configurable via .env)
+MAX_INDEXES_PER_PLATFORM = config("MAX_INDEXES_PER_PLATFORM", default="20")
