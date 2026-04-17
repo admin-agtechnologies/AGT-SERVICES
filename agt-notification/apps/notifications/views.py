@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from apps.notifications.models import (
     Notification, NotificationLog, UserPreference, ScheduledNotification,
@@ -18,6 +19,7 @@ from apps.notifications.services import UserResolverService, PreferenceService, 
 from apps.notifications.serializers import (
     SendNotificationSerializer, SendBulkNotificationSerializer,
     PreferenceUpdateSerializer, ChannelConfigUpdateSerializer,
+    ScheduledNotificationCreateSerializer, ScheduledNotificationUpdateSerializer,
 )
 
 logger = logging.getLogger(__name__)
@@ -196,7 +198,13 @@ class InAppListView(APIView):
         page = paginator.paginate_queryset(qs, request)
         data = [{"id": str(n.id), "subject": n.subject, "body": n.body, "is_read": n.is_read,
                  "created_at": n.created_at.isoformat()} for n in page]
-        return paginator.get_paginated_response(data)
+        unread_count = Notification.objects.filter(
+            user_id=user_id, channel="in_app",
+            read_at__isnull=True, deleted_at__isnull=True
+        ).count()
+        response = paginator.get_paginated_response(data)
+        response.data["unread_count"] = unread_count
+        return response
 
 
 class InAppUnreadCountView(APIView):
@@ -249,17 +257,43 @@ class NotificationStatsView(APIView):
 
     @extend_schema(tags=["Stats"], summary="Statistiques globales")
     def get(self, request):
-        by_status = dict(Notification.objects.values_list("status").annotate(c=Count("id")))
+        from django.db.models import Count
+        total_sent = Notification.objects.filter(status__in=["sent", "read"]).count()
         by_channel = dict(Notification.objects.values_list("channel").annotate(c=Count("id")))
-        return Response({"by_status": by_status, "by_channel": by_channel})
+        by_status = dict(Notification.objects.values_list("status").annotate(c=Count("id")))
+        total = Notification.objects.count()
+        delivery_rate = round((total_sent / total * 100), 1) if total > 0 else 0.0
 
+        return Response({
+            "total_sent": total_sent,
+            "by_channel": by_channel,
+            "by_status": by_status,
+            "delivery_rate": delivery_rate,
+        })
 
 class NotificationLogsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Stats"], summary="Logs d'envoi")
+    @extend_schema(
+        tags=["Stats"],
+        summary="Logs d'envoi",
+        parameters=[
+            OpenApiParameter(name="channel", type=str, required=False, description="Filtrer par canal (email, sms, push...)"),
+            OpenApiParameter(name="status", type=str, required=False, description="Filtrer par statut (sent, failed...)"),
+            OpenApiParameter(name="from", type=str, required=False, description="Date début (ex: 2026-04-01)"),
+            OpenApiParameter(name="to", type=str, required=False, description="Date fin (ex: 2026-04-30)"),
+        ]
+    )
     def get(self, request):
         qs = NotificationLog.objects.all()
+        if request.GET.get("channel"):
+            qs = qs.filter(channel=request.GET["channel"])
+        if request.GET.get("status"):
+            qs = qs.filter(status=request.GET["status"])
+        if request.GET.get("from"):
+            qs = qs.filter(created_at__gte=request.GET["from"])
+        if request.GET.get("to"):
+            qs = qs.filter(created_at__lte=request.GET["to"])
         paginator = StandardPagination()
         page = paginator.paginate_queryset(qs, request)
         data = [{"id": str(l.id), "notification_id": str(l.notification_id), "channel": l.channel,
@@ -285,3 +319,155 @@ class ChannelConfigView(APIView):
             config.fallback_enabled = request.data["fallback_enabled"]
         config.save()
         return Response({"message": "Config mise a jour."})
+
+class ScheduleNotificationView(APIView):
+    """POST /notifications/schedule — Planifier une notification."""
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        tags=["Schedule"],
+        summary="Planifier une notification",
+        request=ScheduledNotificationCreateSerializer
+    )
+    def post(self, request):
+        from apps.templates_mgr.models import Template
+        from apps.notifications.serializers import ScheduledNotificationCreateSerializer
+
+        serializer = ScheduledNotificationCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        data = serializer.validated_data
+        platform_id = str(getattr(request.user, "platform_id", "") or "")
+
+        # scheduled_at doit être dans le futur
+        if data["scheduled_at"] <= timezone.now():
+            return Response(
+                {"detail": "scheduled_at doit être dans le futur."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            template = Template.resolve(data["template_name"], platform_id=platform_id)
+        except Template.DoesNotExist:
+            return Response(
+                {"detail": f"Template '{data['template_name']}' introuvable."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # On planifie sur le premier canal fourni
+        # (le modèle stocke un seul canal par entrée planifiée)
+        channel = data["channels"][0]
+
+        sn = ScheduledNotification.objects.create(
+            user_id=data["user_id"],
+            platform_id=platform_id or "00000000-0000-0000-0000-000000000000",
+            template=template,
+            channel=channel,
+            variables=data.get("variables", {}),
+            scheduled_at=data["scheduled_at"],
+            status="pending",
+        )
+
+        return Response({
+            "id": str(sn.id),
+            "status": "pending",
+            "scheduled_at": sn.scheduled_at.isoformat(),
+            "message": "Notification scheduled"
+        }, status=status.HTTP_201_CREATED)
+
+
+class ScheduledNotificationListView(APIView):
+    """GET /notifications/scheduled — Lister les notifications planifiées."""
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(tags=["Schedule"], summary="Lister les notifications planifiées")
+    def get(self, request):
+        qs = ScheduledNotification.objects.all()
+
+        # Filtre optionnel par statut
+        status_filter = request.GET.get("status")
+        if status_filter:
+            qs = qs.filter(status=status_filter)
+
+        paginator = StandardPagination()
+        page = paginator.paginate_queryset(qs, request)
+        data = [
+            {
+                "id": str(sn.id),
+                "user_id": str(sn.user_id),
+                "channel": sn.channel,
+                "template": sn.template.name if sn.template else None,
+                "scheduled_at": sn.scheduled_at.isoformat(),
+                "status": sn.status,
+                "created_at": sn.created_at.isoformat(),
+            }
+            for sn in page
+        ]
+        return paginator.get_paginated_response(data)
+
+
+class ScheduledNotificationDetailView(APIView):
+    """PUT/DELETE /notifications/scheduled/{id}"""
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(tags=["Schedule"], summary="Modifier une notification planifiée", request=ScheduledNotificationUpdateSerializer)
+    def put(self, request, scheduled_id):
+        from apps.notifications.serializers import ScheduledNotificationUpdateSerializer
+
+        try:
+            sn = ScheduledNotification.objects.get(id=scheduled_id)
+        except ScheduledNotification.DoesNotExist:
+            return Response({"detail": "Notification planifiée introuvable."}, status=status.HTTP_404_NOT_FOUND)
+
+        # On ne peut pas modifier une notification déjà envoyée ou annulée
+        if sn.status in ["sent", "cancelled"]:
+            return Response(
+                {"detail": f"Impossible de modifier une notification avec le statut '{sn.status}'."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = ScheduledNotificationUpdateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        data = serializer.validated_data
+
+        if "scheduled_at" in data:
+            if data["scheduled_at"] <= timezone.now():
+                return Response(
+                    {"detail": "scheduled_at doit être dans le futur."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            sn.scheduled_at = data["scheduled_at"]
+
+        if "variables" in data:
+            sn.variables = data["variables"]
+
+        sn.save(update_fields=["scheduled_at", "variables", "updated_at"])
+
+        return Response({
+            "id": str(sn.id),
+            "scheduled_at": sn.scheduled_at.isoformat(),
+            "status": sn.status,
+            "message": "Notification planifiée mise à jour."
+        })
+
+    @extend_schema(tags=["Schedule"], summary="Annuler une notification planifiée")
+    def delete(self, request, scheduled_id):
+        try:
+            sn = ScheduledNotification.objects.get(id=scheduled_id)
+        except ScheduledNotification.DoesNotExist:
+            return Response({"detail": "Notification planifiée introuvable."}, status=status.HTTP_404_NOT_FOUND)
+
+        if sn.status == "sent":
+            return Response(
+                {"detail": "Impossible d'annuler une notification déjà envoyée."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        sn.status = "cancelled"
+        sn.save(update_fields=["status", "updated_at"])
+
+        return Response({"message": "Scheduled notification cancelled"})
+
