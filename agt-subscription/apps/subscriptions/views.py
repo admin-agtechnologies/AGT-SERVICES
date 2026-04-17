@@ -514,9 +514,9 @@ class PlatformConfigView(APIView):
         config, _ = PlatformSubscriptionConfig.objects.get_or_create(platform_id=platform_id)
         return Response({
             "platform_id": str(config.platform_id),
-            "trial_days": config.trial_days,
+            "trial_days": config.default_trial_days,
             "grace_period_days": config.grace_period_days,
-            "allow_multiple_subscriptions": config.allow_multiple_subscriptions,
+            "allowed_cycles": config.allowed_cycles,
             "default_currency": config.default_currency,
         })
 
@@ -524,15 +524,15 @@ class PlatformConfigView(APIView):
     def put(self, request, platform_id):
         config, _ = PlatformSubscriptionConfig.objects.get_or_create(platform_id=platform_id)
         d = request.data
-        for field in ["trial_days", "grace_period_days", "allow_multiple_subscriptions", "default_currency"]:
+        for field in ["default_trial_days", "grace_period_days", "allowed_cycles", "default_currency"]:
             if field in d:
                 setattr(config, field, d[field])
         config.save()
         return Response({
             "platform_id": str(config.platform_id),
-            "trial_days": config.trial_days,
+            "trial_days": config.default_trial_days,
             "grace_period_days": config.grace_period_days,
-            "allow_multiple_subscriptions": config.allow_multiple_subscriptions,
+            "allowed_cycles": config.allowed_cycles,
             "default_currency": config.default_currency,
             "message": "Config updated",
         })

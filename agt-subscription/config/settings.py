@@ -79,6 +79,15 @@ AUTH_SERVICE_PUBLIC_KEY_PATH = config(
     default=str(BASE_DIR / "keys" / "auth_public.pem"),
 )
 
+# Charger le contenu de la clé publique en mémoire
+AUTH_PUBLIC_KEY = ""
+if AUTH_SERVICE_PUBLIC_KEY_PATH:
+    try:
+        with open(AUTH_SERVICE_PUBLIC_KEY_PATH, "r") as f:
+            AUTH_PUBLIC_KEY = f.read()
+    except FileNotFoundError:
+        pass
+
 # --- Services externes ---
 USERS_SERVICE_URL = config("USERS_SERVICE_URL", default="http://agt-users-service:7001/api/v1")
 PAYMENT_SERVICE_URL = config("PAYMENT_SERVICE_URL", default="http://agt-payment-service:7005/api/v1")
@@ -98,6 +107,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "common.authentication.JWTAuthentication",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
