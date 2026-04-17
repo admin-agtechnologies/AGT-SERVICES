@@ -1,14 +1,38 @@
 {
-  "name": "agt-chat-simulator",
-  "version": "1.0.0",
-  "description": "Simulateur MVP du Service Chat AGT",
-  "main": "server.js",
+  "name": "agt-chat",
+  "version": "1.2.0",
+  "description": "AG Technologies - Chat Service v1.2 - Messagerie Temps Réel Unifiée",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --runInBand --forceExit",
+    "test:unit": "jest tests/unit --runInBand --forceExit",
+    "test:integration": "jest tests/integration --runInBand --forceExit"
   },
   "dependencies": {
+    "@socket.io/redis-adapter": "^8.3.0",
+    "amqplib": "^0.10.4",
+    "axios": "^1.7.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "socket.io": "^4.7.5"
+    "ioredis": "^5.4.1",
+    "joi": "^17.13.1",
+    "morgan": "^1.10.0",
+    "pg": "^8.12.0",
+    "pino": "^9.3.2",
+    "pino-pretty": "^11.2.1",
+    "socket.io": "^4.7.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.4",
+    "supertest": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
