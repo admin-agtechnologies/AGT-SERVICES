@@ -1,0 +1,30 @@
+# Dépendances
+node_modules/
+dist/
+coverage/
+
+# Environnement
+.env
+.env.local
+.env.*.local
+
+# Clés (JAMAIS committer les clés privées)
+keys/*.pem
+keys/*.key
+!keys/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
