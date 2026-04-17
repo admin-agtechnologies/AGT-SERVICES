@@ -1,14 +1,36 @@
 import { Controller, Get, Put, Param, Body, UseGuards, ParseUUIDPipe } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiPropertyOptional  } from '@nestjs/swagger';
 import { PlatformConfigService } from './platform-config.service';
 import { JwtAuthGuard } from '../common/auth/jwt-auth.guard';
 import { S2SGuard } from '../common/auth/s2s.guard';
+import { IsOptional, IsArray, IsObject, IsInt, IsString, Min, Max } from 'class-validator';
+
 
 class UpsertConfigDto {
+  @ApiPropertyOptional({ example: ['image/jpeg', 'image/png', 'application/pdf'] })
+  @IsOptional()
+  @IsArray()
   allowed_types?: string[];
+
+  @ApiPropertyOptional({ example: { image: 10485760, document: 52428800 } })
+  @IsOptional()
+  @IsObject()
   max_size_bytes?: Record<string, number>;
+
+  @ApiPropertyOptional({ example: ['150x150', '300x300'] })
+  @IsOptional()
+  @IsArray()
   thumbnail_sizes?: string[];
+
+  @ApiPropertyOptional({ example: 80 })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(100)
   compression_quality?: number;
+
+  @ApiPropertyOptional({ example: null })
+  @IsOptional()
   storage_quota_bytes?: number;
 }
 
