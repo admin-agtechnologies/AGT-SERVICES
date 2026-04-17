@@ -1,10 +1,44 @@
 services:
-  chat:
-    build: .
-    container_name: agt-chat-simulator
+  agt-chat-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: agt-chat-service
     restart: unless-stopped
     ports:
       - "7008:7008"
+    env_file:
+      - .env
+    depends_on:
+      agt-chat-db:
+        condition: service_healthy
+      agt-chat-redis:
+        condition: service_started
+    networks:
+      - agt_network
+
+  agt-chat-db:
+    image: postgres:16-alpine
+    container_name: agt-chat-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: agt_user
+      POSTGRES_PASSWORD: agt_password
+      POSTGRES_DB: agt-chat-db
+    volumes:
+      - chat_pg_data:/var/lib/postgresql/data
+    networks:
+      - agt_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agt_user -d agt-chat-db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  agt-chat-redis:
+    image: redis:7-alpine
+    container_name: agt-chat-redis
+    restart: unless-stopped
     networks:
       - agt_network
 
@@ -12,3 +46,7 @@ networks:
   agt_network:
     external: true
     name: agt_network
+
+volumes:
+  chat_pg_data:
+    driver: local
