@@ -1,4 +1,4 @@
-# AGT — Guide Complet du Service Notification v1.0
+# AGT — Guide Complet du Service Notification v1.2
 
 > Ce guide vous accompagne pas à pas pour configurer, démarrer, comprendre et tester toutes les routes du service Notification de l'écosystème AGT. Il est conçu pour être accessible à un débutant tout en étant complet pour un développeur confirmé.
 
@@ -13,14 +13,15 @@
 5. [Comprendre l'authentification](#5-comprendre-lauthentification)
 6. [Templates — Créer et gérer les modèles de messages](#6-templates)
 7. [Envoi de notifications](#7-envoi-de-notifications)
-8. [Notifications In-App](#8-notifications-in-app)
-9. [Préférences utilisateur](#9-préférences-utilisateur)
-10. [Device Tokens — Notifications Push](#10-device-tokens)
-11. [Campagnes — Envoi en masse](#11-campagnes)
-12. [Statistiques et Logs](#12-statistiques-et-logs)
-13. [Configuration des canaux par plateforme](#13-configuration-des-canaux)
-14. [Intégration dans un frontend](#14-intégration-dans-un-frontend)
-15. [Troubleshooting](#15-troubleshooting)
+8. [Notifications planifiées](#8-notifications-planifiées)
+9. [Notifications In-App](#9-notifications-in-app)
+10. [Préférences utilisateur](#10-préférences-utilisateur)
+11. [Device Tokens — Notifications Push](#11-device-tokens)
+12. [Campagnes — Envoi en masse](#12-campagnes)
+13. [Statistiques et Logs](#13-statistiques-et-logs)
+14. [Configuration des canaux par plateforme](#14-configuration-des-canaux)
+15. [Intégration dans un frontend](#15-intégration-dans-un-frontend)
+16. [Troubleshooting](#16-troubleshooting)
 
 ---
 
@@ -35,6 +36,7 @@ Le service Notification est le **hub de communication** de l'écosystème AGT. I
 - Envoie des **notifications push** (via FCM pour Android/Web)
 - Gère les **notifications in-app** (messages dans l'interface de l'application)
 - Gère des **campagnes** d'envoi en masse
+- Gère les **notifications planifiées** (envoi différé à une date future)
 - Gère les **préférences** de notification des utilisateurs
 - Gère les **templates** dynamiques avec variables (moteur Jinja2)
 
@@ -133,7 +135,6 @@ Réponse attendue :
 
 ### Swagger UI
 
-Ouvrez dans votre navigateur :
 ```
 http://localhost:7002/api/v1/docs/
 ```
@@ -142,12 +143,9 @@ http://localhost:7002/api/v1/docs/
 
 ## 4. Configuration initiale obligatoire
 
-Avant de pouvoir utiliser le service, vous devez effectuer ces étapes dans l'ordre.
-
 ### Étape préalable — Migrations (premier lancement uniquement)
 
-Lors du premier lancement, les bases de données sont vides.
-Vous devez générer et appliquer les schémas avant toute utilisation.
+Lors du premier lancement ou après un reset complet de la base de données, les bases sont vides. Vous devez générer et appliquer les schémas avant toute utilisation.
 
 **Auth :**
 ```bash
@@ -167,12 +165,11 @@ docker exec -it agt-notif-service python manage.py makemigrations notifications 
 docker exec -it agt-notif-service python manage.py migrate
 ```
 
-> ⚠️ Ces commandes sont à exécuter **une seule fois** lors du premier
-> lancement ou après un reset complet de la base de données.
-> Si les tables existent déjà, Django ignorera les migrations déjà appliquées.
-### Étape 1 — Créer une plateforme S2S dans Auth
+> ⚠️ Ces commandes sont à exécuter **une seule fois** lors du premier lancement ou après un reset complet. Si les tables existent déjà, Django ignorera les migrations déjà appliquées.
 
-> ℹ️ Une plateforme S2S est l'identité machine de votre service ou application dans l'écosystème AGT. Elle lui permet de s'authentifier de service à service.
+---
+
+### Étape 1 — Créer une plateforme S2S dans Auth
 
 Dans Swagger Auth (`http://localhost:7000/api/v1/docs/`), appelez `POST /api/v1/auth/platforms` :
 
@@ -202,6 +199,8 @@ X-Admin-API-Key: votre-cle-admin
 
 > ⚠️ **Conservez précieusement** le `client_id` et le `client_secret` — le `client_secret` ne sera plus affiché après.
 
+---
+
 ### Étape 2 — Obtenir un token S2S
 
 Dans Swagger Auth, appelez `POST /api/v1/auth/s2s/token` :
@@ -224,23 +223,20 @@ Dans Swagger Auth, appelez `POST /api/v1/auth/s2s/token` :
 
 > ℹ️ Ce token expire après 1 heure. Renouvelez-le en rappelant ce endpoint.
 
+---
+
 ### Étape 3 — S'authentifier dans Swagger Notification
 
 1. Ouvrez `http://localhost:7002/api/v1/docs/`
-2. Cliquez sur le bouton **Authorize** (icône cadenas en haut à droite)
-3. Dans le champ **BearerAuth**, entrez votre token S2S :
-   ```
-   eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
-   ```
+2. Cliquez sur **Authorize** (icône cadenas)
+3. Entrez votre token S2S dans le champ **BearerAuth**
 4. Cliquez **Authorize** puis **Close**
 
-> ✅ Toutes les routes protégées sont maintenant accessibles.
+---
 
-### Étape 4 — Configurer le .env du service Notification (pour les services AGT)
+### Étape 4 — Configurer le .env du service Notification
 
-> ℹ️ Cette étape concerne uniquement les développeurs qui intègrent Notification comme service appelant d'autres services AGT.
-
-Dans `agt-notification/.env`, ajoutez les credentials S2S du service Notification :
+Dans `agt-notification/.env` :
 
 ```env
 S2S_AUTH_URL=http://agt-auth-service:7000/api/v1
@@ -248,13 +244,19 @@ S2S_CLIENT_ID=votre-client-id-du-service-notification
 S2S_CLIENT_SECRET=votre-client-secret-du-service-notification
 ```
 
-> ℹ️ Ces credentials permettent au service Notification d'appeler Users Service pour récupérer l'email/téléphone d'un utilisateur avant d'envoyer une notification.
+Après modification, redémarrez le worker :
+
+```bash
+docker restart agt-notif-worker
+```
+
+> ⚠️ **Restart vs Rebuild :** En développement, le code est monté en volume (`- .:/app`). Un simple `docker restart` suffit après modification du code ou du `.env`. Le rebuild (`--build`) n'est nécessaire que si vous modifiez le `Dockerfile` ou `requirements.txt`.
+
+---
 
 ### Étape 5 — Créer les templates système (obligatoire pour Auth)
 
-> ℹ️ Les templates système sont des templates **sans `platform_id`** (globaux). Ils sont utilisés par Auth Service pour envoyer les emails de vérification, réinitialisation de mot de passe, etc.
-
-Dans Swagger Notification, créez ces 4 templates via `POST /api/v1/templates` :
+Les templates système sont des templates **sans `platform_id`** (globaux). Créez ces 4 templates via `POST /api/v1/templates` :
 
 **Template 1 — Vérification email :**
 ```json
@@ -299,7 +301,7 @@ Dans Swagger Notification, créez ces 4 templates via `POST /api/v1/templates` :
 }
 ```
 
-> ⚠️ **Important :** Ne pas inclure le champ `platform_id` dans ces templates — ils doivent être globaux (valables pour toutes les plateformes).
+> ⚠️ Ne pas inclure le champ `platform_id` — ces templates doivent être globaux.
 
 ---
 
@@ -309,27 +311,37 @@ Dans Swagger Notification, créez ces 4 templates via `POST /api/v1/templates` :
 
 | Type | Qui | Comment |
 |------|-----|---------|
-| **Plateforme applicative** | Une app mobile, un site web, un dashboard | Token S2S avec `platform_id` = UUID de la plateforme |
+| **Plateforme applicative** | App mobile, site web, dashboard | Token S2S avec `platform_id` = UUID de la plateforme |
 | **Service AGT** | Auth, Users, Payment... | Token S2S avec `platform_id` = UUID du service |
 
 ### Comment le service résout les templates
 
-Quand une notification est envoyée, Notification extrait le `platform_id` du token JWT et cherche le template dans cet ordre :
+Notification extrait le `platform_id` du token JWT et cherche dans cet ordre :
 
 1. Template avec ce `platform_id` exact → priorité maximale
 2. Template global (`platform_id = null`) → fallback universel
 
-> ℹ️ C'est pourquoi les templates système d'Auth sont créés sans `platform_id` — ils doivent fonctionner quelle que soit la plateforme qui appelle.
+### Mécanisme de fallback entre providers
+
+```
+Tentative 1 : smtp_local (Mailpit en dev)
+      ↓ échec
+Tentative 2 : sendgrid
+      ↓ échec
+Notification marquée "failed"
+```
+
+Les logs tracent chaque tentative (`attempt: 1`, `attempt: 2`). Voir deux tentatives est **normal** en dev si SENDGRID_API_KEY n'est pas configuré.
 
 ---
 
 ## 6. Templates
 
-Un template est un **modèle de message réutilisable** avec des variables dynamiques. Il utilise le moteur **Jinja2** avec la syntaxe `{{nom_variable}}`.
+Un template est un **modèle de message réutilisable** avec des variables dynamiques (moteur Jinja2, syntaxe `{{nom_variable}}`).
 
-### GET /api/v1/templates — Lister les templates
+### GET /api/v1/templates — Lister
 
-**Header :** `Authorization: Bearer <token>`
+Supporte : `?channel=email&platform_id=uuid&page=1&limit=20`
 
 **Réponse :**
 ```json
@@ -351,9 +363,7 @@ Un template est un **modèle de message réutilisable** avec des variables dynam
 
 ---
 
-### POST /api/v1/templates — Créer un template
-
-**Header :** `Authorization: Bearer <token>`
+### POST /api/v1/templates — Créer
 
 **Body :**
 ```json
@@ -361,81 +371,58 @@ Un template est un **modèle de message réutilisable** avec des variables dynam
   "name": "bienvenue_client",
   "channel": "email",
   "subject": "Bienvenue {{prenom}} !",
-  "body": "Bonjour {{prenom}},\n\nBienvenue sur {{platform_name}} !\n\nVotre compte est actif.",
+  "body": "Bonjour {{prenom}},\n\nBienvenue sur {{platform_name}} !",
   "category": "transactional",
   "platform_id": "votre-platform-id",
   "locale": "fr"
 }
 ```
 
-| Champ | Type | Requis | Description |
-|-------|------|--------|-------------|
-| `name` | string | ✅ | Identifiant unique du template (par plateforme) |
-| `channel` | string | ✅ | `email`, `sms`, `push`, `whatsapp`, `in_app` |
-| `body` | string | ✅ | Corps du message avec variables `{{variable}}` |
-| `subject` | string | ❌ | Sujet (email uniquement) |
-| `category` | string | ❌ | `transactional` (défaut) ou `marketing` |
-| `platform_id` | UUID | ❌ | Laisser vide pour un template global |
-| `locale` | string | ❌ | Langue (`fr` par défaut) |
+| Champ | Requis | Description |
+|-------|--------|-------------|
+| `name` | ✅ | Identifiant unique (par plateforme) |
+| `channel` | ✅ | `email`, `sms`, `push`, `whatsapp`, `in_app` |
+| `body` | ✅ | Corps du message avec `{{variable}}` |
+| `subject` | ❌ | Sujet (email uniquement) |
+| `category` | ❌ | `transactional` (défaut) ou `marketing` |
+| `platform_id` | ❌ | Vide = template global |
+| `locale` | ❌ | `fr` par défaut |
 
-**Réponse :**
-```json
-{
-  "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-  "name": "bienvenue_client",
-  "channel": "email"
-}
-```
+**Réponse 201 :** `{"id": "uuid", "name": "bienvenue_client", "channel": "email"}`
+
+**Codes :** 201 Created, 400 Validation error, 409 Name already exists for this platform.
 
 ---
 
-### GET /api/v1/templates/{template_id} — Détail d'un template
+### GET /api/v1/templates/{template_id} — Détail
 
 **Réponse :**
 ```json
 {
-  "id": "b18b48c3-a02f-477d-8ae0-e461e8a247d9",
+  "id": "uuid",
   "name": "auth_verify_email",
   "channel": "email",
   "subject": "Vérifiez votre adresse email",
-  "body": "Bonjour,\n\nCliquez sur ce lien : {{verification_url}}\n\nExpire dans {{expires_in_minutes}} minutes."
+  "body": "Bonjour,\n\nCliquez sur ce lien : {{verification_url}}..."
 }
 ```
 
 ---
 
-### PUT /api/v1/templates/{template_id} — Modifier un template
+### PUT /api/v1/templates/{template_id} — Modifier
 
-Chaque modification crée une **nouvelle version** tout en conservant l'historique.
+Crée automatiquement une nouvelle version en conservant l'historique.
 
-**Body :**
-```json
-{
-  "subject": "Nouveau sujet",
-  "body": "Nouveau corps avec {{variable}}",
-  "locale": "fr"
-}
-```
+**Body :** `{"subject": "Nouveau sujet", "body": "Nouveau corps {{variable}}", "locale": "fr"}`
 
-**Réponse :**
-```json
-{
-  "message": "Template mis a jour.",
-  "version": 2
-}
-```
-
-> ℹ️ Le système de versioning permet de revenir à une version précédente et de suivre l'évolution des templates.
+**Réponse :** `{"message": "Template mis a jour.", "version": 2}`
 
 ---
 
-### POST /api/v1/templates/{template_id}/preview — Prévisualiser un template
+### POST /api/v1/templates/{template_id}/preview — Prévisualiser
 
-Permet de tester le rendu d'un template avec des variables de test, sans envoyer de notification réelle.
+> ⚠️ Swagger ne montre pas le champ body pour cette route. Utilisez curl ou Postman.
 
-> ⚠️ **Note Swagger :** Cette route ne montre pas de champ body dans Swagger UI. Utilisez curl ou Postman.
-
-**Curl :**
 ```bash
 curl -s -X POST http://localhost:7002/api/v1/templates/{template_id}/preview \
   -H "Content-Type: application/json" \
@@ -454,46 +441,31 @@ curl -s -X POST http://localhost:7002/api/v1/templates/{template_id}/preview \
 ```json
 {
   "subject": "Vérifiez votre adresse email",
-  "body": "Bonjour,\n\nCliquez sur ce lien pour vérifier votre email : https://app.agt.com/verify?token=test123\n\nCe lien expire dans 60 minutes.\n\nMon Application"
+  "body": "Bonjour,\n\nCliquez sur ce lien : https://app.agt.com/verify?token=test123\n\nExpire dans 60 minutes.\n\nMon Application"
 }
 ```
 
 ---
 
-### GET /api/v1/templates/{template_id}/versions — Historique des versions
+### GET /api/v1/templates/{template_id}/versions — Historique
 
 **Réponse :**
 ```json
 {
   "data": [
-    {
-      "version": 2,
-      "locale": "fr",
-      "is_current": true,
-      "created_at": "2026-04-15T08:25:07.397890+00:00"
-    },
-    {
-      "version": 1,
-      "locale": "fr",
-      "is_current": false,
-      "created_at": "2026-04-14T17:55:20.598281+00:00"
-    }
+    {"version": 2, "locale": "fr", "is_current": true, "created_at": "..."},
+    {"version": 1, "locale": "fr", "is_current": false, "created_at": "..."}
   ]
 }
 ```
 
 ---
 
-### DELETE /api/v1/templates/{template_id} — Désactiver un template
+### DELETE /api/v1/templates/{template_id} — Désactiver
 
-> ℹ️ La suppression est **logique** — le template est marqué `is_active = false` mais reste en base pour conserver l'historique. Il ne sera plus utilisable pour les nouveaux envois.
+Suppression logique (`is_active = false`). Le template n'est plus utilisable mais reste en base.
 
-**Réponse :**
-```json
-{
-  "message": "Template desactive."
-}
-```
+**Réponse :** `{"message": "Template desactive."}`
 
 ---
 
@@ -501,16 +473,13 @@ curl -s -X POST http://localhost:7002/api/v1/templates/{template_id}/preview \
 
 ### POST /api/v1/notifications/send — Envoi unitaire
 
-Envoie une notification à **un seul utilisateur** sur un ou plusieurs canaux.
-
-**Header :** `Authorization: Bearer <token>`
-
 **Body :**
 ```json
 {
   "user_id": "uuid-de-l-utilisateur",
   "channels": ["email"],
   "template_name": "auth_verify_email",
+  "locale": "fr",
   "variables": {
     "verification_url": "https://app.agt.com/verify?token=abc123",
     "expires_in_minutes": "60",
@@ -522,108 +491,117 @@ Envoie une notification à **un seul utilisateur** sur un ou plusieurs canaux.
 }
 ```
 
-| Champ | Type | Requis | Description |
-|-------|------|--------|-------------|
-| `user_id` | UUID | ✅ | ID Auth de l'utilisateur destinataire |
-| `channels` | array | ✅ | Liste des canaux : `email`, `sms`, `push`, `whatsapp`, `in_app` |
-| `template_name` | string | ✅ | Nom du template à utiliser |
-| `variables` | object | ❌ | Variables à injecter dans le template |
-| `category` | string | ❌ | `transactional` (défaut) ou `marketing` ou `security` |
-| `priority` | string | ❌ | `low`, `normal` (défaut), `high`, `critical` |
-| `idempotency_key` | string | ❌ | Clé unique pour éviter les doublons |
+| Champ | Requis | Description |
+|-------|--------|-------------|
+| `user_id` | ✅ | ID Auth de l'utilisateur |
+| `channels` | ✅ | `email`, `sms`, `push`, `whatsapp`, `in_app` |
+| `template_name` | ✅ | Nom du template |
+| `locale` | ❌ | `fr` par défaut |
+| `variables` | ❌ | Variables à injecter |
+| `category` | ❌ | `transactional`, `marketing` ou `security` |
+| `priority` | ❌ | `low`, `normal`, `high`, `critical` |
+| `idempotency_key` | ❌ | Évite les doublons |
 
-**Réponse :**
+**Réponse 202 :**
 ```json
 {
-  "notifications": [
-    {
-      "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-      "channel": "email",
-      "status": "pending"
-    }
-  ],
+  "notifications": [{"id": "uuid", "channel": "email", "status": "pending"}],
   "message": "Notifications queued"
 }
 ```
 
-> ℹ️ Le statut `pending` indique que la notification est en file d'attente. Le worker Celery la traitera de manière asynchrone.
+**Codes :** 202 Accepted, 400, 401, 404 Template not found, 409 Idempotency conflict.
 
 **Ce qui se passe sous le capot :**
 ```
-POST /notifications/send
-        ↓
-  Validation du body
-        ↓
-  Résolution du template (par nom + platform_id)
-        ↓
-  Rendu Jinja2 (injection des variables)
-        ↓
-  Création en base (status: pending)
-        ↓
-  Envoi dans RabbitMQ
-        ↓
-  Worker Celery consomme la tâche
-        ↓
-  Appel Users Service pour récupérer email/téléphone
-        ↓
-  Envoi via le provider (SMTP/SendGrid/Twilio...)
-        ↓
-  Mise à jour status (sent/failed)
+POST /notifications/send → Validation → Résolution template → Rendu Jinja2
+→ Création en base (pending) → RabbitMQ → Worker Celery
+→ Appel Users Service (email/téléphone) → Provider (SMTP/SendGrid...) → sent/failed
 ```
 
 ---
 
 ### POST /api/v1/notifications/send-bulk — Envoi en masse (max 100)
 
-Envoie le même message à **plusieurs utilisateurs** en une seule requête.
-
-> ℹ️ Pour plus de 100 utilisateurs, utilisez les **Campagnes** (voir section 11).
-
 **Body :**
 ```json
 {
-  "user_ids": [
-    "uuid-user-1",
-    "uuid-user-2",
-    "uuid-user-3"
-  ],
+  "user_ids": ["uuid-1", "uuid-2", "uuid-3"],
   "channels": ["email"],
   "template_name": "auth_verify_email",
-  "variables": {
-    "verification_url": "https://app.agt.com/verify?token=bulk123",
-    "expires_in_minutes": "60",
-    "platform_name": "Mon Application"
-  },
+  "locale": "fr",
+  "variables": {"verification_url": "...", "expires_in_minutes": "60", "platform_name": "..."},
   "category": "transactional"
 }
 ```
 
-**Réponse :**
-```json
-{
-  "message": "3 notifications queued",
-  "total": 3
-}
-```
+**Réponse 202 :** `{"message": "3 notifications queued", "total": 3}`
+
+**Codes :** 202 Accepted, 400 (dont user_ids > 100), 401.
 
 ---
 
-## 8. Notifications In-App
+## 8. Notifications planifiées
 
-Les notifications in-app sont des messages affichés **directement dans l'interface** de l'application (comme les notifications d'une app mobile ou d'un dashboard web). Elles sont stockées en base et consultables à tout moment.
+Les notifications planifiées permettent de programmer l'envoi d'un message à une **date et heure future**. Le worker Celery Beat les consomme automatiquement à l'heure prévue.
 
-### GET /api/v1/users/{user_id}/notifications — Lister les notifications
+### POST /api/v1/notifications/schedule — Planifier
+
+**Body :**
+```json
+{
+  "user_id": "uuid-de-l-utilisateur",
+  "channels": ["email"],
+  "template_name": "auth_verify_email",
+  "locale": "fr",
+  "variables": {
+    "verification_url": "https://app.agt.com/verify?token=sched123",
+    "expires_in_minutes": "60",
+    "platform_name": "Mon Application"
+  },
+  "scheduled_at": "2026-04-20T10:00:00Z"
+}
+```
+
+| Champ | Requis | Description |
+|-------|--------|-------------|
+| `user_id` | ✅ | ID Auth de l'utilisateur |
+| `channels` | ✅ | Canaux souhaités (le premier est utilisé) |
+| `template_name` | ✅ | Nom du template |
+| `scheduled_at` | ✅ | Date/heure UTC future |
+| `variables` | ❌ | Variables du template |
+| `locale` | ❌ | `fr` par défaut |
+
+**Réponse 201 :**
+```json
+{
+  "id": "78b9a014-b31a-485c-94e1-0a95ed5fc206",
+  "status": "pending",
+  "scheduled_at": "2026-04-20T10:00:00+00:00",
+  "message": "Notification scheduled"
+}
+```
+
+> ℹ️ Un seul canal est planifié par entrée. Pour plusieurs canaux, faites plusieurs appels.
+
+---
+
+### GET /api/v1/notifications/scheduled — Lister
+
+Supporte : `?status=pending&page=1`
 
 **Réponse :**
 ```json
 {
   "data": [
     {
-      "id": "9a8143ad-5d40-44b3-a814-05f2f34f54cf",
-      "subject": "Vérifiez votre adresse email",
-      "body": "Bonjour,\n\nCliquez sur ce lien...",
-      "is_read": false,
-      "created_at": "2026-04-15T08:44:22.294005+00:00"
+      "id": "uuid",
+      "user_id": "uuid",
+      "channel": "email",
+      "template": "auth_verify_email",
+      "scheduled_at": "2026-04-20T10:00:00+00:00",
+      "status": "pending",
+      "created_at": "..."
     }
   ],
   "page": 1,
@@ -632,86 +610,118 @@ Les notifications in-app sont des messages affichés **directement dans l'interf
 }
 ```
 
+**Statuts possibles :** `pending`, `sent`, `cancelled`, `failed`
+
 ---
 
-### GET /api/v1/users/{user_id}/notifications/unread-count — Compteur non lues
+### PUT /api/v1/notifications/scheduled/{scheduled_id} — Modifier
 
-Utilisé pour afficher le **badge** de notifications non lues dans votre interface.
+> ⚠️ Impossible de modifier une notification avec le statut `sent` ou `cancelled`.
+
+**Body :**
+```json
+{
+  "scheduled_at": "2026-04-21T08:00:00Z",
+  "variables": {
+    "verification_url": "https://app.agt.com/verify?token=updated",
+    "expires_in_minutes": "30",
+    "platform_name": "Mon Application"
+  }
+}
+```
 
 **Réponse :**
 ```json
 {
-  "user_id": "uuid-user",
+  "id": "uuid",
+  "scheduled_at": "2026-04-21T08:00:00+00:00",
+  "status": "pending",
+  "message": "Notification planifiée mise à jour."
+}
+```
+
+---
+
+### DELETE /api/v1/notifications/scheduled/{scheduled_id} — Annuler
+
+> ⚠️ Impossible d'annuler une notification déjà envoyée (`sent`).
+
+**Réponse :** `{"message": "Scheduled notification cancelled"}`
+
+---
+
+## 9. Notifications In-App
+
+Les notifications in-app sont des messages affichés directement dans l'interface de l'application. Elles sont stockées en base et consultables à tout moment.
+
+### GET /api/v1/users/{user_id}/notifications — Lister
+
+Supporte : `?status=unread&page=1&limit=20`
+
+**Réponse :**
+```json
+{
+  "data": [
+    {
+      "id": "uuid",
+      "subject": "Vérifiez votre adresse email",
+      "body": "Bonjour,\n\nCliquez sur ce lien...",
+      "is_read": false,
+      "created_at": "2026-04-15T08:44:22.294005+00:00"
+    }
+  ],
+  "page": 1,
+  "limit": 20,
+  "total": 3,
   "unread_count": 3
 }
 ```
 
+> ℹ️ Le champ `unread_count` est inclus directement dans la réponse pour éviter un appel supplémentaire.
+
 ---
 
-### PUT /api/v1/users/{user_id}/notifications/{notification_id}/read — Marquer comme lue
+### GET /api/v1/users/{user_id}/notifications/unread-count — Badge
 
-Appelé quand l'utilisateur clique sur une notification.
+**Réponse :** `{"user_id": "uuid", "unread_count": 3}`
 
-**Réponse :**
-```json
-{
-  "message": "Notification lue."
-}
-```
+---
+
+### PUT /api/v1/users/{user_id}/notifications/{notification_id}/read — Marquer lue
+
+**Réponse :** `{"message": "Notification lue."}`
 
 ---
 
 ### PUT /api/v1/users/{user_id}/notifications/read-all — Tout marquer comme lu
 
-Appelé quand l'utilisateur clique sur "Tout marquer comme lu".
-
-**Réponse :**
-```json
-{
-  "message": "3 notifications marquees lues."
-}
-```
+**Réponse :** `{"message": "3 notifications marquees lues."}`
 
 ---
 
 ### DELETE /api/v1/users/{user_id}/notifications/{notification_id} — Supprimer
 
-**Réponse :**
-```json
-{
-  "message": "Notification supprimee."
-}
-```
+Suppression logique — n'apparaît plus dans les listes.
+
+**Réponse :** `{"message": "Notification supprimee."}`
 
 ---
 
-## 9. Préférences utilisateur
-
-Les préférences permettent à chaque utilisateur de choisir **quels canaux** et **quelles catégories** de notifications il souhaite recevoir.
-
-> ℹ️ Si aucune préférence n'est définie pour un utilisateur, le système utilise les valeurs par défaut (tout activé sauf marketing).
+## 10. Préférences utilisateur
 
 ### GET /api/v1/users/{user_id}/notification-preferences
+
+Supporte : `?platform_id=uuid`
 
 **Réponse :**
 ```json
 {
-  "channels": {
-    "email": true,
-    "sms": true,
-    "push": true,
-    "whatsapp": true,
-    "in_app": true
-  },
-  "categories": {
-    "transactional": true,
-    "marketing": false,
-    "security": true
-  }
+  "channels": {"email": true, "sms": true, "push": true, "whatsapp": true, "in_app": true},
+  "categories": {"transactional": true, "marketing": false, "security": true}
 }
 ```
 
-> ℹ️ La catégorie `security` est toujours `true` et ne peut pas être désactivée — les notifications de sécurité (2FA, alertes de connexion) sont toujours envoyées.
+> ℹ️ `security` est toujours `true` et ne peut pas être désactivé.
 
 ---
 
@@ -720,47 +730,27 @@ Les préférences permettent à chaque utilisateur de choisir **quels canaux** e
 **Body :**
 ```json
 {
-  "channels": {
-    "email": true,
-    "sms": false,
-    "push": true,
-    "whatsapp": false,
-    "in_app": true
-  },
-  "categories": {
-    "transactional": true,
-    "marketing": false
-  }
+  "channels": {"email": true, "sms": false, "push": true, "whatsapp": false, "in_app": true},
+  "categories": {"transactional": true, "marketing": false}
 }
 ```
 
-**Réponse :**
-```json
-{
-  "message": "Preferences mises a jour."
-}
-```
+**Réponse :** `{"message": "Preferences mises a jour."}`
 
 ---
 
-## 10. Device Tokens
+## 11. Device Tokens
 
-Un **device token** est un identifiant unique généré automatiquement par Android ou iOS pour chaque appareil. Il est nécessaire pour envoyer des **notifications push** sur les téléphones des utilisateurs.
+Un **device token** est un identifiant unique généré par Android ou iOS pour envoyer des notifications push.
 
 ### Flux d'enregistrement
 
 ```
-App mobile démarre
-      ↓
-Android/iOS génère un token unique
-      ↓
-L'app envoie ce token à votre backend
-      ↓
-Votre backend appelle POST /users/{user_id}/device-tokens
-      ↓
-AGT stocke token + user_id
-      ↓
-AGT peut maintenant envoyer des push à cet appareil
+App mobile démarre → Android/iOS génère un token unique
+→ L'app envoie ce token à votre backend
+→ POST /users/{user_id}/device-tokens
+→ AGT stocke token + user_id
+→ AGT peut envoyer des push à cet appareil
 ```
 
 ### POST /api/v1/users/{user_id}/device-tokens — Enregistrer
@@ -770,23 +760,12 @@ AGT peut maintenant envoyer des push à cet appareil
 {
   "token": "fcm_token_genere_par_android_ou_ios",
   "device_type": "android",
-  "device_name": "Pixel 7"
+  "device_name": "Pixel 7",
+  "platform_id": "votre-platform-id"
 }
 ```
 
-| Champ | Valeurs | Description |
-|-------|---------|-------------|
-| `device_type` | `android`, `ios`, `web` | Type d'appareil |
-| `device_name` | string | Nom lisible de l'appareil (optionnel) |
-
-**Réponse :**
-```json
-{
-  "id": "5b03b5e2-5682-42a3-9f88-22298fb1fa3e",
-  "device_type": "android",
-  "created": true
-}
-```
+**Réponse 201 :** `{"id": "uuid", "device_type": "android", "created": true}`
 
 ---
 
@@ -795,14 +774,7 @@ AGT peut maintenant envoyer des push à cet appareil
 **Réponse :**
 ```json
 {
-  "data": [
-    {
-      "id": "5b03b5e2-5682-42a3-9f88-22298fb1fa3e",
-      "device_type": "android",
-      "device_name": "Pixel 7",
-      "created_at": "2026-04-15T08:55:14.779587+00:00"
-    }
-  ]
+  "data": [{"id": "uuid", "device_type": "android", "device_name": "Pixel 7", "created_at": "..."}]
 }
 ```
 
@@ -810,32 +782,25 @@ AGT peut maintenant envoyer des push à cet appareil
 
 ### DELETE /api/v1/users/{user_id}/device-tokens/{token_id} — Supprimer
 
-Appelé quand l'utilisateur se déconnecte ou désinstalle l'app.
-
-**Réponse :**
-```json
-{
-  "message": "Device token supprime."
-}
-```
+**Réponse :** `{"message": "Device token supprime."}`
 
 ---
 
-## 11. Campagnes
+## 12. Campagnes
 
-Une campagne est un **envoi en masse programmé** vers une liste d'utilisateurs avec un même template. Elle est conçue pour les newsletters, promotions, et annonces produit.
+Une campagne est un envoi en masse vers une liste d'utilisateurs avec un même template.
 
 ### Différence avec send-bulk
 
 | | send-bulk | Campagne |
 |---|---|---|
-| Limite utilisateurs | 100 max | Illimité |
-| Envoi | Immédiat | Throttlé (ex: 10/sec) |
+| Limite | 100 max | Illimité |
+| Envoi | Immédiat | Throttlé |
 | Annulable | Non | Oui |
 | Suivi progression | Non | Oui |
-| Usage | Notifications système | Marketing, newsletters |
+| Stats détaillées | Non | Oui |
 
-### POST /api/v1/campaigns — Créer une campagne
+### POST /api/v1/campaigns — Créer
 
 **Body :**
 ```json
@@ -843,59 +808,24 @@ Une campagne est un **envoi en masse programmé** vers une liste d'utilisateurs 
   "name": "Newsletter Avril 2026",
   "template_name": "newsletter_avril",
   "channel": "email",
-  "user_ids": [
-    "uuid-user-1",
-    "uuid-user-2",
-    "uuid-user-3"
-  ],
-  "variables": {
-    "promo_code": "AVRIL20",
-    "platform_name": "Mon Application"
-  },
-  "throttle_per_second": 10
+  "locale": "fr",
+  "user_ids": ["uuid-1", "uuid-2", "uuid-3"],
+  "variables": {"promo_code": "AVRIL20", "platform_name": "Mon Application"},
+  "throttle_per_second": 10,
+  "scheduled_at": "2026-06-01T09:00:00Z"
 }
 ```
 
-| Champ | Description |
-|-------|-------------|
-| `throttle_per_second` | Nombre d'envois par seconde (évite la surcharge) |
-| `variables` | Variables communes à tous les destinataires |
-
-**Réponse :**
+**Réponse 201 :**
 ```json
-{
-  "id": "b74a1016-9ae0-4a9c-a5eb-ed9f71e669a8",
-  "name": "Newsletter Avril 2026",
-  "status": "draft",
-  "total_recipients": 3
-}
+{"id": "uuid", "name": "Newsletter Avril 2026", "status": "draft", "total_recipients": 3}
 ```
-
-> ℹ️ La campagne démarre automatiquement en arrière-plan après création.
 
 ---
 
-### GET /api/v1/campaigns — Lister les campagnes
+### GET /api/v1/campaigns — Lister
 
-Supporte le filtre par statut : `?status=completed`
-
-**Réponse :**
-```json
-{
-  "data": [
-    {
-      "id": "b74a1016-9ae0-4a9c-a5eb-ed9f71e669a8",
-      "name": "Newsletter Avril 2026",
-      "status": "completed",
-      "sent_count": 3,
-      "total_recipients": 3
-    }
-  ],
-  "page": 1,
-  "limit": 20,
-  "total": 1
-}
-```
+Supporte : `?status=running&page=1&limit=20`
 
 ---
 
@@ -904,13 +834,8 @@ Supporte le filtre par statut : `?status=completed`
 **Réponse :**
 ```json
 {
-  "id": "b74a1016-9ae0-4a9c-a5eb-ed9f71e669a8",
-  "name": "Newsletter Avril 2026",
-  "status": "completed",
-  "total_recipients": 3,
-  "sent_count": 3,
-  "failed_count": 0,
-  "progress": 100
+  "id": "uuid", "name": "Newsletter Avril 2026", "status": "completed",
+  "total_recipients": 3, "sent_count": 3, "failed_count": 0, "progress": 100
 }
 ```
 
@@ -918,16 +843,23 @@ Supporte le filtre par statut : `?status=completed`
 
 ### GET /api/v1/campaigns/{campaign_id}/progress — Progression en temps réel
 
-Idéal pour afficher une barre de progression dans votre interface pendant l'envoi.
+**Réponse :**
+```json
+{
+  "progress": 64.3, "sent": 3200, "failed": 15,
+  "pending": 1785, "total": 5000, "status": "running"
+}
+```
+
+---
+
+### GET /api/v1/campaigns/{campaign_id}/stats — Statistiques détaillées
 
 **Réponse :**
 ```json
 {
-  "progress": 75,
-  "sent": 75,
-  "failed": 2,
-  "total": 100,
-  "status": "running"
+  "total_recipients": 5000, "sent": 4985,
+  "failed": 15, "pending": 0, "delivery_rate": 99.7
 }
 ```
 
@@ -935,17 +867,14 @@ Idéal pour afficher une barre de progression dans votre interface pendant l'env
 
 ### POST /api/v1/campaigns/{campaign_id}/cancel — Annuler
 
-> ⚠️ Impossible d'annuler une campagne avec le statut `completed` ou `cancelled`.
+> ⚠️ Impossible d'annuler une campagne `completed` ou `cancelled`.
 
 **Réponse :**
 ```json
-{
-  "message": "Campagne annulee.",
-  "status": "cancelled"
-}
+{"message": "Campaign cancelled", "status": "cancelled", "sent_before_cancel": 3200}
 ```
 
-**Cycle de vie d'une campagne :**
+**Cycle de vie :**
 ```
 draft → running → completed
               ↘ cancelled
@@ -953,68 +882,55 @@ draft → running → completed
 
 ---
 
-## 12. Statistiques et Logs
+## 13. Statistiques et Logs
 
 ### GET /api/v1/notifications/stats — Statistiques globales
+
+Supporte : `?platform_id=uuid&period=last_30d`
 
 **Réponse :**
 ```json
 {
-  "by_status": {
-    "sent": 9,
-    "read": 2,
-    "failed": 4
-  },
-  "by_channel": {
-    "email": 10,
-    "in_app": 5
-  }
+  "total_sent": 125000,
+  "by_channel": {"email": 80000, "push": 30000, "sms": 5000, "in_app": 8000, "whatsapp": 2000},
+  "by_status": {"sent": 120000, "failed": 3000, "pending": 2000},
+  "delivery_rate": 96.0
 }
 ```
 
 ---
 
-### GET /api/v1/notifications/logs — Logs d'envoi détaillés
+### GET /api/v1/notifications/logs — Logs d'envoi
 
-Chaque tentative d'envoi génère un log avec le provider utilisé, le statut et le numéro de tentative.
+Supporte : `?channel=email&status=failed&from=2026-04-01&to=2026-04-30&page=1`
+
+| Param | Description |
+|-------|-------------|
+| `channel` | Filtrer par canal |
+| `status` | Filtrer par statut (`sent`, `failed`...) |
+| `from` | Date début |
+| `to` | Date fin |
 
 **Réponse :**
 ```json
 {
   "data": [
     {
-      "id": "uuid",
-      "notification_id": "uuid",
-      "channel": "email",
-      "provider": "smtp_local",
-      "status": "sent",
-      "attempt": 1,
-      "created_at": "2026-04-15T08:22:04.395380+00:00"
+      "id": "uuid", "notification_id": "uuid", "channel": "email",
+      "provider": "smtp_local", "status": "sent", "attempt": 1, "created_at": "..."
     }
   ],
-  "page": 1,
-  "limit": 20,
-  "total": 14
+  "page": 1, "limit": 20, "total": 14
 }
 ```
 
-> ℹ️ Si `attempt: 2` avec le provider `sendgrid` après un `attempt: 1` échoué avec `smtp_local`, cela indique que le mécanisme de **fallback** entre providers a fonctionné.
+> ℹ️ Voir `attempt: 1 → failed` puis `attempt: 2 → failed` est **normal** — c'est le fallback entre providers.
 
 ---
 
-## 13. Configuration des canaux
+## 14. Configuration des canaux
 
-La config canaux définit pour chaque plateforme **l'ordre de priorité** des canaux et si le **fallback automatique** est activé.
-
-### Qu'est-ce que le fallback ?
-
-Si un canal échoue (ex: email bounce), le système essaie automatiquement le canal suivant dans l'ordre de priorité.
-
-**Exemple :**
-```
-Ordre: email → in_app → sms → push → whatsapp
-```
-Si l'email échoue → essaie in_app. Si in_app échoue → essaie sms, etc.
+La config canaux définit l'ordre de priorité des canaux et le fallback automatique par plateforme.
 
 ### GET /api/v1/platforms/{platform_id}/channels-priority
 
@@ -1022,7 +938,7 @@ Si l'email échoue → essaie in_app. Si in_app échoue → essaie sms, etc.
 ```json
 {
   "platform_id": "uuid",
-  "priority_order": ["email", "in_app", "sms", "push", "whatsapp"],
+  "priority_order": ["email", "push", "in_app", "whatsapp", "sms"],
   "fallback_enabled": true
 }
 ```
@@ -1031,122 +947,96 @@ Si l'email échoue → essaie in_app. Si in_app échoue → essaie sms, etc.
 
 ### PUT /api/v1/platforms/{platform_id}/channels-priority — Modifier
 
-**Body :**
-```json
-{
-  "priority_order": ["email", "push", "in_app", "sms", "whatsapp"],
-  "fallback_enabled": true
-}
-```
+**Body :** `{"priority_order": ["email", "in_app", "sms", "push", "whatsapp"], "fallback_enabled": true}`
 
-**Réponse :**
-```json
-{
-  "message": "Config mise a jour."
-}
-```
+**Réponse :** `{"message": "Config mise a jour."}`
 
 ---
 
-## 14. Intégration dans un frontend
+## 15. Intégration dans un frontend
 
-### Exemple d'intégration React — Notifications In-App
+### React — Notifications In-App
 
 ```javascript
-// notificationService.js
 const NOTIF_API = 'http://localhost:7002/api/v1';
 
-// Récupérer les notifications d'un utilisateur
 export async function getNotifications(userId, token) {
-  const response = await fetch(`${NOTIF_API}/users/${userId}/notifications`, {
+  const res = await fetch(`${NOTIF_API}/users/${userId}/notifications`, {
     headers: { 'Authorization': `Bearer ${token}` }
   });
-  return response.json();
+  return res.json(); // inclut unread_count directement
 }
 
-// Récupérer le compteur de notifications non lues (pour le badge)
 export async function getUnreadCount(userId, token) {
-  const response = await fetch(`${NOTIF_API}/users/${userId}/notifications/unread-count`, {
+  const res = await fetch(`${NOTIF_API}/users/${userId}/notifications/unread-count`, {
     headers: { 'Authorization': `Bearer ${token}` }
   });
-  const data = await response.json();
-  return data.unread_count;
+  return (await res.json()).unread_count;
 }
 
-// Marquer une notification comme lue
 export async function markAsRead(userId, notificationId, token) {
   await fetch(`${NOTIF_API}/users/${userId}/notifications/${notificationId}/read`, {
-    method: 'PUT',
-    headers: { 'Authorization': `Bearer ${token}` }
+    method: 'PUT', headers: { 'Authorization': `Bearer ${token}` }
   });
 }
 
-// Tout marquer comme lu
 export async function markAllAsRead(userId, token) {
   await fetch(`${NOTIF_API}/users/${userId}/notifications/read-all`, {
-    method: 'PUT',
-    headers: { 'Authorization': `Bearer ${token}` }
+    method: 'PUT', headers: { 'Authorization': `Bearer ${token}` }
   });
 }
 
-// Enregistrer un device token pour les push notifications
 export async function registerDeviceToken(userId, fcmToken, deviceType, token) {
-  const response = await fetch(`${NOTIF_API}/users/${userId}/device-tokens`, {
+  const res = await fetch(`${NOTIF_API}/users/${userId}/device-tokens`, {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: fcmToken, device_type: deviceType, device_name: navigator.userAgent })
+  });
+  return res.json();
+}
+
+export async function scheduleNotification(userId, templateName, variables, scheduledAt, token) {
+  const res = await fetch(`${NOTIF_API}/notifications/schedule`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      token: fcmToken,
-      device_type: deviceType,
-      device_name: navigator.userAgent
+      user_id: userId, channels: ['email'],
+      template_name: templateName, variables, scheduled_at: scheduledAt
     })
   });
-  return response.json();
+  return res.json();
 }
-```
 
-### Exemple d'envoi depuis votre backend (Node.js)
-
-```javascript
-// Envoyer une notification depuis votre backend
-async function sendNotification(userId, templateName, variables, s2sToken) {
-  const response = await fetch('http://agt-notif-service:7002/api/v1/notifications/send', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${s2sToken}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      user_id: userId,
-      channels: ['email', 'in_app'],
-      template_name: templateName,
-      variables: variables,
-      category: 'transactional',
-      priority: 'normal'
-    })
-  });
-  return response.json();
-}
-```
-
-### Polling du compteur de notifications non lues
-
-```javascript
-// Actualiser le badge toutes les 30 secondes
+// Polling badge toutes les 30 secondes
 function startNotificationPolling(userId, token, onUpdate) {
   const interval = setInterval(async () => {
     const count = await getUnreadCount(userId, token);
     onUpdate(count);
   }, 30000);
-  return () => clearInterval(interval); // Cleanup
+  return () => clearInterval(interval);
+}
+```
+
+### Node.js — Envoi depuis votre backend
+
+```javascript
+async function sendNotification(userId, templateName, variables, s2sToken) {
+  const res = await fetch('http://agt-notif-service:7002/api/v1/notifications/send', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${s2sToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      user_id: userId, channels: ['email', 'in_app'],
+      template_name: templateName, variables,
+      category: 'transactional', priority: 'normal'
+    })
+  });
+  return res.json();
 }
 ```
 
 ---
 
-## 15. Troubleshooting
+## 16. Troubleshooting
 
 ### Le service ne démarre pas
 
@@ -1154,64 +1044,59 @@ function startNotificationPolling(userId, token, onUpdate) {
 docker logs agt-notif-service --tail 50
 ```
 
-**Causes fréquentes :**
-- Base de données non disponible → vérifier `agt-notif-db`
-- Variables d'environnement manquantes → vérifier `.env`
+Causes fréquentes : DB non disponible, variables `.env` manquantes, migrations non appliquées.
 
 ---
 
 ### Les emails n'arrivent pas dans Mailpit
 
-**Étape 1 — Vérifier les logs du worker :**
 ```bash
 docker logs agt-notif-worker --tail 30
 ```
 
-**Étape 2 — Vérifier la config SMTP dans `.env` :**
-```env
-EMAIL_HOST=agt-mailpit
-EMAIL_PORT=1025
+Vérifier dans `.env` : `EMAIL_HOST=agt-mailpit` et `EMAIL_PORT=1025`
+
+Vérifier que le profil Users existe pour le destinataire :
+```bash
+docker exec -it agt-auth-service python manage.py shell -c "
+from apps.authentication.services import UsersServiceClient
+UsersServiceClient.provision_user(auth_user_id='uuid-du-user', email='email@test.com')
+"
 ```
 
-**Étape 3 — Vérifier que Mailpit est accessible :**
-```
-http://localhost:8025
+---
+
+### Erreur "Connection refused" vers RabbitMQ
+
+Après un rebuild, le worker peut perdre la connexion. Solution :
+
+```bash
+docker restart agt-notif-service agt-notif-worker
 ```
 
 ---
 
 ### Erreur "Template introuvable" (404)
 
-**Causes possibles :**
-1. Le template n'existe pas avec ce nom
-2. Le `platform_id` dans votre token ne correspond pas au `platform_id` du template
-3. Le template a été désactivé (`DELETE`)
+Causes : template inexistant, `platform_id` ne correspond pas, template désactivé.
 
-**Solution :** Créez les templates sans `platform_id` (globaux) pour qu'ils soient accessibles depuis n'importe quelle plateforme.
+Solution : créez les templates sans `platform_id` pour qu'ils soient globaux.
 
 ---
 
 ### Erreur "S2S credentials manquants"
 
-Le service Notification ne peut pas appeler Users Service pour récupérer l'email/téléphone du destinataire.
-
-**Solution :** Configurez les credentials S2S dans `agt-notification/.env` :
+Configurez dans `agt-notification/.env` :
 ```env
 S2S_AUTH_URL=http://agt-auth-service:7000/api/v1
 S2S_CLIENT_ID=votre-client-id
 S2S_CLIENT_SECRET=votre-client-secret
 ```
-
-Puis redémarrez :
-```bash
-docker restart agt-notif-worker
-```
+Puis : `docker restart agt-notif-worker`
 
 ---
 
 ### Erreur 429 Too Many Requests
-
-Le rate limiting Redis est déclenché. En développement :
 
 ```bash
 docker exec -it agt-auth-redis redis-cli FLUSHDB
@@ -1219,20 +1104,16 @@ docker exec -it agt-auth-redis redis-cli FLUSHDB
 
 ---
 
-### Les variables ne sont pas substituées dans le message
+### Les variables ne sont pas substituées
 
-**Vérifiez que :**
-1. Les noms des variables dans votre body correspondent exactement à ceux du template
-2. Le champ dans votre requête s'appelle bien `"variables"` (et non `"data"`)
-3. Les variables sont un objet JSON (et non une chaîne de caractères)
+Vérifiez que le champ s'appelle `"variables"` (pas `"data"`) et que c'est un objet JSON.
 
-**Test rapide en shell :**
+Test rapide :
 ```bash
 docker exec -it agt-notif-service python manage.py shell -c "
 from apps.templates_mgr.models import Template
 t = Template.objects.get(name='auth_verify_email')
-result = t.render({'verification_url': 'https://test.com', 'expires_in_minutes': '60', 'platform_name': 'Test'})
-print(result)
+print(t.render({'verification_url': 'https://test.com', 'expires_in_minutes': '60', 'platform_name': 'Test'}))
 "
 ```
 
@@ -1241,32 +1122,29 @@ print(result)
 ### Commandes utiles
 
 ```bash
-# Voir les logs en direct
+# Logs en direct
 docker logs -f agt-notif-service
 docker logs -f agt-notif-worker
 
-# Redémarrer le service
-docker restart agt-notif-service
-docker restart agt-notif-worker
+# Restart (après modif code ou .env)
+docker restart agt-notif-service agt-notif-worker
 
-#rebuild les services
-docker compose -f agt-auth/docker-compose.yml up -d --build
+# Rebuild complet (Dockerfile ou requirements.txt modifiés)
 docker compose -f agt-notification/docker-compose.yml up -d --build
+docker compose -f agt-auth/docker-compose.yml up -d --build
 docker compose -f agt-users/docker-compose.yml up -d --build
 
-# Accéder au shell Django
+# Shell Django
 docker exec -it agt-notif-service python manage.py shell
 
-# Lancer les tests
+# Tests
 docker exec -it agt-notif-service python -m pytest -v
 
-# Vérifier RabbitMQ
-http://localhost:15672 (agt_rabbit / agt_rabbit_password)
-
-# Vérifier Mailpit
-http://localhost:8025
+# Interfaces
+# RabbitMQ : http://localhost:15672 (agt_rabbit / agt_rabbit_password)
+# Mailpit   : http://localhost:8025
 ```
 
 ---
 
-*AG Technologies — Notification Service Guide v1.0 — Confidentiel*
+*AG Technologies — Notification Service Guide v1.2 — Confidentiel*

@@ -364,7 +364,16 @@ class IndexListCreateView(APIView):
                 autocomplete=field_props.get("autocomplete", False),
                 boost_weight=field_props.get("boost_weight", 1)
             )
-            schema_list.append({"field_name": field_name, **field_props})
+            # APRÈS — correct
+            schema_list.append({
+                "field_name": field_name,
+                "field_type": field_props.get("type", "text"),  # ← renommage type → field_type
+                "searchable": field_props.get("searchable", True),
+                "filterable": field_props.get("filterable", False),
+                "sortable": field_props.get("sortable", False),
+                "autocomplete": field_props.get("autocomplete", False),
+                "boost_weight": field_props.get("boost_weight", 1),
+            })
 
         # Config par défaut avec l'analyzer choisi
         SearchConfig.objects.create(index=idx, analyzer=analyzer)

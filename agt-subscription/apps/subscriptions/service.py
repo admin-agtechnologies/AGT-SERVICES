@@ -1,6 +1,7 @@
 """AGT Subscription Service v1.0 - Subscription lifecycle service."""
 import logging
 from decimal import Decimal
+from operator import sub
 from django.utils import timezone
 from datetime import timedelta
 from apps.plans.models import Plan, PlanPrice, PlanQuota
@@ -8,7 +9,11 @@ from apps.subscriptions.models import (
     Subscription, SubscriptionStatus, SubscriptionEvent,
     SubscriptionQuotaUsage, PlatformSubscriptionConfig,
 )
-
+# Ajout : publisher lifecycle events
+from workers.publisher import (
+    publish_subscription_activated,
+    publish_subscription_cancelled,
+)
 logger = logging.getLogger(__name__)
 
 
@@ -75,6 +80,9 @@ class SubscriptionService:
         sub.status = SubscriptionStatus.ACTIVE
         sub.save(update_fields=["status", "updated_at"])
         SubscriptionEvent.objects.create(subscription=sub, event_type="activated")
+        
+        # Publier l'événement d'activation    # Émettre l'event lifecycle — les backends métier peuvent réagir (permissions, onboarding)
+        publish_subscription_activated(sub)
         return sub, None
 
     @classmethod
@@ -141,6 +149,9 @@ class SubscriptionService:
 
         sub.cancel()
         SubscriptionEvent.objects.create(subscription=sub, event_type="cancelled")
+        # Émettre l'event lifecycle — les backends métier préparent la fin d'accès
+        publish_subscription_cancelled(sub)
+
         return sub, None
 
     @classmethod

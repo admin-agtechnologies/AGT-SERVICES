@@ -1,9 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, IsUUID, IsIn } from 'class-validator';
+import { IsOptional, IsString, IsUUID, IsIn, IsObject, IsNotEmpty } from 'class-validator';
+import { Transform } from 'class-transformer'; // ← ajouter cet import
 
 export class UploadFileDto {
   @ApiPropertyOptional({ description: 'UUID proprietaire metier (users_auth.id)' })
   @IsOptional()
+  @Transform(({ value }) => value === '' ? undefined : value) // ← ajouter cette ligne
   @IsUUID()
   owner_user_id?: string;
 
@@ -39,6 +41,8 @@ export class UploadFromUrlDto {
 
 export class UpdateMetadataDto {
   @ApiProperty({ description: 'Cle-valeur libres', example: { category: 'profile', source: 'mobile' } })
+  @IsObject()        // ← ajouter cet import et ce décorateur
+  @IsNotEmpty()
   metadata: Record<string, string>;
 }
 

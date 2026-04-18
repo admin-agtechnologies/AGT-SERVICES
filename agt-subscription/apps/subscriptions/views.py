@@ -15,6 +15,21 @@ from apps.organizations.models import Organization, OrganizationMember
 from apps.subscriptions.service import SubscriptionService
 from apps.quotas.service import QuotaService
 
+# Import des décorateurs Swagger — request + responses documentés pour chaque endpoint
+from apps.subscriptions.swagger import (
+    health_schema,
+    plan_create_schema, plan_list_schema, plan_detail_schema,
+    plan_update_schema, plan_archive_schema,
+    subscription_create_schema, subscription_list_schema, subscription_detail_schema,
+    subscription_activate_schema, subscription_cancel_schema,
+    subscription_change_plan_schema, subscription_reactivate_schema,
+    quota_check_schema, quota_increment_schema, quota_reserve_schema,
+    quota_confirm_schema, quota_release_schema, quota_usage_schema,
+    organization_create_schema, organization_list_schema,
+    member_add_schema, member_list_schema, member_remove_schema,
+    config_get_schema, config_update_schema,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -27,13 +42,15 @@ class Paginator(PageNumberPagination):
         return Response({"data": data, "page": self.page.number, "total": self.page.paginator.count})
 
 
-# --- Health ---
+# ---------------------------------------------------------------------------
+# Health
+# ---------------------------------------------------------------------------
 
 class HealthCheckView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
 
-    @extend_schema(tags=["Health"], summary="Health check")
+    @health_schema
     def get(self, request):
         db_ok = redis_ok = True
         try:
@@ -48,17 +65,22 @@ class HealthCheckView(APIView):
         except Exception:
             redis_ok = False
         code = status.HTTP_200_OK if db_ok and redis_ok else status.HTTP_503_SERVICE_UNAVAILABLE
-        return Response({"status": "healthy" if db_ok and redis_ok else "degraded",
-                         "database": "ok" if db_ok else "error", "redis": "ok" if redis_ok else "error",
-                         "version": "1.0.0"}, status=code)
+        return Response({
+            "status": "healthy" if db_ok and redis_ok else "degraded",
+            "database": "ok" if db_ok else "error",
+            "redis": "ok" if redis_ok else "error",
+            "version": "1.0.0",
+        }, status=code)
 
 
-# --- Plans ---
+# ---------------------------------------------------------------------------
+# Plans
+# ---------------------------------------------------------------------------
 
 class PlanListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Plans"], summary="Creer un plan avec prix et quotas")
+    @plan_create_schema
     def post(self, request):
         d = request.data
         platform_id = d.get("platform_id")
@@ -67,58 +89,82 @@ class PlanListCreateView(APIView):
             return Response({"detail": "platform_id, name et slug requis."}, status=status.HTTP_400_BAD_REQUEST)
 
         if Plan.objects.filter(platform_id=platform_id, slug=slug).exists():
-            return Response({"detail": "Slug existe deja."}, status=status.HTTP_409_CONFLICT)
+            return Response({"detail": "Slug existe deja pour cette plateforme."}, status=status.HTTP_409_CONFLICT)
 
         plan = Plan.objects.create(
-            platform_id=platform_id, name=d["name"], slug=slug,
-            description=d.get("description"), is_free=d.get("is_free", False),
-            is_default=d.get("is_default", False), tier_order=d.get("tier_order", 0),
+            platform_id=platform_id,
+            name=d["name"],
+            slug=slug,
+            description=d.get("description"),
+            is_free=d.get("is_free", False),
+            is_default=d.get("is_default", False),
+            tier_order=d.get("tier_order", 0),
             metadata=d.get("metadata"),
         )
-        for p in d.get("prices", []):
-            PlanPrice.objects.create(plan=plan, billing_cycle=p["billing_cycle"],
-                                      cycle_days=p.get("cycle_days"), price=p["price"],
-                                      currency=p.get("currency", "XAF"))
-        for q in d.get("quotas", []):
-            PlanQuota.objects.create(plan=plan, quota_key=q["quota_key"], limit_value=q["limit_value"],
-                                      is_cyclical=q.get("is_cyclical", True),
-                                      overage_policy=q.get("overage_policy", "hard"),
-                                      overage_unit_price=q.get("overage_unit_price", 0))
 
-        return Response({"id": str(plan.id), "name": plan.name, "slug": plan.slug, "message": "Plan created"}, status=status.HTTP_201_CREATED)
+        for price_data in d.get("prices", []):
+            PlanPrice.objects.create(
+                plan=plan,
+                billing_cycle=price_data["billing_cycle"],
+                price=price_data["price"],
+                currency=price_data.get("currency", "XAF"),
+                cycle_days=price_data.get("cycle_days"),
+            )
 
-    @extend_schema(tags=["Plans"], summary="Lister les plans")
+        for quota_data in d.get("quotas", []):
+            PlanQuota.objects.create(
+                plan=plan,
+                quota_key=quota_data["quota_key"],
+                limit_value=quota_data["limit_value"],
+                is_cyclical=quota_data.get("is_cyclical", True),
+                overage_policy=quota_data.get("overage_policy", "hard"),
+                overage_unit_price=quota_data.get("overage_unit_price", 0),
+            )
+
+        prices = [{"id": str(pr.id), "billing_cycle": pr.billing_cycle, "price": float(pr.price), "currency": pr.currency}
+                  for pr in plan.prices.filter(is_active=True)]
+        quotas = [{"quota_key": q.quota_key, "limit_value": q.limit_value, "is_cyclical": q.is_cyclical,
+                   "overage_policy": q.overage_policy, "overage_unit_price": float(q.overage_unit_price)}
+                  for q in plan.quotas.all()]
+        return Response({
+            "id": str(plan.id), "name": plan.name, "slug": plan.slug,
+            "description": plan.description, "is_free": plan.is_free,
+            "tier_order": plan.tier_order, "prices": prices, "quotas": quotas,
+        }, status=status.HTTP_201_CREATED)
+
+    @plan_list_schema
     def get(self, request):
-        qs = Plan.objects.filter(is_active=True)
-        pid = request.GET.get("platform_id")
-        if pid:
-            qs = qs.filter(platform_id=pid)
+        qs = Plan.objects.prefetch_related("prices", "quotas").filter(is_active=True)
+        platform_id = request.GET.get("platform_id")
+        if platform_id:
+            qs = qs.filter(platform_id=platform_id)
         paginator = Paginator()
         page = paginator.paginate_queryset(qs, request)
-        data = []
-        for p in page:
-            prices = [{"billing_cycle": pr.billing_cycle, "price": float(pr.price), "currency": pr.currency} for pr in p.prices.filter(is_active=True)]
-            quotas = [{"quota_key": q.quota_key, "limit_value": q.limit_value, "overage_policy": q.overage_policy} for q in p.quotas.all()]
-            data.append({"id": str(p.id), "platform_id": str(p.platform_id), "name": p.name, "slug": p.slug,
-                         "is_free": p.is_free, "tier_order": p.tier_order, "prices": prices, "quotas": quotas})
+        data = [{"id": str(p.id), "name": p.name, "slug": p.slug, "is_free": p.is_free,
+                 "tier_order": p.tier_order, "platform_id": str(p.platform_id)} for p in page]
         return paginator.get_paginated_response(data)
 
 
 class PlanDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Plans"], summary="Detail d'un plan")
+    @plan_detail_schema
     def get(self, request, plan_id):
         try:
-            p = Plan.objects.get(id=plan_id)
+            p = Plan.objects.prefetch_related("prices", "quotas").get(id=plan_id)
         except Plan.DoesNotExist:
             return Response({"detail": "Plan introuvable."}, status=status.HTTP_404_NOT_FOUND)
-        prices = [{"id": str(pr.id), "billing_cycle": pr.billing_cycle, "price": float(pr.price), "currency": pr.currency} for pr in p.prices.filter(is_active=True)]
-        quotas = [{"quota_key": q.quota_key, "limit_value": q.limit_value, "is_cyclical": q.is_cyclical, "overage_policy": q.overage_policy, "overage_unit_price": float(q.overage_unit_price)} for q in p.quotas.all()]
-        return Response({"id": str(p.id), "name": p.name, "slug": p.slug, "description": p.description,
-                         "is_free": p.is_free, "tier_order": p.tier_order, "prices": prices, "quotas": quotas})
+        prices = [{"id": str(pr.id), "billing_cycle": pr.billing_cycle, "price": float(pr.price), "currency": pr.currency}
+                  for pr in p.prices.filter(is_active=True)]
+        quotas = [{"quota_key": q.quota_key, "limit_value": q.limit_value, "is_cyclical": q.is_cyclical,
+                   "overage_policy": q.overage_policy, "overage_unit_price": float(q.overage_unit_price)}
+                  for q in p.quotas.all()]
+        return Response({
+            "id": str(p.id), "name": p.name, "slug": p.slug, "description": p.description,
+            "is_free": p.is_free, "tier_order": p.tier_order, "prices": prices, "quotas": quotas,
+        })
 
-    @extend_schema(tags=["Plans"], summary="Modifier un plan (nom/description uniquement si actif)")
+    @plan_update_schema
     def put(self, request, plan_id):
         try:
             p = Plan.objects.get(id=plan_id)
@@ -138,23 +184,27 @@ class PlanDetailView(APIView):
 class PlanArchiveView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Plans"], summary="Archiver un plan")
+    @plan_archive_schema
     def post(self, request, plan_id):
         try:
             p = Plan.objects.get(id=plan_id)
         except Plan.DoesNotExist:
             return Response({"detail": "Plan introuvable."}, status=status.HTTP_404_NOT_FOUND)
+        if p.has_active_subscriptions():
+            return Response({"detail": "Plan avec abonnements actifs."}, status=status.HTTP_409_CONFLICT)
         p.is_active = False
         p.save(update_fields=["is_active", "updated_at"])
         return Response({"message": "Plan archived", "is_active": False})
 
 
-# --- Subscriptions ---
+# ---------------------------------------------------------------------------
+# Subscriptions
+# ---------------------------------------------------------------------------
 
 class SubscriptionCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Subscriptions"], summary="Creer un abonnement")
+    @subscription_create_schema
     def post(self, request):
         d = request.data
         sub, err = SubscriptionService.create(
@@ -176,7 +226,7 @@ class SubscriptionCreateView(APIView):
 class SubscriptionListView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Subscriptions"], summary="Lister les abonnements")
+    @subscription_list_schema
     def get(self, request):
         qs = Subscription.objects.select_related("plan").all()
         for f in ["platform_id", "subscriber_id", "status"]:
@@ -194,7 +244,7 @@ class SubscriptionListView(APIView):
 class SubscriptionDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Subscriptions"], summary="Detail abonnement avec usage quotas")
+    @subscription_detail_schema
     def get(self, request, sub_id):
         try:
             s = Subscription.objects.select_related("plan", "plan_price").get(id=sub_id)
@@ -219,18 +269,20 @@ class SubscriptionDetailView(APIView):
 class SubscriptionCancelView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Subscriptions"], summary="Annuler (actif jusqu'a fin cycle)")
+    @subscription_cancel_schema
     def post(self, request, sub_id):
         sub, err = SubscriptionService.cancel(sub_id)
         if err:
-            return Response({"detail": err}, status=status.HTTP_404_NOT_FOUND if err == "not_found" else status.HTTP_409_CONFLICT)
-        return Response({"id": str(sub.id), "status": sub.status, "cancel_at_period_end": True, "message": "Subscription will cancel at period end"})
+            return Response({"detail": err},
+                            status=status.HTTP_404_NOT_FOUND if err == "not_found" else status.HTTP_409_CONFLICT)
+        return Response({"id": str(sub.id), "status": sub.status, "cancel_at_period_end": True,
+                         "message": "Subscription will cancel at period end"})
 
 
 class SubscriptionChangePlanView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Subscriptions"], summary="Upgrade/downgrade avec prorata")
+    @subscription_change_plan_schema
     def post(self, request, sub_id):
         d = request.data
         result, err = SubscriptionService.change_plan(sub_id, d.get("new_plan_id"), d.get("billing_cycle", "monthly"))
@@ -243,7 +295,7 @@ class SubscriptionChangePlanView(APIView):
 class SubscriptionActivateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Subscriptions"], summary="Activer apres paiement")
+    @subscription_activate_schema
     def post(self, request, sub_id):
         sub, err = SubscriptionService.activate(sub_id)
         if err:
@@ -254,59 +306,73 @@ class SubscriptionActivateView(APIView):
 class SubscriptionReactivateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Subscriptions"], summary="Reactiver un abonnement")
+    @subscription_reactivate_schema
     def post(self, request, sub_id):
         try:
             sub = Subscription.objects.get(id=sub_id)
         except Subscription.DoesNotExist:
             return Response({"detail": "Introuvable."}, status=status.HTTP_404_NOT_FOUND)
-        if sub.status not in ["suspended", "expired", "cancelled"]:
-            return Response({"detail": "Ne peut pas etre reactive."}, status=status.HTTP_409_CONFLICT)
+        if sub.status not in ["active", "cancelled"]:
+            return Response({"detail": "Reactivation impossible dans cet etat."}, status=status.HTTP_409_CONFLICT)
         sub.status = "active"
         sub.cancel_at_period_end = False
         sub.cancelled_at = None
-        sub.save(update_fields=["status", "cancel_at_period_end", "cancelled_at", "updated_at"])
-        SubscriptionEvent.objects.create(subscription=sub, event_type="reactivated")
-        return Response({"id": str(sub.id), "status": "active", "message": "Subscription reactivated"})
+        sub.save(update_fields=["status", "cancel_at_period_end", "cancelled_at"])
+        return Response({"id": str(sub.id), "status": sub.status, "message": "Subscription reactivated"})
 
 
-# --- Quotas ---
+# ---------------------------------------------------------------------------
+# Quotas
+# ---------------------------------------------------------------------------
 
 class QuotaCheckView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Quotas"], summary="Verifier quota (S2S, < 50ms)")
+    @quota_check_schema
     def post(self, request):
         d = request.data
-        result = QuotaService.check(d.get("platform_id"), d.get("subscriber_type", "user"),
-                                     d.get("subscriber_id"), d.get("quota_key"),
-                                     d.get("amount") or d.get("requested", 1))
+        # check() retourne un dict simple (toujours 200, allowed=False si pas de sub)
+        result = QuotaService.check(
+            d.get("platform_id"),
+            d.get("subscriber_type", "user"),
+            d.get("subscriber_id"),
+            d.get("quota_key"),
+            d.get("amount", d.get("requested", 1)),
+        )
         return Response(result)
 
 
 class QuotaIncrementView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Quotas"], summary="Reporter consommation (S2S)")
+    @quota_increment_schema
     def post(self, request):
         d = request.data
-        result, err = QuotaService.increment(d.get("platform_id"), d.get("subscriber_type", "user"),
-                                              d.get("subscriber_id"), d.get("quota_key"), d.get("amount", 1))
+        result, err = QuotaService.increment(
+            d.get("platform_id"),
+            d.get("subscriber_type", "user"),
+            d.get("subscriber_id"),
+            d.get("quota_key"),
+            d.get("amount", 1),
+        )
         if err:
-            code = 403 if err == "hard_limit_exceeded" else 404
-            return Response({"detail": err}, status=code)
+            return Response({"detail": err}, status=status.HTTP_400_BAD_REQUEST)
         return Response(result)
 
 
 class QuotaReserveView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Quotas"], summary="Reserver quota (atomique)")
+    @quota_reserve_schema
     def post(self, request):
         d = request.data
-        result, err = QuotaService.reserve(d.get("platform_id"), d.get("subscriber_type", "user"),
-                                            d.get("subscriber_id"), d.get("quota_key"),
-                                            d.get("amount", 1), d.get("ttl_seconds", 300))
+        result, err = QuotaService.reserve(
+            d.get("platform_id"),
+            d.get("subscriber_type", "user"),
+            d.get("subscriber_id"),
+            d.get("quota_key"),
+            d.get("amount", 1),
+        )
         if err:
             return Response({"detail": err}, status=status.HTTP_400_BAD_REQUEST)
         return Response(result, status=status.HTTP_201_CREATED)
@@ -315,7 +381,7 @@ class QuotaReserveView(APIView):
 class QuotaConfirmView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Quotas"], summary="Confirmer reservation")
+    @quota_confirm_schema
     def post(self, request):
         result, err = QuotaService.confirm_reservation(request.data.get("reservation_id"))
         if err:
@@ -326,7 +392,7 @@ class QuotaConfirmView(APIView):
 class QuotaReleaseView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Quotas"], summary="Liberer reservation")
+    @quota_release_schema
     def post(self, request):
         result, err = QuotaService.release_reservation(request.data.get("reservation_id"))
         if err:
@@ -337,114 +403,153 @@ class QuotaReleaseView(APIView):
 class QuotaUsageView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Quotas"], summary="Consultation usage courant")
+    @quota_usage_schema
     def get(self, request, sub_id):
         try:
             sub = Subscription.objects.get(id=sub_id)
         except Subscription.DoesNotExist:
             return Response({"detail": "Introuvable."}, status=status.HTTP_404_NOT_FOUND)
         usage = SubscriptionQuotaUsage.objects.filter(subscription=sub, period_start=sub.current_period_start)
-        plan_quotas = {q.quota_key: {"limit": q.limit_value, "policy": q.overage_policy} for q in PlanQuota.objects.filter(plan=sub.plan)}
+        plan_quotas = {q.quota_key: {"limit": q.limit_value, "policy": q.overage_policy}
+                       for q in PlanQuota.objects.filter(plan=sub.plan)}
         data = []
         for u in usage:
             pq = plan_quotas.get(u.quota_key, {})
-            data.append({"quota_key": u.quota_key, "used": u.used, "limit": pq.get("limit", 0),
-                         "remaining": max(0, pq.get("limit", 0) - u.used), "overage": u.overage, "policy": pq.get("policy", "hard")})
+            data.append({
+                "quota_key": u.quota_key, "used": u.used,
+                "limit": pq.get("limit", 0),
+                "remaining": max(0, pq.get("limit", 0) - u.used),
+                "overage": u.overage, "policy": pq.get("policy", "hard"),
+            })
         return Response({"subscription_id": str(sub.id), "quotas": data})
 
 
-# --- Organizations ---
+# ---------------------------------------------------------------------------
+# Organizations
+# ---------------------------------------------------------------------------
 
 class OrganizationListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Organizations"], summary="Creer une organisation")
+    @organization_create_schema
     def post(self, request):
         d = request.data
         if not all([d.get("platform_id"), d.get("name"), d.get("owner_user_id")]):
             return Response({"detail": "platform_id, name et owner_user_id requis."}, status=status.HTTP_400_BAD_REQUEST)
-        org = Organization.objects.create(platform_id=d["platform_id"], name=d["name"], owner_user_id=d["owner_user_id"])
+        if Organization.objects.filter(platform_id=d["platform_id"], name=d["name"]).exists():
+            return Response({"detail": "Organisation existe deja."}, status=status.HTTP_409_CONFLICT)
+        org = Organization.objects.create(
+            platform_id=d["platform_id"], name=d["name"], owner_user_id=d["owner_user_id"]
+        )
         OrganizationMember.objects.create(organization=org, user_id=d["owner_user_id"], role="owner")
-        return Response({"id": str(org.id), "name": org.name, "message": "Organization created"}, status=status.HTTP_201_CREATED)
+        return Response({
+            "id": str(org.id), "platform_id": str(org.platform_id),
+            "name": org.name, "owner_user_id": str(org.owner_user_id), "is_active": org.is_active,
+        }, status=status.HTTP_201_CREATED)
 
-    @extend_schema(tags=["Organizations"], summary="Lister les organisations")
+    @organization_list_schema
     def get(self, request):
         qs = Organization.objects.filter(is_active=True)
-        pid = request.GET.get("platform_id")
-        if pid:
-            qs = qs.filter(platform_id=pid)
-        data = [{"id": str(o.id), "name": o.name, "owner_user_id": str(o.owner_user_id)} for o in qs]
-        return Response({"data": data})
+        platform_id = request.GET.get("platform_id")
+        if platform_id:
+            qs = qs.filter(platform_id=platform_id)
+        paginator = Paginator()
+        page = paginator.paginate_queryset(qs, request)
+        data = [{"id": str(o.id), "name": o.name, "platform_id": str(o.platform_id),
+                 "owner_user_id": str(o.owner_user_id)} for o in page]
+        return paginator.get_paginated_response(data)
 
 
 class OrganizationMemberView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Organizations"], summary="Ajouter un membre")
+    @member_add_schema
     def post(self, request, org_id):
-        user_id = request.data.get("user_id")
-        if not user_id:
-            return Response({"detail": "user_id requis."}, status=status.HTTP_400_BAD_REQUEST)
         try:
             org = Organization.objects.get(id=org_id)
         except Organization.DoesNotExist:
             return Response({"detail": "Organisation introuvable."}, status=status.HTTP_404_NOT_FOUND)
-        _, created = OrganizationMember.objects.get_or_create(organization=org, user_id=user_id)
-        return Response({"message": "Member added" if created else "Already member"}, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+        user_id = request.data.get("user_id")
+        role = request.data.get("role", "member")
+        if not user_id:
+            return Response({"detail": "user_id requis."}, status=status.HTTP_400_BAD_REQUEST)
+        if OrganizationMember.objects.filter(organization=org, user_id=user_id).exists():
+            return Response({"detail": "Utilisateur deja membre."}, status=status.HTTP_409_CONFLICT)
+        member = OrganizationMember.objects.create(organization=org, user_id=user_id, role=role)
+        return Response({"id": str(member.id), "user_id": str(member.user_id), "role": member.role},
+                        status=status.HTTP_201_CREATED)
 
-    @extend_schema(tags=["Organizations"], summary="Lister les membres")
+    @member_list_schema
     def get(self, request, org_id):
-        members = OrganizationMember.objects.filter(organization_id=org_id)
-        data = [{"user_id": str(m.user_id), "role": m.role, "joined_at": m.joined_at.isoformat()} for m in members]
-        return Response({"data": data})
+        try:
+            org = Organization.objects.get(id=org_id)
+        except Organization.DoesNotExist:
+            return Response({"detail": "Organisation introuvable."}, status=status.HTTP_404_NOT_FOUND)
+        members = org.members.all()
+        data = [{"id": str(m.id), "user_id": str(m.user_id), "role": m.role,
+                 "joined_at": m.joined_at.isoformat()} for m in members]
+        return Response({"organization_id": str(org.id), "members": data})
 
-    @extend_schema(tags=["Organizations"], summary="Retirer un membre")
+    @member_remove_schema
     def delete(self, request, org_id, user_id):
         try:
             org = Organization.objects.get(id=org_id)
         except Organization.DoesNotExist:
             return Response({"detail": "Organisation introuvable."}, status=status.HTTP_404_NOT_FOUND)
-        if str(org.owner_user_id) == str(user_id):
-            return Response({"detail": "Impossible de retirer le owner."}, status=status.HTTP_400_BAD_REQUEST)
-        deleted, _ = OrganizationMember.objects.filter(organization_id=org_id, user_id=user_id).delete()
+        deleted, _ = OrganizationMember.objects.filter(organization=org, user_id=user_id).delete()
         if not deleted:
             return Response({"detail": "Membre introuvable."}, status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# --- Platform Config ---
+# ---------------------------------------------------------------------------
+# Platform Config
+# ---------------------------------------------------------------------------
 
 class PlatformConfigView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Config"], summary="Lire config plateforme")
+    @config_get_schema
     def get(self, request, platform_id):
-        config = PlatformSubscriptionConfig.get_for_platform(str(platform_id))
-        return Response({"platform_id": str(platform_id), "default_trial_days": config.default_trial_days,
-                         "grace_period_days": config.grace_period_days, "post_trial_behavior": config.post_trial_behavior,
-                         "default_currency": config.default_currency, "allowed_cycles": config.allowed_cycles})
+        config, _ = PlatformSubscriptionConfig.objects.get_or_create(platform_id=platform_id)
+        return Response({
+            "platform_id": str(config.platform_id),
+            "trial_days": config.default_trial_days,
+            "grace_period_days": config.grace_period_days,
+            "allowed_cycles": config.allowed_cycles,
+            "default_currency": config.default_currency,
+        })
 
-    @extend_schema(tags=["Config"], summary="Modifier config plateforme")
+    @config_update_schema
     def put(self, request, platform_id):
-        config, _ = PlatformSubscriptionConfig.objects.get_or_create(
-            platform_id=platform_id, defaults={"allowed_cycles": ["monthly", "yearly"]})
+        config, _ = PlatformSubscriptionConfig.objects.get_or_create(platform_id=platform_id)
         d = request.data
-        for f in ["default_trial_days", "grace_period_days", "post_trial_behavior", "default_currency", "allowed_cycles", "require_default_plan"]:
-            if f in d:
-                setattr(config, f, d[f])
+        for field in ["default_trial_days", "grace_period_days", "allowed_cycles", "default_currency"]:
+            if field in d:
+                setattr(config, field, d[field])
         config.save()
-        return Response({"message": "Config updated"})
+        return Response({
+            "platform_id": str(config.platform_id),
+            "trial_days": config.default_trial_days,
+            "grace_period_days": config.grace_period_days,
+            "allowed_cycles": config.allowed_cycles,
+            "default_currency": config.default_currency,
+            "message": "Config updated",
+        })
 
 
-# --- Admin Stats ---
+# ---------------------------------------------------------------------------
+# Admin Stats
+# ---------------------------------------------------------------------------
 
 class AdminStatsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(tags=["Admin"], summary="Statistiques abonnements")
+    @extend_schema(tags=["Admin"], summary="Statistiques globales")
     def get(self, request):
-        from django.db.models import Count, Sum
-        total = Subscription.objects.count()
-        by_status = dict(Subscription.objects.values_list("status").annotate(c=Count("id")))
-        active = Subscription.objects.filter(status__in=["active", "trial"]).count()
-        return Response({"total": total, "active": active, "by_status": by_status})
+        return Response({
+            "total_plans": Plan.objects.filter(is_active=True).count(),
+            "total_subscriptions": Subscription.objects.count(),
+            "active_subscriptions": Subscription.objects.filter(status="active").count(),
+            "total_organizations": Organization.objects.filter(is_active=True).count(),
+        })

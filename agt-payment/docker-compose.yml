@@ -16,6 +16,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
   redis:
     image: redis:7-alpine
     container_name: agt-pay-redis
@@ -29,6 +30,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
   payment:
     build:
       context: .
@@ -50,12 +52,16 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    networks:
+      - default
+      - agt_network
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:7005/api/v1/payments/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+
   payment-dev:
     build:
       context: .
@@ -81,6 +87,13 @@ services:
         condition: service_healthy
     profiles:
       - dev
+
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  default:
+    name: agt-payment_default
+  agt_network:
+    external: true

@@ -9,9 +9,14 @@ class JWTPayload:
         self.payload = p
         self.id = p.get("sub")
         self.auth_user_id = p.get("sub")
-        self.platform_id = p.get("platform_id")
         self.is_authenticated = True
-
+        # Pour les tokens S2S, platform_id est dans "sub" (pas dans "platform_id")
+        token_type = p.get("type", "")
+        if token_type == "s2s":
+            self.platform_id = p.get("sub")
+        else:
+            self.platform_id = p.get("platform_id")
+            
 class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
         h = request.headers.get("Authorization", "")

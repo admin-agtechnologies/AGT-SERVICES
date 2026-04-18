@@ -93,7 +93,51 @@
       - dev
     networks:
       - agt_network
+  celery-worker:
+    build:
+      context: .
+      target: production
+    container_name: agt-sub-worker
+    restart: unless-stopped
+    command: celery -A config worker --loglevel=info --concurrency=2
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://sub_user:sub_password@agt-sub-db:5432/agt_subscription_db
+      REDIS_URL: redis://agt-sub-redis:6379/4
+      AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
+    volumes:
+      - ./keys:/app/keys:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - agt_network
 
+  celery-beat:
+    build:
+      context: .
+      target: production
+    container_name: agt-sub-beat
+    restart: unless-stopped
+    command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://sub_user:sub_password@agt-sub-db:5432/agt_subscription_db
+      REDIS_URL: redis://agt-sub-redis:6379/4
+      AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
+    volumes:
+      - ./keys:/app/keys:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - agt_network
 volumes:
   postgres_data:
   redis_data:
