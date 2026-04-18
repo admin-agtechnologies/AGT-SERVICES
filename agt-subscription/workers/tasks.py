@@ -110,6 +110,10 @@ def process_expired_subscriptions(self):
                 subscription=sub,
                 event_type="expired" if sub.status == "expired" else "grace_started",
             )
+            # Émettre l'event lifecycle si directement expired (sans grace)
+            if sub.status == "expired":
+                from workers.publisher import publish_subscription_expired
+                publish_subscription_expired(sub)
 
         except Exception as exc:
             logger.error(f"[EXPIRE] Erreur sub {sub.id}: {exc}")
@@ -131,6 +135,9 @@ def process_expired_subscriptions(self):
                 subscription=sub,
                 event_type="expired",
             )
+            # Émettre l'event lifecycle — accès à couper immédiatement
+            from workers.publisher import publish_subscription_expired
+            publish_subscription_expired(sub)
         except Exception as exc:
             logger.error(f"[EXPIRE] Erreur grace sub {sub.id}: {exc}")
 
@@ -265,6 +272,9 @@ def handle_payment_confirmed(self, payload: dict):
             sub.status = "active"
             sub.save(update_fields=["status", "updated_at"])
             event_type = "activated"
+            # Émettre l'event lifecycle après activation via paiement confirmé
+            from workers.publisher import publish_subscription_activated
+            publish_subscription_activated(sub)
 
         SubscriptionEvent.objects.create(
             subscription=sub,
