@@ -164,3 +164,5 @@ curl "http://localhost:7001/api/v1/users/<profiles_id>/permissions/check\
 ?platform_id=<platform_id>&permission=chat:admin" \
   -H "Authorization: Bearer <token_s2s>"
 ```
+
+
