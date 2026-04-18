@@ -24,7 +24,12 @@ VALID_TRANSITIONS = {
 
 class Transaction(models.Model):
     PROVIDER_CHOICES = [("orange_money", "Orange Money"), ("mtn_momo", "MTN MoMo"), ("stripe", "Stripe"), ("paypal", "PayPal")]
-    SOURCE_CHOICES = [("subscription", "Subscription"), ("wallet", "Wallet"), ("platform_direct", "Platform Direct")]
+    SOURCE_CHOICES = [
+    ("subscription", "Subscription"),
+    ("wallet", "Wallet"),
+    ("platform", "Platform"),
+    ("manual", "Manual"),
+    ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     platform_id = models.UUIDField(db_index=True)
@@ -137,3 +142,77 @@ class PlatformPaymentConfig(models.Model):
             return cls.objects.get(platform_id=platform_id)
         except cls.DoesNotExist:
             return cls(platform_id=platform_id, providers_priority=["orange_money", "stripe"], default_currency="XAF")
+        
+        
+class ReconciliationReport(models.Model):
+    """
+    Rapport de réconciliation provider ↔ transactions internes.
+    Généré automatiquement par le cron Celery toutes les 6h.
+    Permet de détecter les anomalies financières entre ce que Payment
+    a enregistré et ce que le provider a réellement traité.
+    """
+    STATUS_CHOICES = [
+        ("completed", "Completed"),
+        ("failed", "Failed"),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    provider = models.CharField(
+        max_length=30,
+        db_index=True,
+        help_text="Provider concerné : orange_money, mtn_momo, stripe, paypal"
+    )
+    period_start = models.DateTimeField(
+        help_text="Début de la période analysée"
+    )
+    period_end = models.DateTimeField(
+        help_text="Fin de la période analysée"
+    )
+    total_internal = models.IntegerField(
+        default=0,
+        help_text="Nombre de transactions dans notre base sur cette période"
+    )
+    total_provider = models.IntegerField(
+        default=0,
+        help_text="Nombre de transactions chez le provider sur cette période"
+    )
+    matched = models.IntegerField(
+        default=0,
+        help_text="Transactions concordantes des deux côtés"
+    )
+    mismatched = models.IntegerField(
+        default=0,
+        help_text="Transactions présentes des deux côtés mais avec anomalie (montant différent)"
+    )
+    missing_internal = models.IntegerField(
+        default=0,
+        help_text="Présentes chez le provider mais absentes dans notre base — anormal"
+    )
+    missing_provider = models.IntegerField(
+        default=0,
+        help_text="Présentes dans notre base mais absentes chez le provider — critique"
+    )
+    details = models.JSONField(
+        null=True, blank=True,
+        help_text="Détail des anomalies : IDs concernés, montants, descriptions"
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="completed",
+        help_text="completed = rapport généré avec succès, failed = erreur lors de la génération"
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        help_text="Date de génération du rapport"
+    )
+
+    class Meta:
+        db_table = "reconciliation_reports"
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["provider", "created_at"]),
+        ]
+
+    def __str__(self):
+        return f"Reconciliation {self.provider} {self.period_start.date()} → {self.period_end.date()} [{self.status}]"

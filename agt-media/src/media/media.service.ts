@@ -407,6 +407,10 @@ export class MediaService {
 
   /** MAJ metadonnees custom. CDC 9.4.1 */
   async updateMetadata(id: string, metadata: Record<string, string>, auth: any): Promise<MediaFile> {
+    // ← AJOUT : garde si metadata vide ou null
+    if (!metadata || Object.keys(metadata).length === 0) {
+      throw new BadRequestException('metadata ne peut pas etre vide');
+    }
     const media = await this.mediaRepo.findOne({ where: { id, deleted_at: IsNull() } });
     if (!media) throw new NotFoundException(`Media ${id} introuvable`);
 

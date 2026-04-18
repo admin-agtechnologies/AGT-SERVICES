@@ -1,10 +1,13 @@
 from django.urls import path
+
 from apps.notifications.views import (
     HealthCheckView, SendNotificationView, SendBulkNotificationView,
     PreferenceView, InAppListView, InAppUnreadCountView, InAppMarkReadView,
     InAppMarkAllReadView, InAppDeleteView, NotificationStatsView,
     NotificationLogsView, ChannelConfigView,
+    ScheduleNotificationView, ScheduledNotificationListView, ScheduledNotificationDetailView,
 )
+from apps.campaigns.views import CampaignListCreateView, CampaignDetailView, CampaignProgressView, CampaignCancelView, CampaignStatsView
 
 urlpatterns = [
     path("health", HealthCheckView.as_view(), name="health"),
@@ -19,4 +22,7 @@ urlpatterns = [
     path("users/<str:user_id>/notifications/<uuid:notification_id>/read", InAppMarkReadView.as_view(), name="inapp-read"),
     path("users/<str:user_id>/notifications/<uuid:notification_id>", InAppDeleteView.as_view(), name="inapp-delete"),
     path("platforms/<str:platform_id>/channels-priority", ChannelConfigView.as_view(), name="channel-config"),
+    path("notifications/schedule", ScheduleNotificationView.as_view(), name="notif-schedule"),
+    path("notifications/scheduled", ScheduledNotificationListView.as_view(), name="notif-scheduled-list"),
+    path("notifications/scheduled/<uuid:scheduled_id>", ScheduledNotificationDetailView.as_view(), name="notif-scheduled-detail"),
 ]

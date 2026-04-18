@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 from apps.campaigns.models import Campaign, CampaignRecipient
 from apps.notifications.pagination import StandardPagination
+from apps.notifications.models import Notification
 
 from apps.notifications.serializers import CampaignCreateSerializer
 
@@ -80,7 +81,14 @@ class CampaignProgressView(APIView):
             c = Campaign.objects.get(id=campaign_id)
         except Campaign.DoesNotExist:
             return Response({"detail": "Campagne introuvable."}, status=status.HTTP_404_NOT_FOUND)
-        return Response({"progress": c.progress_percent, "sent": c.sent_count, "failed": c.failed_count, "total": c.total_recipients, "status": c.status})
+        return Response({
+            "progress": c.progress_percent,
+            "sent": c.sent_count,
+            "failed": c.failed_count,
+            "pending": max(c.total_recipients - c.sent_count - c.failed_count, 0),
+            "total": c.total_recipients,
+            "status": c.status
+        })
 
 
 class CampaignCancelView(APIView):
@@ -101,4 +109,37 @@ class CampaignCancelView(APIView):
             )
 
         c.cancel()
-        return Response({"message": "Campagne annulee.", "status": "cancelled"})
+        return Response({
+            "message": "Campaign cancelled",
+            "status": "cancelled",
+            "sent_before_cancel": c.sent_count
+        })
+
+class CampaignStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(tags=["Campaigns"], summary="Statistiques d'une campagne")
+    def get(self, request, campaign_id):
+        try:
+            c = Campaign.objects.get(id=campaign_id)
+        except Campaign.DoesNotExist:
+            return Response({"detail": "Campagne introuvable."}, status=status.HTTP_404_NOT_FOUND)
+
+        total = c.total_recipients
+        sent = c.sent_count
+        failed = c.failed_count
+        pending = total - sent - failed
+        read = Notification.objects.filter(
+            campaign_id=c.id if hasattr(Notification, 'campaign_id') else None,
+            status="read"
+        ).count() if False else 0  # placeholder — à connecter si FK existe
+
+        delivery_rate = round((sent / total * 100), 1) if total > 0 else 0.0
+
+        return Response({
+            "total_recipients": total,
+            "sent": sent,
+            "failed": failed,
+            "pending": max(pending, 0),
+            "delivery_rate": delivery_rate,
+        })

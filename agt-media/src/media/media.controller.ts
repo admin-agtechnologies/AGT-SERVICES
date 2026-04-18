@@ -4,6 +4,18 @@
  * Controller monte sur : media
  * Resultat : /api/v1/media/*
  * CDC Media v1.4 -- sections 9.1 a 9.6.
+ *
+ * ORGANISATION DES ROUTES (ordre important pour Express) :
+ * 1. Health
+ * 2. Upload        (POST /, POST /batch, POST /from-url)
+ * 3. Statistiques  (GET /stats, GET /stats/:platformId)
+ * 4. Consultation  (GET /, GET /:id/info, GET /:id/thumbnails, etc.)
+ *    NOTE : les routes statiques /:id/xxx DOIVENT etre declarees
+ *    AVANT la route generique /:id pour eviter les conflits Express.
+ * 5. Gestion       (PUT, DELETE)
+ * 6. RGPD          (DELETE /by-user/:userId)
+ *    NOTE : /by-user/:userId doit etre AVANT /:id pour ne pas
+ *    etre intercepte comme un UUID.
  */
 import {
   Controller,
@@ -52,7 +64,6 @@ import {
 import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
 
-@ApiTags('Upload', 'Consultation', 'Gestion', 'RGPD', 'Statistiques')
 @ApiBearerAuth('BearerAuth')
 @UseGuards(JwtAuthGuard)
 @Controller('media')
@@ -61,6 +72,22 @@ export class MediaController {
     private readonly mediaService: MediaService,
     private readonly config: ConfigService,
   ) {}
+
+  // ============================================================
+  // HEALTH  CDC 9.1
+  // ============================================================
+
+  // /**
+  //  * GET /api/v1/media/health
+  //  * Health check du service. Public, pas de token requis.
+  //  */
+  // @Get('health')
+  // @ApiTags('Health')
+  // @Public()
+  // @ApiOperation({ summary: 'Health check du service Media' })
+  // async health() {
+  //   return this.mediaService.getHealth();
+  // }
 
   // ============================================================
   // UPLOAD  CDC 9.2
@@ -72,6 +99,7 @@ export class MediaController {
    * Retourne url si public, signed_url si private.
    */
   @Post()
+  @ApiTags('Upload')
   @ApiOperation({ summary: 'Upload fichier unique (multipart/form-data)' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -123,9 +151,24 @@ export class MediaController {
    * Upload multiple (max 10). CDC 9.2.2. Reponse 207 Multi-Status.
    */
   @Post('batch')
+  @ApiTags('Upload')
   @HttpCode(207)
   @ApiOperation({ summary: 'Upload multiple (max 10 fichiers) -- reponse 207' })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({                                    // ← AJOUTER CE BLOC
+  schema: {
+    type: 'object',
+    properties: {
+      files: {
+        type: 'array',
+        items: { type: 'string', format: 'binary' },
+      },
+      visibility: { type: 'string', enum: ['public', 'private'], default: 'public' },
+      owner_user_id: { type: 'string', format: 'uuid' },
+    },
+    required: ['files'],
+  },
+  })
   @UseInterceptors(FilesInterceptor('files', 10, { limits: { fileSize: 52_428_800 } }))
   async uploadBatch(
     @UploadedFiles() files: Express.Multer.File[],
@@ -160,6 +203,7 @@ export class MediaController {
    * Import depuis URL externe. CDC 9.2.3. SSRF complet.
    */
   @Post('from-url')
+  @ApiTags('Upload')
   @ApiOperation({ summary: 'Importe un fichier depuis URL externe (SSRF protege)' })
   async uploadFromUrl(
     @Body() dto: UploadFromUrlDto,
@@ -181,9 +225,8 @@ export class MediaController {
   }
 
   // ============================================================
-  // CONSULTATION  CDC 9.3
-  // NOTE : les routes statiques DOIVENT etre declarees AVANT :id
-  // pour eviter les conflits de routage Express.
+  // STATISTIQUES  CDC 9.6
+  // NOTE : declares avant /:id pour eviter collision de routage.
   // ============================================================
 
   /**
@@ -191,6 +234,7 @@ export class MediaController {
    * Statistiques globales. CDC 9.6.1.
    */
   @Get('stats')
+  @ApiTags('Statistiques')
   @ApiOperation({ summary: 'Statistiques globales des medias' })
   async getStats() {
     return this.mediaService.getStats();
@@ -201,10 +245,17 @@ export class MediaController {
    * Statistiques par plateforme. CDC 9.6.2.
    */
   @Get('stats/:platformId')
+  @ApiTags('Statistiques')
   @ApiOperation({ summary: 'Statistiques par plateforme' })
   async getStatsByPlatform(@Param('platformId', ParseUUIDPipe) platformId: string) {
     return this.mediaService.getStats(platformId);
   }
+
+  // ============================================================
+  // CONSULTATION  CDC 9.3
+  // NOTE : les routes statiques /:id/xxx DOIVENT etre declarees
+  // AVANT la route generique /:id pour eviter les conflits Express.
+  // ============================================================
 
   /**
    * GET /api/v1/media
@@ -212,6 +263,7 @@ export class MediaController {
    * Query : platform_id, uploaded_by, owner_user_id, mime_type, visibility, from, to, page, limit.
    */
   @Get()
+  @ApiTags('Consultation')
   @ApiOperation({ summary: 'Liste paginee des medias avec filtres' })
   @ApiQuery({ name: 'platform_id', required: false })
   @ApiQuery({ name: 'uploaded_by', required: false })
@@ -243,6 +295,7 @@ export class MediaController {
    * Metadonnees uniquement. CDC 9.3.2.
    */
   @Get(':id/info')
+  @ApiTags('Consultation')
   @ApiOperation({ summary: 'Metadonnees completes (JSON) d un fichier' })
   async getInfo(@Param('id', ParseUUIDPipe) id: string) {
     const media = await this.mediaService.getMediaInfo(id);
@@ -254,6 +307,7 @@ export class MediaController {
    * Liste des variantes thumbnails. CDC 9.3.3.
    */
   @Get(':id/thumbnails')
+  @ApiTags('Consultation')
   @ApiOperation({ summary: 'Liste des thumbnails d un fichier' })
   async getThumbnails(@Param('id', ParseUUIDPipe) id: string) {
     const variants = await this.mediaService.getVariants(id);
@@ -265,13 +319,13 @@ export class MediaController {
    * Thumbnail specifique (ex: 300x300). CDC 9.3.4.
    */
   @Get(':id/thumbnail/:size')
+  @ApiTags('Consultation')
   @ApiOperation({ summary: 'Thumbnail specifique par taille (ex: 300x300)' })
   async getThumbnailBySize(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('size') size: string,
     @Res() res: Response,
   ) {
-    // Valider le format "WxH"
     if (!/^\d+x\d+$/.test(size)) {
       throw new BadRequestException('Format de taille invalide. Utiliser WxH (ex: 300x300)');
     }
@@ -285,6 +339,7 @@ export class MediaController {
    * Resize a la volee. CDC 9.3.5. Query: w, h, crop. Cache Redis.
    */
   @Get(':id/resize')
+  @ApiTags('Consultation')
   @ApiOperation({ summary: 'Resize a la volee (cache Redis). Query: w, h, crop' })
   @ApiQuery({ name: 'w', required: true, type: Number, description: 'Largeur cible en px' })
   @ApiQuery({ name: 'h', required: true, type: Number, description: 'Hauteur cible en px' })
@@ -313,6 +368,7 @@ export class MediaController {
    * URL temporaire signee. CDC 9.4.5.
    */
   @Get(':id/signed-url')
+  @ApiTags('Consultation')
   @ApiOperation({ summary: 'Genere une URL signee temporaire' })
   @ApiQuery({ name: 'expires', required: false, description: 'TTL en secondes (defaut: 3600)' })
   async getSignedUrl(
@@ -329,6 +385,7 @@ export class MediaController {
    * Logs d acces pagines. CDC 9.3.7.
    */
   @Get(':id/access-logs')
+  @ApiTags('Consultation')
   @ApiOperation({ summary: 'Logs d acces d un fichier (admin/proprietaire)' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
@@ -346,6 +403,7 @@ export class MediaController {
    */
   @Public()
   @Get(':id/serve')
+  @ApiTags('Consultation')
   @ApiOperation({ summary: 'Acces fichier via URL signee (public, token temporaire)' })
   async serveSignedUrl(
     @Param('id', ParseUUIDPipe) id: string,
@@ -369,8 +427,11 @@ export class MediaController {
   /**
    * GET /api/v1/media/:id
    * Telechargement binaire. CDC 9.3.1. Declenche log d acces.
+   * DOIT etre declare EN DERNIER parmi les GET /:id/* pour
+   * ne pas intercepter les sous-routes.
    */
   @Get(':id')
+  @ApiTags('Consultation')
   @ApiOperation({ summary: 'Telechargement binaire du fichier brut' })
   async download(
     @Param('id', ParseUUIDPipe) id: string,
@@ -396,6 +457,7 @@ export class MediaController {
    * MAJ metadonnees personnalisees. CDC 9.4.1.
    */
   @Put(':id/metadata')
+  @ApiTags('Gestion')
   @ApiOperation({ summary: 'Met a jour les metadonnees custom (cle-valeur)' })
   async updateMetadata(
     @Param('id', ParseUUIDPipe) id: string,
@@ -411,6 +473,7 @@ export class MediaController {
    * Changement de visibilite. CDC 9.4.2.
    */
   @Put(':id/visibility')
+  @ApiTags('Gestion')
   @ApiOperation({ summary: 'Change la visibilite d un fichier (public/private)' })
   async updateVisibility(
     @Param('id', ParseUUIDPipe) id: string,
@@ -426,6 +489,7 @@ export class MediaController {
    * Soft delete. CDC 9.4.3. Reponse 204.
    */
   @Delete(':id')
+  @ApiTags('Gestion')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Soft delete (marque deleted_at)' })
   async softDelete(
@@ -440,6 +504,7 @@ export class MediaController {
    * Hard delete -- S2S uniquement. CDC 9.4.4. Reponse 204.
    */
   @Delete(':id/permanent')
+  @ApiTags('Gestion')
   @UseGuards(S2SGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Hard delete permanent -- token S2S uniquement' })
@@ -447,12 +512,19 @@ export class MediaController {
     await this.mediaService.hardDelete(id);
   }
 
+  // ============================================================
+  // RGPD  CDC 9.4.6
+  // NOTE : /by-user/:userId declare AVANT /:id pour ne pas
+  // etre intercepte par la route generique DELETE /:id.
+  // ============================================================
+
   /**
    * DELETE /api/v1/media/by-user/:userId
    * Purge RGPD totale. CDC 9.4.6. S2S uniquement.
    * Retourne files_deleted, variants_deleted, storage_freed_bytes.
    */
   @Delete('by-user/:userId')
+  @ApiTags('RGPD')
   @UseGuards(S2SGuard)
   @ApiOperation({ summary: 'Purge RGPD -- suppression totale fichiers utilisateur (S2S)' })
   async purgeByUser(@Param('userId', ParseUUIDPipe) userId: string) {

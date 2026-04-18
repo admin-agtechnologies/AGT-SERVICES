@@ -81,6 +81,15 @@ export class MediaProcessor extends WorkerHost {
     const [w, h] = sizeStr.split('x').map(Number);
     const thumbKey = originalKey.replace(/(\.\w+)$/, `_thumb_${w}x${h}$1`);
 
+    // ← AJOUT : vérifier si ce variant existe déjà (idempotence)
+    const existing = await this.variantRepo.findOne({
+      where: { media_id: mediaId, variant_type: 'thumbnail', width: w, height: h },
+    });
+    if (existing) {
+      this.logger.log(`Thumbnail ${w}x${h} déjà existant pour ${mediaId}, skip`);
+      return;
+    }
+
     const thumbBuffer = await sharp(buffer)
       .resize(w, h, { fit: 'cover', position: 'centre' })
       .jpeg({ quality: 80 })

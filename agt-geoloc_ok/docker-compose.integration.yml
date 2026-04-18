@@ -1,0 +1,90 @@
+# ── AGT Geolocation Service — Intégration dans l'écosystème AGT global ────────
+# Usage : depuis le dossier racine AGT-SERVICES
+#
+#   # Copier la clé publique Auth
+#   cp agt-auth/keys/public.pem agt-geoloc/keys/auth_public.pem
+#
+#   # Ajouter dans deploy_mvp.sh ou lancer manuellement :
+#   cd agt-geoloc && docker compose -f docker-compose.integration.yml up -d --build && cd ..
+#
+# Ce fichier suppose que l'infrastructure partagée (RabbitMQ, PostgreSQL) tourne
+# déjà via le deploy_mvp global. Le service Geoloc a son propre PostgreSQL+PostGIS
+# et son propre Redis (spécifiques à ses besoins GEO).
+
+services:
+
+  agt-geoloc-db:
+    image: postgis/postgis:15-3.4-alpine
+    container_name: agt-geoloc-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: agt_geoloc_db
+      POSTGRES_USER: geoloc_user
+      POSTGRES_PASSWORD: geoloc_password
+    volumes:
+      - geoloc_postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-postgis.sql:/docker-entrypoint-initdb.d/init-postgis.sql
+    ports:
+      - "5439:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U geoloc_user -d agt_geoloc_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - agt_network
+
+  agt-geoloc-redis:
+    image: redis:7-alpine
+    container_name: agt-geoloc-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - geoloc_redis_data:/data
+    ports:
+      - "6385:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - agt_network
+
+  agt-geoloc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agt-geoloc-service
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 7009
+      DB_HOST: agt-geoloc-db
+      DB_PORT: 5432
+      DB_NAME: agt_geoloc_db
+      DB_USER: geoloc_user
+      DB_PASSWORD: geoloc_password
+      REDIS_HOST: agt-geoloc-redis
+      REDIS_PORT: 6379
+      # RabbitMQ partagé avec le reste de l'écosystème AGT
+      RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@host.docker.internal:5672
+      AUTH_SERVICE_URL: http://host.docker.internal:7000
+    ports:
+      - "7009:7009"
+    depends_on:
+      agt-geoloc-db:
+        condition: service_healthy
+      agt-geoloc-redis:
+        condition: service_healthy
+    networks:
+      - agt_network
+
+volumes:
+  geoloc_postgres_data:
+  geoloc_redis_data:
+
+networks:
+  agt_network:
+    external: true

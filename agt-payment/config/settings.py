@@ -18,8 +18,32 @@ def _read_key(path):
         with open(path, "r") as f: return f.read()
     except FileNotFoundError: return ""
 AUTH_PUBLIC_KEY = _read_key(config("AUTH_SERVICE_PUBLIC_KEY_PATH", default=str(BASE_DIR / "keys/auth_public.pem")))
+# RabbitMQ — broker pour les événements sortants (payment.confirmed, etc.)
+BROKER_URL = config("BROKER_URL", default="amqp://guest:guest@localhost:5672//")
 REST_FRAMEWORK = {"DEFAULT_AUTHENTICATION_CLASSES": ["common.authentication.JWTAuthentication"], "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"], "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"], "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema", "UNAUTHENTICATED_USER": None}
-SPECTACULAR_SETTINGS = {"TITLE": "AGT Payment Service API", "VERSION": "1.0.0", "DESCRIPTION": "Paiements multi-provider: Orange Money, MTN MoMo, Stripe, PayPal.", "TAGS": [{"name": "Health"}, {"name": "Payments"}, {"name": "Webhooks"}, {"name": "Providers"}, {"name": "Admin"}]}
+SPECTACULAR_SETTINGS = {
+    "TITLE": "AGT Payment Service API",
+    "VERSION": "1.2.0",
+    "DESCRIPTION": "Paiements multi-provider: Orange Money, MTN MoMo, Stripe, PayPal.",
+    "TAGS": [
+        {"name": "Health"},
+        {"name": "Payments"},
+        {"name": "Webhooks"},
+        {"name": "Providers"},
+        {"name": "Admin"},
+    ],
+    "SECURITY": [{"BearerAuth": []}],
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            }
+        }
+    },
+    "COMPONENT_SPLIT_REQUEST": True,
+}
 CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="http://localhost:3000").split(",")
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"

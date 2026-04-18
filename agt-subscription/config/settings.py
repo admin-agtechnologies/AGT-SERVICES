@@ -1,19 +1,22 @@
 """AGT Subscription Service v1.0 - Django Settings"""
 from pathlib import Path
 from decouple import config
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost").split(",")
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1,0.0.0.0").split(",")
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
+    "django.contrib.auth",          # Requis par DRF (AnonymousUser)
     "django.contrib.staticfiles",
     "rest_framework",
     "drf_spectacular",
     "corsheaders",
+    "django_celery_beat",           # Scheduler Beat (crons CDC)
     "apps.plans",
     "apps.subscriptions",
     "apps.quotas",
@@ -24,24 +27,26 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 
-TEMPLATES = [{
-    "BACKEND": "django.template.backends.django.DjangoTemplates",
-    "DIRS": [],
-    "APP_DIRS": True,
-    "OPTIONS": {"context_processors": ["django.template.context_processors.request"]},
-}]
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {"context_processors": [
+            "django.template.context_processors.request",
+        ]},
+    },
+]
 
 # --- Base de données ---
-import dj_database_url
 DATABASES = {
-    "default": dj_database_url.parse(
-        config("DATABASE_URL", default="sqlite:///db.sqlite3"),
+    "default": dj_database_url.config(
+        default=config("DATABASE_URL", default="sqlite:///db.sqlite3"),
         conn_max_age=600,
     )
 }
@@ -56,78 +61,82 @@ CACHES = {
     }
 }
 
-# --- Clé publique Auth (JWT RS256) ---
-def _read_key(path):
-    try:
-        with open(path, "r") as f:
-            return f.read()
-    except FileNotFoundError:
-        return ""
+# --- RabbitMQ ---
+RABBITMQ_URL = config("RABBITMQ_URL", default="amqp://guest:guest@localhost:5672//")
 
-AUTH_PUBLIC_KEY = _read_key(
-    config("AUTH_SERVICE_PUBLIC_KEY_PATH", default=str(BASE_DIR / "keys/auth_public.pem"))
+# --- Celery ---
+CELERY_BROKER_URL = RABBITMQ_URL
+CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND", default=f"redis://localhost:6379/5")
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "UTC"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# --- Auth JWT (clé publique RSA) ---
+AUTH_SERVICE_PUBLIC_KEY_PATH = config(
+    "AUTH_SERVICE_PUBLIC_KEY_PATH",
+    default=str(BASE_DIR / "keys" / "auth_public.pem"),
 )
 
-# --- URLs des services externes ---
-PAYMENT_SERVICE_URL = config("PAYMENT_SERVICE_URL", default="")
-NOTIFICATION_SERVICE_URL = config("NOTIFICATION_SERVICE_URL", default="")
+# Charger le contenu de la clé publique en mémoire
+AUTH_PUBLIC_KEY = ""
+if AUTH_SERVICE_PUBLIC_KEY_PATH:
+    try:
+        with open(AUTH_SERVICE_PUBLIC_KEY_PATH, "r") as f:
+            AUTH_PUBLIC_KEY = f.read()
+    except FileNotFoundError:
+        pass
 
-# --- S2S — credentials pour appels inter-services sortants ---
+# --- Services externes ---
+USERS_SERVICE_URL = config("USERS_SERVICE_URL", default="http://agt-users-service:7001/api/v1")
+PAYMENT_SERVICE_URL = config("PAYMENT_SERVICE_URL", default="http://agt-payment-service:7005/api/v1")
+NOTIFICATION_SERVICE_URL = config("NOTIFICATION_SERVICE_URL", default="http://agt-notification-service:7002/api/v1")
+
+# --- S2S Credentials ---
 S2S_AUTH_URL = config("S2S_AUTH_URL", default="")
 S2S_CLIENT_ID = config("S2S_CLIENT_ID", default="")
 S2S_CLIENT_SECRET = config("S2S_CLIENT_SECRET", default="")
 
-# --- Django REST Framework ---
+# --- Cache TTL ---
+QUOTA_CACHE_TTL = config("QUOTA_CACHE_TTL", default=30, cast=int)   # 30s CDC NF-10
+USER_STATUS_CACHE_TTL = config("USER_STATUS_CACHE_TTL", default=60, cast=int)  # 60s CDC
+
+# --- REST Framework ---
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ["common.authentication.JWTAuthentication"],
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
-    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "common.authentication.JWTAuthentication",
+    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "UNAUTHENTICATED_USER": None,
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 20,
 }
 
-# --- Swagger / drf-spectacular ---
-# SECURITY + APPEND_COMPONENTS requis pour que le bouton Authorize fonctionne
+# --- Swagger (drf-spectacular) ---
 SPECTACULAR_SETTINGS = {
-    "TITLE": "AGT Subscription Service API",
+    "TITLE": "AGT Subscription Service",
+    "DESCRIPTION": "Plans, abonnements, quotas temps réel, prorata, trial, organisations B2B.",
     "VERSION": "1.0.0",
-    "DESCRIPTION": "Plans, abonnements, quotas temps reel, prorata, organisations B2B.",
     "SECURITY": [{"BearerAuth": []}],
     "APPEND_COMPONENTS": {
         "securitySchemes": {
-            "BearerAuth": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT",
-            }
+            "BearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
         }
     },
     "COMPONENT_SPLIT_REQUEST": True,
-    "TAGS": [
-        {"name": "Health"},
-        {"name": "Plans"},
-        {"name": "Subscriptions"},
-        {"name": "Quotas"},
-        {"name": "Organizations"},
-        {"name": "Config"},
-        {"name": "Admin"},
-    ],
 }
 
 # --- CORS ---
-CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="http://localhost:3000").split(",")
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = config(
+    "CORS_ALLOWED_ORIGINS",
+    default="http://localhost:3000,http://localhost:3001",
+).split(",")
 
 # --- Static ---
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# --- Logging ---
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {"console": {"class": "logging.StreamHandler"}},
-    "root": {"handlers": ["console"], "level": "INFO"},
-}

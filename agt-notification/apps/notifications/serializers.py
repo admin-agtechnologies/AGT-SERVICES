@@ -104,3 +104,15 @@ class ChannelConfigUpdateSerializer(serializers.Serializer):
         help_text="Ordre de priorité des canaux"
     )
     fallback_enabled = serializers.BooleanField(required=False)
+
+class ScheduledNotificationCreateSerializer(serializers.Serializer):
+    user_id = serializers.UUIDField()
+    channels = serializers.ListField(child=serializers.CharField(), min_length=1)
+    template_name = serializers.CharField()
+    locale = serializers.CharField(default="fr")
+    variables = serializers.DictField(required=False, default=dict)
+    scheduled_at = serializers.DateTimeField()
+
+class ScheduledNotificationUpdateSerializer(serializers.Serializer):
+    scheduled_at = serializers.DateTimeField(required=False)
+    variables = serializers.DictField(required=False)
