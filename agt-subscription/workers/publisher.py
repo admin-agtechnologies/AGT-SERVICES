@@ -103,6 +103,92 @@ def publish_overage_billing(subscription, quota_key: str, overage_amount: int,
     return _publish("subscription", "subscription.overage_billing", payload)
 
 
+def publish_subscription_activated(subscription) -> bool:
+    """
+    Émet subscription.activated vers tous les consommateurs intéressés.
+
+    Déclenché lors de l'activation d'un abonnement (paiement confirmé,
+    plan gratuit, ou activation manuelle). Permet aux backends métier
+    de réagir : mise à jour des permissions, onboarding, notifications.
+
+    Consommateurs attendus : backends métier (AGT-Bot, AGT-Market, etc.)
+    """
+    payload = {
+        "event_id": str(uuid.uuid4()),
+        "event_type": "subscription.activated",
+        "source": "subscription",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "data": {
+            "subscription_id": str(subscription.id),
+            "platform_id": str(subscription.platform_id),
+            "subscriber_type": subscription.subscriber_type,
+            "subscriber_id": str(subscription.subscriber_id),
+            "plan_id": str(subscription.plan.id),
+            "plan_name": subscription.plan.name,
+            "billing_cycle": subscription.plan_price.billing_cycle,
+            "current_period_end": subscription.current_period_end.isoformat(),
+        },
+    }
+    return _publish("subscription", "subscription.activated", payload)
+
+
+def publish_subscription_cancelled(subscription) -> bool:
+    """
+    Émet subscription.cancelled vers tous les consommateurs intéressés.
+
+    Déclenché lors de l'annulation d'un abonnement (cancel_at_period_end=True).
+    Permet aux backends métier de réagir : restriction des droits à terme,
+    notifications de fin d'abonnement.
+
+    Consommateurs attendus : backends métier (AGT-Bot, AGT-Market, etc.)
+    """
+    payload = {
+        "event_id": str(uuid.uuid4()),
+        "event_type": "subscription.cancelled",
+        "source": "subscription",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "data": {
+            "subscription_id": str(subscription.id),
+            "platform_id": str(subscription.platform_id),
+            "subscriber_type": subscription.subscriber_type,
+            "subscriber_id": str(subscription.subscriber_id),
+            "plan_id": str(subscription.plan.id),
+            "plan_name": subscription.plan.name,
+            "current_period_end": subscription.current_period_end.isoformat(),
+            "cancelled_at": subscription.cancelled_at.isoformat() if subscription.cancelled_at else None,
+        },
+    }
+    return _publish("subscription", "subscription.cancelled", payload)
+
+
+def publish_subscription_expired(subscription) -> bool:
+    """
+    Émet subscription.expired vers tous les consommateurs intéressés.
+
+    Déclenché par le cron Celery Beat (process_expired_subscriptions)
+    quand un abonnement passe à l'état 'expired'. Permet aux backends
+    métier de couper les accès immédiatement.
+
+    Consommateurs attendus : backends métier (AGT-Bot, AGT-Market, etc.)
+    """
+    payload = {
+        "event_id": str(uuid.uuid4()),
+        "event_type": "subscription.expired",
+        "source": "subscription",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "data": {
+            "subscription_id": str(subscription.id),
+            "platform_id": str(subscription.platform_id),
+            "subscriber_type": subscription.subscriber_type,
+            "subscriber_id": str(subscription.subscriber_id),
+            "plan_id": str(subscription.plan.id),
+            "plan_name": subscription.plan.name,
+            "expired_at": datetime.now(timezone.utc).isoformat(),
+        },
+    }
+    return _publish("subscription", "subscription.expired", payload)
+
+
 def publish_notification_event(data: dict) -> bool:
     """
     Émet un event vers Notification Service (alertes cycle de vie, quotas).
