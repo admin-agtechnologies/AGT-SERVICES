@@ -1,10 +1,4 @@
-# ── AGT Geolocation Service — docker-compose AUTONOME ─────────────────────────
-# Usage : cd agt-geoloc && docker compose up -d --build
-# Port service : 7009 | Swagger : http://localhost:7009/api/v1/docs
-
 services:
-
-  # ── PostgreSQL + PostGIS ────────────────────────────────────────────────────
   agt-geoloc-db:
     image: postgis/postgis:15-3.4-alpine
     container_name: agt-geoloc-db
@@ -14,37 +8,34 @@ services:
       POSTGRES_USER: geoloc_user
       POSTGRES_PASSWORD: geoloc_password
     volumes:
-      - geoloc_postgres_data:/var/lib/postgresql/data
-      - ./scripts/init-postgis.sql:/docker-entrypoint-initdb.d/init-postgis.sql
-    ports:
-      - "5439:5432"
+    - geoloc_postgres_data:/var/lib/postgresql/data
+    - ./scripts/init-postgis.sql:/docker-entrypoint-initdb.d/init-postgis.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U geoloc_user -d agt_geoloc_db"]
+      test:
+      - CMD-SHELL
+      - pg_isready -U geoloc_user -d agt_geoloc_db
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - agt_geoloc_network
-
-  # ── Redis ───────────────────────────────────────────────────────────────────
+    - agt_geoloc_network
   agt-geoloc-redis:
     image: redis:7-alpine
     container_name: agt-geoloc-redis
     restart: unless-stopped
     command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
     volumes:
-      - geoloc_redis_data:/data
-    ports:
-      - "6385:6379"
+    - geoloc_redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+      - CMD
+      - redis-cli
+      - ping
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - agt_geoloc_network
-
-  # ── RabbitMQ ────────────────────────────────────────────────────────────────
+    - agt_geoloc_network
   agt-geoloc-rabbitmq:
     image: rabbitmq:3.12-management-alpine
     container_name: agt-geoloc-rabbitmq
@@ -53,17 +44,18 @@ services:
       RABBITMQ_DEFAULT_USER: agt_rabbit
       RABBITMQ_DEFAULT_PASS: agt_rabbit_password
     ports:
-      - "5675:5672"
-      - "15675:15672"
+    - 5675:5672
+    - 15675:15672
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      test:
+      - CMD
+      - rabbitmq-diagnostics
+      - ping
       interval: 15s
       timeout: 10s
       retries: 5
     networks:
-      - agt_geoloc_network
-
-  # ── Geolocation Service ─────────────────────────────────────────────────────
+    - agt_geoloc_network
   agt-geoloc:
     build:
       context: .
@@ -83,7 +75,7 @@ services:
       REDIS_PORT: 6379
       RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt-geoloc-rabbitmq:5672
     ports:
-      - "7009:7009"
+    - 7009:7009
     depends_on:
       agt-geoloc-db:
         condition: service_healthy
@@ -92,18 +84,18 @@ services:
       agt-geoloc-rabbitmq:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:7009/api/v1/geo/health || exit 1"]
+      test:
+      - CMD-SHELL
+      - wget -qO- http://localhost:7009/api/v1/geo/health || exit 1
       interval: 30s
       timeout: 10s
       start_period: 20s
       retries: 3
     networks:
-      - agt_geoloc_network
-
+    - agt_geoloc_network
 volumes:
-  geoloc_postgres_data:
-  geoloc_redis_data:
-
+  geoloc_postgres_data: null
+  geoloc_redis_data: null
 networks:
   agt_geoloc_network:
     driver: bridge

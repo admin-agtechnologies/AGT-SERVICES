@@ -1,5 +1,4 @@
 services:
-  # ── PostgreSQL ─────────────────────────────────────────────────────────────
   db:
     image: postgres:15-alpine
     container_name: agt-notif-db
@@ -9,36 +8,33 @@ services:
       POSTGRES_USER: notif_user
       POSTGRES_PASSWORD: notif_password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5434:5432"
+    - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U notif_user -d agt_notification_db"]
+      test:
+      - CMD-SHELL
+      - pg_isready -U notif_user -d agt_notification_db
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - agt_network
-
-  # ── Redis ──────────────────────────────────────────────────────────────────
+    - agt_network
   redis:
     image: redis:7-alpine
     container_name: agt-notif-redis
     restart: unless-stopped
     command: redis-server --appendonly yes --maxmemory 256mb
     volumes:
-      - redis_data:/data
-    ports:
-      - "6381:6379"
+    - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+      - CMD
+      - redis-cli
+      - ping
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - agt_network
-
-  # ── Notification Service (API Production) ──────────────────────────────────
+    - agt_network
   notification:
     build:
       context: .
@@ -46,7 +42,7 @@ services:
     container_name: agt-notif-service
     restart: unless-stopped
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://notif_user:notif_password@agt-notif-db:5432/agt_notification_db
       REDIS_URL: redis://agt-notif-redis:6379/2
@@ -54,58 +50,55 @@ services:
       CELERY_RESULT_BACKEND: redis://agt-notif-redis:6379/3
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
-      - ./keys:/app/keys:ro
+    - ./keys:/app/keys:ro
     ports:
-      - "7002:7002"
+    - 7002:7002
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:7002/api/v1/health || exit 1"]
+      test:
+      - CMD-SHELL
+      - curl -f http://localhost:7002/api/v1/health || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
     networks:
-      - agt_network
-
-  # ── Notification Service (API Dev — hot reload) ────────────────────────────
+    - agt_network
   notification-dev:
     build:
       context: .
       target: builder
     container_name: agt-notif-dev
     restart: unless-stopped
-    command: >
-      sh -c "python manage.py migrate --noinput &&
-             python manage.py runserver 0.0.0.0:7002"
+    command: "sh -c \"python manage.py migrate --noinput &&\n       python manage.py\
+      \ runserver 0.0.0.0:7002\"\n"
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://notif_user:notif_password@agt-notif-db:5432/agt_notification_db
       REDIS_URL: redis://agt-notif-redis:6379/2
       RABBITMQ_URL: amqp://agt_rabbit:agt_rabbit_password@agt-rabbitmq:5672//
-      DEBUG: "True"
+      DEBUG: 'True'
       DJANGO_SETTINGS_MODULE: config.settings
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
-      - .:/app
-      - ./keys:/app/keys:ro
+    - .:/app
+    - ./keys:/app/keys:ro
     ports:
-      - "7002:7002"
+    - 7002:7002
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     profiles:
-      - dev
+    - dev
     networks:
-      - agt_network
-
-  # ── Celery Worker (Traitement asynchrone) ──────────────────────────────────
+    - agt_network
   celery-worker:
     build:
       context: .
@@ -114,7 +107,7 @@ services:
     restart: unless-stopped
     command: celery -A config.celery worker -l info -c 4
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://notif_user:notif_password@agt-notif-db:5432/agt_notification_db
       REDIS_URL: redis://agt-notif-redis:6379/2
@@ -122,16 +115,14 @@ services:
       CELERY_RESULT_BACKEND: redis://agt-notif-redis:6379/3
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
-      - ./keys:/app/keys:ro
+    - ./keys:/app/keys:ro
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     networks:
-      - agt_network
-
-  # ── Celery Beat (Planification) ───────────────────────────────────────────
+    - agt_network
   celery-beat:
     build:
       context: .
@@ -140,7 +131,7 @@ services:
     restart: unless-stopped
     command: celery -A config.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://notif_user:notif_password@agt-notif-db:5432/agt_notification_db
       REDIS_URL: redis://agt-notif-redis:6379/2
@@ -149,12 +140,10 @@ services:
       db:
         condition: service_healthy
     networks:
-      - agt_network
-
+    - agt_network
 volumes:
-  postgres_data:
-  redis_data:
-
+  postgres_data: null
+  redis_data: null
 networks:
   agt_network:
     external: true

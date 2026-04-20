@@ -1,13 +1,24 @@
 # ============================================================
 # AG TECHNOLOGIES — Infrastructure partagée
 # Usage : docker compose -f docker-compose.infra.yml up -d
-# Monte les services d'infrastructure communs à tout l'écosystème.
+#
+# Contient les services d'infrastructure communs à tout l'écosystème :
+#   - Gateway  : point d'entrée HTTP unique (Nginx)
+#   - RabbitMQ : message broker pour la communication asynchrone
+#   - Mailpit  : serveur SMTP local pour intercepter les emails en dev
+#
+# NOTE — Elasticsearch :
+#   ES n'est PAS dans l'infra partagée car seul le service Search l'utilise.
+#   Search gère son propre ES dans son docker-compose.yml.
+#   En production, ES serait remplacé par Elastic Cloud.
+#
 # Chaque microservice a son propre docker-compose.yml pour sa DB et son Redis.
 # ============================================================
 
 services:
-
   # ── API Gateway (Nginx reverse proxy) ────────────────────────────────────
+  # Point d'entrée unique — route /api/v1/<service>/... vers le bon container.
+  # Voir gateway/nginx.conf pour les règles de routing.
   gateway:
     image: nginx:alpine
     container_name: agt-gateway
@@ -22,6 +33,8 @@ services:
       - agt_network
 
   # ── RabbitMQ (Message Broker partagé) ────────────────────────────────────
+  # Utilisé par : Notification (envoi email/SMS), Subscription, Payment, Wallet.
+  # Interface de monitoring : http://localhost:15672 (agt_rabbit / agt_rabbit_password)
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
     container_name: agt-rabbitmq
@@ -42,28 +55,10 @@ services:
     networks:
       - agt_network
 
-  # ── Elasticsearch (Search Service) ───────────────────────────────────────
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
-    container_name: agt-elasticsearch
-    restart: unless-stopped
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-    volumes:
-      - es_data:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
-      interval: 15s
-      timeout: 10s
-      retries: 5
-    networks:
-      - agt_network
-
-  # ── Mailpit (SMTP local pour dev) ───────────────────────────────────────
+  # ── Mailpit (SMTP local pour dev) ────────────────────────────────────────
+  # Intercepte tous les emails envoyés par les services en développement.
+  # Interface web : http://localhost:8025
+  # SMTP : localhost:1025 (configuré dans les .env des services)
   mailpit:
     image: axllent/mailpit
     container_name: agt-mailpit
@@ -71,13 +66,24 @@ services:
     ports:
       - "8025:8025"
       - "1025:1025"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8025",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
     networks:
       - agt_network
 
 volumes:
   rabbitmq_data:
-    driver: local
-  es_data:
     driver: local
 
 networks:

@@ -1,5 +1,4 @@
 services:
-  # ── PostgreSQL ─────────────────────────────────────────────────────────────
   db:
     image: postgres:15-alpine
     container_name: agt-users-db
@@ -9,36 +8,33 @@ services:
       POSTGRES_USER: users_user
       POSTGRES_PASSWORD: users_password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
+    - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U users_user -d agt-users-db"]
+      test:
+      - CMD-SHELL
+      - pg_isready -U users_user -d agt-users-db
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - agt_network
-
-  # ── Redis ──────────────────────────────────────────────────────────────────
+    - agt_network
   redis:
     image: redis:7-alpine
     container_name: agt-users-redis
     restart: unless-stopped
     command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     volumes:
-      - redis_data:/data
-    ports:
-      - "6380:6379"
+    - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+      - CMD
+      - redis-cli
+      - ping
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - agt_network
-
-  # ── Users Service (production) ─────────────────────────────────────────────
+    - agt_network
   users:
     build:
       context: .
@@ -46,68 +42,65 @@ services:
     container_name: agt-users-service
     restart: unless-stopped
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://users_user:users_password@agt-users-db:5432/agt-users-db
       REDIS_URL: redis://agt-users-redis:6379/1
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
-      - ./keys:/app/keys:ro
+    - ./keys:/app/keys:ro
     ports:
-      - "7001:7001"
+    - 7001:7001
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:7001/api/v1/health || exit 1"]
+      test:
+      - CMD-SHELL
+      - curl -f http://localhost:7001/api/v1/health || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
     networks:
-      - agt_network
-
-  # ── Users Service (dev — hot reload) ───────────────────────────────────────
+    - agt_network
   users-dev:
     build:
       context: .
       target: builder
     container_name: agt-users-dev
     restart: unless-stopped
-    command: >
-      sh -c "python manage.py migrate --noinput &&
-             python manage.py runserver 0.0.0.0:7001"
+    command: "sh -c \"python manage.py migrate --noinput &&\n       python manage.py\
+      \ runserver 0.0.0.0:7001\"\n"
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://users_user:users_password@agt-users-db:5432/agt-users-db
       REDIS_URL: redis://agt-users-redis:6379/1
-      DEBUG: "True"
+      DEBUG: 'True'
       DJANGO_SETTINGS_MODULE: config.settings
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
-      - .:/app
-      - ./keys:/app/keys:ro
+    - .:/app
+    - ./keys:/app/keys:ro
     ports:
-      - "7001:7001"
+    - 7001:7001
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     profiles:
-      - dev
+    - dev
     networks:
-      - agt_network
-
+    - agt_network
 volumes:
   postgres_data:
     driver: local
   redis_data:
     driver: local
-
 networks:
   agt_network:
     external: true

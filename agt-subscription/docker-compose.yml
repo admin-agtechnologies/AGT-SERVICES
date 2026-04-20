@@ -1,4 +1,4 @@
-﻿services:
+services:
   db:
     image: postgres:15-alpine
     container_name: agt-sub-db
@@ -8,33 +8,32 @@
       POSTGRES_USER: sub_user
       POSTGRES_PASSWORD: sub_password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5435:5432"
+    - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U sub_user -d agt_subscription_db"]
+      test:
+      - CMD-SHELL
+      - pg_isready -U sub_user -d agt_subscription_db
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - agt_network
-
+    - agt_network
   redis:
     image: redis:7-alpine
     container_name: agt-sub-redis
     restart: unless-stopped
     volumes:
-      - redis_data:/data
-    ports:
-      - "6382:6379"
+    - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+      - CMD
+      - redis-cli
+      - ping
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - agt_network
-
+    - agt_network
   subscription:
     build:
       context: .
@@ -42,57 +41,59 @@
     container_name: agt-sub-service
     restart: unless-stopped
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://sub_user:sub_password@agt-sub-db:5432/agt_subscription_db
       REDIS_URL: redis://agt-sub-redis:6379/4
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
-      - ./keys:/app/keys:ro
+    - ./keys:/app/keys:ro
     ports:
-      - "7004:7004"
+    - 7004:7004
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:7004/api/v1/subscriptions/health || exit 1"]
+      test:
+      - CMD-SHELL
+      - curl -f http://localhost:7004/api/v1/subscriptions/health || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
     networks:
-      - agt_network
-
+    - agt_network
   subscription-dev:
     build:
       context: .
       target: builder
     container_name: agt-sub-dev
     restart: unless-stopped
-    command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:7004"
+    command: sh -c "python manage.py migrate --noinput && python manage.py runserver
+      0.0.0.0:7004"
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://sub_user:sub_password@agt-sub-db:5432/agt_subscription_db
       REDIS_URL: redis://agt-sub-redis:6379/4
-      DEBUG: "True"
+      DEBUG: 'True'
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
-      - .:/app
-      - ./keys:/app/keys:ro
+    - .:/app
+    - ./keys:/app/keys:ro
     ports:
-      - "7004:7004"
+    - 7004:7004
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     profiles:
-      - dev
+    - dev
     networks:
-      - agt_network
+    - agt_network
   celery-worker:
     build:
       context: .
@@ -101,21 +102,20 @@
     restart: unless-stopped
     command: celery -A config worker --loglevel=info --concurrency=2
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://sub_user:sub_password@agt-sub-db:5432/agt_subscription_db
       REDIS_URL: redis://agt-sub-redis:6379/4
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
-      - ./keys:/app/keys:ro
+    - ./keys:/app/keys:ro
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     networks:
-      - agt_network
-
+    - agt_network
   celery-beat:
     build:
       context: .
@@ -124,24 +124,23 @@
     restart: unless-stopped
     command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://sub_user:sub_password@agt-sub-db:5432/agt_subscription_db
       REDIS_URL: redis://agt-sub-redis:6379/4
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
-      - ./keys:/app/keys:ro
+    - ./keys:/app/keys:ro
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     networks:
-      - agt_network
+    - agt_network
 volumes:
-  postgres_data:
-  redis_data:
-
+  postgres_data: null
+  redis_data: null
 networks:
   agt_network:
     external: true

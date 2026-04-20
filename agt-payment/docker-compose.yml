@@ -8,29 +8,28 @@ services:
       POSTGRES_USER: pay_user
       POSTGRES_PASSWORD: pay_password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5436:5432"
+    - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U pay_user -d agt_payment_db"]
+      test:
+      - CMD-SHELL
+      - pg_isready -U pay_user -d agt_payment_db
       interval: 10s
       timeout: 5s
       retries: 5
-
   redis:
     image: redis:7-alpine
     container_name: agt-pay-redis
     restart: unless-stopped
     volumes:
-      - redis_data:/data
-    ports:
-      - "6383:6379"
+    - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+      - CMD
+      - redis-cli
+      - ping
       interval: 10s
       timeout: 5s
       retries: 5
-
   payment:
     build:
       context: .
@@ -38,60 +37,60 @@ services:
     container_name: agt-pay-service
     restart: unless-stopped
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://pay_user:pay_password@db:5432/agt_payment_db
       REDIS_URL: redis://redis:6379/5
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
-      - ./keys:/app/keys:ro
+    - ./keys:/app/keys:ro
     ports:
-      - "7005:7005"
+    - 7005:7005
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     networks:
-      - default
-      - agt_network
+    - default
+    - agt_network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:7005/api/v1/payments/health || exit 1"]
+      test:
+      - CMD-SHELL
+      - curl -f http://localhost:7005/api/v1/payments/health || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
-
   payment-dev:
     build:
       context: .
       target: builder
     container_name: agt-pay-dev
-    command: sh -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:7005"
+    command: sh -c "python manage.py migrate --noinput && python manage.py runserver
+      0.0.0.0:7005"
     env_file:
-      - .env
+    - .env
     environment:
       DATABASE_URL: postgresql://pay_user:pay_password@db:5432/agt_payment_db
       REDIS_URL: redis://redis:6379/5
-      DEBUG: "True"
+      DEBUG: 'True'
       AUTH_SERVICE_PUBLIC_KEY_PATH: /app/keys/auth_public.pem
     volumes:
-      - .:/app
-      - ./keys:/app/keys:ro
+    - .:/app
+    - ./keys:/app/keys:ro
     ports:
-      - "7005:7005"
+    - 7005:7005
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     profiles:
-      - dev
-
+    - dev
 volumes:
-  postgres_data:
-  redis_data:
-
+  postgres_data: null
+  redis_data: null
 networks:
   default:
     name: agt-payment_default

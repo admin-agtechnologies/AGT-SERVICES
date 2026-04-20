@@ -1,5 +1,4 @@
 services:
-  # ── PostgreSQL ─────────────────────────────────────────────────────────────
   db:
     image: postgres:15-alpine
     container_name: agt-auth-db
@@ -9,36 +8,33 @@ services:
       POSTGRES_USER: agt_user
       POSTGRES_PASSWORD: agt_password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U agt_user -d agt-auth-db"]
+      test:
+      - CMD-SHELL
+      - pg_isready -U agt_user -d agt-auth-db
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - agt_network
-
-  # ── Redis ──────────────────────────────────────────────────────────────────
+    - agt_network
   redis:
     image: redis:7-alpine
     container_name: agt-auth-redis
     restart: unless-stopped
     command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     volumes:
-      - redis_data:/data
-    ports:
-      - "6379:6379"
+    - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+      - CMD
+      - redis-cli
+      - ping
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - agt_network
-
-  # ── Auth Service (production) ──────────────────────────────────────────────
+    - agt_network
   auth:
     build:
       context: .
@@ -46,70 +42,67 @@ services:
     container_name: agt-auth-service
     restart: unless-stopped
     env_file:
-      - .env
+    - .env
     environment:
-      DATABASE_URL: postgresql://agt_user:agt_password@agt-auth-db:5432/agt-auth-db # Mis à jour agt-auth-db
-      REDIS_URL: redis://agt-auth-redis:6379/0 # Mis à jour agt-auth-redis
+      DATABASE_URL: postgresql://agt_user:agt_password@agt-auth-db:5432/agt-auth-db
+      REDIS_URL: redis://agt-auth-redis:6379/0
       JWT_PRIVATE_KEY_PATH: /app/keys/private.pem
       JWT_PUBLIC_KEY_PATH: /app/keys/public.pem
     volumes:
-      - ./keys:/app/keys:ro
+    - ./keys:/app/keys:ro
     ports:
-      - "7000:7000"
+    - 7000:7000
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:7000/api/v1/auth/health || exit 1"]
+      test:
+      - CMD-SHELL
+      - curl -f http://localhost:7000/api/v1/auth/health || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
     networks:
-      - agt_network
-
-  # ── Auth Service (dev — hot reload) ────────────────────────────────────────
+    - agt_network
   auth-dev:
     build:
       context: .
       target: builder
     container_name: agt-auth-dev
     restart: unless-stopped
-    command: >
-      sh -c "python manage.py migrate --noinput &&
-             python manage.py runserver 0.0.0.0:7000"
+    command: "sh -c \"python manage.py migrate --noinput &&\n       python manage.py\
+      \ runserver 0.0.0.0:7000\"\n"
     env_file:
-      - .env
+    - .env
     environment:
-      DATABASE_URL: postgresql://agt_user:agt_password@agt-auth-db:5432/agt-auth-db # Mis à jour agt-auth-db
-      REDIS_URL: redis://agt-auth-redis:6379/0 # Mis à jour agt-auth-redis
-      DEBUG: "True"
+      DATABASE_URL: postgresql://agt_user:agt_password@agt-auth-db:5432/agt-auth-db
+      REDIS_URL: redis://agt-auth-redis:6379/0
+      DEBUG: 'True'
       JWT_PRIVATE_KEY_PATH: /app/keys/private.pem
       JWT_PUBLIC_KEY_PATH: /app/keys/public.pem
       DJANGO_SETTINGS_MODULE: config.settings
     volumes:
-      - .:/app
-      - ./keys:/app/keys:ro
+    - .:/app
+    - ./keys:/app/keys:ro
     ports:
-      - "7000:7000"
+    - 7000:7000
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
     profiles:
-      - dev
+    - dev
     networks:
-      - agt_network
-
+    - agt_network
 volumes:
   postgres_data:
     driver: local
   redis_data:
     driver: local
-
 networks:
   agt_network:
     external: true
